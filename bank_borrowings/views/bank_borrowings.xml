@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="bank_borrowings_tree" model="ir.ui.view">
+        <field name="name">bank.borrowings.tree</field>
+        <field name="model">bank.borrowings</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="journal_id"/>
+                <field name="loan_ref"/>
+                <field name="type_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <record id="bank_borrowings_form" model="ir.ui.view">
+        <field name="name">bank.borrowings.form</field>
+        <field name="model">bank.borrowings</field>
+        <field name="arch" type="xml">
+            <form string="Bank Borrowing">
+                <header>
+                    <button name="action_approve" type="object" string="Confirm"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" class="btn-primary"
+                            states="confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="bank_partner_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="journal_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="loan_ref" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="type_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="account_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="from_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="maturity_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="days" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="interest_rate" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="account_balance" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="balance_to_utilize" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="accounts_info" string="Accounts Info">
+                            <group>
+                                <group>
+                                    <field name="bill_journal_id"/>
+                                    <field name="bank_ledger_account_id"/>
+                                </group>
+                                <group>
+                                    <field name="bank_interest_account_id"/>
+                                    <field name="account_receivable_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="installments" string="Installments">
+                            <field name="installment_ids">
+                                <tree editable="bottom">
+                                    <field name="from_date"/>
+                                    <field name="to_date"/>
+                                    <field name="days"/>
+                                    <field name="due_date"/>
+                                    <field name="loan_amount"/>
+                                    <field name="principle_repayment"/>
+                                    <field name="interest_percent"/>
+                                    <field name="interest_amount" force_save="1"/>
+                                    <field name="total_amount"/>
+                                    <field name="is_create_move" invisible="1"/>
+                                    <button name="create_bill" string="Create Bill" type="object"
+                                            attrs="{'invisible':[('is_create_move','=',True)]}"/>
+                                    <field name="move_id" attrs="{'invisible':[('is_create_move','=',False)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="Remarks" string="Remarks">
+                            <field name="remarks" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_bank_borrowings" model="ir.actions.act_window">
+        <field name="name">Bank Borrowings</field>
+        <field name="res_model">bank.borrowings</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Bank Borrowings
+            </p>
+        </field>
+    </record>
+    <menuitem id="bank_borrowings_menu" name="Bank Borrowings"
+              action="action_bank_borrowings" parent="account.menu_finance_payables"/>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_lc_letter"
+                  name="LC"
+                  parent="account.menu_finance_payables"
+                  sequence="10"
+                  groups="aqar_lc_letter.group_lc_admin"
+                  action="aqar_lc_letter.action_lc_letter_view"
+                  />
+
+<!--                <menuitem id="menu_otc_department_masters"-->
+<!--                          name="Department Master"-->
+<!--                          parent="menu_otc_internship_masters"-->
+<!--                          sequence="10"-->
+<!--                          action="act_department_master_view"-->
+<!--                          />-->
+<!--                <menuitem id="menu_otc_employer_masters"-->
+<!--                          name="Employers Master"-->
+<!--                          parent="menu_otc_internship_masters"-->
+<!--                          sequence="20"-->
+<!--                          action="act_employer_master_view"-->
+<!--                          />-->
+
+<!--            <menuitem id="menu_otc_internship_enquiry"-->
+<!--                      name="Internship Enquiry"-->
+<!--                      parent="menu_otc_internship"-->
+<!--                      sequence="90"-->
+<!--                      action="act_otc_internship_enquiry_view"-->
+<!--                      />-->
+
+    </data>
+
+</odoo>

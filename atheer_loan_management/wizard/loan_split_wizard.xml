@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="view_hr_loan_split_wizard" model="ir.ui.view">
+            <field name="name">hr.loan.split</field>
+            <field name="model">wizard.loan.split</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator string="Installments Due Details"/>
+                    <group>
+                        <group>
+                            <field name="no_of_month_due"/>
+                        </group>
+                        <group>
+                            <field name="amount_due"/>
+                        </group>
+                    </group>
+                    <separator string="Split Installments"/>
+                    <group>
+                        <group>
+                            <field name="no_of_month"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="start_date_pay"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="confirm" string="Confirm" type="object" class="oe_highlight"/>
+                        <button name="cancel" string="Cancel" type="object" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

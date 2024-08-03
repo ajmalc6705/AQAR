@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_employee_view_form_inherit_salary_assignment" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.salary_assignment</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']" position="inside">
+                <group name="salary_assignment" string="Salary Assignment">
+                    <field name="salary_assignment_issued" readonly="True"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_view_form_inherit_salary_assignment" model="ir.ui.view">
+        <field name="name">hr.employee.public.view.form.salary_assignment</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='public']" position="inside">
+                <group name="salary_assignment" string="Salary Assignment">
+                    <field name="salary_assignment_issued" readonly="True"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

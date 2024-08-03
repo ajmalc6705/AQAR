@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_lc_letter_tree" model="ir.ui.view">
+            <field name="name">lc.letter.tree</field>
+            <field name="model">lc.letter</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="InternshipEnquiry">
+                    <field name="name"/>
+                    <field name="lc_ref_date" required="1"/>
+                    <field name="supplier"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_lc_letter_form" model="ir.ui.view">
+            <field name="name">lc.letter.form</field>
+            <field name="model">lc.letter</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="LC Letter">
+                    <header>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,lc_open,assign_po,acceptance,payment,ltr,ltr_payment"/>
+
+                        <button string="Open LC" name="open_lc" type="object" states="draft" class="oe_highlight"/>
+                        <button string="PO Assign" name="po_assign" type="object" states="lc_open"
+                                class="oe_highlight"/>
+                        <button string="Accept LC" name="accept_lc" type="object" states="assign_po"
+                                class="oe_highlight"/>
+                        <button string="LC Payment" name="lc_payment" type="object" states="acceptance"
+                                class="oe_highlight"/>
+                        <button string="Create Payment" name="button_payment" type="object" states="payment"
+                                class="oe_highlight"/>
+                        <button name="send_to_ltr" string="Send To LTR" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'payment')]}"/>
+                        <button name="create_ltr" string="Create LTR Payment" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'ltr')]}"/>
+                        <button name="cancel" string="Cancel" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '=', 'cancel')]}"/>
+                        <button name="reset_to_draft" string="Reset TO Draft" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'cancel')]}"/>
+                        <button name="done" string="Done" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'ltr')]}"/>
+
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="button_view_move" attrs="{'invisible': [('state', 'not in', ['ltr','ltr_payment','cancel'])]}" type="object" class="oe_stat_button" icon="fa-bars">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Journal</span>
+                                </div>
+                            </button>
+                            <button name="button_view_payment" type="object" attrs="{'invisible': [('state', 'in', ['draft','lc_open','assign_po','acceptance'])]}" class="oe_stat_button" icon="fa-bars">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Payments</span>
+                                </div>
+                            </button>
+
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="supplier"/>
+                                <field name="lc_type"/>
+                                <field name="currency_id" required="1"/>
+                                <field name="lc_value"/>
+                                <field name="move_id" invisible="1"/>
+                                <field name="lc_increment"/>
+                                <field name="lc_max_val"/>
+                                <field name="total_assign_value" attrs="{'invisible': [('state', 'in', ['draft','lc_open'])]}"/>
+                                <field name="pending_lc_value"  attrs="{'invisible': [('state', 'in', ['draft','lc_open'])]}"/>
+                                <field name="acceptance_value" required="1" attrs="{'invisible': [('state', 'in', ['draft','lc_open'])]}"/>
+                                <field name="acceptance_value_omr" attrs="{'invisible': [('state', 'in', ['draft','lc_open'])]}"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="lc_ref_date" required="1"/>
+                                <field name="lc_exp_date" required="1"/>
+                                <field name="lading_bill_date"/>
+                                <field name="due_date" attrs="{'required' : [('state', 'not in', ['draft','lc_open'])], 'invisible': [('state', 'in', ['draft','lc_open'])]}"/>
+                                <field name="acceptance_date" required="1"/>
+                                <field name="lading_bill_no"/>
+                                <field name="company_id"/>
+                                <field name="lc_ref" required="1"/>
+                                <field name="lc_description"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Supplier Bank" name="supplier_other_details">
+                                <group>
+                                    <group>
+                                        <field name="bank_name" required="1"/>
+                                        <field name="iban_code"/>
+                                        <field name="swift_Code"/>
+                                        <field name="advising_bank_code"/>
+                                        <field name="advising_bank_number"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Shipment Information" name="lc_other_details">
+                                <group>
+                                    <group>
+                                        <field name="valid_place"/>
+                                        <field name="shipment_by"/>
+                                        <field name="shipment_from"/>
+                                        <field name="shipment_to"/>
+                                        <field name="shipment_last_date" required="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="partial_shipment" widget="radio"/>
+                                        <field name="multi_modal_shipment" widget="radio"/>
+                                        <field name="transshipment" widget="radio"/>
+                                        <field name="completed" widget="radio" required="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="LTR Information" name="ltr_other_details" attrs="{'invisible': [('state', 'not in', ['ltr','ltr_payment'])]}">
+                                <group>
+                                    <group>
+                                        <field name="new_ltr_ref_no" />
+                                        <field name="new_ltr_ref_date" />
+                                        <field name="new_ltr_val"/>
+                                        <field name="new_ltr_due_date"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Purchase Details"
+                                  attrs="{'required' : [('state', '=', 'assign_po')], 'invisible': [('state', 'in', ['draft','lc_open'])]}">
+                                <field name="lc_lines" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="purchase_id" required="1"/>
+                                        <field name="date_order"/>
+                                        <field name="po_order_val"/>
+                                        <field name="assigning_value" required="1"/>
+                                        <field name="lc_pending_order_value"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Trade Terms" name="trade_terms_details">
+                                <field name="trade_terms" required="1"/>
+                            </page>
+                            <page string="Payment Terms" name="payment_terms_details">
+                                <field name="lc_payment_terms"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                         <field name="activity_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_lc_letter_view">
+            <field name="name">LC Letter</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">lc.letter</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

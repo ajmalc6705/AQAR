@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_manpower_transfer_project_form" model="ir.ui.view">
+            <field name="name">manpower.transfer.project.form</field>
+            <field name="model">manpower.transfer.project</field>
+            <field name="arch" type="xml">
+                <form string="Manpower Transfer">
+                    <header>
+                        <button name="send_to_section_head" states="draft" string="Send to Section Head"
+                                class="btn-primary" type="object" />
+                        <button name="action_confirm" states="section_head" string="Confirm"
+                                class="btn-primary" type="object" />
+                        <!--send back buttons-->
+                        <button name="send_back" states="section_head" string="Send Back"
+                                class="btn-primary" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,section_head,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="effective_date" />
+                            <field name="job_type" />
+                            <field name="is_transferred" invisible="1" />
+                        </group>
+                        <group>
+                            <group string="From Details">
+                                <field name="project_from" />
+                            </group>
+                            <group string="To Details">
+                                <field name="project_to" />
+                            </group>
+                        </group>
+                        <group col="4">
+                            <field name="remarks" />
+                        </group>
+                        <group>
+                            <field name="employees_from" options="{'reload_on_button': true}" nolabel="1"
+                                   context="{'default_transfer_id': active_id}" domain="[('state', '=', 'draft')]">
+                                <tree create="0" delete="0" edit="0">
+                                    <field name="employee_id" />
+                                    <!--                                    <field name="job_id"/>-->
+                                    <field name="job_type" />
+                                    <field name="state" invisible="1" />
+                                    <field name="transfer_id" invisible="1" />
+                                    <field name="transfer_state" invisible="1" />
+                                    <button name="action_transfer" type="object"
+                                            icon="fa-arrow-right" string="Transfer" />
+                                </tree>
+                            </field>
+                            <field name="employees_to" options="{'reload_on_button': true}" nolabel="1"
+                                   context="{'default_transfer_id': active_id}" domain="[('state', '=', 'done')]">
+                                <tree create="0" delete="0" editable="bottom">
+                                    <field name="employee_id" readonly="1" />
+                                    <field name="job_type" readonly="1" />
+                                    <field name="n_job_type" />
+                                    <field name="r_person" context="{'list_employee': True}" />
+                                    <field name="state" invisible="1" />
+                                    <field name="transfer_id" invisible="1" />
+                                    <field name="transfer_state" invisible="1" />
+                                    <button name="action_return_transfer" type="object"
+                                            attrs="{'invisible': [('transfer_state', '!=', 'draft')]}"
+                                            icon="fa-arrow-left" string="Transfer" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_manpower_transfer_project_tree" model="ir.ui.view">
+            <field name="name">manpower.transfer.project.tree</field>
+            <field name="model">manpower.transfer.project</field>
+            <field name="arch" type="xml">
+                <tree string="Manpower Transfer">
+                    <field name="name" />
+                    <field name="project_from" string="Project From" />
+                    <field name="project_to" string="Project To" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_manpower_transfer_project">
+            <field name="name">Manpower Transfer</field>
+            <field name="res_model">manpower.transfer.project</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--Search Manpower History-->
+        <record id="search_manpower_history_project_filter" model="ir.ui.view">
+            <field name="name">Manpower History</field>
+            <field name="model">manpower.history</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="employee_id" />
+                    <field name="create_date" />
+                    <field name="create_uid" />
+                    <field name="project_from" />
+                    <field name="project_to" />
+                    <group expand="1" string="Group By">
+                        <filter name="create_date" string="Created Date" context="{'group_by':'create_date'}" />
+                        <filter name="project_from" string="From Project" context="{'group_by':'project_from'}" />
+                        <filter name="project_to" string="To Project" context="{'group_by':'project_to'}" />
+                        <filter name="employee" string="Employee" context="{'group_by':'employee_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--Tree Manpower Transfer History-->
+        <record id="tree_manpower_transfer_project_history" model="ir.ui.view">
+            <field name="name">Manpower History</field>
+            <field name="model">manpower.history</field>
+            <field name="arch" type="xml">
+                <tree create="0" delete="0" edit="0">
+                    <field name="employee_id" readonly="1" />
+                    <field name="mode_of_activity" readonly="1" />
+                    <field name="project_from" readonly="1" />
+                    <field name="project_to" readonly="1" />
+                    <field name="create_date" readonly="1" />
+                    <field name="name" readonly="1" />
+                </tree>
+            </field>
+        </record>
+        <!--    Action for Manpower Transfer History-->
+        <record model="ir.actions.act_window" id="action_manpower_transfer_history_project">
+            <field name="name">Manpower Transfer History</field>
+            <field name="res_model">manpower.history</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="search_manpower_history_project_filter" />
+            <field name="target">current</field>
+            <field name="domain">[('project', '=', True)]</field>
+            <field name="view_id" ref="tree_manpower_transfer_project_history" />
+        </record>
+
+        <record model="ir.actions.act_window" id="action_manpower_transfer">
+            <field name="name">Manpower Transfer</field>
+            <field name="res_model">manpower.transfer</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_sub_contract_report">
+            <field name="name">Sub Contract Report</field>
+            <field name="res_model">sub.contract.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_manpower_status_report">
+            <field name="name">Manpower Status Report</field>
+            <field name="res_model">manpower.status.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_lnc_pro_receivable_report">
+            <field name="name">Receivable Report</field>
+            <field name="res_model">project.receivable.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_lnc_pro_payable_report">
+            <field name="name">Payable Report</field>
+            <field name="res_model">project.payable.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_manpower_status_wiz">
+            <field name="name">Manpower Status Report</field>
+            <field name="res_model">manpower.status.report.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_lc_subcontract_form" model="ir.ui.view">
+            <field name="name">project.sub.contract.form</field>
+            <field name="model">project.sub.contract</field>
+            <field name="arch" type="xml">
+                <form string="Sub Contract">
+                    <header>
+                        <button name="action_confirm" states="draft" string="Confirm"
+                                class="btn-primary" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" class="oe_inline" />
+                            </h1>
+                        </div>
+                        <group col="4">
+                            <field name="create_uid" />
+                            <field name="project_id" readonly="context.get('default_project_id')" />
+                            <field name="partner_id" context="{'res_partner_search_mode': 'supplier'}" />
+                            <field name="date_from" />
+                            <field name="date_to" />
+                            <field name="contract_type" />
+                            <field name="contract_value" />
+                            <field name="invoice_schedule" />
+                            <field name="company_id" />
+                        </group>
+                        <group col="4">
+                            <field name="contact" />
+                            <field name="phone" />
+                            <field name="reference" />
+                            <field name="payment_terms" />
+                        </group>
+                        <group string="Description">
+                            <field name="description" nolabel="1" />
+                        </group>
+                        <group string="Supply/ Service Lines">
+                            <field name="line_ids" context="{'default_sub_contract_id': active_id}" nolabel="1">
+                                <tree editable="bottom" create="0" delete="0">
+                                    <field name="service_date" />
+                                    <field name="remark" />
+                                    <field name="is_completed" />
+                                    <field name="service_doc" />
+                                    <field name="project_id" invisible="1" />
+                                    <field name="sub_contract_id" invisible="1" />
+                                    <field name="state" invisible="1" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_lc_subcontract_tree" model="ir.ui.view">
+            <field name="name">project.sub.contract.tree</field>
+            <field name="model">project.sub.contract</field>
+            <field name="arch" type="xml">
+                <tree string="Sub Contract">
+                    <field name="project_id" />
+                    <field name="partner_id" context="{'res_partner_search_mode': 'supplier'}" />
+                    <field name="date_from" />
+                    <field name="date_to" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_lc_subcontract">
+            <field name="name">Sub Contract</field>
+            <field name="res_model">project.sub.contract</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="open_view_lnc_project_contracts" model="ir.actions.act_window">
+            <field name="name">Contracts</field>
+            <field name="res_model">project.project</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,kanban,form,gantt</field>
+            <field name="search_view_id" ref="project.view_project_project_filter" />
+            <field name="context">{
+                'default_is_contract': True,
+                'default_state': 'draft'
+                }
+            </field>
+            <field name="domain">[('is_contract', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to start a new project contract.
+                </p>
+                <p>
+                    Projects are used to organize your activities; plan
+                    tasks, track issues, invoice timesheets.
+                </p>
+                <p>
+                    You will be able collaborate with internal users on
+                    projects or invite customers to share your activities.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem name="Management"
+                  id="menu_sub_pm"
+                  parent="project.menu_main_pm"
+                  sequence="5" />
+        <menuitem name="Contracts"
+                  id="menu_contract_main_lnc"
+                  parent="project.menu_main_pm"
+                  sequence="7" />
+
+        <menuitem name="Tenders" parent="menu_sub_pm" id="menu_tender_form"
+                  action="open_tender_form" sequence="0"
+        />
+        <menuitem name="Site Visits" parent="menu_sub_pm" id="menu_visit_form"
+                  action="open_visit_form" />
+        <menuitem name="Gate Pass" parent="menu_sub_pm" id="menu_gatepass_form"
+                  action="open_gatepass_form"
+        />
+        <menuitem name="Utility Records" parent="menu_sub_pm" id="menu_utility_form"
+                  action="open_utility_form" />
+        <menuitem name="Correspondence Log" parent="menu_sub_pm" id="menu_log_form"
+                  action="open_log_form" />
+        <menuitem name="Manpower Status Report" parent="project.menu_project_report"
+                  id="menu_manpower_status_report" action="action_manpower_status_wiz"
+        />
+
+
+        <!--    Menu for Manpower Transfer History-->
+        <menuitem action="open_view_lnc_project_contracts" id="menu_contracts_lnc" name="Contracts"
+                  parent="menu_contract_main_lnc" sequence="3" />
+        <menuitem name="Sub Contract" parent="menu_contract_main_lnc" id="menu_subcontract_lnc"
+                  action="action_lc_subcontract" sequence="4" />
+
+
+        <menuitem name="Manpower Transfer" parent="project.menu_main_pm"
+                  id="menu_manpower_transfer_project_parent" sequence="10" />
+        <menuitem name="Manpower Transfer" parent="menu_manpower_transfer_project_parent"
+                  id="menu_manpower_transfer_project" action="action_manpower_transfer_project" sequence="10" />
+        <menuitem name="Manpower Transfer History" parent="menu_manpower_transfer_project_parent"
+                  id="menu_manpower_transfer_history_project" action="action_manpower_transfer_history_project"
+                  sequence="11" />
+
+
+        <menuitem name="Reports"
+                  parent="project.menu_main_pm" sequence="50"
+                  id="menu_lnc_project_reports" />
+        <menuitem name="Sub Contract Summary" parent="project.menu_project_report"
+                  id="menu_sub_contract_report" action="action_sub_contract_report" />
+        <menuitem name="Receivable Report" parent="project.menu_project_report"
+                  id="menu_lnc_pro_receivable_report" action="action_lnc_pro_receivable_report"
+        />
+        <menuitem name="Payable Report" parent="project.menu_project_report"
+                  id="menu_lnc_pro_payable_report" action="action_lnc_pro_payable_report"
+        />
+
+<!--    Commented By Ajmal    <menuitem name="Project Type" parent="project.menu_project_config" id="menu_project_type"-->
+<!--                  action="action_project_type" sequence="1"-->
+<!--        />-->
+        <menuitem name="BOQ Category" parent="project_custom.menu_sub_pm" id="menu_project_boq_category"
+                  action="action_project_boq_category" sequence="50"
+        />
+    </data>
+</odoo>

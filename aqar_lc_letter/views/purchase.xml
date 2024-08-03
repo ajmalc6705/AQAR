@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="purchase_order_inherit_form2_mode_of_payment" model="ir.ui.view">
+        <field name="name">Purchase Order Mode of payment</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="mode_of_payment"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

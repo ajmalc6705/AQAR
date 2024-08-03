@@ -1,0 +1,455 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_monthly_bill_tree" model="ir.ui.view">
+            <field name="name">monthly.bill.tree</field>
+            <field name="model">monthly.bill</field>
+            <field name="arch" type="xml">
+                <tree default_order="name desc" string="Monthly Bill" sample="1">
+                    <field name="name" string="Seq No"/>
+                    <field name="monthly_bill_approval_id" string="Approval Ref"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="effective_date" optional="show"/>
+                    <field name="create_uid" optional="hide" widget="many2one_avatar_user"/>
+                    <field name="building_id" optional="show"/>
+                    <field name="bill_type" optional="show"/>
+                    <field name="consumed_reading" optional="show"/>
+                    <field name="unit_rate" optional="show"/>
+                    <field name="other_charges" sum="Other Charges Amount" optional="hide" digits="[12,3]"/>
+                    <field name="unit_amount" sum="Total Unit Amount" digits="[12,3]"/>
+                    <field name="tax_id" optional="show"/>
+                    <field name="tax_amount" sum="Total Tax" digits="[12,3]" optional="hide"/>
+                    <field name="total_amount" sum="Total Amount" digits="[12,3]"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="approval_state"
+                           decoration-info="(approval_state == 'draft')"
+                           decoration-warning="approval_state in ('property_head','accountant')"
+                           decoration-success="approval_state == 'paid'"
+                           decoration-danger="approval_state == 'reject'"
+                           widget="badge" optional="show"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_monthly_bill_form" model="ir.ui.view">
+            <field name="name">monthly.bill.form</field>
+            <field name="model">monthly.bill</field>
+            <field name="arch" type="xml">
+                <form string="Monthly Bill">
+                    <sheet>
+                        <widget name="web_ribbon" title="Paid"
+                                attrs="{'invisible': [('is_bill_paid', '=', False)]}"/>
+
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="effective_date"
+                                       attrs="{'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+                                <field name="building_id"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+                                <field name="property_id" domain="[('parent_building', '=', building_id)]"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+                                <field name="bill_type"
+                                       attrs="{'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+
+                                <field name="current_reading_date"
+                                       attrs="{'invisible':[('is_electricity', '=', False)],'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+                                <field name="reading_type_id"
+                                       attrs="{'invisible':[('is_electricity', '=', False)], 'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+                                <field name="kwh" invisible="1"/>
+
+                                <field name="current_reading"
+                                       attrs="{'invisible':[('is_electricity', '=', False)], 'readonly':[('monthly_bill_approval_id', '!=', False)]}"/>
+
+
+                                <field name="consumed_reading" force_save="1"
+                                       attrs="{'invisible':[('is_electricity', '=', False)]}"
+                                />
+
+                                <field name="tax_id"
+                                       attrs="{'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                       domain="[('type_tax_use','=','purchase'), ('company_id', '=', company_id)]"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                                <field name="unit_rate"
+                                       attrs="{'invisible':[('is_electricity', '=', False)], 'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+
+                                <field name="sewage_rate"
+                                       attrs="{'invisible':[('bill_type', '!=', %(atr_bill_type_water)d)], 'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="other_charges" force_save="1"
+                                       attrs="{'invisible':[('is_electricity', '=', False)],'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="wifi_amount"
+                                       attrs="{'invisible':[('is_electricity', '=', True)],'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="is_trip_shown" invisible="1"/>
+                                <field name="trip_count"
+                                       attrs="{'invisible':[('is_trip_shown', '=', False)],'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="monthly_bill_approval_id" readonly="1" string="Bill Approval"/>
+                                <field name="approval_state" readonly="1" invisible="1"/>
+
+                            </group>
+                            <group>
+
+                                <field name="electricity_account_id" string="Unit Electricity Account"
+                                       domain="[('property_id', '=', property_id)]"
+                                       attrs="{'invisible':[('bill_type', '!=', %(atr_bill_type_electricity)d)],'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="water_account_id" string="Unit Water Account"
+                                       domain="[('property_id', '=', property_id)]"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                       attrs="{'invisible':[('bill_type', '!=', %(atr_bill_type_water)d)], 'readonly':[('monthly_bill_approval_id', '!=', False)]}"
+                                />
+                                <field name="electricity_account" invisible="1"/>
+                                <field name="water_account" invisible="1"/>
+                                <field name="previous_reading" readonly="1" force_save="1" invisible="1"/>
+                                <field name="previous_reading_date" readonly="1" force_save="1" invisible="1"/>
+
+                                <field name="unit_amount" string="Unit Amount" readonly="1" force_save="1"
+                                       attrs="{'invisible':[('is_electricity', '=', False)]}"
+                                />
+
+                                <field name="tax_amount" readonly="1" force_save="1"/>
+
+                                <field name="total_amount" readonly="1" force_save="1"/>
+                                <field name="is_electricity" invisible="1" readonly="1"/>
+                                <field name="is_bill_paid" invisible="1" readonly="1"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="monthly_bill_search_view" model="ir.ui.view">
+            <field name="name">monthly.bill.search</field>
+            <field name="model">monthly.bill</field>
+            <field name="arch" type="xml">
+                <search string="Monthly Bill">
+                    <field name="building_id"/>
+                    <filter string="Current Month" name="current_month"
+                            domain="[('effective_date','&lt;',(context_today()+relativedelta(months=1)).strftime('%%Y-%%m-01')), ('effective_date','&gt;=',time.strftime('%%Y-%%m-01'))]"
+                    />
+                    <filter string="Previous Month" name="prev_month"
+                            domain="[('effective_date','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('effective_date','&lt;',time.strftime('%%Y-%%m-01'))]"
+                    />
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Bill Type" context="{'group_by':'bill_type'}" name="group_by_bill_type"/>
+                        <filter name="group_date_from" string="Month" context="{'group_by':'effective_date:month'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_monthly_bill" model="ir.actions.act_window">
+            <field name="name">Monthly Bill</field>
+            <field name="res_model">monthly.bill</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Create Monthly Bills.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bill_type" model="ir.actions.act_window">
+            <field name="name">Bill Type</field>
+            <field name="res_model">bill.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create utility types.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_bill_type" action="action_bill_type"
+                  parent="property_lease_management.menu_property_config"
+                  sequence="7"
+        />
+
+        <record id="view_monthly_bill_approval_tree" model="ir.ui.view">
+            <field name="name">monthly.bill.approval.tree</field>
+            <field name="model">monthly.bill.approval</field>
+            <field name="arch" type="xml">
+                <tree string="Monthly Bill Approval" sample="1" decoration-info="(state == 'draft')"
+                      default_order="name desc">
+                    <field name="name" string="Seq No"/>
+                    <field name="partner_id"/>
+                    <field name="create_uid" widget="many2one_avatar_user"/>
+                    <field name="create_date" optional="hide"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                    <field name="building_select" optional="hide"/>
+                    <field name="building_ids" widget="many2many_tags" optional="hide"/>
+                    <field name="bill_type"/>
+                    <field name="approved_by" widget="many2one_avatar_user" optional="hide"/>
+                    <field name="approved_date" optional="hide"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="invoice_state" widget="badge" optional="show"
+                           decoration-muted="invoice_state != 'posted'"
+                           decoration-success="invoice_state == 'posted'"
+                    />
+                    <field name="payment_state" widget="badge" optional="show"
+                           decoration-danger="payment_state == 'not_paid'"
+                           decoration-muted="payment_state in ('partial', 'in_payment')"
+                           decoration-success="payment_state in ('paid', 'reversed')"
+                    />
+                    <field name="state"
+                           decoration-info="(state == 'draft')"
+                           decoration-warning="state in ('property_head','accountant')"
+                           decoration-success="state == 'paid'"
+                           decoration-danger="state == 'reject'"
+                           widget="badge" optional="show"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_monthly_bill_approval_form" model="ir.ui.view">
+            <field name="name">monthly.bill.approval.form</field>
+            <field name="model">monthly.bill.approval</field>
+            <field name="arch" type="xml">
+                <form string="Monthly Bill Approval">
+                    <header>
+                        <button name="send_to_property_head" string="Send to Property Head" type="object"
+                                class="oe_highlight" states="draft"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="send_to_accountant" string="Send to Accountant" type="object"
+                                groups="property_lease_management.group_property_head" class="oe_highlight"
+                                states="property_head"
+                        />
+                        <button name="button_action_create_bill" string="Create Bill" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                attrs="{'invisible': ['|',('bill_count', '!=', 0), ('state', '!=', 'accountant')]}"
+                        />
+                        <button name="send_to_paid" string="Mark as Paid" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                attrs="{'invisible': ['|',('payment_state', '!=', 'paid'), ('state', '!=', 'accountant')]}"
+                        />
+                        <button name="send_back" string="Send Back" type="object" class="oe_highlight"
+                                states="property_head"
+                                groups="property_lease_management.group_property_head"
+                        />
+                        <button name="send_back" string="Send Back" type="object" class="oe_highlight"
+                                attrs="{'invisible': ['|',('bill_count', '!=', 0), ('state', '!=', 'accountant')]}"
+                                groups="property_lease_management.group_property_accountant"
+                        />
+                        <button name="reject_bills" string="Reject Bills" type="object" class="oe_highlight"
+                                states="property_head"
+                                groups="property_lease_management.group_property_head"
+                        />
+
+                        <button name="reject_bills" string="Reject Bills" type="object"
+                                class="oe_highlight" states="accountant"
+                                groups="property_lease_management.group_property_accountant"
+                        />
+                        <button name="get_bills" string="Get Bills" type="object"
+                                class="oe_highlight" invisible="1" states="draft"
+                        />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,property_head,paid"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object"
+                                    name="button_action_view_bill" icon="fa-dollar"
+                                    attrs="{'invisible': [('bill_count', '==', 0)]}">
+                                <field name="bill_count" string="Bills" widget="statinfo"/>
+                            </button>
+                            <!--   attrs="{'invisible': [('is_create_bill', '=', False)]}"-->
+
+                        </div>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name" nolabel="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="from_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="to_date" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="building_select" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="building_ids" widget="many2many_tags"
+                                       attrs="{'invisible':[('building_select', '!=', 'choose')], 'readonly':[('state', '!=', 'draft')]}"
+                                />
+                                <field name="bill_type" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="move_id" readonly="1" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="invoice_state" widget="badge"
+                                       decoration-muted="invoice_state != 'posted'"
+                                       decoration-success="invoice_state == 'posted'"
+                                />
+                                <field name="payment_state" widget="badge"
+                                       decoration-danger="payment_state == 'not_paid'"
+                                       decoration-muted="payment_state in ('partial', 'in_payment')"
+                                       decoration-success="payment_state in ('paid', 'reversed')"
+                                />
+
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                                <p attrs="{'invisible':[('bill_type', '!=', %(atr_bill_type_water)d)]}">(Including
+                                    sewage amount)
+                                </p>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Bills" string="Bills">
+                                <field name="monthly_bill_ids" force_save="1"
+                                       attrs="{'readonly':[('state', '!=', 'draft')]}"
+                                >
+                                    <tree create="false" edit="false">
+                                        <button name="view_monthly_bill" string="View" type="object"
+                                                class="oe_highlight"
+                                        />
+                                        <field name="effective_date"/>
+                                        <field name="name"/>
+                                        <field name="building_id"/>
+                                        <field name="property_id"/>
+                                        <field name="bill_type"/>
+                                        <field name="previous_reading" optional="hide" invisible="1"/>
+                                        <field name="current_reading" optional="hide"/>
+                                        <field name="consumed_reading" optional="show"/>
+                                        <field name="unit_rate"/>
+                                        <field name="unit_amount" string="Unit Amount" readonly="1" force_save="1"/>
+                                        <field name="sewage_rate"/>
+                                        <field name="other_charges"/>
+                                        <field name="tax_id" optional="show"/>
+                                        <field name="tax_amount" readonly="1" force_save="1" optional="hide"/>
+                                        <field name="total_amount" readonly="1" force_save="1"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <button name="view_monthly_bill" string="View"
+                                                    type="object"
+                                                    class="oe_highlight"/>
+                                            <field name="effective_date" readonly="1" force_save="1"/>
+                                            <field name="building_id" readonly="1" force_save="1"/>
+                                            <field name="bill_type" readonly="1" force_save="1"/>
+                                            <field name="previous_reading" readonly="1" force_save="1" invisible="1"/>
+                                            <field name="current_reading" readonly="1" force_save="1"/>
+                                            <field name="consumed_reading" readonly="1" force_save="1"/>
+                                            <field name="unit_rate" readonly="1" force_save="1"/>
+                                            <field name="unit_amount" string="Unit Amount" readonly="1" force_save="1"/>
+                                            <field name="tax_id" readonly="1" force_save="1"/>
+                                            <field name="tax_amount" readonly="1" force_save="1"/>
+                                            <field name="total_amount" readonly="1" force_save="1"/>
+
+                                        </group>
+                                    </form>
+                                </field>
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                    <group colspan="4">
+                                        <!--                                        <field colspan="2" name="note" nolabel="1"-->
+                                        <!--                                               placeholder="Terms and conditions..."/>-->
+                                    </group>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="monthly_bill_total">
+                                        <field name="total_unit_amount" readonly="1" force_save="1"/>
+                                        <field name="total_tax_amount" readonly="1" force_save="1"/>
+                                        <field name="total_total_amount" readonly="1" force_save="1"/>
+                                    </group>
+                                    <div class="clearfix"/>
+                                </group>
+
+
+                            </page>
+                            <page name="Remarks" string="Remarks &amp; Approvals">
+                                <group>
+                                    <group>
+                                        <field name="remarks"/>
+                                        <field name="property_remarks"/>
+                                        <field name="create_uid" readonly="1"/>
+                                        <field name="approved_by" readonly="1"/>
+                                        <field name="approved_date" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="monthly_bill_approval_search_view" model="ir.ui.view">
+            <field name="name">monthly.bill.approval.search</field>
+            <field name="model">monthly.bill.approval</field>
+            <field name="arch" type="xml">
+                <search string="Monthly Bill Approval">
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <!-- <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/> -->
+                        <filter string="Bill Type" context="{'group_by':'bill_type'}" name="group_by_bill_type"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_monthly_bill_approval" model="ir.actions.act_window">
+            <field name="name">Monthly Bill Approval</field>
+            <field name="res_model">monthly.bill.approval</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Create Monthly Bill Approval.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="main_menu_monthly_bill"
+                  name="Monthly Bills"
+                  sequence="6"
+                  parent="property_lease_management.menu_base_property"
+        />
+
+        <menuitem id="menu_monthly_bill"
+                  name="Monthly Bills"
+                  sequence="1"
+                  action="action_monthly_bill"
+                  parent="property_lease_management.main_menu_monthly_bill"
+        />
+
+        <menuitem id="menu_monthly_bill_approval"
+                  name="Monthly Bills Approval"
+                  sequence="5"
+                  action="action_monthly_bill_approval"
+                  parent="property_lease_management.main_menu_monthly_bill"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+
+        <!-- Recieving PDC Notifications -->
+         <record id="mail_activity_pdc_receiving_notification" model="mail.activity.type">
+            <field name="name">PDC Cheque Date</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">account.payment</field>
+        </record>
+
+       
+    </data>
+</odoo>

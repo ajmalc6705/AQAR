@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_property_opportunity_report_wiz" model="ir.ui.view">
+            <field name="name">property.opportunity.report.wiz.form</field>
+            <field name="model">property.opportunity.report.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Property Opportunity Report">
+                    <group>
+                        <field name="date_from" />
+                        <field name="date_to" />
+                    </group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight" type="object"
+                                icon="fa-print" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="lost_reason_wizard">
+        <field name="name">Lost Reason</field>
+        <field name="model">tender.lost.reason</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="lost_reason" nolabel="1" placeholder="Add Lost Reason Here"/>
+                    <field name="tender_id"  invisible="1"/>
+                </group>
+                <footer>
+                    <button name="lost" string="Tender Lost" type="object"
+                            class="oe_highlight"/>
+                    <button string="Cancel" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

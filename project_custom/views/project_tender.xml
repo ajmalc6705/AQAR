@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tender_form" model="ir.ui.view">
+            <field name="name">project.tender.form</field>
+            <field name="model">project.tender</field>
+            <field name="arch" type="xml">
+                <form string="Tender">
+                    <header>
+                        <button name="qs" string="Send to QS head" type="object"
+                                groups="project.group_project_user"
+                                attrs="{'invisible': [('state', 'not in', ('draft' ,'boq'))]}" class="oe_highlight"/>
+                        <button name="operations" string="Send to Projects Manager" type="object"
+                                groups="project_custom.group_qs_head"
+                                attrs="{'invisible': [('state', '!=', 'draft1')]}" class="oe_highlight"/>
+                        <button name="action_send_coo" string="Send to COO" type="object"
+                                groups="project.group_project_manager"
+                                attrs="{'invisible': [('state', '!=', 'draft2')]}" class="oe_highlight"/>
+                        <button name="action_send_ceo" string="Send to CEO" type="object"
+                                groups="atr_hr_custom.group_hr_coo"
+                                attrs="{'invisible': [('state', '!=', 'open')]}" class="oe_highlight"/>
+                        <button name="validate1" string="Approve" type="object"
+                                groups="atr_hr_custom.group_hr_ceo"
+                                attrs="{'invisible': [('state', '!=', 'validate1')]}" class="oe_highlight"/>
+                        <button name="revise" string="Revise" type="object"
+                                attrs="{'invisible': [('state', '!=', 'client')]}" class="oe_highlight"/>
+                        <button name="won" string="Tender Won" type="object"
+                                attrs="{'invisible': [('state', '!=', 'client')]}" class="oe_highlight"/>
+                        <button name="lost" string="Tender Lost" type="object"
+                                attrs="{'invisible': [('state', '!=', 'client')]}"/>
+                        <button name="done" string="Validate" type="object"
+                                states="validate22" class="oe_highlight"/>
+                        <button name="close" string="Close" type="object"
+                                states="validate1" class="oe_highlight"/>
+                        <!--send back-->
+                        <button name="sent_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state', '!=', 'draft1')]}"/>
+                        <button name="sent_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state', '!=', 'draft2')]}"/>
+                        <button name="sent_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state', '!=', 'open')]}"/>
+                        <button name="sent_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state', '!=', 'validate1')]}"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="return_site_visit" class="oe_stat_button" type="object" icon="fa-suitcase"
+                                    context="{'xml_id':'open_visit_form'}">
+                                <div class="o_stat_info">
+                                    <field name="visit_count"/>
+                                    <span class="o_stat_text">Site Visits</span>
+                                </div>
+                            </button>
+                            <button name="open_boq" class="oe_stat_button" type="object" icon="fa-file-text">
+                                <div class="o_stat_info">
+                                    <field name="boq_count"/>
+                                    <span class="o_stat_text">BOQ</span>
+                                </div>
+                            </button>
+
+                            <button name="open_ext_boq" class="oe_stat_button" type="object" icon="fa-file-text">
+                                <div class="o_stat_info">
+                                    <field name="boq_ext_count"/>
+                                    <span class="o_stat_text">Extended BOQ</span>
+                                </div>
+                            </button>
+
+                            <button name="open_parent" class="oe_stat_button" type="object" icon="fa-file-text"
+                                    attrs="{'invisible':[('revision', '=', False)]}">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Related Tender</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="tender_no" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group string="Tender Details">
+                            <group>
+                                <field name="tender_ref" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="tender_title" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="tender_source_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="priority" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="project_tender_type" attrs="{'readonly': [('state','!=','draft')]}"
+                                       string="Type"/>
+                                <field name="sub_type" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="type_contract" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="work_id" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="revised" invisible="1"/>
+                                <field name="revision" invisible="1"/>
+                                <field name="parent_tender" invisible="1"/>
+                                <field name="location" required="1"/>
+                            </group>
+                            <group>
+                                <field name="client" attrs="{'readonly': [('state','!=','draft')]}" required="1"/>
+                                <field name="date_tender" required="1"
+                                       attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="date_collection" required="1"
+                                       attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="date_receipt"
+                                       attrs="{'readonly': [('state','not in',('done'))], 'required': [('state','in',('done'))]}"/>
+
+                                <field name="date_submission"
+                                       attrs="{'readonly': [('state','not in',('draft', 'boq'))]}"/>
+                                <field name="date_visit" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="extended_days"
+                                       attrs="{'readonly': [('state','not in',('draft', 'boq'))]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Cost Estimation Details">
+                                <field name="project_duration"
+                                       attrs="{'readonly': [('state','not in',('boq', 'draft1'))]}"/>
+                                <field name="mobilization_duration"
+                                       attrs="{'readonly': [('state','not in',('boq', 'draft1'))]}"/>
+                                <field name="manpower" attrs="{'readonly': [('state','not in',('boq', 'draft1'))]}"/>
+                                <field name="project_cost"/>
+                                <field name="project_buffer_amount"
+                                       attrs="{'readonly': [('state','not in',('draft', 'draft1', 'draft2'))]}"/>
+                                <field name="profit_perc"
+                                       attrs="{'readonly': [('state','!=', 'validate1')]}"/>
+                                <field name="profit_amount" readonly="1" forcesave="1"/>
+                                <field name="project_total" readonly="1" forcesave="1"/>
+                            </group>
+                            <group string="Purchase Details">
+                                <field name="foc"/>
+                                <field name="amount"
+                                       attrs="{'required': [('foc','=', False)],'invisible': [('foc','=',True)]}"/>
+                                <field name="related_rfq" attrs="{'readonly': [('state','not in',('boq', 'draft1'))]}"/>
+                                <field name="payment_mode"
+                                       attrs="{'required': [('foc','=', False)],'invisible': [('foc','=',True)]}"/>
+                                <field name="date_payment"
+                                       attrs="{'required': ['&amp;', ('foc','=', False), ('state', '=', 'ready')],
+                                       'invisible': [('foc','=',True)]}"/>
+                            </group>
+                        </group>
+                        <group string="Bond Details">
+                            <group>
+                                <field name="bond"/>
+                                <field name="bond_value"
+                                       attrs="{'required': [('bond','=', True)],'invisible': [('bond','=',False)]}"/>
+                                <field name="bond_date_start"
+                                       attrs="{'invisible': [('bond','=',False)]}"/>
+                                <field name="bond_date_end"
+                                       attrs="{'invisible': [('bond','=',False)]}"/>
+                                <field name="bond_file"
+                                       attrs="{'invisible': [('bond','=',False)]}" filename="file_name"/>
+                            </group>
+                            <group>
+                                <field name="insurance_start"
+                                       attrs="{'invisible': [('bond','=',False)]}"/>
+                                <field name="insurance_end"
+                                       attrs="{'invisible': [('bond','=',False)]}"/>
+                                <field name="insurance_doc"
+                                       attrs="{'invisible': [('bond','=',False)]}" filename="file_name"/>
+                            </group>
+                        </group>
+                        <group string="Additional Details">
+                            <group>
+                                <field name="advance_payment"
+                                       attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="payment_term_id"
+                                       attrs="{'readonly': [('state','!=', 'draft')]}"/>
+
+                                <field name="minimum_monthly_claim"
+                                       attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="date_revision" attrs="{'invisible':[('revision', '=', False)]}"/>
+                                <field name="revised_date" attrs="{'invisible':[('revised', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="description" required="1"
+                                   attrs="{'readonly': [('state','!=','draft')], }"/>
+                        </group>
+                        <notebook>
+                            <page string="Tender Documents Collected"
+                                  attrs="{'readonly': [('state','!=','draft')], }">
+                                <field name="tender_docs" context="{'default_tender': active_id}">
+                                    <tree>
+                                        <field name="date_collection"/>
+                                        <field name="description"/>
+                                        <field name="attach_name" string="Document"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                    <form>
+                                        <group col="4">
+                                            <field name="date_collection"/>
+                                            <field name="description"/>
+                                            <field name="attachment" filename="attach_name"/>
+                                            <field name="attach_name" invisible="1"/>
+                                            <field name="tender" invisible="1"/>
+                                        </group>
+                                        <group string="Remarks" col="4">
+                                            <field name="remarks" nolabel="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Revised Tender Documents Collected"
+                                  attrs="{'invisible':[('revision', '=', False)]}">
+                                <field name="tender_docs_revised" context="{'default_tender': active_id}">
+                                    <tree>
+                                        <field name="date_collection"/>
+                                        <field name="description"/>
+                                        <field name="attach_name" string="Document"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                    <form>
+                                        <group col="4">
+                                            <field name="date_collection"/>
+                                            <field name="description"/>
+                                            <field name="attachment" filename="attach_name"/>
+                                            <field name="attach_name" invisible="1"/>
+                                            <field name="tender" invisible="1"/>
+                                        </group>
+                                        <group string="Remarks" col="4">
+                                            <field name="remarks" nolabel="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Queries">
+                                <field name="tender_query" context="{'default_tender': active_id}">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="description"/>
+                                        <field name="attach_name" string="Document"/>
+                                        <field name="reply_date"/>
+                                        <field name="attach_reply_name" string="Reply Doc."/>
+                                    </tree>
+                                    <form>
+                                        <group col="4">
+                                            <field name="date"/>
+                                            <field name="description"/>
+                                            <field name="attachment" filename="attach_name"/>
+                                            <field name="attachment_reply" filename="attach_reply_name"/>
+                                            <field name="reply_date"/>
+                                            <field name="attach_name" invisible="1"/>
+                                            <field name="attach_reply_name" invisible="1"/>
+                                            <field name="tender" invisible="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Addendum &amp; Circulars">
+                                <field name="tender_addendum" context="{'default_tender': active_id}">
+                                    <tree>
+                                        <field name="sl_no"/>
+                                        <field name="date"/>
+                                        <field name="description"/>
+                                        <field name="date_submission"/>
+                                        <field name="attach_name" string="Document"/>
+                                        <field name="remarks"/>
+                                    </tree>
+                                    <form>
+                                        <group col="4">
+                                            <field name="sl_no"/>
+                                            <field name="date"/>
+                                            <field name="description"/>
+                                            <field name="date_submission"/>
+                                            <field name="attachment" filename="attach_name"/>
+                                            <field name="attach_name" invisible="1"/>
+                                            <field name="tender" invisible="1"/>
+                                        </group>
+                                        <group string="Remarks" col="4">
+                                            <field name="remarks" nolabel="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Competitor Details">
+                                <field name="competitor_ids" context="{'default_tender': active_id}">
+                                    <tree editable="bottom">
+                                        <field name="company_name"/>
+                                        <field name="value"/>
+                                        <field name="position"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Challenges">
+                                <field name="challenge_ids" context="{'default_tender': active_id}">
+                                    <tree editable="bottom">
+                                        <field name="challenge_type"/>
+                                        <field name="remark"/>
+                                        <field name="create_uid"/>
+                                        <field name="write_uid"/>
+                                    </tree>
+                                    <form>
+                                        <group col="4">
+                                            <field name="challenge_type"/>
+                                            <field name="tender_id"/>
+                                            <field name="create_uid"/>
+                                            <field name="write_uid"/>
+                                        </group>
+                                        <group col="4" string="Remark">
+                                            <field name="remark" nolabel="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Revisions" attrs="{'invisible':[('revised', '=', False)]}">
+                                <field name="child_ids">
+                                    <tree editable="false">
+                                        <field name="tender_no"/>
+                                        <field name="date_revision"/>
+                                        <field name="project_cost"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Working Team">
+                                <group>
+                                    <field name="construction_team_ids" string="Construction Team"
+                                           widget="many2many_tags"/>
+                                    <field name="aluminium_team_ids" string="Aluminium Team" widget="many2many_tags"/>
+                                    <field name="qs_team_ids" string="QS Team" widget="many2many_tags"/>
+                                </group>
+                            </page>
+                            <page string="Lost Reason" attrs="{'invisible':[('state', '!=', 'close')]}">
+                                <group>
+                                    <field name="lost_reason" nolabel="1" readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tender_tree" model="ir.ui.view">
+            <field name="name">project.tender.tree</field>
+            <field name="model">project.tender</field>
+            <field name="arch" type="xml">
+                <tree string="Tender">
+                    <field name="tender_no" decoration-bf="1"/>
+                    <field name="tender_title" decoration-bf="1"/>
+                    <field name="client" decoration-bf="1"/>
+                    <field name="date_tender" decoration-bf="1"/>
+                    <field name="location"/>
+                    <!--<field name="analytic_account_id"/>-->
+                    <field name="amount" decoration-bf="1" widget="monetary"/>
+                    <field name="state" widget="badge"
+                           decoration-muted="state == 'close' or state == 'cancel' or state == 'revise'"
+                           decoration-info="state == 'open' or state == 'validate1' or state == 'boq'
+                           or state == 'client' or state == 'draft1' or state == 'draft2'"
+                           decoration-success="state == 'won'" />
+                    <field name="type" invisible="1"/>
+                    <field name="priority" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- tender search view -->
+        <record id="view_tender_search" model="ir.ui.view">
+            <field name="name">project.tender.search</field>
+            <field name="model">project.tender</field>
+            <field name="arch" type="xml">
+                <search string="Tender">
+                    <field name="tender_no" string="Tender No."/>
+                    <field name="client" string="Client"/>
+                    <group expand="1" string="Group By">
+                        <filter name="parent" string="Parent" context="{'group_by':'parent_tender'}"/>
+                        <filter name="priority" string="Priority" domain="[]" context="{'group_by':'priority'}"/>
+                        <filter name="type" string="Type" domain="[]" context="{'group_by':'type'}"/>
+                        <filter name="location" string="Location" context="{'group_by':'location'}"/>
+                        <filter name="bu" string="Business Unit" context="{'group_by':'analytic_account_id'}"/>
+                        <filter name="status" string="Status" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--BOQ-->
+        <record id="view_boq_search" model="ir.ui.view">
+            <field name="name">project.boq.search</field>
+            <field name="model">project.boq</field>
+            <field name="arch" type="xml">
+                <search string="Tender">
+                    <field name="ref" string="BOQ Reference"/>
+                    <field name="product_id" string="Product"/>
+                    <field name="description" string="Description"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_product" string="Product" context="{'group_by':'product_id'}"/>
+                        <filter name="unit" string="Unit" context="{'group_by':'unit'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_boq_tree" model="ir.ui.view">
+            <field name="name">project.boq.tree</field>
+            <field name="model">project.boq</field>
+            <field name="arch" type="xml">
+                <tree edit="0" create="1" delete="0" string="BOQ">
+                    <field name="ref"/>
+                    <field name="product_id"/>
+                    <field name="description"/>
+                    <field name="quantity"/>
+                    <field name="calc_qty"/>
+                    <field name="unit"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="rate" options="{'currency_field': 'currency_id'}"/>
+                    <field name="labor_rate" options="{'currency_field': 'currency_id'}"/>
+                    <field name="sub_contract_quote"/>
+                    <field name="sub_contract_disc"/>
+                    <field name="total_rate"/>
+                    <field name="amount_total" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                    <field name="calc_total_amount" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                    <field name="material_total" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                    <field name="labor_total" options="{'currency_field': 'currency_id'}" sum="Total"/>
+                    <field name="sub_contract_cost"
+                           options="{'currency_field': 'currency_id'}" sum="Sub Contract Total"/>
+                    <field name="remark"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_project_boq_form" model="ir.ui.view">
+            <field name="name">project.boq.form</field>
+            <field name="model">project.boq</field>
+            <field name="arch" type="xml">
+                <form edit="0" create="0" delete="0" string="BOQ">
+                    <sheet>
+                        <group col="4">
+                            <field name="ref"/>
+                            <field name="product_id"/>
+                            <field name="description"/>
+                        </group>
+                        <group col="4">
+                            <field name="quantity"/>
+                            <field name="calc_qty"/>
+                            <field name="unit"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="rate" options="{'currency_field': 'currency_id'}"/>
+                            <field name="labor_rate" options="{'currency_field': 'currency_id'}"/>
+                            <field name="sub_contract_quote"/>
+                            <field name="sub_contract_disc"/>
+                            <field name="total_rate"/>
+                        </group>
+                        <group string="Remark">
+                            <field name="remark" nolabel="1"/>
+                        </group>
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="boq_total">
+                            <field name="calc_total_amount" options="{'currency_field': 'currency_id'}"/>
+                            <field name="material_total" options="{'currency_field': 'currency_id'}" />
+                            <field name="labor_total" options="{'currency_field': 'currency_id'}"/>
+                            <field name="sub_contract_cost" options="{'currency_field': 'currency_id'}"/>
+                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                <label for="amount_total" />
+                            </div>
+                            <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator"
+                                   widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_project_boq" model="ir.actions.act_window">
+            <field name="name">Bill Of Quantities</field>
+            <field name="res_model">project.boq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">99999999</field>
+        </record>
+
+        <record id="view_extend_boq_search" model="ir.ui.view">
+            <field name="name">project.extend.boq.search</field>
+            <field name="model">project.extend.boq</field>
+            <field name="arch" type="xml">
+                <search string="Tender">
+                    <field name="ref" string="BOQ Reference"/>
+                    <field name="boq_category" string="Category"/>
+                    <field name="product_id" string="Product"/>
+                    <field name="description" string="Description"/>
+                    <group expand="1" string="Group By">
+                        <filter name="boq_category" string="Category" context="{'group_by':'boq_category'}"/>
+                        <filter name="group_product" string="Product" context="{'group_by':'product_id'}"/>
+                        <filter name="unit" string="Unit" context="{'group_by':'unit'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_extend_boq_tree" model="ir.ui.view">
+            <field name="name">project.extend.boq.tree</field>
+            <field name="model">project.extend.boq</field>
+            <field name="arch" type="xml">
+                <tree create="1" delete="0" edit="0" import="1" string="BOQ">
+                    <field name="ref"/>
+                    <field name="boq_category" decoration-bf="1"/>
+                    <field name="product_id" decoration-bf="1"/>
+                    <field name="description" string="Work Description"/>
+                    <field name="quantity"/>
+<!--                    <field name="calc_qty"/>-->
+                    <field name="unit"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="rate" options="{'currency_field': 'currency_id'}"/>
+<!--                    <field name="sub_contract_quote"/>-->
+<!--                    <field name="sub_contract_disc"/>-->
+<!--                    <field name="labor_rate" options="{'currency_field': 'currency_id'}"/>-->
+<!--                    <field name="profit"/>-->
+<!--                    <field name="total_rate"/>-->
+                    <field name="amount_total" options="{'currency_field': 'currency_id'}" sum="Total"/>
+<!--                    <field name="calc_total_amount" options="{'currency_field': 'currency_id'}" sum="Total"/>-->
+<!--                    <field name="material_total" options="{'currency_field': 'currency_id'}" sum="Total"/>-->
+<!--                    <field name="labor_total" options="{'currency_field': 'currency_id'}" sum="Total"/>-->
+                    <field name="remark"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_project_extend_boq_form" model="ir.ui.view">
+            <field name="name">project.extend.boq.form</field>
+            <field name="model">project.extend.boq</field>
+            <field name="arch" type="xml">
+                <form string="BOQ" create="0" edit="0" delete="0">
+                    <sheet>
+                        <group col="4">
+                            <field name="ref"/>
+                            <field name="boq_category"/>
+                            <field name="product_id"/>
+                            <field name="description" string="Work Description"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group col="4">
+                            <field name="quantity" forcesave="1"/>
+                            <field name="unit"/>
+                            <field name="rate" options="{'currency_field': 'currency_id'}" forcesave="1"/>
+                            <field name="amount_total" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                        <group col="4" string="Remark">
+                            <field name="remark" nolabel="1"/>
+                        </group>
+                        <group class="oe_subtotal_footer oe_right" colspan="2" name="boq_total">
+                            <div class="oe_inline o_td_label">
+                                <label for="amount_total" />
+                            </div>
+                            <field name="amount_total" nolabel="1"
+                                   widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_project_extend_boq" model="ir.actions.act_window">
+            <field name="name">Bill Of Quantities</field>
+            <field name="res_model">project.extend.boq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="limit">99999999</field>
+        </record>
+
+        <!--Locations-->
+        <record id="view_project_tender_location_form" model="ir.ui.view">
+            <field name="name">project.tender.location.form</field>
+            <field name="model">project.tender.location</field>
+            <field name="arch" type="xml">
+                <form string="Locations">
+                    <sheet>
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="manpower"/>
+                        </group>
+                        <group col="6" colspan="2" string="Manpower Status">
+                            <field name="current_manpower"/>
+                            <field name="emp_on_leave_count"/>
+                            <field name="manpower_available"/>
+                            <field name="emp_on_leave" invisible="1"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="tender_id" invisible="1"/>
+                            <field name="date_create" invisible="1"/>
+                        </group>
+                        <button class="oe_inline oe_stat_button" string="Show/Hide Employees" name="toggle_employee"
+                                type="object" style="width:22% !important; background-color:thistle;"
+                                icon="fa-user-circle-o"/>
+
+                        <group>
+                            <field name="toggle_employee_visibility" invisible="1"/>
+                            <field name="employee_ids" widget="many2many_tags"
+                                   domain="['|', ('current_location_id', '=', False), ('current_location_id', '=', id)]"
+                                   attrs="{'invisible': [('toggle_employee_visibility', '=', True)]}"/>
+                        </group>
+                        <!--                        <group col="4">-->
+                        <!--                            <field name="emp_with_gp" widget="many2many_tags"-->
+                        <!--                                   attrs="{'invisible': [('toggle_employee_visibility', '=', True)]}" />-->
+                        <!--                            <field name="emp_with_out_gp" widget="many2many_tags"-->
+                        <!--                                   attrs="{'invisible': [('toggle_employee_visibility', '=', True)]}" />-->
+                        <!--                        </group>-->
+                        <group>
+                            <field name="transfer_history">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="effective_date"/>
+                                    <field name="project_from"/>
+                                    <field name="location_from"/>
+                                    <field name="project_to"/>
+                                    <field name="location_to"/>
+                                </tree>
+                            </field>
+                            <field name="leave_history">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="holiday_status_id"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="number_of_days"/>
+                                    <field name="state" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_project_tender_location_tree" model="ir.ui.view">
+            <field name="name">project.tender.location.tree</field>
+            <field name="model">project.tender.location</field>
+            <field name="arch" type="xml">
+                <tree string="Locations">
+                    <field name="name"/>
+                    <field name="manpower"/>
+                    <field name="current_manpower"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

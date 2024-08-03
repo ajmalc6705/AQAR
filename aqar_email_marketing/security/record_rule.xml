@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!--    Mailing Marketing Rule-->
+    <record id="email_marketing_user_rule" model="ir.rule">
+        <field name="name">Email Marketing User Rule</field>
+        <field name="model_id" ref="model_mailing_mailing"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|',('user_ids','=',False),('user_ids','in',user.id)]
+        </field>
+    </record>
+    <!--    Mailing List record Rule-->
+    <record id="email_marketing_mailing_list_user_rule" model="ir.rule">
+        <field name="name">Email Mailing List User Rule</field>
+        <field name="model_id" ref="model_mailing_list"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|',('user_ids','=',False),('user_ids','in',user.id)]
+        </field>
+    </record>
+    <!--     record Rule for Mailing Contact-->
+    <record id="email_marketing_mailing_contact_user_rule" model="ir.rule">
+        <field name="name">Email Mailing Contact User Rule</field>
+        <field name="model_id" ref="model_mailing_contact"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|',('user_ids','=',False),('user_ids','in',user.id)]
+        </field>
+    </record>
+
+    <!--      <record id="contract_user_multi_company_rule" model="ir.rule">-->
+    <!--        <field name="name">Contract User multi-company</field>-->
+    <!--        <field ref="model_aqar_contract" name="model_id"/>-->
+    <!--        <field eval="True" name="global"/>-->
+    <!--        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>-->
+    <!--    </record>-->
+
+</odoo>

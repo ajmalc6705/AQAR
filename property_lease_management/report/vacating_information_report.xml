@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="paperformat_amalk_tenant_deposit_release" model="report.paperformat">
+            <field name="name">Employe A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_report_tenant_deposit_release" model="ir.actions.report">
+            <field name="name">Vacating Information</field>
+            <field name="model">tenant.deposit.release</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">property_lease_management.report_vacating_information</field>
+            <field name="report_file">property_lease_management.report_vacating_information</field>
+            <field name="print_report_name">'Vacating-Information-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="binding_model_id" ref="property_lease_management.model_tenant_deposit_release" />
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_amalk_tenant_deposit_release"/>
+        </record>
+
+
+        <template id="vacating_information">
+            <!-- <t t-call="web.external_layout"> -->
+                <t t-set="o" t-value="o.with_context(lang=lang)" />
+                <link rel='stylesheet' href='/property_management/static/src/css/report.css' />
+                
+                <div class="row">
+                    <center>
+                        <h1 class="p3 ft0" style="margin-bottom: 0px !important;">Aqar Real Estate</h1>
+                        <h4 style="margin: 0px !important;">P. O. Box 550, Postal Code 111</h4>
+                        <h4 style="margin: 0px !important;">CPO Seeb, Sultanate of Oman</h4>
+                        <div style="border-bottom: 1px solid black;"/>
+                    </center>
+                </div>
+                <div class="page">
+                    <div class="oe_structure" />
+                    <center>
+                        <h2>Vacating Information</h2>
+                    </center>
+                    <center style="text-align: left;" />
+                    <h3>
+                        <storng>
+                            <span t-esc="o.reference" />
+                        </storng>
+                    </h3>
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Building : </strong>
+                            <span t-esc="o.building_id.name" />
+                        </div>
+                        <div class="col-4">
+                            <strong>Tenant : </strong>
+                            <span t-esc="o.partner_id.name" />
+                        </div>
+                        <div class="col-4">
+                            <strong>Flat/Villa : </strong>
+                            <span t-esc="o.property_id.name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Rent : </strong>
+                            <span t-esc="o.rent_id.name" />
+                        </div>
+                        <div class="col-4">
+                            <strong>Lease Start :</strong>
+                            <span t-if="o.from_date" t-field="o.from_date"
+                                  t-options='{"format": "d/MM/Y"}' />
+                        </div>
+                        <div class="col-4">
+                            <strong>Lease End :</strong>
+                            <span t-if="o.to_date" t-field="o.to_date"
+                                  t-options='{"format": "d/MM/Y"}' />
+                        </div>
+                    </div>
+                    <br />
+                    <table width="50%">
+                        <tbody>
+                            <td width="10%">
+                                <span>
+                                    <strong>A. Total Deposit Amount :</strong>
+                                </span>
+                            </td>
+                            <td width="10%">
+                                <span t-esc="'%.3f'%o.security_deposit" />
+                            </td>
+                        </tbody>
+                    </table>
+                    <br />
+                    <h6>
+                        <span>
+                                <strong>B. Deduction  :</strong>
+                        </span>
+                    </h6>
+                    <table width="100%" style=" border-bottom:1px solid;">
+                        <thead>
+                            <tr style="border-bottom:1px solid; padding:5px;  height: 35px !important;">
+                                <th width="50%" style="border-spacing: 10px;vertical-align : middle;">Deduction Type</th>
+                                <th width="20%" style="border-spacing: 10px;text-align:right">RO</th>
+                                <th width="30%" style="border-spacing: 10px;vertical-align : middle; text-align:right;">
+                                    Description
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--data body goes here-->
+                            <t t-foreach="o.deduction_line_ids" t-as="line">
+                                <tr style="padding:5px;border-bottom:1px solid;height: 20px !important;">
+                                    <td style="border-spacing: 10px;">
+                                        <span>
+                                            <t t-esc="line.deduction_type_id.name" />
+                                        </span>
+                                    </td>
+                                    <td style="text-align:right;border-spacing: 10px;">
+                                        <span t-esc="'%.3f'%line.ro" />
+                                    </td>
+                                    <td style="text-align:center;border-spacing: 10px;">
+                                        <span t-field="line.remark" />
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <br />
+                    <table width="50%">
+                        <tbody>
+                            <td width="10%">
+                                <span>
+                                    <strong>Total Deduction Amount  :</strong>
+                                </span>
+                            </td>
+                            <td width="10%">
+                                <span t-esc="'%.3f'%o.amount" />
+                            </td>
+                        </tbody>
+                    </table>
+                    <br />
+                    <table width="50%">
+                        <tbody>
+                            <td width="10%">
+                                <span>
+                                    <strong>Balance Amount  :</strong>
+                                </span>
+                            </td>
+                            <td width="10%">
+                                <span t-esc="'%.3f'%o.balance_amount" />
+                            </td>
+                        </tbody>
+                    </table>
+
+                </div>
+            <!-- </t> -->
+        </template>
+        <template id="report_vacating_information">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="property_lease_management.vacating_information" t-lang="lang" />
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

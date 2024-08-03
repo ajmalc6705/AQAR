@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="property_building_inherited" model="ir.ui.view">
+        <field name="name">property.building.inherited.form</field>
+        <field name="model">property.building</field>
+        <field name="inherit_id" ref="property_lease_management.view_property_building_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='krookie_number']" position="after">
+                <field name="sequence_id"/>
+            </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Parking">
+                    <field name="parking_line_ids">
+                        <tree string="parking" editable="bottom" sample="1">
+                            <field name="parking_no"/>
+                            <field name="name" optional="show"/>
+                            <field name="park_no" optional="show"/>
+                            <field name="floor_no" optional="show"/>
+                            <field name="is_sale" optional="show"/>
+                            <field name="is_rent" optional="show"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                   context="{'default_for_parking':True, }"
+                                   optional="show"/>
+<!--                            domain="[('id','in',unit_ids)]"-->
+                            <field name="unit_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="sales_price" optional="show"/>
+                            <field name="notes" optional="show"/>
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_property_rent_inherit_rent" model="ir.ui.view">
+        <field name="name">property_rent.form.inherit.rent</field>
+        <field name="model">property.rent</field>
+        <field name="inherit_id" ref="property_lease_management.view_rent_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='agreement']" position="after">
+                <page name="parking_slots" string="Parking Slots">
+                    <field name="parking_line_ids" widget="one2many_list"
+                    >
+                        <tree string="Parking Slot">
+                            <field name="name"/>
+                            <field name="parking_no"/>
+                            <field name="building_id"/>
+                            <field name="floor_no" optional="hide"/>
+                            <field name="unit_id" optional="hide"/>
+
+                            <field name="state" widget="badge"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

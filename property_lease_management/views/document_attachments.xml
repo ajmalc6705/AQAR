@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<odoo>
+
+<!--    <record id="view_document_attachment_form" model="ir.ui.view">-->
+<!--        <field name="name">atheer.documents.form</field>-->
+<!--        <field name="model">atheer.documents</field>-->
+<!--        <field name="inherit_id" ref="amlak_finance.view_document_attachment_form"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="partner_id" position="after">-->
+<!--                <field name="building_id" attrs="{'invisible':[('building_id','=', False)]}"/>-->
+<!--                <field name="property_id" attrs="{'invisible':[('property_id','=', False)]}"/>-->
+<!--                <field name="rent_id" attrs="{'invisible':[('rent_id','=', False)]}"/>-->
+<!--                <field name="room_building_id" attrs="{'invisible':[('room_building_id','=', False)]}"/>-->
+<!--                <field name="room_property_id" attrs="{'invisible':[('room_property_id','=', False)]}"/>-->
+<!--                <field name="room_id" attrs="{'invisible':[('room_id','=', False)]}"/>-->
+<!--                <field name="asset_id" attrs="{'invisible':[('asset_id','=', False)]}"/>-->
+<!--                <field name="complaint_id" attrs="{'invisible':[('complaint_id','=', False)]}"/>-->
+<!--                <field name="maintainz_id" attrs="{'invisible':[('maintainz_id','=', False)]}"/>-->
+<!--                <field name="client_id" attrs="{'invisible':[('client_id','=', False)]}"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="view_document_attachment_tree_notification" model="ir.ui.view">
+        <field name="name">atheer.documents.tree.notification</field>
+        <field name="model">atheer.documents</field>
+        <field name="arch" type="xml">
+            <tree string="Document Attachments" create="0" delete="0" edit="0" sample="1">
+                <field name="doc_no"/>
+                <field name="doc_type"/>
+                <field name="file_name"/>
+                <field name="expiry_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_document_attachment_form_notification" model="ir.ui.view">
+        <field name="name">atheer.documents.form.notification</field>
+        <field name="model">atheer.documents</field>
+        <field name="arch" type="xml">
+            <form string="Document Attachments" create="0" delete="0" edit="0">
+                <sheet>
+                    <group>
+                        <group string="Document Details">
+                            <field name="doc_no"/>
+                            <field name="doc_type"/>
+                            <field name="expiry_date"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="attachment_ids" filename="file_name"/>
+                        </group>
+                        <group string="Information">
+                            <field name="partner_id" attrs="{'invisible':[('partner_id','=', False)]}"/>
+                            <field name="building_id" attrs="{'invisible':[('building_id','=', False)]}"/>
+                            <field name="property_id" attrs="{'invisible':[('property_id','=', False)]}"/>
+                            <field name="rent_id" attrs="{'invisible':[('rent_id','=', False)]}"/>
+                            <field name="room_building_id" attrs="{'invisible':[('room_building_id','=', False)]}"/>
+                            <field name="room_property_id" attrs="{'invisible':[('room_property_id','=', False)]}"/>
+                            <field name="room_id" attrs="{'invisible':[('room_id','=', False)]}"/>
+                            <field name="asset_id" attrs="{'invisible':[('asset_id','=', False)]}"/>
+                            <field name="complaint_id" attrs="{'invisible':[('complaint_id','=', False)]}"/>
+                            <field name="maintainz_id" attrs="{'invisible':[('maintainz_id','=', False)]}"/>
+<!--                            <field name="sale_id" attrs="{'invisible':[('sale_id','=', False)]}"/>-->
+                            <field name="client_id" attrs="{'invisible':[('client_id','=', False)]}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_document_attachment_notification" model="ir.actions.act_window">
+        <field name="name">Document Attachments</field>
+        <field name="res_model">atheer.documents</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids"
+               eval="[(5, 0, 0),
+                          (0, 0, {'view_mode': 'tree', 'view_id': ref('view_document_attachment_tree_notification')}),
+                          (0, 0, {'view_mode': 'form', 'view_id': ref('view_document_attachment_form_notification')})]"/>
+        <field name="target">current</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create your Document Attachments.
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_check_print_std">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="journal" t-value="o.journal_id"/>
+                    <div class="page">
+                        <style>
+                            .adjustable {
+                                position: absolute;
+                                width:100%;
+                            }
+                        </style>
+                        <div style="margin-top:0cm !important;margin-left:0cm !important;width:100%;">
+                            <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.date_top }}cm; left: {{ journal.date_left }}cm;">
+                                <t t-if="o.transaction_type == 'pdc'">
+                                    <span t-esc="o.effective_date.strftime('%d/%m/%Y')"/>
+                                </t>
+                                <t t-else="">
+                                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                                </t>
+                            </div>
+                            <t t-if="o.include_payee">
+                             <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.payee_top }}cm; left: {{ journal.payee_left }}cm;">
+                              <span>  A/C Payee</span>
+                            </div>
+                            </t>
+
+                            <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.bearer_top }}cm; left: {{ journal.bearer_left }}cm;">
+                                <span t-field="o.bearer" />
+                            </div>
+                           
+
+                            <t t-set="amt_str" t-value="o.do_format_amount()"/>
+                            <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.amt_line1_top }}cm; left: {{ journal.amt_line1_left }}cm;">
+                                <span style="line-height:300% !important;text-align:left !important;">
+                                    <t t-esc="amt_str['line1']"/>
+                                </span> 
+                            </div>
+                            <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.amt_line2_top }}cm; left: {{ journal.amt_line2_left }}cm;">
+                                <span style="line-height:300% !important;text-align:left !important;">
+                                    <t t-esc="amt_str['line2']"/>
+                                </span>
+                            </div>
+
+                            <div class="adjustable" t-attf-style="font-size:20px;top: {{ journal.amt_top }}cm; left: {{ journal.amt_left }}cm;">
+                                <span t-esc="'{0:,.3f}'.format(o.amount)"
+                                      style="line-height:210% !important;"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+        
+        <record id="paperformat_landscape_agar_1" model="report.paperformat">
+            <field name="name">Landscape</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_check_print_std" model="ir.actions.report">
+            <field name="name">Cheque Print</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cheque_print_config.report_check_print_std</field>
+            <field name="report_file">cheque_print_config.report_check_print_std</field>
+            <field name="paperformat_id" ref="cheque_print_config.paperformat_landscape_agar_1"/>
+        </record>
+
+        <!--default template-->
+        <template id="report_check_print">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div class="page">
+                        <br/>
+                        <br/>
+                        <!-- <div class="row" width="100%" style="text-align: right; margin-top:10px;">
+                            <div class="col-xs-9"/>
+                            <div class="col-xs-3">
+                                <t t-if="o.transaction_type == 'pdc'">
+                                    <span style="font-size:20px;margin-right:10px !important;margin-bottom:8px;"
+                                          t-esc="o.effective_date.strftime('%d-%m-%Y')"/>
+                                </t>
+                                <t t-if="o.transaction_type != 'pdc'">
+                                    <span style="font-size:20px;margin-right:10px !important;margin-bottom:8px;"
+                                          t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                                </t>
+                            </div>
+                        </div> -->
+                        <div class="row" width="100%" style="text-align: center;">
+                            <div class="col-12">
+                                A/C Payee
+                            </div>
+                        </div>
+
+                        <br/>
+                        <table style="margin-top:13px;height:32px; width:100%;text-align:left; !important;font-size:20px; margin-left:25px;">
+                            <tbody class="sale_tbody">
+                                <td sytle="text-align:left !important;">
+                                    <span t-field="o.bearer"/>
+                                </td>
+                            </tbody>
+                        </table>
+                        <div class="row" width="100%" style="margin-top:8px;">
+                            <div class="col-xs-9" style="text-align:left; !important">
+                                <span style="line-height:300% !important;text-align:left !important;font-size:20px;">
+                                    <t t-esc="o.check_amount_in_words"/>
+                                    Only
+                                </span>
+                            </div>
+                            <div class="col-xs-3" style="margin-top:28px;text-align: right;">
+                                <span t-esc="'{0:,.3f}'.format(o.amount)"
+                                      style="line-height:210% !important;font-size:20px;margin-right:10px !important;margin-top:28px;"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                    </div>
+                </t>
+            </t>
+        </template>
+		
+    <record id="paperformat_landscape_agar" model="report.paperformat">
+            <field name="name">Landscape</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">30</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+    
+        <record id="action_check_print_default" model="ir.actions.report">
+            <field name="name">Cheque Print</field>
+            <field name="model">account.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">cheque_print_config.report_check_print</field>
+            <field name="report_file">cheque_print_config.report_check_print</field>
+            <field name="paperformat_id" ref="cheque_print_config.paperformat_landscape_agar"/>
+        </record>
+        
+    </data>
+</odoo>

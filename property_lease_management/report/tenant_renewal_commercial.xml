@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="renewal_commercial_report_tag" model="ir.actions.report">
+            <field name="name">Renewal Commercial Report</field>
+            <field name="model">tenant.request</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Renewal Commercial Report-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.commercial_renewal_report_template</field>
+            <field name="report_file">property_lease_management.commercial_renewal_report_template</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="commercial_renewal_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                            <style>
+                                tr{
+                                height:40px !important;
+                                }
+                                .my_class_left{
+                                width:50% !important;
+                                margin-top:2px;
+                                margin-left:2px;
+                                margin-right:2px;
+                                border-left:1px solid black !important;
+                                border-right:1px solid black !important;
+                                }
+                                .my_class_right{
+                                width:50% !important;
+                                text-align:right !important;
+                                margin-top:2px;
+                                margin-left:2px;
+                                margin-right:2px;
+                                border-right:1px solid black !important;
+                                }
+
+                            </style>
+                            <table width="100%">
+                                <tbody>
+                                    <tr style="border-top:1px solid black !important;">
+                                        <td class="my_class_left">
+                                            <strong>
+                                                <u>Landlord Detail NO:</u>
+                                            </strong>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :بيانات المؤجر
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Name: <span t-field="docs.building_id.partner_id.name"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :الاسم
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Phone:<span t-field="docs.building_id.partner_id.phone"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم الهاتف
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            <strong>
+                                                <u>Tenant Details:</u>
+                                            </strong>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :بينات المستأجر
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Name: <span t-field="docs.partner_id.name"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :الاسم
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Labor card NO/C.R, NO/ :
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم البطاقة الشخصية/ المقيم/ السجل التجاري
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Phone NO: <span t-field="docs.partner_id.phone"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم الهاتف
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            <strong>
+                                                <u>Property Details:</u>
+                                            </strong>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :بيانات العقار
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Building NO:<span t-field="docs.building_id.name"/>
+                                            /Flat No: <span t-field="docs.property_id.name"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم المبنى
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Plot NO:<span t-field="docs.building_id.plot_no"/>
+                                            Block NO: <span t-field="docs.building_id.block_number"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم القطعة
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Area: <span t-field="docs.building_id.building_area.name"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :المنطقة
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Street: <span t-field="docs.building_id.street"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :رقم الشارع
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Land use: Residential/Commercial: <span t-field="docs.building_id.land_usage_purpose"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :استعمال الارض
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Type of activity : <span t-field="docs.building_id.purpose_of_contract"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :نوع النشاط
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            ( 5% Vat for commercial agreements )
+                                        </td>
+                                        <td class="my_class_right">
+                                            &#160;&#160;
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="my_class_left">
+                                            <strong>
+                                                <u>Contract Period &amp; Rental Value:</u>
+                                            </strong>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :مدة العقد والقيمة الإجارية
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            This agreement is valid for a period of
+                                        </td>
+                                        <td class="my_class_right">
+                                            :يسري هذا العقد لمدة
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Commencing on : <span t-field="docs.lease_from_date"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :تبدا من
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Expiring on : <span t-field="docs.lease_to_date"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :الى
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="my_class_left">
+                                            Monthly Rent Fees: <span t-field="docs.rent_id.agreed_rent_amount"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :القيمة الايجارية الشهرية
+                                        </td>
+                                    </tr>
+                                    <tr style="border-right:1px solid black !important;border-bottom:1px solid black !important;">
+                                        <td class="my_class_left">
+                                            To be paid in advance every: <span t-field="docs.installment_schedule"/>
+                                        </td>
+                                        <td class="my_class_right">
+                                            :تقدم مقدما في بداية كل
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <br/>
+                            <br/>
+                            <div style="text-align:right;float:right">
+                                Signature / التوقيع:
+                                <br/>
+                                <br/>
+                                /Date التاريخ:
+                            </div>
+                        </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

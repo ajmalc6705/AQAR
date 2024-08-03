@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate="1">
+        <record id="sale_sequence" model="ir.sequence">
+            <field name="name">Property Sale</field>
+            <field name="code">sale.sequence</field>
+            <field name="prefix">SALE/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="mulkiya_sequence" model="ir.sequence">
+            <field name="name">Property Mulkiya Transfer</field>
+            <field name="code">mulkiya.sequence</field>
+            <field name="prefix">MULKIYA/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

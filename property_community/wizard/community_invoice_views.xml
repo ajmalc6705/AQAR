@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_community_invoice_form">
+        <field name="name">community.invoice.form.inherit</field>
+        <field name="model">community.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Community">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="income_account_id" required="1"
+                                   domain="[('is_admin_fund','=',True)]"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                            <field name="sinking_account_id" required="1"
+                                   domain="[('is_sinking_fund','=',True)]"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                            <field name="account_receivable_id" required="1"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                            <field name="journal_id" domain="[('type', '=', 'sale')]" required="1"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                        </group>
+                        <group>
+                            <field name="end_date" required="1"/>
+                            <field name="invoice_date" required="1"/>
+                            <field name="invoice_date_due" required="1"/>
+                            <field name="unit_ids" widget="many2many_tags" required="1"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"
+                            />
+                            <field name="tax_ids" widget="many2many_tags"
+                                   options="{'no_create_edit':True, 'no_create':True,'no_open':True,}"/>
+                            <field name="community_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Unit Community Invoices" name="unit_community_invoices" invisible="1">
+                            <field name="unit_community_invoice_line_ids" widget="one2many_list" readonly="1">
+                                <tree>
+                                    <field name="property_id"/>
+                                    <field name="unit_admin_amount"/>
+                                    <field name="unit_sink_amount"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+                <footer>
+                    <button name="create_invoice" type="object" string="Create Invoice" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_community_invoice">
+        <field name="name">Community Invoice</field>
+        <field name="res_model">community.invoice</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

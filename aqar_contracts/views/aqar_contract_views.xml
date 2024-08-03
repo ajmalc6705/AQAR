@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="contract_action_sub_contract" model="ir.actions.act_window">
+        <field name="name">Sub-Contract</field>
+        <field name="res_model">aqar.contract</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('id', 'child_of', active_id), ('id', '!=', active_id)]</field>
+        <field name="context">{'default_parent_id': active_id}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Contract found. Let's create one!
+            </p>
+        </field>
+    </record>
+
+    <record id="aqar_contract_tree" model="ir.ui.view">
+        <field name="name">aqar.contract.tree</field>
+        <field name="model">aqar.contract</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="contract_seq"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="building_id" optional="hide"/>
+                <field name="unit_id" optional="hide"/>
+                <field name="state" decoration-info="state == 'draft'" decoration-success="state == 'running'"
+                       decoration-danger="state == 'expire'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_aqar_contract_search" model="ir.ui.view">
+        <field name="name">aqar.contract.form.search</field>
+        <field name="model">aqar.contract</field>
+        <field name="arch" type="xml">
+            <search string="Contracts">
+                <field name="name" string="Contract" filter_domain="('|','|','|','|', ('name', 'ilike', self),
+                                                                        ('contract_seq', 'ilike', self),
+                                                                        ('building_id', 'ilike', self),
+                                                                        ('unit_id', 'ilike', self),
+                                                                        ('partner_id', 'ilike', self),
+                                                                        )"/>
+                <filter name="active" string="Active" domain="[('active','=',True)]" help="Show active Contracts"/>
+                <filter name="inactive" string="Archive" domain="[('active','=',False)]"
+                        help="Show inactive Contracts"/>
+
+                <group string="Group By">
+                    <filter string="Company" name="company" domain="[]" context="{'group_by':'company_id'}"
+                            groups="base.group_multi_company"/>
+                    <filter string="Customer" name="partner_id" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Building" name="building" domain="[]" context="{'group_by':'building_id'}"/>
+                    <filter string="Unit" name="unit_id" domain="[]" context="{'group_by':'unit_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--   Aqar Contract Form View-->
+    <record id="aqar_contract_form" model="ir.ui.view">
+        <field name="name">aqar.contract.form</field>
+        <field name="model">aqar.contract</field>
+        <field name="arch" type="xml">
+            <form string="Aqar Contract">
+                <header>
+                    <button name="action_running" class="oe_highlight" states="draft" string="Running"
+                            type="object"/>
+                    <button name="action_expire" class="oe_highlight" states="running" string="Expire"
+                            type="object"/>
+                    <button name="action_reset_draft" states="expire,running"
+                            string="Reset to Draft" type="object"/>
+                    <button name="action_renew" class="oe_highlight"
+                            states="expire" string="Renew" type="object"
+                    />
+                    <!--                    states="expire"-->
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            attrs="{'invisible': [('active', '=', True)]}"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_show_renewed" string="Renewed Contracts" icon="fa-file"
+                                attrs="{'invisible': [('state', '!=', 'expire')]}"
+                        >
+                            <field string="Renewed Contracts" name="renewal_count" widget="statinfo"
+                                   field_id="renewal_count_0"/>
+                        </button>
+                        <button name="%(contract_action_sub_contract)d" type="action" class="oe_stat_button"
+                                icon="fa-tasks"
+                                attrs="{'invisible' : ['|',('id', '=', False),('subcontract_count','=',0)]}"
+                                context="{'default_user_ids': user_ids}">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="subcontract_count" widget="statinfo" nolabel="1"/>
+                                </span>
+                                <span class="o_stat_text">Sub-Contract</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="contract_seq" placeholder="e.g. Contract"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="renewal_count" invisible="1"/>
+                            <field name="name" attrs="{'readonly':[('state','not in',['draft'])]}" required="1"/>
+                            <field name="renew_id" attrs="{'invisible':[('is_create_renew','=',False)]}"/>
+                            <field name="date" attrs="{'readonly':[('state','not in',['draft'])]}" required="1"/>
+                            <field name="start_date" attrs="{'readonly':[('state','not in',['draft'])]}" required="1"/>
+                            <field name="end_date" attrs="{'readonly':[('state','not in',['draft'])]}" required="1"/>
+                            <field name="contract_mode" required="1"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="building_id"
+                                   attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('contract_mode','!=','property')],'required':[('contract_mode','=','property')], }"
+                            />
+                            <field name="unit_id" domain="[('id','in',unit_ids)]" widget="many2many_tags"
+                                   attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('contract_mode','!=','property')],'required':[('contract_mode','=','property')], }"
+                            />
+
+                            <field name="unit_ids" invisible="1"/>
+                            <field name="is_create_renew" readonly="1" invisible="1"/>
+                            <field name="unit_count"
+                                   attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('contract_mode','!=','property')],'required':[('contract_mode','=','property')], }"
+                            />
+                        </group>
+                        <group>
+                            <field name="contract_amt" attrs="{'readonly':[('state','not in',['draft'])]}"
+                                   required="1"/>
+                            <field name="partner_id" attrs="{'readonly':[('state','not in',['draft'])]}" required="1"/>
+                            <field name="contract_categ_id" attrs="{'readonly':[('state','not in',['draft'])]}"
+                                   required="1"/>
+                            <field name="contract_type" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="user_ids" widget="many2many_tags"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Terms &amp; Conditions" String="Terms &amp; Conditions">
+                            <field name="terms" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="doc_ids">
+                                <tree string="Documents" editable="bottom" sample="1">
+                                    <field name="doc_type"/>
+                                    <field name="doc_no"/>
+                                    <field name="name"/>
+                                    <field name="doc_dec" optional="hide"/>
+                                    <field name="issue_date" string="Issue Date" readonly="1"/>
+                                    <field name="expiry_date" string="Expiry Date" readonly="1"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="attachment_ids" filename="file_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="sub_contract_page" string="Sub-Contract">
+                            <field name="child_ids"
+                                   context="{
+                                   'default_user_ids': user_ids, 'default_parent_id': id,
+                                    'default_partner_id': partner_id,'default_contract_categ_id':contract_categ_id,
+                                    'default_building_id':building_id,'default_unit_id':unit_id,
+                                    }"
+                                   widget="many2many" domain="['!', ('id', 'parent_of', id)]">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="contract_seq"/>
+                                    <field name="partner_id"/>
+                                    <field name="start_date" string="Start Date"/>
+                                    <field name="end_date" string="End Date"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+
+                        </page>
+                        <page name="Description" String="Description">
+                            <field name="notes" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!--    window action for AQAR Contracts-->
+    <record id="action_contracts" model="ir.actions.act_window">
+        <field name="name">Contracts</field>
+        <field name="res_model">aqar.contract</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Contracts
+            </p>
+        </field>
+    </record>
+    <!--Contract Menu -->
+    <menuitem id="aqar_contract_main_menu" name="Contracts"
+              web_icon="aqar_contracts,static/description/odoo_icon.png"
+              groups="group_contract_user"
+    />
+    <menuitem id="aqar_contract_menu" name="Contracts" parent="aqar_contract_main_menu"
+              action="action_contracts" sequence="30"/>
+</odoo>

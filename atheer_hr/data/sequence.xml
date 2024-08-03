@@ -1,0 +1,270 @@
+<odoo>
+    <data noupdate="1">
+        <!--        applicant sequence code-->
+        <record model="ir.sequence" id="atheer_hr_applicant_sequence">
+            <field name="name">Sequence For Hr Applicant</field>
+            <field name="code">hr.applicant</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/AR/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">00001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+        <!--       HR Leave sequence code-->
+        <record model="ir.sequence" id="atheer_hr_payslip">
+            <field name="name">Sequence For HR Payslip</field>
+            <field name="code">hr.payslip</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/PS/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+        <!--      sequence for  utility approval-->
+        <record model="ir.sequence" id="af_utility_Approval">
+            <field name="name">Sequence For Utility Approval</field>
+            <field name="code">utility.approval</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/UB/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+        <!--       HR Leave sequence code-->
+        <record model="ir.sequence" id="atheer_hr_leave">
+            <field name="name">Sequence For HR Leave</field>
+            <field name="code">hr.leave</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/LR/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <!--       employee sequence code-->
+        <record model="ir.sequence" id="atheer_hr_employee_sequence_code">
+            <field name="name">Sequence For Employee</field>
+            <field name="code">hr.employee.code</field>
+            <field name="active">TRUE</field>
+            <field name="number_increment">1</field>
+            <field name="prefix">AF/</field>
+            <field name="number_next">001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <!--        increment and promotion sequence code-->
+        <record model="ir.sequence" id="atheer_hr_performance_sequence">
+            <field name="name">Sequence For Performance Evaluation</field>
+            <field name="code">performance.evaluation</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/PE/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <!--        increment and promotion sequence code-->
+        <record model="ir.sequence" id="atheer_hr_increment_sequence">
+            <field name="name">Sequence For Increment and promotion</field>
+            <field name="code">increment.and.promotion</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/IP/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <!--        annual bonus sequence code-->
+        <record model="ir.sequence" id="atheer_hr_annual_bonus_sequence">
+            <field name="name">Sequence For Annual bonus</field>
+            <field name="code">annual.bonus</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">AF/HR/AB/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <!--        sequence for attendance amendment-->
+        <record model="ir.sequence" id="atheer_hr_attendance_amendment">
+            <field name="name">Sequence For Attendance Amendment</field>
+            <field name="code">hr.attendance.amendment</field>
+            <field name="prefix">AF/HR/AA/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for loan adjustment-->
+        <record model="ir.sequence" id="atheer_hr_loan_adjustment">
+            <field name="name">Sequence For Hr Loan Adjustment</field>
+            <field name="code">hr.loan.adjustments</field>
+            <field name="prefix">AF/HR/LA/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for loan Types-->
+        <record model="ir.sequence" id="atheer_hr_loan_types">
+            <field name="name">Sequence For Hr Loan Addition and Deduction</field>
+            <field name="code">hr.loan.types</field>
+            <field name="prefix">AF/HR/AL/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        <!--        sequence for payroll hold-->
+        <record model="ir.sequence" id="atheer_hr_payroll_hold">
+            <field name="name">Sequence For Hr Payroll Hold</field>
+            <field name="code">hr.payroll.hold</field>
+            <field name="prefix">AF/HR/PH/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        <!--        sequence for payroll release-->
+        <record model="ir.sequence" id="atheer_hr_payroll_release">
+            <field name="name">Sequence For Hr Payroll Release</field>
+            <field name="code">hr.payroll.release</field>
+            <field name="prefix">AF/HR/PR/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for gratuity-->
+        <record model="ir.sequence" id="atheer_hr_gratuity">
+            <field name="name">Sequence For Gratuity</field>
+            <field name="code">hr.gratuity</field>
+            <field name="prefix">AF/HR/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for resignation-->
+        <record model="ir.sequence" id="atheer_hr_resignation">
+            <field name="name">Sequence For Resignation</field>
+            <field name="code">hr.resignation</field>
+            <field name="prefix">AF/HR/RE/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for final settlement-->
+        <record model="ir.sequence" id="atheer_hr_final_settlement">
+            <field name="name">Sequence For Final Settlement</field>
+            <field name="code">final.settlement</field>
+            <field name="prefix">AF/HR/FS/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for air ticket-->
+        <record model="ir.sequence" id="atheer_hr_air_ticket">
+            <field name="name">Sequence For Air Ticket</field>
+            <field name="code">air.ticket.management</field>
+            <field name="prefix">AF/HR/AT/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for hr leave return -->
+        <record id="af_seq_hr_leave_return_seq" model="ir.sequence">
+            <field name="name">hr.leave.return</field>
+            <field name="code">hr.leave.return</field>
+            <field name="prefix">AF/HR/RL/%(range_year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- sequence for employee training -->
+        <record model="ir.sequence" id="atheer_hr_emp_training">
+            <field name="name">Sequence For Employee Training</field>
+            <field name="code">employee.training</field>
+            <field name="prefix">AF/TR/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+        <!--        sequence for hr main timesheet-->
+        <record id="atheer_hr_main_timesheet" model="ir.sequence">
+            <field name="name">hr main timesheet</field>
+            <field name="code">hr.main.timesheet</field>
+            <field name="prefix">AF/HR/ET/%(range_year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+
+    </data>
+
+    <data noupdate="0">
+
+        <record id="af_seq_hr_clearance_request" model="ir.sequence">
+            <field name="name">CLR</field>
+            <field name="code">CLR</field>
+            <field name="prefix">AF/CL-REQ/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+
+        <record id="af_seq_hr_visa_request" model="ir.sequence">
+            <field name="name">VR</field>
+            <field name="code">VR</field>
+            <field name="prefix">AF/VR/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+        <record id="af_seq_hr_visa_cancel_request" model="ir.sequence">
+            <field name="name">VCR</field>
+            <field name="code">VCR</field>
+            <field name="prefix">AF/VCR/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+        <record id="af_seq_hr_visa_renew_request" model="ir.sequence">
+            <field name="name">VRR</field>
+            <field name="code">VRR</field>
+            <field name="prefix">AF/VRR/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!--        Air Sector Sequence-->
+        <record id="airsector_sequence" model="ir.sequence">
+            <field name="name">AIR</field>
+            <field name="code">airsector.sequence</field>
+            <field name="prefix">AIR/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+         <record id="grade_sequence" model="ir.sequence">
+            <field name="name">Provision Grade</field>
+            <field name="code">provision.grade.sequence</field>
+            <field name="prefix">GRADE/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+          <record id="checklist_sequence" model="ir.sequence">
+            <field name="name">Employee Checklist</field>
+            <field name="code">checklist.sequence</field>
+            <field name="prefix">CHECK/LIST/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

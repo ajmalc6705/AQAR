@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+<!--        <record id="client_information_report_tag" model="ir.actions.report">-->
+<!--            <field name="name">Client Information</field>-->
+<!--            <field name="model">client.information</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">amlak_property_management.report_client_information_template</field>-->
+<!--            <field name="report_file">amlak_property_management.report_client_information_template</field>-->
+<!--            <field name="print_report_name">'Client Information-%s' %(time.strftime('%Y-%m-%d'))</field>-->
+<!--            <field name="paperformat_id" ref="amlak_property_management.paperformat_client_information"/>-->
+<!--            <field name="binding_model_id" ref="model_client_information"/>-->
+<!--            <field name="binding_type">report</field>-->
+<!--        </record>-->
+
+<!--        <template id="report_client_information_template">-->
+<!--            <t t-call="web.html_container">-->
+<!--                <div class="page">-->
+
+<!--                    <div class="row" style="color:black;">-->
+<!--                        <img t-if="docs[0].company_id.report_image1"-->
+<!--                             t-att-src="image_data_uri(docs[0].company_id.report_image1)"-->
+<!--                             style="max-height: 110px;width:150px" alt="Logo"/>-->
+<!--                        <center>-->
+<!--                            <h1>-->
+<!--                                <strong style="border-bottom: 1px solid;">CLIENT INFORMATION FORM</strong>-->
+<!--                            </h1>-->
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                        </center>-->
+<!--                    </div>-->
+
+<!--                    <table class="table table-bordered" width="100%">-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td width="20%">-->
+<!--                                <strong>Date</strong>-->
+<!--                            </td>-->
+<!--                            <td width="30%" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].date"/>-->
+<!--                            </td>-->
+<!--                            <td width="20%">-->
+<!--                                <strong>Shop / Flat No</strong>-->
+<!--                            </td>-->
+<!--                            <td width="30%" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].property_id.name"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td colspan="2"></td>-->
+<!--                            <td>-->
+<!--                                <strong>Building</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].building.name"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Name</strong>-->
+<!--                            </td>-->
+<!--                            <td colspan="3" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].name"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Single / Married</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].marital"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Tenancy Agreement</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].tenancy_agreement"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Nationality</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].nationality.name"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Monthly Rental</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].monthly_rental"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Resident Card No</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].resident_card"/>-->
+<!--                            </td>-->
+<!--                            &lt;!&ndash;                            <td>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <strong>Driving License No</strong>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </td>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <td style="border-bottom:1px dotted !important;">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                :&#160;&#160;<t t-esc="docs[0].driving_license"/>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </td>&ndash;&gt;-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Passport No</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].passport"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Expiry Date</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].passport_expiry_date"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Email ID</strong>-->
+<!--                            </td>-->
+<!--                            <td colspan="3" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].email"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Mobile No</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].mobile"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Alternate No</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].mobile_alternate"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Office No</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].office_no"/>-->
+<!--                            </td>-->
+<!--                            &lt;!&ndash;                            <td>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <strong>Fax No</strong>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </td>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            <td style="border-bottom:1px dotted !important;">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                :&#160;&#160;<t t-esc="docs[0].fax_no"/>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </td>&ndash;&gt;-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Company</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].company"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Position</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].position"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Company Address</strong>-->
+<!--                            </td>-->
+<!--                            <td colspan="3" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].company_address"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>CR Number</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].cr_number"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Commercial Activities</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].commercial_activities"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Remarks</strong>-->
+<!--                            </td>-->
+<!--                            <td colspan="3" style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].sales_remarks"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr style="border:1px solid; height: 35px !important;">-->
+<!--                            <td>-->
+<!--                                <strong>Approved By</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].approved_by.name"/>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>Sales Co coordinator</strong>-->
+<!--                            </td>-->
+<!--                            <td style="border-bottom:1px dotted !important;">-->
+<!--                                :&#160;&#160;<t t-esc="docs[0].sales_coordinator.name"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr></tr>-->
+
+<!--                    </table>-->
+<!--                </div>-->
+<!--                <br/>-->
+
+<!--                <br></br>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-2" style="text-align:justify">-->
+<!--                        <strong>I ,&#160;&#160;</strong>-->
+<!--                        <span style="border-bottom: 1px dotted #000;">&#160;&#160;&#160;&#160;-->
+<!--                            <t t-esc="docs[0].name"/>&#160;&#160;&#160;&#160;-->
+<!--                        </span>-->
+<!--                        <strong>&#160;&#160;hereby declare that the details-->
+<!--                            furnished above are true and correct to the best of my knowledge and belief and-->
+<!--                            I undertake to inform you of any changes therein, Immediately. In case any of-->
+<!--                            the above information is found to be false or untrue or misleading or-->
+<!--                            misrepresenting, I am aware that I may be held liable for it.-->
+<!--                        </strong>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <div>-->
+<!--                        <strong>Tenant Signature &amp; Date :</strong>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div>-->
+<!--                        <strong>Referred By :</strong>-->
+<!--                        <t t-esc="docs[0].referred_by.name"/>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div>-->
+<!--                        <strong>Names &amp; Contact no of friends whom you want to referred in Amlak Properties:-->
+<!--                        </strong>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <t t-foreach='docs[0].referrals' t-as='ref'>-->
+<!--                            <div style="height=35px; text-align:justify; width:800px;">-->
+<!--                                <strong>Name</strong>&#160;&#160;:-->
+<!--                                <span style="border-bottom:1px dotted !important; min-width=300px;">-->
+<!--                                    &#160;&#160;-->
+<!--                                    <t t-esc="ref.name"/>-->
+<!--                                    &#160;&#160;-->
+<!--                                </span>&#160;&#160;-->
+<!--                                <strong>Contact No</strong>&#160;&#160;:-->
+<!--                                <span style="border-bottom:1px dotted !important; min-width=300px;">-->
+<!--                                    &#160;&#160;-->
+<!--                                    <t t-esc="ref.contact_no"/>-->
+<!--                                    &#160;&#160;-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <br/>-->
+
+<!--                        </t>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;      2nd page  Supplementary Form&ndash;&gt;-->
+<!--                <div class="col-12"-->
+<!--                     style="margin-left:50px;white-space: normal;color:black; border-collapse:collapse;page-break-before: always;">-->
+<!--                    <div class="row" style="color:black;">-->
+<!--                        <img t-if="docs[0].company_id.report_image1"-->
+<!--                             t-att-src="image_data_uri(docs[0].company_id.report_image1)"-->
+<!--                             style="max-height: 110px;width:150px" alt="Logo"/>-->
+<!--                    </div>-->
+<!--                    <table style="border-collapse:collapse;border: 1px solid black;width:95%;padding:5px;font-size:12px;">-->
+
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;" width="50%">-->
+<!--                                Date :-->
+<!--                                &#160;&#160;&#160;-->
+<!--                                <span t-esc="docs[0].date.strftime('%d/%m/%Y')"/>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                :التاريخ-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                The Tenant:&#160;&#160;&#160;-->
+<!--                                <strong>-->
+<!--                                    <span t-esc="docs[0].name"/>-->
+<!--                                </strong>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                :المستأجر-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                The Property/Flat No :&#160;&#160;&#160;-->
+<!--                                <strong>-->
+<!--                                    <span t-esc="docs[0].property_id.name"/>-->
+<!--                                </strong>-->
+<!--                            </td>-->
+<!--                            <td style="border: 1px solid black;">-->
+
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                Tenancy Period &amp; No:&#160;&#160;&#160;-->
+<!--                                <strong>-->
+<!--                                    <span t-esc="docs[0].tenancy_agreement"/>-->
+<!--                                </strong>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                :مدة الإيجار-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                Rent :&#160;&#160;&#160;-->
+<!--                                <strong>-->
+<!--                                    <span t-esc="docs[0].monthly_rental"/>-->
+<!--                                </strong>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                : قيمة الإيجار الشهري-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                Payment status:-->
+<!--                                <span t-esc="docs[0].payment_status"/>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash;                            static&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>The Tenant agrees and acknowledges the following</u>:-->
+<!--                                <br/>-->
+<!--                                <br/>-->
+<!--                                <u>1.1 Security Deposit</u>:&#160;Place a deposit equivalent to one (1) Months’ rent-->
+<!--                                with-->
+<!--                                the landlord in open dated cheque or cash which shall:-->
+<!--                                <br/>-->
+<!--                                <div style="margin-left:10px;">-->
+<!--                                    <span>• be held for security purposes towards performance of Tenant obligations-->
+<!--                                        here-->
+<!--                                        under-->
+<!--                                        carry no interest.-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                                <div style="margin-left:10px;">-->
+<!--                                    <span>• Will be released only upon termination of agreement with such amount to-->
+<!--                                        be so-->
+<!--                                        released be carried out by the landlord. This will take into account all-->
+<!--                                        unpaid-->
+<!--                                        utility and other payments relating to the period of tenancy and shall also-->
+<!--                                        include-->
+<!--                                        post vacating maintenance work-->
+<!--                                        *not applicable for staff-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong><u>اتفق المستأجر مع المالك على الآتي</u>:-->
+<!--                                </strong>-->
+<!--                                <br/>-->
+<!--                                <strong>-->
+<!--                                    <u>:1.1 مبلغ التأمين</u>-->
+<!--                                </strong>-->
+<!--                                <p>على المستأجر إيداع مبلغ تأمين لدى المالك-->
+<!--                                    <br/>-->
+<!--                                    / وكيل المالك شيك مؤرخ وذلك لضمان المالك في-->
+<!--                                    <br/>-->
+<!--                                    حالة تخريب أو فقد أو عدم دفع فواتير-->
+<!--                                    <br/>-->
+<!--                                    استهلاك الكهرباء والمياه من قبل المستأجر للعقار-->
+<!--                                    <br/>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    او الوحدة المؤجرة له .-->
+<!--                                    <br/>-->
+<!--                                    يتم استرجاع الضمان في حالة طلب المستأجر ل-->
+<!--                                    <br/>-->
+<!--                                    لإخلاء أو انتهاء مدة العقد بعد أن يتم-->
+<!--                                    <br/>-->
+<!--                                    التأكد من تصفية المستأجر لكافة-->
+<!--                                    <br/>-->
+<!--                                </p>-->
+<!--                                <p>-->
+<!--                                    المستحقات وتشمل-->
+<!--                                    الصيانة قبل إخلاء والوحدة المؤجرة .-->
+<!--                                    <br/>-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash;2nd &ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.2 Post Dated Cheques</u>:-->
+<!--                                &lt;!&ndash;                                    <br/>&ndash;&gt;-->
+<!--                                <p>To provide the landlord post-dated cheques covering the entire duration of the-->
+<!--                                    tenancy period and to ensure all rent amounts duly honoured in a time manner so-->
+<!--                                    specified. *not applicable in terms of cash payment-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong><u>2.1 شيكات مؤجلة الدفع</u>:-->
+<!--                                </strong>-->
+<!--                                <p>على المستأجر تسليم المالك /-->
+<!--                                    <br/>-->
+<!--                                    وكيل المالك شيكات مؤجلة عن مدة العقد حيث تضمن للمالك-->
+<!--                                    <br/>-->
+<!--                                    إستلام الإيجار الشهري في الموعد المحدد أو المتفق عليه .-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash;                            3rd&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.3 Consequences for delayed payment</u>:-->
+<!--                                <p>Should the Rent Payment not be honoured as requisite, by way of a dishonoured-->
+<!--                                    cheque-->
+<!--                                    or otherwise, the tenant will be held responsible for all cost and expenses-->
+<!--                                    Incurred-->
+<!--                                    in connection with recovering such over-due amounts, including but not limited-->
+<!--                                    to,-->
+<!--                                    to third party costs paid to debt collectors and lawyers. In the event two (2)-->
+<!--                                    cheques so deposited are dishonoured for whatever reason simultaneously, the-->
+<!--                                    lease-->
+<!--                                    agreement shall automatically terminate.-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong><u>3.1 عواقب تأخر دفع الإيجار</u>:-->
+<!--                                </strong>-->
+<!--                                <p>-->
+<!--                                    على المستأجر عدم الإستهانة أو التأخير في دفع القيمة الإيجارية-->
+<!--                                    <br/>-->
+<!--                                    الشهرية عن الموعد المحدد أو أن يتم رفض الشيكات المستحقة بشكل-->
+<!--                                    <br/>-->
+<!--                                    أو بآخر فعليه سيتحمل المستأجر المسؤولية ، وكل التكاليف الناتجة عن-->
+<!--                                    <br/>-->
+<!--                                    عدم دفع القيمة الإيجارية في حالة تدخل طرف ثالث كمحصلي الديون-->
+<!--                                    <br/>-->
+<!--                                    أو المستشاريين القانونيين ، أما في حالة أن يتم رفض عدد-->
+<!--                                    <br/>-->
+<!--                                    2 شيك من الشيكات مستحقة الدفع أو الواجب سدادها لمرتين-->
+<!--                                    <br/>-->
+<!--                                    متتاليتين لأي سبب من-->
+<!--                                    <br/>-->
+<!--                                    الأسباب ، فعليه يلغى عقد الإيجار تلقائياً .-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash;                            4th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.4 Utilities</u>:-->
+<!--                                To promptly settle to the authorities and other services providers all outgoings,-->
+<!--                                including electricity and water bill payments, after the commencement of the tenancy-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong><u>4.1 المرافق</u>:-->
+<!--                                </strong>-->
+<!--                                <p>على المستأجر مواصلة تسديد جميع الفواتير المستحقة-->
+<!--                                    <br/>-->
+<!--                                    للكهرباء والمياه بانتظام للجهات المعنية بذلك منذ-->
+<!--                                    <br/>-->
+<!--                                    بدء العقد وحتى نهايته .-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash;                            5th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.5 Use of Property</u>:-->
+<!--                                <p>Not to use property for any illegal or immoral purpose. Permitted occupants of-->
+<!--                                    the-->
+<!--                                    tenant shall only be immediate family or offices.-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>5.1 إستخدام العقار:</u>-->
+<!--                                </strong>-->
+<!--                                <p>على المستأجر عدم استخدام العقار-->
+<!--                                    <br/>-->
+<!--                                    لأي غرض غير قانونيأو غير أخلاقي مع التزامه بالنشاط-->
+<!--                                    <br/>-->
+<!--                                    المذكور في عقد الإيجار فقط ، وعلى المستأجر السماح فقط بالأسرة-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            6th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.6 Orderly UP Keep</u>:-->
+<!--                                <p>Not to damage the property or its content-->
+<!--                                    or to make alterations or additions unless with the prior express-->
+<!--                                    written consent of the landlord. To ensure the interior of the-->
+<!--                                    property in maintained in good and clean condition at all times-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>6.1 الحفاظعلىالوحدةالمؤجرة:</u>-->
+<!--                                </strong>-->
+<!--                                <p>علىالمستأجر-->
+<!--                                    <br/>-->
+<!--                                    الحفاظعلىالوحدةالمؤجرةلھوعدمإلحاقالضرر-->
+<!--                                    <br/>-->
+<!--                                    بھاأوإجراءأيتعدیلاتأوإضافاتإلابعدموافقة-->
+<!--                                    <br/>-->
+<!--                                    كتابیةمنالمالك،وفيحالةإجراءأيتعدیلات-->
+<!--                                    <br/>-->
+<!--                                    بدونموافقةالمالكیتمتعویضالمالكعنالضرر-->
+<!--                                    <br/>-->
+<!--                                    الناتج عن ھذه التعدیلا-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            7th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.7 No sublet</u>:-->
+<!--                                <p>Not to sub-let the property or any portion thereof-->
+<!--                                    to any third party under any circumstances whatsoever-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>7.1 إعادةتأجیرالوحدةالإیجاریة:</u>-->
+<!--                                </strong>-->
+<!--                                <p>-->
+<!--                                    علىالمستأجر-->
+<!--                                    <br/>-->
+<!--                                    عدمإعادةتأجیرالعقارأوجزءمنھإلاأيطرف-->
+<!--                                    <br/>-->
+<!--                                    ثالث)تأجیرمنالباطن(تحتأيظرفوعلى-->
+<!--                                    <br/>-->
+<!--                                    الإطلاقمعتحملھكاملالمسؤولیةالقانونیةفيحالة-->
+<!--                                    <br/>-->
+<!--                                    تأجیره للوحدة لأي طرف ثالث-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            8th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.8 No animals</u>:-->
+<!--                                <p>Not to keep any animals or birds or other living-->
+<!--                                    creature on the property unless with the prior written consent-->
+<!--                                    of the landlord-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>8.1ممنوعتربیةالحیوانات:</u>-->
+<!--                                </strong>-->
+<!--                                <p>-->
+<!--                                    علىالمستأجرعدم-->
+<!--                                    <br/>-->
+<!--                                    تربیةالحیواناتأوالطیورفيالوحدةالمؤجرةلھإلا-->
+<!--                                    <br/>-->
+<!--                                    بعد موافقة كتابیة من مالك العقا-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            9th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>1.9 Termination</u>:-->
+<!--                                <p>During the Tenancy Period, no early-->
+<!--                                    termination is permitted. If the tenant seeks to terminate the-->
+<!--                                    agreement on expiry of its original term, a minimum three (3)-->
+<!--                                    months notice needs to be served to the landlord in writing-->
+<!--                                    prior to its original expiry Otherwise, the tenant must find a-->
+<!--                                    replacement to occupy the property , in case of renewal, tenant-->
+<!--                                    is responsible to coming to landlord offices and concluding all-->
+<!--                                    renewal formalities; including providing PDC’s in accordance-->
+<!--                                    with 1.2 herein, within a period of fifteen (15) days prior to the-->
+<!--                                    date of original contract expiry. Any municipal fines arising in-->
+<!--                                    connection with a delay attributable to the tenant, any such-->
+<!--                                    costs shall be his/her/their sole cost and expense-->
+<!--                                    <strong>*not-->
+<!--                                        applicable for short term contracts i.e 1,2,3 months-->
+<!--                                    </strong>-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>فسخعقدالإیجار9.1:</u>-->
+<!--                                </strong>-->
+<!--                                <p>-->
+<!--                                    الإیجارأوإخلاءالوحدةالإیجاریةخلالسریانفترة-->
+<!--                                    <br/>-->
+<!--                                    الإیجارالأصلیة،أمافيحالةرغبةالمستأجرفي-->
+<!--                                    <br/>-->
+<!--                                    إلغءعقدالإیجارفعلیھإشعارالمالك/وكیلالمالك-->
+<!--                                    <br/>-->
+<!--                                    أشھرقبلإنتھاءمدة<span>(3)</span>برسالةكتابیةقبلثلاثة-->
+<!--                                    <br/>-->
+<!--                                    العقدالأصليكحدأدنىوذلكًوفقالقوانینالإیجارات-->
+<!--                                    <br/>-->
+<!--                                    المعمولبھافيالسلطنةبالإضافةإلىذلك،وفي-->
+<!--                                    <br/>-->
+<!--                                    حالةتجدیدالعقدفإنالمستأجرمسؤولعنحضوره-->
+<!--                                    <br/>-->
+<!--                                    لمكتبالمالك/وكیلالمالكلإستكمالإجراءات-->
+<!--                                    <br/>-->
+<!--                                    تجدیدالعقدبمافيذلكتقدیمشیكاتمؤجلةالدفعًوفقا-->
+<!--                                    <br/>-->
+<!--                                    للفقرة2.1المذكورةًآنفاوذلكخلالخمسةعشر ً-->
+<!--                                    <br/>-->
+<!--                                    یوماقبلتاریخإنتھاءالعقدالحالي.أمافيحالة-->
+<!--                                    <br/>-->
+<!--                                    تأخرالمستأجرعنالموعدالمحددلتجدیدعقد-->
+<!--                                    <br/>-->
+<!--                                    الإیجارعلیھأنیتحملكاملالمسؤولیةعنالتأخیر-->
+<!--                                    <br/>-->
+<!--                                    فيتوقیعالعقدوعنالغراماتالتيتفرضمنقبل البلدیة .-->
+<!--                                </p>-->
+
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            10th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;">-->
+<!--                                <u>2.0 Post Vacating Cleaning &amp; Maintenance</u>:-->
+<!--                                <p>On termination of-->
+<!--                                    the agreement , the Tenant shall bear all reasonable costs and-->
+<!--                                    expenses incurred in connection with reinstating the property-->
+<!--                                    to its original state and condition; as given at the-->
+<!--                                    commencement of the tenancy. This shall include, amongst-->
+<!--                                    other, cleaning, repairing broken fixtures &amp; fittings and-->
+<!--                                    repainting – as deemed necessary.-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:right;border: 1px solid black;padding:5px;">-->
+<!--                                <strong>-->
+<!--                                    <u>0.2 صیانةوتنظیفالوحدةالإیجاریةقبلالإخلاء:</u>-->
+<!--                                </strong>-->
+<!--                                <p>-->
+<!--                                    عندإنتھاءمدةالعقدوإخلاءالوحدةالإیجاریةعلى-->
+<!--                                    <br/>-->
+<!--                                    المستأجرتحملجمیعالتكالیفوالنفقاتالتكبدة،-->
+<!--                                    <br/>-->
+<!--                                    وإعادةالوحدةالمؤجرةإلیھحسبالشروطالمتفق-->
+<!--                                    <br/>-->
+<!--                                    علیھافيبدایةالعقدوالحالةالتياستلمھاعلیھا-->
+<!--                                    <br/>-->
+<!--                                    المستأجرفيبدایةالإیجاروالتيیجبأنتشمل:-->
+<!--                                    <br/>-->
+<!--                                    تنظیفوإصلاحفيحالةوجودأضراروإعادةطلاء-->
+<!--                                    <br/>-->
+<!--                                    ـ عند الضرورة-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash;                            11th&ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td style="border: 1px solid black;padding:5px;" colspan="2">-->
+<!--                                <u>2.1 Parking</u>:-->
+<!--                                <p>This Tenancy Agreement does not include an exclusive or assigned parking lot along-->
+<!--                                    with the-->
+<!--                                    rented unit. However, public and municipal parking lots are available for use within-->
+<!--                                    the area.-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </table>-->
+<!--                    <br/>-->
+<!--                    <table style="width:100%">-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <strong>THE TENANT:</strong>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <strong>DATE:</strong>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td colspan="2">&#160;</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <strong>__________________________</strong>-->
+<!--                            </td>-->
+<!--                            <td></td>-->
+<!--                        </tr>-->
+<!--                    </table>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash;                    3rd page Rent Payment Policy&ndash;&gt;-->
+<!--                <div class="col-10"-->
+<!--                     style="width:90%;margin-left:80px;margin-right:50px;white-space: normal;color:black; border-collapse:collapse;page-break-before: always;">-->
+<!--                    <div class="row" style="color:black;">-->
+<!--                        <img t-if="docs[0].company_id.report_image1"-->
+<!--                             t-att-src="image_data_uri(docs[0].company_id.report_image1)"-->
+<!--                             style="max-height: 110px;width:150px" alt="Logo"/>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div class="col-12">-->
+<!--                        <center>-->
+<!--                            <strong>Rent Payment Policy</strong>-->
+<!--                        </center>-->
+<!--                        <br/>-->
+<!--                        <center>-->
+<!--                            <strong>Amlak Real Estate</strong>-->
+<!--                        </center>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <p>Your timely payment of rent is greatly appreciated. Please review these policies-->
+<!--                            carefully-->
+<!--                            to preserve your good credit with us. Our office policy concerning the payment of rent-->
+<!--                            is as-->
+<!--                            follows:-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            1. Your Monthly rent is due on the date of the cheque you issued to Amlak Real Estate.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            2. Post-dated checks are required to be submitted together with the Tenancy Agreement,-->
+<!--                            to cover the monthly rental fee.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            3. Any returned checks will be <strong>re-deposited within 48 hours</strong>after Amlak-->
+<!--                            advised the tenant regarding the matter, unless both parties agreed otherwise.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            4. Security deposit will be non-refundable if any of the tenant breach the contract between-->
+<!--                            his tenancy period.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            5. Make personal checks payable to Amlak Real Estate.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            6. Cash payments are  <strong>not</strong> accepted in replacement of the checks.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            7. We will not hold a check for any period of time.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            8. Security deposits <strong>cannot</strong> be applied to the last month’s rent.-->
+<!--                        </p>-->
+<!--                        &lt;!&ndash;                        <br/>&ndash;&gt;-->
+<!--                        <p>-->
+<!--                            9. Upon vacating your unit, the rent continues to accrue until the door key is returned to-->
+<!--                            us.-->
+<!--                        </p>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <strong>Agreed and Accepted:</strong>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <strong>__________________________________</strong>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <span>Signature</span>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <span>Date: _____________________________</span>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;                    4th page Tenant Vacating Procedure&ndash;&gt;-->
+<!--                <div class="col-12"-->
+<!--                     style="width:95%;margin-left:50px;white-space: normal;color:black; border-collapse:collapse;page-break-before: always;">-->
+<!--                    <div class="row" style="color:black;">-->
+<!--                        <img t-if="docs[0].company_id.report_image1"-->
+<!--                             t-att-src="image_data_uri(docs[0].company_id.report_image1)"-->
+<!--                             style="max-height: 110px;width:150px" alt="Logo"/>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div class="col-12">-->
+<!--                        <br/>-->
+<!--                        <div style="padding:5px;margin-left:-20px;">-->
+<!--                            <center>-->
+<!--                                <strong>-->
+<!--                                    <font color="41689c">Tenant Vacating Procedure</font>-->
+<!--                                </strong>-->
+<!--                            </center>-->
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                            <p>-->
+<!--                                The following guidelines have been prepared to assist you at the time of vacating the-->
+<!--                                property.&#160;Please ensure that they are carried out in order that all matters may be-->
+<!--                                brought to our satisfactory conclusion:-->
+
+<!--                            </p>-->
+<!--                            <br/>-->
+<!--                            <div style="margin-left:20px;font-size:12px;">-->
+<!--                                <li>Non-renewal notice should be given at least <strong>3 months prior to or before the-->
+<!--                                    end/expiration-->
+<!--                                </strong> of the Tenancy Agreement Period. Otherwise, the tenant must find a-->
+<!--                                    replacement to occupy the property.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>In case of termination and relocation notice received by tenant from his employer-->
+<!--                                    the-->
+<!--                                    same needs to be justify to the office and if approves can accept 1 month notice.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>Tenant need to pay for the month of grace period, the remaining amount for the-->
+<!--                                    Municipality fees and 5 % office commission for the remaining period if they vacate-->
+<!--                                    the-->
+<!--                                    flat before the end of the contract period irrespective of any reason.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>The property must be thoroughly cleaned throughout.  All floor coverings require to-->
+<!--                                    be-->
+<!--                                    cleaned as appropriate.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>There won`t be any changes or partition work need to be carry forward inside an-->
+<!--                                    apartment without informing and approved the same to the property in charge of the-->
+<!--                                    building.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>Property must be handover in the same condition as it`s receive at the time of move-->
+<!--                                    in-->
+<!--                                    inspection.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>Any rubbish, debris, foodstuff etc must be disposed of correctly and not left behind-->
+<!--                                    in-->
+<!--                                    the property.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>Please ensure that items of rubbish are disposed of in the appropriate wheelie bins.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>Any damage incurred must be reported to our office and arrangements made to rectify-->
+<!--                                    as-->
+<!--                                    necessary.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>All utility bills should be settled accordingly.&#160;Final meter readings should be-->
+<!--                                    passed-->
+<!--                                    to our office at the time of vacating.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>All payments to be settled.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>All keys to the property must be returned to our office on the day of departure-->
+<!--                                    unless-->
+<!--                                    alternative arrangements have been agreed by both parties.-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>A <strong>suitable appointment</strong> should be made in order that the inventory-->
+<!--                                    can-->
+<!--                                    be agreed and the-->
+<!--                                    property inspected prior to your vacating date. (Please advise Amlak Real Estate)-->
+<!--                                </li>-->
+<!--                                <br/>-->
+<!--                                <li>We trust the aforementioned requirements are clear, however should any clarification-->
+<!--                                    be-->
+<!--                                    required please do not hesitate to contact our office.-->
+<!--                                </li>-->
+<!--                            </div>-->
+<!--                            <br/>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <span>-->
+<!--                            <strong>Agreed and Accepted:</strong>-->
+<!--                        </span>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <span>__________________________________________________</span>-->
+<!--                        <br/>-->
+<!--                        <span>Signature</span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash;                5th page  Key Turn-over Form&ndash;&gt;-->
+<!--                <div class="col-12"-->
+<!--                     style="margin-left:50px;white-space: normal;color:black; border-collapse:collapse;page-break-before: always;">-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <div class="row" style="text-align:justify;font-size:16px;">-->
+<!--                        <center>-->
+<!--                            <strong>Key Turn-over Form</strong>-->
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                        </center>-->
+<!--                    </div>-->
+<!--                    <div class="row" style="margin-top:50px;text-align:justify;font-size:14px;">-->
+<!--                        <div style="height=35px;">-->
+<!--                            <strong>Date</strong>&#160;&#160;:-->
+<!--                            <span style="border-bottom:1px solid !important;"-->
+<!--                                  t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <div style="height=35px;display:inline;float:left;">-->
+<!--                                <strong>To</strong>&#160;&#160;:-->
+<!--&lt;!&ndash;                                <t t-esc="docs[0].name"/>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            <div style="height=35px;display:inline;float:right;">-->
+<!--                                <strong>From : Amlak-Head Office</strong>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <center>-->
+<!--                                <strong>-->
+<!--                                    <u>Subject: Key Turn-over</u>-->
+<!--                                    <br/>-->
+<!--                                </strong>-->
+<!--                            </center>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <strong>Please hand over the key to-->
+<!--                                <u>-->
+<!--                                    <t t-esc="docs[0].name"/>-->
+<!--                                </u>-->
+<!--                                &#160;for-->
+<!--                                <u>-->
+<!--                                    <t t-esc="docs[0].building.name"/>/-->
+<!--                                    <t t-esc="docs[0].property_id.name"/>-->
+<!--                                </u>-->
+<!--                                , upon presentation of this letter.-->
+<!--                                <br/>-->
+<!--                                <br/>-->
+<!--                                Thank you.-->
+<!--                                <br/>-->
+<!--                                <br/>-->
+<!--                                Signature :-->
+<!--                                <span style="border-bottom:1px solid !important;">-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                </span>-->
+<!--                            </strong>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <center>-->
+<!--                        <span style="border-bottom:1px dotted !important;">-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                        </span>-->
+<!--                    </center>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <br/>-->
+<!--                    <div class="row" style="text-align:justify;font-size:16px;">-->
+<!--                        <center>-->
+<!--                            <strong>Key Turn-over Form</strong>-->
+<!--                            <br/>-->
+<!--                            <br/>(Office Copy)-->
+<!--                            <br/>-->
+<!--                            <br/>-->
+<!--                        </center>-->
+<!--                    </div>-->
+<!--                    <div class="row" style="text-align:justify;font-size:14px;">-->
+<!--                        <div style="height=35px;">-->
+<!--                            <strong>Date</strong>&#160;&#160;:-->
+<!--                            <span style="border-bottom:1px solid !important;"-->
+<!--                                  t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <div style="height=35px;display:inline;float:left;">-->
+<!--                                <strong>To</strong>&#160;&#160;:-->
+<!--&lt;!&ndash;                                <t t-esc="docs[0].name"/>&ndash;&gt;-->
+<!--                            </div>-->
+<!--                            <div style="height=35px;display:inline;float:right;">-->
+<!--                                <strong>From : Amlak-Head Office</strong>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <center>-->
+<!--                                <strong>-->
+<!--                                    <u>Subject: Key Turn-over</u>-->
+<!--                                    <br/>-->
+<!--                                </strong>-->
+<!--                            </center>-->
+<!--                        </div>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <div style="height=35px;">-->
+<!--                            <strong>Please hand over the key to-->
+<!--                                <u>-->
+<!--                                    <t t-esc="docs[0].name"/>-->
+<!--                                </u>-->
+<!--                                &#160;for-->
+<!--                                <u>-->
+<!--                                    <t t-esc="docs[0].building.name"/>/-->
+<!--                                    <t t-esc="docs[0].property_id.name"/>-->
+<!--                                </u>-->
+<!--                                , upon presentation of this letter.-->
+<!--                                <br/>-->
+<!--                                <br/>-->
+<!--                                Thank you.-->
+<!--                                <br/>-->
+<!--                                <br/>-->
+<!--                                Signature :-->
+<!--                                <span style="border-bottom:1px solid !important;">-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                                </span>-->
+<!--                            </strong>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </t>-->
+<!--        </template>-->
+    </data>
+</odoo>

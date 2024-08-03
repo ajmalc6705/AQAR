@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payment_receipt_report_inherited" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//table[@class='table table-sm']" position="after">
+            <table class="table table-sm">
+                <tr style="font-weight:bold;">
+                    <td>
+                        <div>
+                        <span>Received by:</span>
+                            <span t-field="o.received_by"/>
+                        <br/>
+
+                        <span>Signature:</span>
+                            <t t-if="o.signature">
+                                <img t-att-src="image_data_uri(o.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                            </t>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+             <div class="row" style="padding-top: 50px;">
+                <div class="col-2">
+                    <span>Attachment:</span>
+                </div>
+                <div class="col-10">
+                    <t t-if="o.attachment">
+                            <img t-att-src="image_data_uri(o.attachment)"
+                                    style="max-height: 12cm; max-width: 18cm;" />
+                            <!--                    <img t-att-src="o.attachment" width="70%" height="70%"/>-->
+                        </t>
+                </div>
+                                
+                                    
+
+            </div>
+        </xpath>
+    </template>
+</odoo>

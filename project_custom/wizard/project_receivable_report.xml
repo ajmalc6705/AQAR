@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_lnc_project_receivable_report" model="ir.ui.view">
+            <field name="name">project.receivable.report.form</field>
+            <field name="model">project.receivable.report</field>
+            <field name="arch" type="xml">
+                <form string="Receivable Report">
+                    <group col="4">
+                        <field name="project_ids" widget="many2many_tags" />
+                        <field name="inv_date" />
+                    </group>
+                    <div class="oe_clear" />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <footer>
+                        <button name="print_xls" string="Print XLS Report" type="object"
+                                context="{'xls_export':1}" default_focus="1" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

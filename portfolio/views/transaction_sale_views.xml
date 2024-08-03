@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="portfolio_salee_tree" model="ir.ui.view">
+        <field name="name">sale.tree</field>
+        <field name="model">portfolio.sale</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="doc_id"/>
+                <field name="date"/>
+                <field name="investment_id"/>
+                <field name="investment_company"/>
+                <field name="investor_id"/>
+                <field name="sales_qty"/>
+                <field name="sale_rate_per_share"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state in ('done')"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+    <record id="portfolio_sale_form" model="ir.ui.view">
+        <field name="name">sale.form</field>
+        <field name="model">portfolio.sale</field>
+        <field name="arch" type="xml">
+            <form string="Sale">
+                <header>
+                    <button name="action_done" class="oe_highlight" states="draft" string="Done"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,done"
+                            string="Reset to draft" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <button name="action_cancel" class="oe_highlight" states="draft"
+                            string="Cancel" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div name="button_box" position="inside">
+                        <button class="oe_stat_button" type="object"
+                                name="get_invoices"
+                                icon="fa-pencil-square-o"
+                                string="Customer Invoices" attrs="{'invisible':[('move_id','=',False)]}">
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="doc_id" placeholder="e.g. Doc"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Investment Details">
+                            <field name="investment_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investment_type_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investment_broker_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investment_company"/>
+                            <field name="investor_id"/>
+                        </group>
+                        <group string="Account Details">
+                            <field name="journal_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="account_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="tax_ids" widget="many2many_tags"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                   groups="analytic.group_analytic_accounting"
+                                   />
+                            <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="company_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                    </group>
+                    <group string="Sale Info">
+                        <group>
+                            <field name="date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="target_date" attrs="{'readonly':[('state','not in',['draft'])]}"
+                                   invisible="1"/>
+                            <field name="sales_qty" string="Sales Quantity"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="sale_rate_per_share"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="move_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="commission" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="total_amount" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="commission_percentage"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="info" string="Additional Info">
+                            <group>
+                                <group>
+                                    <field name="share_in_hand" readonly="1"/>
+                                    <field name="invested_value" readonly="1"/>
+                                    <field name="cost_per_share" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="current_market_rate" readonly="1"/>
+                                    <field name="holding_share_percent"/>
+                                    <field name="move_id" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="Notes" String="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_portfolio_sales" model="ir.actions.act_window">
+        <field name="name">Sales</field>
+        <field name="res_model">portfolio.sale</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                sales
+            </p>
+        </field>
+    </record>
+    <menuitem id="portfolio_transaction_sales_menu" name="Share Sales" parent="transactions_menu"
+              sequence="20"
+              action="action_portfolio_sales"/>
+</odoo>

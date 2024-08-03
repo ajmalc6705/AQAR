@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_soa_confirmation_report_wiz" model="ir.ui.view">
+            <field name="name">soa.confirmation.report.wiz.view</field>
+            <field name="model">soa.confirmation.report.wiz</field>
+            <field name="arch" type="xml">
+                <form string="SOA Confirmation Report">
+                    <group colspan="2" col="4">
+                        <field name="balance_as_of_date"/>
+                        <field name="partner_id"/>
+                        <field name="company_id"/>
+                        <field name="auditor_id" domain="[('is_auditor','=', True)]"
+                               context="{'default_is_auditor': True}"/>
+                        <field name="date" invisible="1"/>
+                    </group>
+                    <group></group>
+                    <group></group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight"
+                                type="object" icon="fa-print"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_soa_confirmation_report__menu" model="ir.actions.act_window">
+            <field name="name">SOA Confirmation Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">soa.confirmation.report.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_soa_confirmation_report_wiz"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_soa_confirmation_report"
+                name="Partner Balance Confirmation"
+                sequence="43"
+                parent="account_reports.account_reports_audit_reports_menu"
+                action="action_wizard_soa_confirmation_report__menu"
+        />
+
+    </data>
+</odoo>

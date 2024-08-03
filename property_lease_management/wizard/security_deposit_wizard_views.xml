@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="security_deposit_view" model="ir.ui.view">
+        <field name="name">Security Deposit Wizard</field>
+        <field name="model">security.deposit.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="rent_id" invisible="1"/>
+                        <field name="partner_id"/>
+                        <field name="reference" required="1"/>
+                        <field name="debit_account" required="1"/>
+                        <field name="analytic_distribution" widget="analytic_distribution"/>
+
+                    </group>
+                    <group>
+                        <field name="invoice_date" required="1"/>
+                        <field name="journal_id" domain="[('type','=','general')]" required="1"/>
+                        <field name="credit_account" required="1"/>
+                        <field name="security_deposit" readonly="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_entry" string="Create Entry" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_security_deposit_wizard" model="ir.actions.act_window">
+        <field name="name">Security Deposit</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">security.deposit.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">view.sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="button_get_digital_siganature" class="oe_highlight" string="Get Signature"
+                            attrs="{'invisible': [('order_is_signed', '=', True)]}"
+                            type="object"/>
+
+                </xpath>
+                <xpath expr="//group[@name='sale_reporting']" position="after">
+                    <group string="Signature" name="so_user_signature">
+                        <field name="order_is_signed" readonly="1" invisible="1"/>
+                        <field name="user_signature" widget="signature" readonly="1"/>
+                    </group>
+                </xpath>
+                <button position="after">
+                    <button name="action_approve"
+                            string="Approve"
+                            groups="aqar_sale.group_sale_order_approve_group"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'ceo_approve')]}"/>
+                </button>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="cancel_reason"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="outside_salesperson"/>
+                </xpath>
+                <xpath expr="//field[@name='outside_salesperson']" position="after">
+                    <field name="sale_revision" attrs="{'invisible': [('sale_revision', '=', 0)]}"/>
+                </xpath>
+                <xpath expr="//notebook[last()]" position="inside">
+                    <page string="Remarks">
+                        <group>
+                            <field name="ceo_remark" invisible="1"/>
+                            <field name="ceo_note" attrs="{'readonly': [('ceo_remark', '=', False)]}"/>
+                            <field name="salesman_remark" invisible="1"/>
+                            <field name="salesman_note" attrs="{'readonly': [('salesman_remark', '=', False)]}"/>
+                            <field name="manager_remark" invisible="1"/>
+                            <field name="manager_note" attrs="{'readonly': [('manager_remark', '=', False)]}"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='order_line']" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancel','sale'))]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

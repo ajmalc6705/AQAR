@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_complaint_helpdesk" model="ir.actions.act_window">
+        <field name="name">Customer Complaints</field>
+        <field name="res_model">customer.complaints</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('from_helpdesk', '=', True)]</field>
+        <field name="context">{'default_from_helpdesk': True,'create':False,'edit':False}</field>
+    </record>
+    <menuitem id="customer_complaint_helpdesk_menu" name="Customer Complaints"
+              parent="helpdesk.helpdesk_ticket_menu_main"
+              action="action_complaint_helpdesk" sequence="60"/>
+</odoo>

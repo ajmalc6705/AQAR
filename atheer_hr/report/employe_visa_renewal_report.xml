@@ -1,0 +1,61 @@
+<odoo>
+    <data>
+        <template id="employe_visa_renewal_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <div>
+                            <div class="page" style="padding: 14px;">
+                                <t t-set="company" t-value="doc.company_id"/>
+                                <!-- <t t-call="atheer_hr.af_external_layout_header"></t> -->
+                                <div class="col-12 mb4" style="margin-top: 35px;">
+                                    <div class="date-div">
+                                        <b>Date:
+                                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/>
+                                        </b>
+                                    </div>
+                                    <div class="letter-address">
+                                        <b>To,<br/>The HR,<br/>Atheer Real Estate
+                                        </b>
+                                    </div>
+                                    <div class="letter-head">
+                                        <u>
+                                            <b>Subject : Acceptance for Visa Renewal</b>
+                                        </u>
+                                    </div>
+                                    <div class="letter-body">
+                                        <p>
+                                            I hereby wish to renew my visa for the next contract period of 2 years.
+                                            <br/>
+                                            If I fail to serve my contract period after renewing the visa,
+                                            <br/>
+                                            I assure to pay back the complete expense related to my visa.
+                                            <br/>
+                                            Hence I kindly request to renew my Visa.
+                                        </p>
+                                    </div>
+                                    <div class="letter-address" style="margin-top: 35px;">
+                                        <b>Thanking You,</b>
+                                        <br/>
+                                    </div>
+                                    <div class="letter-address" style="margin-top: 50px;">
+                                        <b>Name -
+                                            <t t-esc="doc.name"/>
+                                        </b>
+                                        <br/>
+                                        <b>Id No. -
+                                            <t t-esc="doc.employee_id"/>
+                                        </b>
+                                        <br/>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

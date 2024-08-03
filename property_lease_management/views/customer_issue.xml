@@ -1,0 +1,466 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--customer issue form and tree and kanban-->
+        <record id="customer_issue_kanban_view" model="ir.ui.view">
+            <field name="name">customer.complaints.kanban</field>
+            <field name="model">customer.complaints</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="oe_background_grey"
+                        statusbar_visible="issue,alloc,done">
+                    <field name="state"/>
+                    <field name="complaint_no"/>
+                    <field name="property"/>
+                    <field name="company_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_card codup_kanban_status oe_kanban_global_click">
+                                <div class="codup_kanban_details">
+                                    <h4>
+                                        <a type="open" title="Complaint">
+                                            <field name="complaint_no"/>
+                                        </a>
+                                    </h4>
+                                    <ul>
+                                        <li title="Property">
+                                            <field name="property"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record id="res_partner_view_buttons_property" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.property</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority" eval="29"/>
+            <field name="arch" type="xml">
+                <!--                <xpath expr="//div[@class='oe_button_box']" position="inside">-->
+                <xpath expr="//div[hasclass('oe_button_box')]" position="after">
+                    <button name="return_tenant_complaint" type="object" class="oe_stat_button"
+                            icon="fa-building" context="{'xml_id':'action_customer_issue_form'}"
+                            help="show the complaints of the tenant">
+                        <field string="Complaints" name="mrf_count" widget="statinfo"/>
+                    </button>
+                    <button name="return_property_maintenance" type="object" class="oe_stat_button"
+                            icon="fa-building"
+                            help="show the maintenance of the building">
+                        <field string="Maintenance" name="maintenance_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_customer_complaint_tree" model="ir.ui.view">
+            <field name="name">customer.complaints.tree</field>
+            <field name="model">customer.complaints</field>
+            <field name="arch" type="xml">
+                <tree string="Complaint Log" decoration-danger="(state == 'issue')"
+                      decoration-success="(state == 'done')" sample="1">
+                    <field name="complaint_no" decoration-bf="1"/>
+                    <field name="date"/>
+                    <field name="building"/>
+                    <field name="property"/>
+                    <field name="total_amount"/>
+                    <field name="state" decoration-danger="(state == 'issue')"
+                           decoration-success="(state == 'done')" widget="badge" optional="show"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_customer_complaint_form" model="ir.ui.view">
+            <field name="name">customer.complaints.form</field>
+            <field name="model">customer.complaints</field>
+            <field name="arch" type="xml">
+                <form string="Customer Complaints">
+                    <header>
+                        <field name="to_property_visibility" invisible="1"/>
+                        <field name="direct_approve_visibility" invisible="1"/>
+                        <!--                        <field name="sr" invisible="1"/>-->
+                        <button name="to_property_head" string="Send to Property Head"
+                                type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user"
+                                attrs="{'invisible':[('to_property_visibility','=', False)]}"/>
+                        <!-- <button name="direct_approve" string="Approve"
+                                type="object" class="oe_highlight"
+                                groups="amlak_property_management.group_property_user"
+                                attrs="{'invisible':[('direct_approve_visibility','=', False)]}"/> -->
+                        <button name="sen_to_procurement" string="Send To Procurement"
+                                type="object"
+                                groups="property_lease_management.group_property_head"
+                                class="oe_highlight" states="with_section2"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                groups="property_lease_management.group_property_head"
+                                class="oe_highlight" states="with_section"/>
+                        <button name="to_property_head2" string="Send to Property Head" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user"
+                                attrs="{'invisible':[('state','!=','srs_and_mrs')]}"/>
+                        <button name="to_approve" string="Approve" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_procurement"
+                                states="with_ceo"/>
+                        <button name="move_to_refuse" string="Reject" type="object"
+                                class="oe_highlight"
+                                states="with_section"/>
+
+                        <button name="to_srs_and_mrs" string="Approve" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_head"
+                                states="with_section"/>
+                        <button name="create_mrf" string="Create MR" type="object" class="oe_highlight"
+                                invisible="1"/>
+                        <button name="create_sr" string="Create SR" type="object" class="oe_highlight"
+                                invisible="1"/>
+                        <!--                        <button name="petty_cash_voucher" string="Print Petty Cash Voucher " type="object"-->
+                        <!--                                class="oe_highlight" invisible="1"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="issue,approve"/>
+                    </header>
+                    <sheet>
+                        <!-- <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button"
+                                    icon="fa-file"
+                                    name="mr_open" type="object" attrs="{'invisible': [('mrf_count', '&lt;', 1)]}">
+                                <field name="mrf_count" widget="statinfo" string="MR"/>
+                            </button>
+                            <button class="oe_stat_button"
+                                    icon="fa-file"
+                                    name="sr_open" type="object" attrs="{'invisible': [('sr_count', '&lt;', 1)]}">
+                                <field name="sr_count" widget="statinfo" string="SR"/>
+                            </button>
+                        </div> -->
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="complaint_no" class="oe_inline" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Complaint Booked On">
+                                <field name="create_date" readonly="1"/>
+                            </group>
+                            <group string="Complaint Issued On">
+                                <field name="date" attrs="{'readonly':[('state','!=', 'issue')]}"/>
+                            </group>
+                            <group string="Agreement Details">
+                                <field name="building"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':[('state','!=', 'issue')]}"/>
+                                <field name="property"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':[('state','!=', 'issue')]}"
+                                       domain="[('parent_building','=',building)]"/>
+                                <field name="agreement_no" attrs="{'required':[('complain_initiated_by','=','tenant')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       force_save="1"/>
+                                <field name="residing_since" readonly="1" force_save="1"/>
+                                <field name="tenant_years" readonly="1" force_save="1"/>
+                                <field name="user_id"
+                                       attrs="{'invisible':[('state','!=','issue')],'readonly':[('state','!=', 'issue')]}"/>
+                                <!--issue end-->
+                            </group>
+                            <group string="Tenant Details">
+                                <field name="complain_initiated_by"
+                                       attrs="{'readonly':[('state','!=', 'issue')],'invisible':[('state','!=','issue')]}"/>
+                                <field name="tenant_id" attrs="{'readonly':True}" force_save="1"/>
+                                <field name="tenant_ph" attrs="{'readonly':[('state','!=', 'issue')]}" force_save="1"/>
+                                <field name="contact_person" attrs="{'readonly':[('state','!=', 'issue')]}"/>
+                                <!--end issue2-->
+                                <!--                                <field name="mr" invisible="1"/>-->
+                            </group>
+                            <group string="Job Allocation Details"
+                                   attrs="{'invisible':[('state','in',('issue'))]}">
+                                <!--allocation1-->
+                                <field name="job_by_suprvsr" string="Job Assigned By"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':[('state','!=', 'issue')],'invisible':[('state','in',('issue'))]}"/>
+                                <field name="alloc_date"
+                                       attrs="{'invisible':[('state','in',('issue'))]}"/>
+                                <field name="company_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <!--end completion-->
+                            </group>
+                            <group>
+                                <field name="remarks" attrs="{'readonly':[('state','!=','with_section')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Complaints &amp; Inspection Details">
+                                <group>
+                                    <group>
+                                        <field name="inspection_date"/>
+                                    </group>
+                                </group>
+                                <h2>Complaints</h2>
+                                <field name="complaint_details" context="{'state': state}">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="name" required="1"
+                                               attrs="{'readonly':[('state','in',('draft','open','done'))]}"/>
+                                        <field name="priority" required="1"
+                                               attrs="{'readonly':[('state','in',('draft','open','done'))]}"/>
+                                        <field name="asset"
+                                               domain="[('property_id','=',property)]"
+                                               attrs="{'invisible':[('state','in',('draft'))]}"/>
+                                        <field name="comments" attrs="{'invisible':[('state','in',('draft'))]}"/>
+                                        <field name="responsible"
+                                               attrs="{'invisible':[('state','not in',('draft'))]}"/>
+                                        <field name="complaint_id" invisible="1"/>
+                                        <field name="parent_state" invisible="1"/>
+                                        <field name="date_approved"
+                                               attrs="{'readonly':[('state','not in',('open'))]}"/>
+                                        <field name="state" readonly="1"/>
+                                        <field name="property" readonly="1"/>
+                                        <button name="set_to_done"
+                                                type="object" icon="fa-check"
+                                                attrs="{'invisible':[('state','not in',('open'))]}"/>
+                                    </tree>
+                                </field>
+                                <h2>Cost Estimation</h2>
+                                <field name="product_ids"
+                                       attrs="{'readonly':[('state','in',('done', 'cancel'))]}">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="name" on_change="onchange_product(name)"
+                                               attrs="{'readonly': [('estimate','=', True)]}"/>
+                                        <field name="decryption" string="Description"
+                                               attrs="{'readonly': [('estimate','=', True)]}"/>
+                                        <field name="qty" digits="[42,3]"
+                                               attrs="{'readonly': [('estimate','=', True)]}"/>
+                                        <field name="estimated_cost" digits="[42,3]" string="Estimated Unit Price"
+                                               attrs="{'readonly': [('estimate','=', True)]}"/>
+                                        <field name="discount" digits="[42,3]"
+                                               attrs="{'readonly': [('estimate','=', True)]}" invisible="1"/>
+                                        <field name="subtotal" digits="[42,3]" readonly="1"/>
+                                        <field name="type" attrs="{'readonly': [('estimate','=', True)]}"/>
+                                        <field name="estimate" invisible="1"/>
+                                        <!--attrs="{'invisible':[('estimate','=', False)],required':[('estimate','=', True)]"-->
+                                        <field name="actual_qty" digits="[42,3]"
+                                               attrs="{'readonly': [('estimate','=', False)]} " invisible="1"/>
+                                        <field name="actual_unit_price" digits="[42,3]"
+                                               attrs="{'readonly': [('estimate','=', False)]}" invisible="1"/>
+                                        <field name="actual_subtotal" digits="[42,3]" readonly="1" invisible="1"/>
+                                    </tree>
+                                </field>
+
+                                <group class="oe_subtotal_footer oe_right" colspan="2"
+                                       attrs="{'invisible':[('state','in',('issue'))]}" name="sale_total">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="estimated_total_amount" digits="[42,3]" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_amount" digits="[42,3]" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_type"/>
+                                        <field name="doc_no"/>
+                                        <field name="doc_dec"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" filename="file_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="MRS Sheet" name="mrs_sheet"
+                                  attrs="{'invisible':[('state','in',('issue', 'with_section', 'with_section2', 'cancel'))]}">
+                                <group>
+                                    <group>
+                                        <field name="mrs_date" attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="mrs_reference"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="mrs_project_code_location"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="mrs_attachments"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                    </group>
+                                </group>
+                                <field name="mrs_sheet_ids" attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}">
+                                    <tree string="MRS Sheet" editable="bottom">
+                                        <field name="description"/>
+                                        <field name="required_date"/>
+                                        <field name="allocated_budget_ro"/>
+                                        <field name="remarks"/>
+                                        <field name="customer_complaint_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="SRS Sheet" name="srs_sheet"
+                                  attrs="{'invisible':[('state','in',('issue', 'with_section', 'with_section2', 'cancel'))]}">
+                                <group>
+                                    <group>
+                                        <field name="srs_date" attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="srs_reference"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="srs_project_code_location"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                        <field name="srs_attachments"
+                                               attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}"/>
+                                    </group>
+                                </group>
+                                <field name="srs_sheet_ids" attrs="{'readonly':[('state','!=', 'srs_and_mrs')]}">
+                                    <tree string="SRS Sheet" editable="bottom">
+                                        <field name="description"/>
+                                        <field name="required_date"/>
+                                        <field name="allocated_budget_ro"/>
+                                        <field name="remarks"/>
+                                        <field name="customer_complaint_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="search_customer_complaint" model="ir.ui.view">
+            <field name="name">customer.complaints.search</field>
+            <field name="model">customer.complaints</field>
+            <field name="arch" type="xml">
+                <search string="Search Customer Complaints">
+                    <filter name="open" string="Open" domain="[('state', '!=', 'issue')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <field name="complaint_no"/>
+                    <field name="agreement_no"/>
+                    <field name="building"/>
+                    <field name="property"/>
+                    <!--                    <field name="mr"/>-->
+                    <field name="user_id"/>
+                    <field name="compl_emp"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_agreement" string="Agreement" domain="[]"
+                                context="{'group_by':'agreement_no'}"/>
+                        <filter name="group_building" string="Building" domain="[]" context="{'group_by':'building'}"/>
+                        <filter name="group_prperty" string="Property" domain="[]" context="{'group_by':'property'}"/>
+                        <!--                        <filter name="mrf" string="MRF" domain="[]" context="{'group_by':'mr'}"/>-->
+                        <filter name="group_recorded_by" string="Complaint Recorded By" domain="[]"
+                                context="{'group_by':'user_id'}"/>
+                        <filter name="job_done_by" string="Job Completed By" domain="[]"
+                                context="{'group_by':'compl_emp'}"/>
+                        <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!--Customer issue action-->
+        <record id="action_customer_issue_form" model="ir.actions.act_window">
+            <field name="name">Tenant Complaints</field>
+            <field name="res_model">customer.complaints</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Customer complaints.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_customer_issue_form" parent="property_lease_management.menu_property_maintenance_root"
+                  id="menu_customer_issues" sequence="2"/>
+
+        <record id="tree_customer_complaint_details" model="ir.ui.view">
+            <field name="name">tree.complaint.details</field>
+            <field name="model">complaint.details</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0" delete="0" sample="1">
+                    <field name="name" readonly="1" decoration-bf="1"/>
+                    <field name="asset"/>
+                    <field name="priority"/>
+                    <field name="comments"/>
+                    <field name="responsible"/>
+                    <field name="complaint_id" invisible="1"/>
+                    <field name="date_approved"/>
+                    <field name="state" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="form_customer_complaint_details" model="ir.ui.view">
+            <field name="name">form.complaint.details</field>
+            <field name="model">complaint.details</field>
+            <field name="arch" type="xml">
+                <form create="0" edit="0" delete="0" sample="1">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1" decoration-bf="1"/>
+                                <field name="asset"/>
+                                <field name="priority"/>
+                                <field name="comments"/>
+                            </group>
+                            <group>
+                                <field name="responsible"/>
+                                <field name="complaint_id" invisible="1"/>
+                                <field name="date_approved"/>
+                                <field name="state" widget="badge" optional="show"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_customer_complaints_tree" model="ir.actions.act_window">
+            <field name="name">Complaints Register</field>
+            <field name="res_model">complaint.details</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('state','=','open')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Customer complaint Details.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_customer_complaints_tree"
+                  parent="property_lease_management.menu_property_maintenance_root"
+                  id="menu_customer_complaints" sequence="3"/>
+
+        <record id="view_product_complaints_form" model="ir.ui.view">
+            <field name="name">product.complaints.form</field>
+            <field name="model">product.complaints</field>
+            <field name="arch" type="xml">
+                <form string="Product Complaints">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="decryption"/>
+                                <field name="actual_unit_price"/>
+                                <field name="qty"/>
+                                <field name="actual_qty"/>
+                                <field name="type"/>
+                            </group>
+                            <group>
+                                <field name="complaint_id"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="discount"/>
+                                <field name="actual_subtotal"/>
+                                <field name="subtotal"/>
+                                <field name="estimate"/>
+                                <field name="estimated_cost"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

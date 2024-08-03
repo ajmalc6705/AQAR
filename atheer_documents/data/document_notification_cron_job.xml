@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <odoo>
+    <record model="ir.cron" id="notification_reminder">
+        <field name="name">Document Expiration</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_atheer_documents"/>
+        <field name="state">code</field>
+        <field name="code">model.notification_reminder()</field>
+    </record>
+</odoo>
+</odoo>

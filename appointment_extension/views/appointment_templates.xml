@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="appointment_form" inherit_id="appointment.appointment_form">
+        <xpath expr="//h1[hasclass('o_page_header')]" position="replace">
+            <h1 class="o_page_header mt32">
+                <span class="text-primary" t-out="appointment_type.name"/>
+
+            </h1>
+        </xpath>
+        <xpath expr="//form" position="replace">
+            <form class="appointment_submit_form col-lg-7 col-md-12" enctype="multipart/form-data"
+                  t-attf-action="/appointment/#{appointment_type.id}/submit?#{keep_query('*')}"
+                  method="POST">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="datetime_str" t-att-value="datetime_str"/>
+                <input type="hidden" name="duration_str" t-att-value="duration_str"/>
+                <div class="mb-3">
+                    <label class="pb-2" for="name">Your Name*</label>
+                    <div>
+                        <input type="char" class="form-control" name="name" required="1"
+                               t-att-value="'name' in partner_data and partner_data['name']"
+                               placeholder="John Smith"/>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="pb-2" for="name">Your Attachment*</label>
+                    <div class="div-class-button">
+                        <div class="col-sm">
+                            <input type="file" name="attachment_name"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 mt-1">
+                    <label class="pb-2" for="email">Your Email*</label>
+                    <div>
+                        <input type="email" class="form-control" name="email" required="1"
+                               t-att-value="'email' in partner_data and partner_data['email']"
+                               placeholder="john.smith@example.com"/>
+                    </div>
+                </div>
+                <div class="mb-3 mt-1">
+                    <label class="pb-2" for="phone">Your Phone Number*</label>
+                    <div>
+                        <input type="tel" class="form-control" name="phone" id="phone_field" required="1"
+                               t-att-value="'mobile' in partner_data and partner_data['mobile']"
+                               placeholder="+3212345678"/>
+                    </div>
+                </div>
+                <t t-foreach="appointment_type.question_ids" t-as="question">
+                    <div class="mb-3 mt-1" t-if="question.question_type!='text'">
+                        <label class="pb-2" t-attf-for="question_#{question.id}"
+                               t-out="' '.join([question.name, '*' if question.question_required else ''])"/>
+                        <div>
+                            <t t-if="question.question_type == 'char'">
+                                <input type="char" class="form-control"
+                                       t-attf-name="question_#{question.id}"
+                                       t-att-required="question.question_required or None"
+                                       t-att-placeholder="question.placeholder"/>
+                            </t>
+                            <t t-if="question.question_type == 'select'">
+                                <select t-attf-name="question_#{question.id}" class="form-control"
+                                        t-att-required="question.question_required or None"
+                                        t-att-placeholder="question.placeholder">
+                                    <t t-foreach="question.answer_ids or []" t-as="answer">
+                                        <option t-att-value="answer.id">
+                                            <t t-out="answer.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </t>
+                            <t t-if="question.question_type == 'radio'">
+                                <div class="checkbox" t-foreach="question.answer_ids or []" t-as="answer">
+                                    <label>
+                                        <input type="radio" t-attf-name="question_#{question.id}"
+                                               t-att-required="question.question_required or None"
+                                               t-att-value="answer.id" class="me-1"/>
+                                        <t t-out="answer.name"/>
+                                    </label>
+                                </div>
+                            </t>
+                            <t t-if="question.question_type == 'checkbox'">
+                                <div t-attf-class="checkbox-group #{question.question_required and 'required' or ''}">
+                                    <div class="checkbox" t-foreach="question.answer_ids or []" t-as="answer">
+                                        <label>
+                                            <input type="checkbox"
+                                                   t-attf-name="question_#{question.id}_answer_#{answer.id}"
+                                                   t-att-value="answer.name" class="me-2"/>
+                                            <t t-out="answer.name"/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="mb-3 mt-1" t-if="question.question_type == 'text'">
+                        <label t-attf-for="question_#{question.id}" class="pb-2"
+                               t-out="' '.join([question.name, '*' if question.question_required else ''])"/>
+                        <textarea class="form-control" rows="6"
+                                  t-att-required="question.question_required or None"
+                                  t-attf-name="question_#{question.id}"
+                                  t-att-placeholder="question.placeholder"/>
+                    </div>
+                </t>
+                <div groups="appointment.group_appointment_manager"
+                     class="alert alert-info mt-4 rounded-0 o_not_editable" role="status">
+                    <a t-attf-href="/web#id=#{appointment_type.id}&amp;view_type=form&amp;model=#{appointment_type._name}&amp;action=appointment.appointment_type_action">
+                        <i class="fa fa-pencil me-2" role="img" aria-label="Edit"
+                           title="Create custom questions in backend"/>
+                        <em>Add Custom Questions</em>
+                    </a>
+                </div>
+                <div class="mb-3 pt-4">
+                    <div class="o_not_editable">
+                        <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+                    </div>
+                </div>
+            </form>
+        </xpath>
+    </template>
+
+      <template id="portal_my_appointments_view" inherit_id="appointment.portal_my_appointments">
+        <xpath expr="//t[@t-foreach='appts']" position="replace">
+            <t t-foreach="appts" t-as="appointment">
+                <tr>
+                    <td>
+                        <a t-attf-href="/calendar/view/#{appointment.access_token}?partner_id=#{request.env.user.partner_id.id}">
+                            <t t-out="appointment.appointment_type_id.name"/>
+                            with
+                            <t t-out="appointment.user_id.name"/>
+                        </a>
+                    </td>
+                    <td class="text-end">
+                        <span t-field="appointment.start"/>
+                    </td>
+                    <td class="text_end">
+                        <t t-if="appointment.attachment_id">
+                            <a t-attf-href="/web/content/#{appointment.attachment_id.id}?download=true&amp;access_token=#{appointment.attachment_id.access_token}"
+                               target="_blank">
+                                <div class='oe_attachment_embedded o_image' t-att-title="appointment.attachment_id.name"
+                                     t-att-data-mimetype="appointment.attachment_id.mimetype"/>
+                                <div class='o_portal_chatter_attachment_name'>
+                                    <t t-esc='appointment.attachment_id.name'/>
+                                </div>
+                            </a>
+                        </t>
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        <record id="view_recommendation_tree" model="ir.ui.view">
+            <field name="name">Recommendation</field>
+            <field name="model">evaluation.recommendation</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Evaluation Recommendation" >
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_evaluation_recommendation_form" model="ir.ui.view">
+            <field name="name">Recommendation</field>
+            <field name="model">evaluation.recommendation</field>
+            <field name="arch" type="xml">
+                <form string="Evaluation Recommendation" >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_recommendation_form" model="ir.actions.act_window">
+            <field name="name">Recommendation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">evaluation.recommendation</field>
+        </record>
+        <menuitem name="Recommendation" parent="atheer_hr.configuration_menu" action="action_recommendation_form" id="recommendation_menu" sequence="20"/>
+    </data>
+</odoo>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="renewal_sanad_report_tag" model="ir.actions.report">
+            <field name="name">Renewal Sanad Report</field>
+            <field name="model">tenant.request</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Renewal Sanad Report-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.sanad_renewal_report_template</field>
+            <field name="report_file">property_lease_management.sanad_renewal_report_template</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_renewal_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="sanad_renewal_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <div style="padding:10px;">
+                            <center>
+                                <!--                            <img src="/static/description/stamp.png"/>-->
+                                <img class="img img-responsive"
+                                     src="/property_lease_management/static/description/stamp.png"
+                                     style="width:100px;height:100px;"/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <strong>
+                                    تفويض بتجديد عقد ايجار الكترونيا
+                                    <br/>
+                                    <br/>
+                                    Authorized for contract renewal electronically
+                                </strong>
+                                <br/>
+                                <table width="100%" class="table table-bordered" style="padding:40px !important;">
+                                    <tbody>
+                                        <tr>
+                                            <td width="50%">
+                                                We have authorized:
+                                                <br/>
+                                                Establishment to renew the rent contract data stated below through the
+                                                electronic system of Muscat municipality for contract renewal as
+                                                follows:
+                                            </td>
+                                            <td width="50%" style="text-align:right;">
+                                                لقد فوضنا الشركة:
+                                                <br/>
+                                                بتجديد عقد الإيجار الموضح بياناتة أدناه عن طريق النظام الألكتروني ببلدية
+                                                مسقط لتجديد
+                                                عقود الايجار ، حسبما يلي:
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <table width="100%"
+                                           style="font-size:16px;text-align:center;padding:40px !important;"
+                                           class="table table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td width="33%">
+                                                    Building No
+                                                </td>
+                                                <td width="33%">
+                                                    <span t-field="docs.building_id.name"/>
+                                                </td>
+                                                <td width="33%">
+                                                    رقم المبنى:
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Flat/shop No
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.property_id.name"/>
+                                                </td>
+                                                <td>
+                                                    الشقة/المحل:
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Contract number to be renewal
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.rent_id.name"/>
+                                                </td>
+                                                <td>
+                                                    رقم العقد المراد تجديده
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    contract commencing on
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.lease_from_date"/>
+                                                </td>
+                                                <td>
+                                                    تاريخ بداية العقد
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Contract expiring on
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.lease_to_date"/>
+                                                </td>
+                                                <td>
+                                                    تاريخ نهاية العقد
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Monthly rent R.O
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.rent_id.agreed_rent_amount"/>
+                                                </td>
+                                                <td>
+                                                    الايجار الشهري ر.ع
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Rent to be paid in advance every
+                                                </td>
+                                                <td>
+                                                    <span t-field="docs.installment_schedule"/>
+                                                </td>
+                                                <td>
+                                                    يدفع الايجار في أول كل
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <br/>
+                                    <div style="font-size:18px;float:left !important;text-align:left !important;width:700px !important;">
+                                        Agreement period:
+                                        <span t-field="docs.year_month_days"/>
+                                        <br/>
+                                        Electricity Account:
+                                        <span t-field="docs.property_id.electricity_no"/>
+                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <div style="font-size:16px;float:right;">
+                                        المؤجر (landlord)
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        المستأجر (Tenant)
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_resource_calendar_attendance_weekend_tree" model="ir.ui.view">
+            <field name="name">resource.calendar.attendance.weekend.tree</field>
+            <field name="model">resource.calendar.attendance</field>
+            <field name="inherit_id" ref="resource.view_resource_calendar_attendance_tree"/>
+            <field name="arch" type="xml">
+                <field name="week_type" position="before">
+                    <field name="is_weekend"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

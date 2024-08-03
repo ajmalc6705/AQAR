@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="draft_button_account_view_move_form">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+                <attribute name="groups">aqar_accounting_updates.account_management_group_user</attribute>
+            </xpath>
+            <xpath expr="//div[@name='journal_div']" position="after">
+                <field name="zakath" invisible="1"/>
+                <field name="zakath_amount" readonly="1"
+                       attrs="{'invisible': [('zakath', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='to_check']" position="after">
+                <field name="approval_status" invisible="1"/>
+                <field name="approval_status_2" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_post']" position="before">
+                <button name="approve_status_move" class="oe_highlight" string="Verify"
+                        attrs="{'invisible': [('approval_status', '=', True)]}"
+                        type="object"/>
+                <button name="update_approve_status_two" class="oe_highlight" string="Approve"
+                        attrs="{'invisible': [('approval_status_2', '=', True)]}"
+                        type="object"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

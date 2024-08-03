@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="portfolio_dividend_tree" model="ir.ui.view">
+        <field name="name">dividend.tree</field>
+        <field name="model">portfolio.dividend</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="company_id"/>
+                <field name="doc_id"/>
+                <field name="date"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state in ('done')"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+    <record id="portfolio_dividend_form" model="ir.ui.view">
+        <field name="name">dividend.form</field>
+        <field name="model">portfolio.dividend</field>
+        <field name="arch" type="xml">
+            <form string="Dividend">
+                <header>
+                    <button name="action_done" class="oe_highlight" states="draft" string="Done"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,done"
+                            string="Reset to draft" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <button name="action_cancel" class="oe_highlight" states="draft"
+                            string="Cancel" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div name="button_box" position="inside">
+                        <button class="oe_stat_button" type="object"
+                                name="get_entry"
+                                icon="fa-pencil-square-o"
+                                string="Dividend Entry" attrs="{'invisible':[('move_id','=',False)]}">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="doc_id" placeholder="e.g. Doc"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Portfolio Info">
+                            <field name="investment_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investor_id"/>
+                            <field name="investment_company"/>
+                            <field name="investment_type_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investment_broker_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="dividend_cut_off_date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="available_stocks" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="face_value" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="dividend_percent" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="amount" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="company_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                        <group string="Accounting Info">
+                            <field name="date" string="Accounting Date"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="journal_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="account_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="credit_account_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                   groups="analytic.group_analytic_accounting"
+                            />
+                            <label for="total_dividend"/>
+                            <div name="total_dividend_div" class="o_row">
+                                <field name="total_dividend" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}" required="1"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       groups="base.group_multi_currency"/>
+                            </div>
+                            <!--                            <field name="total_dividend"-->
+                            <!--                                   widget='monetary' options="{'currency_field': 'currency_id'}"-->
+                            <!--                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>-->
+                            <!--                            <field name="currency_id" invisible="1"-->
+                            <!--                                   options="{'no_create': True, 'no_open': True}"-->
+                            <!--                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>-->
+                            <field name="label" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="move_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Notes" String="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_portfolio_dividend" model="ir.actions.act_window">
+        <field name="name">Dividend</field>
+        <field name="res_model">portfolio.dividend</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Dividend
+            </p>
+        </field>
+    </record>
+    <menuitem id="portfolio_transaction_dividend_menu" name="Dividend" parent="transactions_menu"
+              sequence="30"
+              action="action_portfolio_dividend"/>
+</odoo>

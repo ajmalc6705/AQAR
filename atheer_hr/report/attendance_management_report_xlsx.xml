@@ -1,0 +1,12 @@
+<odoo>
+    <record id="attendance_management_report_xlsx" model="ir.actions.report">
+        <field name="name">Attendance Report</field>
+        <field name="model">wizard.attendance.history</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">atheer_hr.attendance_management_report</field>
+        <field name="report_file">Attendance Report</field>
+        <field name="binding_model_id" ref="atheer_hr.model_wizard_attendance_history"/>
+        <field name="attachment_use">False</field>
+        <field name="binding_view_types">form,list</field>
+    </record>
+</odoo>

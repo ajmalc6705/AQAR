@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="turnover_punch_list_report_tag" model="ir.actions.report">
+            <field name="name">Turn-Over Punchlist</field>
+            <field name="model">property.checklist.takeover</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">property_lease_management.turn_over_punch_list_excel</field>
+            <field name="report_file">property_lease_management.turn_over_punch_list_excel</field>
+            <field name="print_report_name">'Turn-Over Punchlist'</field>
+            <field name="binding_model_id" ref="model_property_checklist_takeover"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="handover_punch_list_report_tag" model="ir.actions.report">
+            <field name="name">Hand-Over Punchlist</field>
+            <field name="model">property.checklist</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">property_lease_management.hand_over_punch_list_excel</field>
+            <field name="report_file">property_lease_management.hand_over_punch_list_excel</field>
+            <field name="print_report_name">'Hand-Over Punchlist'</field>
+            <field name="binding_model_id" ref="model_property_checklist"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

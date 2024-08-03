@@ -1,0 +1,225 @@
+<odoo>
+    <!-- Cron -->
+    <data>
+        <record id="hr_payroll.decimal_payroll" model="decimal.precision">
+            <field name="digits">3</field>
+        </record>
+
+
+        <record id="update_employee_info_increment" model="ir.cron">
+            <field name="name">Increment and promotion</field>
+            <field name="model_id" ref="model_increment_and_promotion"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_update_employee_info()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+        <!-- Employee excessive annual leave (annual leave balance > 60)-->
+        <record id="notify_emp_excessive_annual_leave" model="ir.cron">
+            <field name="name">Employee Excessive Annual Leave</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.notify_employee_annual_leave()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+        <!-- Employee documents expiry-->
+        <record id="notify_employee_doc_expiration" model="ir.cron">
+            <field name="name">Employee Document Expiration</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.notify_employee_doc_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+        <!--        employee resignation: cron job-->
+        <record id="employee_resignation" model="ir.cron">
+            <field name="name">Employee Resignation</field>
+            <field name="model_id" ref="model_hr_resignation"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_resignation()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+        <!--        payroll hold release-->
+        <record id="payroll_hold_release" model="ir.cron">
+            <field name="name">Payroll Hold Release</field>
+            <field name="model_id" ref="model_hr_payroll_hold"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_release()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+        <record id="cron_annual_leave_allocation" model="ir.cron">
+            <field name="name">Annual Leave Calculations</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.annual_leave_cron()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field name="priority" eval="1"/>
+        </record>
+
+        <record id="cron_leave_allocation_yearly" model="ir.cron">
+            <field name="name">Yearly Leave Allocation</field>
+            <field name="model_id" ref="model_hr_leave_allocation"/>
+            <field name="state">code</field>
+            <field name="code">model.allocate_leaves_annually()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+
+<!--        &lt;!&ndash;        annual leaves eligibility: cron job&ndash;&gt;-->
+<!--        <record id="eligible_for_annual_leaves" model="ir.cron">-->
+<!--            <field name="name">Eligible for annual leaves</field>-->
+<!--            <field name="model_id" ref="model_hr_employee"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">model.cron_eligible_for_annual_leaves()</field>-->
+<!--            <field name="interval_number">1</field>-->
+<!--            <field name="interval_type">days</field>-->
+<!--            <field name="numbercall">-1</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="doall" eval="True"/>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash;      eligible  annual leaves: cron job&ndash;&gt;-->
+<!--        <record id="eligible_annual_leaves" model="ir.cron">-->
+<!--            <field name="name">Eligible annual leaves</field>-->
+<!--            <field name="model_id" ref="model_hr_employee"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">model.cron_eligible_annual_leaves()</field>-->
+<!--            <field name="interval_number">1</field>-->
+<!--            <field name="interval_type">days</field>-->
+<!--            <field name="numbercall">-1</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="doall" eval="True"/>-->
+<!--        </record>-->
+
+        <record id="cron_update_ph_weekend_compensation" model="ir.cron">
+            <field name="name">Update Compensation Leave</field>
+            <field name="model_id" ref="model_public_holidays"/>
+            <field name="state">code</field>
+            <field name="code">model.update_compensation_leave()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="False"/>
+            <field name="doall" eval="True"/>
+        </record>
+
+
+    </data>
+
+    <!-- Notification duration data -->
+    <data>
+        <record id="notification_duration_2_months" model="notification.duration">
+            <field name="name">2</field>
+            <field name="duration">2</field>
+            <field name="period">months</field>
+        </record>
+    </data>
+
+    <data>
+        <!-- activities -->
+        <record id="mail_act_employee_doc_expiry" model="mail.activity.type">
+            <field name="name">Expiry Notification</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">hr.employee</field>
+        </record>
+        <record id="mail_act_payslip_to_hr_manager" model="mail.activity.type">
+            <field name="name">Send to Hr Manager</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">hr.payslip</field>
+        </record>
+        <record id="mail_act_payslip_to_accounts" model="mail.activity.type">
+            <field name="name">Send to Accounts</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">hr.payslip</field>
+        </record>
+        <record id="mail_act_payslip_to_accounts" model="mail.activity.type">
+            <field name="name">Send to Accounts</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">hr.payslip</field>
+        </record>
+        <record id="mail_act_payslip_run_notifications" model="mail.activity.type">
+            <field name="name">Status Notifications</field>
+            <field name="icon">fa-sun-o</field>
+            <field name="res_model">hr.payslip.run</field>
+        </record>
+
+        <!--        Server action-->
+        <record model="ir.actions.server" id="action_sent_to_ceo">
+            <field name="name">Send to CEO</field>
+            <field name="model_id" ref="atheer_hr.model_increment_and_promotion"/>
+            <field name="binding_model_id" ref="atheer_hr.model_increment_and_promotion"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.send_to_ceo()
+            </field>
+        </record>
+
+        <record model="ir.actions.server" id="action_approve_hr">
+            <field name="name">Approve Hr</field>
+            <field name="model_id" ref="atheer_hr.model_increment_and_promotion"/>
+            <field name="binding_model_id" ref="atheer_hr.model_increment_and_promotion"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                action = records.approve_hr()
+            </field>
+        </record>
+
+    </data>
+
+    <data>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'hr_holidays'), ('name', '=', 'holiday_status_unpaid')]" />
+            </function>
+            <value eval="{'noupdate': False}" />
+        </function>
+
+        <record id="hr_holidays.holiday_status_unpaid" model="hr.leave.type">
+            <field name="request_unit">day</field>
+        </record>
+
+<!--        <record id="hr_holidays.holiday_status_comp" model="hr.leave.type">-->
+<!--            <field name="request_unit">day</field>-->
+<!--        </record>-->
+
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'hr_holidays'), ('name', '=', 'holiday_status_unpaid')]" />
+            </function>
+            <value eval="{'noupdate': True}" />
+        </function>
+    </data>
+</odoo>

@@ -1,0 +1,374 @@
+<odoo>
+    <data>
+        <record id="paperformat_af_employe_performance_evaluation"
+                model="report.paperformat">
+            <field name="name">Employe A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="atr_performance_evaluation_report" model="ir.actions.report">
+            <field name="name">Evaluation Report</field>
+            <field name="model">performance.evaluation</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.performance_evaluation</field>
+            <field name="report_file">atheer_hr.performance_evaluation</field>
+            <field name="print_report_name">'Evaluation Report-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af_employe_performance_evaluation"/>
+            <field name="binding_model_id" ref="model_performance_evaluation"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="performance_evaluation">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="padding: 14px;">
+                        <t t-call="atheer_hr.af_external_layout">
+                            <div class="oe_structure"/>
+                            <style type="text/css">
+                                <![CDATA[
+                                @font-face {
+                                    font-family: 'Serif Semi Bold';
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    src: url('/atheer_hr/static/src/font/SourceSerifPro-Semibold.ttf.woff') format('woff');
+                                }
+                                @font-face {
+                                    font-family: 'Sans Regular';
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    src: url('/atheer_hr/static/src/font/SourceSansPro-Regular.otf.woff') format('woff');
+                                }
+                                .border td {
+                                    border: 1px solid black !important;
+                                    font-size: 12px;
+                                    padding: 7px;
+                                    font-family: 'Sans Regular';
+                                  }
+                                .active-appraisal {
+                                    background: #3cdd3c;
+                                }
+                                .table-evaluation td{
+                                    padding: 5px !important;
+                                }
+                                .table-bottam td{
+                                    padding: 5px !important;
+                                    border-top: 0px solid #ddd !important;
+                                    border: 0px solid white !important;
+                                }
+                                .table-bottam tr{
+                                    border: 0px solid white !important;
+                                }
+
+                            ]]>
+                            </style>
+                            <link rel="stylesheet"
+                                  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"></link>
+                            <div class="col-12">
+                                <table width="100%" class='table borderless' style="margin-top: -2%;font-size:15px;">
+                                    <tr>
+                                        <th colspan="3" style="text-align: center;">
+                                            <h2 style="font-family:'Serif Semi Bold'!important;">
+                                                <b>PERFORMANCE EVALUATION</b>
+                                            </h2>
+                                        </th>
+                                        <th width="25%" style="text-align: right;">
+                                            <t t-set="company" t-value="request.env.company"/>
+                                            <img t-if="company.report_image1"
+                                                 t-att-src="image_data_uri(company.report_image1)"
+                                                 style="max-height: 100px;margin-bottom: 20px;" alt="Logo"/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"
+                                            style="font-size:12px;text-align: right;border-top: 0px solid #dee2e6;">
+                                            <b>Report Date:
+                                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/>
+                                            </b>
+                                            <br/>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <table width="100%" style="margin-top: -2%;" class='table borderless'>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            1.&#160;Name
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-esc="doc.employee_id.name"/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            2.&#160;Employee No.
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-esc="doc.employee_id.employee_id"/>
+                                        </th>
+                                    </tr>
+
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            4.&#160;Designation
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-esc="doc.trade.name"/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            5.&#160;Joining Date
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-if="doc.joining_date">
+                                                <span t-esc="doc.joining_date.strftime('%d-%m-%Y')"/>
+                                            </t>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            6.&#160;Visa Valid up to
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-if="doc.visa_expire_date">
+                                                <t t-esc="doc.visa_expire_date.strftime('%d-%m-%Y')"/>
+                                            </t>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            7.&#160;Joining Salary
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-esc="doc.joining_salary"/>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            8.&#160;Current salary
+                                        </th>
+                                        <th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            <t t-esc="doc.current_salary"/>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-12">
+                                <h4 style="font-size:15px;">
+                                    <b>Appraisal for:</b>
+                                </h4>
+                                <table width="100%" class='table border'
+                                       style="font-size:16px;padding-left: 30px;padding-right: 30px;">
+                                    <tr>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'completed_probation' else ''">
+                                            <font color="#000000">Completed probation</font>
+                                        </td>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'visa_renewal' else ''">
+                                            <font color="#000000">Visa renewal</font>
+                                        </td>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'proceeding_on_leave' else ''">
+                                            <font color="#000000">Proceeding on leave</font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'quarterly_appraisal' else ''">
+                                            <font color="#000000">Quarterly appraisal</font>
+                                        </td>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'demobilising' else ''">
+                                            <font color="#000000">Demobilising</font>
+                                        </td>
+                                        <td style="font-size:16px;"
+                                            t-att-class="'active-appraisal' if doc.appraisal_for == 'general' else ''">
+                                            <font color="#000000">General</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="oe_clear"/>
+                            <h4 style="text-align: center;font-size:16px;margin-top: 10px;">
+                                <u>
+                                    <b>Performance Evaluation</b>
+                                </u>
+                            </h4>
+                            <p style="text-align: center;">
+                                <i>(Please tick in the appropriate column)</i>
+                            </p>
+                            <div class="col-11">
+                                <table width="100%" class="table border  table-evaluation">
+                                    <tr>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Sl.No.</b>
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Description</b>
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Excellent</b>
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Good</b>
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Average</b>
+                                            </font>
+                                        </td>
+                                        <td style="text-align:center;font-size:18px;">
+                                            <font color="#000000">
+                                                <b>Below Average</b>
+                                            </font>
+                                        </td>
+                                    </tr>
+                                    <t t-set="count" t-value="1"/>
+                                    <t t-foreach="doc.performance_evaluation_line_ids" t-as="line">
+                                        <tr>
+                                            <td style="text-align:center;font-size:16px;">
+                                                <font color="#000000"><t t-esc="count"/>.
+                                                </font>
+                                            </td>
+                                            <td style="text-align:left;font-size:16px;">
+                                                <font color="#000000">
+                                                    <t t-esc="line.evaluation_type.name"/>
+                                                </font>
+                                            </td>
+                                            <td style="text-align:left;font-size:16px;">
+                                                <font color="#000000">
+                                                    <t t-if="line.employee_rating=='excellent'">&amp;#10004;</t>
+                                                </font>
+                                            </td>
+                                            <td style="text-align:left;font-size:16px;">
+                                                <font color="#000000">
+                                                    <t t-if="line.employee_rating=='good'">&amp;#10004;</t>
+                                                </font>
+                                            </td>
+                                            <td style="text-align:left;font-size:16px;">
+                                                <font color="#000000">
+                                                    <t t-if="line.employee_rating=='average'">&amp;#10004;</t>
+                                                </font>
+                                            </td>
+                                            <td style="text-align:left;font-size:16px;">
+                                                <font color="#000000">
+                                                    <t t-if="line.employee_rating=='below_average'">&amp;#10004;</t>
+                                                </font>
+                                            </td>
+                                            <t t-set="count" t-value="count+1"/>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                            <div class="col-12">
+                                <table class='table borderless table-bottom'
+                                       style="margin-top:-20px;font-size:15px;padding-left: 30px;padding-right: 30px;font-family:'sansserif'!important;">
+                                    <tr>
+                                        <td colspan="2" style="border-top: 0px solid #ddd !important;">
+                                            <h4 style="text-align: left;font-size:18px;">
+                                                <font color="#000000"><strong>Overall Rating</strong>&#160;(Excellent /
+                                                    Good / Average / Below Average) :
+                                                </font>
+                                                <font color="#000000">
+                                                    <t t-if="doc.overall_rating == 'excellent'">Excellent</t>
+                                                    <t t-if="doc.overall_rating == 'good'">Good</t>
+                                                    <t t-if="doc.overall_rating == 'average'">Average</t>
+                                                    <t t-if="doc.overall_rating == 'below_average'">Below Average</t>
+                                                </font>
+                                            </h4>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 0px solid #ddd !important;">
+                                            <font color="#000000">
+                                                <strong>Prepared by : &amp;nbsp;</strong>
+                                                <br/>
+                                                Name : &amp;nbsp;
+                                                <t t-esc="doc.prepared_by.name"/>
+                                                <br/>
+                                                Designation : &amp;nbsp;
+                                                <t t-esc="doc.prepared_by_designation.name"/>
+                                            </font>
+                                        </td>
+                                        <td style="border-top: 0px solid #ddd !important;">
+                                            <font color="#000000">
+                                                <b>Approved by : &amp;nbsp;</b>
+                                                <t t-esc="doc.approved_by.name"/>
+                                            </font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 0px solid #ddd !important;">
+                                            <font color="#000000">
+                                                <b>Recommendations:</b>
+                                                <t t-foreach="doc.recommendations" t-as="each">
+                                                    <span t-field="each.name"/>,
+                                                </t>
+                                            </font>
+                                        </td>
+                                        <td style="border-top: 0px solid #ddd !important;">
+                                            <font color="#000000">
+                                                <b>Recommendations Remarks:</b>
+                                                <t t-esc="doc.recommendation_remark"/>
+                                            </font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 0px solid #ddd !important;">
+                                            <font color="#000000">
+                                                <b>Remarks by Site In-Charge if any:</b>
+                                                <t t-esc="doc.site_remark"/>
+                                            </font>
+                                        </td>
+                                        <td colspan="3"
+                                            style="border-top: 0px solid #ddd !important;text-align: left;">
+                                            <font color="#000000">
+                                                <b>Approval Note</b>
+                                                <t t-esc="doc.approval_note"/>
+                                            </font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br/>
+                                            <font color="#000000">
+                                                <strong>HR</strong>
+                                            </font>
+                                        </td>
+                                         <td>
+                                            <br/>
+                                            <font color="#000000">
+                                                <strong>CEO</strong>
+                                            </font>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

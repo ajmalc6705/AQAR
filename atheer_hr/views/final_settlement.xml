@@ -1,0 +1,289 @@
+<odoo>
+    <!--Leave Return Form-->
+
+    <record id="view_final_settlement_form" model="ir.ui.view">
+        <field name="name">final.settlement.form</field>
+        <field name="model">final.settlement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--Buttons-->
+                    <button name="action_reject" string="Refuse" type="object"
+                            attrs="{'invisible': [('state','!=','accounts')]}" groups="atheer_hr.group_hr_accounts"/>
+                    <button name="send_back" string="Send Back" type="object" groups="atheer_hr.group_hr_accounts"
+                            attrs="{'invisible': [('state','!=','accounts')]}"/>
+                    <button name="send_to_accounts"
+                            string="SEND TO ACCOUNTS"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'hr')]}"
+                            groups="atheer_hr.group_hr_manager"
+                    />
+                    <button name="approve"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'accounts')]}"
+                            groups="atheer_hr.group_hr_accounts"
+                    />
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="hr,accounts,approved"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="document_date" force_save="1"
+                                   attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                            <field name="final_settlement_date"
+                                   attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                            />
+                            <field name="resignation_reference" options='{"no_open": True, "no_create": True}'
+                                   force_save="1" attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                        </group>
+                        <group>
+                            <field name="last_rejoin_date_from_al" force_save="1"/>
+                            <field name="no_of_up_after_rejoin_from_al" force_save="1"/>
+                            <field name="no_of_up_taken_from_joining" force_save="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee Information">
+                            <group string="Employee Information">
+                                <group>
+                                    <field name="employee_id" options='{"no_open": True, "no_create": True}'
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                                    <field name="designation" options='{"no_open": True, "no_create": True}'/>
+                                    <field name="passport_no"/>
+                                    <field name="passport_expiry_date"/>
+                                    <field name="civil_card_no"/>
+                                    <field name="civil_card_expire_date"/>
+                                    <field name="joining_date"/>
+                                </group>
+                                <group>
+                                    <field name="date_of_travelling"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="flight_name"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                                    <field name="flight_departure_time"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="ticket_fare" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="last_date_of_duty"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="total_days_completed_from_joining" digits="[12,3]" force_save="1"/>
+                                    <field name="eligible_leave_days" readonly="1" force_save="1" digits="[12,3]"/>
+                                    <field name="eligible_gratuity_days" digits="[12,3]" force_save="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Salary &amp; Benefit Details">
+                            <group string="Salary &amp; Benefit Details" width="60%">
+                                <field name="salary_package_ids" nolabel="1" force_save="1">
+                                    <tree editable="bottom">
+                                        <field name="component" width="35%"
+                                        />
+                                        <field name="amount_per_month" digits="[12,3]" width="40%"
+                                        />
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                    <field name="gross_salary" digits="[12,3]" readonly="1" force_save="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Final Settlement">
+                            <group>
+                                <group>
+                                    <field name="leave_salary" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="gratuity_amount" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="previous_month_salary" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="current_month_salary" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="total_ot_amount" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="other_additions" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="total_allowances" digits="[12,3]" force_save="1"
+                                    />
+                                </group>
+                                <group>
+                                    <field name="loan_deduction" digits="[12,3]" force_save="1"/>
+                                    <field name="medical_deduction" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="air_ticket_deduction" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="other_deduction" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="visa_deduction" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="visa_waive_off" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="air_ticket_waive_off" digits="[12,3]"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"
+                                    />
+                                    <field name="total_deductions" digits="[12,3]" force_save="1"
+                                    />
+                                </group>
+                            </group>
+                            <group>
+                                <group></group>
+                                <group>
+                                    <field name="net_payable" digits="[12,3]" force_save="1"
+                                    />
+                                    <field name="leave_salary_taken"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                                    <field name="gratuity_amount_taken"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                                    <field name="total_net_payable" digits="[12,3]" force_save="1"
+                                           attrs="{'invisible':[('leave_salary_taken','=',False),('gratuity_amount_taken','=',False)]}"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="total"/>
+                            </group>
+                        </page>
+                        <page string="Remarks">
+                            <group string="Remarks">
+                                <group>
+                                    <field name="hr_remarks" force_save="1"
+                                           attrs="{'readonly': [('state', 'not in', ['hr'])]}"/>
+                                </group>
+                                <group>
+                                </group>
+                                <group>
+                                    <field name="account_remarks" force_save="1"
+                                           attrs="{'readonly': [('state', 'not in', ['accounts'])]}"/>
+                                </group>
+                            </group>
+                            <group col="3">
+                                <group>
+                                    <field name="prepared_by" force_save="1"
+                                           options='{"no_open": True, "no_create": True}'/>
+                                </group>
+                                <group>
+                                    <field name="checked_by" options='{"no_open": True, "no_create": True}'
+                                           attrs="{'readonly':[('state','in',['approved','reject'])]}"/>
+                                </group>
+                                <group>
+                                    <field name="approved_by" options='{"no_open": True, "no_create": True}'
+                                           attrs="{'invisible':[('state','not in',['approved'])]}"/>
+                                </group>
+                            </group>
+                            <group string="Refused Details"
+                                   attrs="{'readonly':[('state','in',['approved','reject'])],'invisible':[('state','!=','reject')]}">
+                                <group>
+                                    <field name="rejected_by" options='{"no_open": True, "no_create": True}'
+                                           attrs="{'readonly':[('state','in',['approved','reject'])],'invisible':[('state','!=','reject')]}"/>
+                                </group>
+                                <group>
+                                    <field name="rejected_date"
+                                           attrs="{'readonly':[('state','in',['approved','reject'])],'invisible':[('state','!=','reject')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Loans">
+                            <field name="loan_ids">
+                                <tree readonly="1">
+                                    <field name="name"/>
+                                    <field name="employee_id"/>
+                                    <field name="emp_id"/>
+                                    <field name="amount_total" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_paid" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_balance" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}" sum="Total Balance"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Checklist">
+                            <field name="checklist_line_ids">
+                                <tree editable="bottom">
+                                    <field name="checklist_id"/>
+                                    <field name="answers" widget="radio"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_final_settlement_search" model="ir.ui.view">
+        <field name="name">final.settlement.search</field>
+        <field name="model">final.settlement</field>
+        <field name="arch" type="xml">
+            <search string="Final Settlement">
+                <field name="name"/>
+                <field name="employee_id" string="Employees"
+                       filter_domain="[('employee_id.name','ilike',self)]"/>
+                <field name="resignation_reference"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="designation"/>
+                <group expand="0" string="Group By">
+                    <filter domain="[('state', '=', 'hr')]" name="hr" string="HR Manager"/>
+                    <filter domain="[('state', '=', 'accounts')]" name="accounts" string="Accounts"/>
+                    <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                    <filter domain="[('state', '=', 'reject')]" name="reject" string="Rejected"/>
+                    <separator/>
+                    <filter name="group_employee" string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_final_settlement_tree" model="ir.ui.view">
+        <field name="name">final.settlement.tree</field>
+        <field name="model">final.settlement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="final_settlement_date"/>
+                <field name="net_payable"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_final_settlement" model="ir.actions.act_window">
+        <field name="name">Final Settlement</field>
+        <field name="res_model">final.settlement</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_final_settlement"
+              parent="atheer_hr.hr_resignation"
+              name="Final Settlement"
+              action="action_final_settlement"
+              sequence="100"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"
+    />
+</odoo>

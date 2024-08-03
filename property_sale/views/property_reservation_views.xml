@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_property_reservation_form" model="ir.ui.view">
+        <field name="name">property.reservation.inherits</field>
+        <field name="model">property.reservation</field>
+        <field name="inherit_id" ref="property_reservation.property_reservation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lead_id']" position="after">
+                <field name="property_sale_id" invisible="1"/>
+                <field name="is_create_sale" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_reserve']" position="before">
+                <button name="create_property_sale" class="oe_highlight" string="Create Sale"
+                        type="object" groups="property_sale.group_sale_user_own"
+                        attrs="{'invisible':['|',('is_create_sale','=',True),('state', '=', 'sale_offer')]}"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" type="object"
+                        name="action_sale" string="Property Sale" icon="fa-dollar"
+                        attrs="{'invisible': [('property_sale_id', '=', False)]}"
+                >
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!--    Building Views-->
+
+    <record id="view_property_building_form" model="ir.ui.view">
+        <field name="name">property.building.inherits</field>
+        <field name="model">property.building</field>
+        <field name="inherit_id" ref="property_lease_management.view_property_building_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="account_receivable_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_parking_reservation_form" model="ir.ui.view">
+        <field name="name">parking.reservation.inherits</field>
+        <field name="model">parking.reservation</field>
+        <field name="inherit_id" ref="parking_management.parking_reservation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="property_sale_id" attrs="{'invisible': [('type_of_parking', '=', 'is_rent')]}"/>
+            </xpath>
+            <xpath expr="//field[@name='unit_ids']" position="after">
+                <field name="journal_id" attrs="{'required':[('state','in',['reserve'])]}"/>
+                <field name="account_id" attrs="{'required':[('state','in',['reserve'])]}"/>
+                <field name="account_receivable_id" attrs="{'required':[('state','in',['reserve'])]}"/>
+            </xpath>
+            <xpath expr="//page[@name='parking_slots']" position="after">
+                <page name="Payment Plans" string="Payment Plans">
+                    <field name="payment_plan_ids"
+                           >
+                        <tree editable="bottom">
+                            <field name="due_date"/>
+                            <field name="percent" required="1"/>
+                            <field name="amount_untaxed" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_taxed" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_total" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field invisible="1" name="parking_reservation_id"/>
+                            <field invisible="1" name="is_create_move"/>
+                            <field name="move_id" readonly="1" attrs="{'invisible':[('is_create_move','=',False)]}"/>
+                            <button name="create_invoice" string="Create Invoice" type="object"
+                                    help="Creates Invoices"
+                                    attrs="{'invisible':[('is_create_move','=',True)]}"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

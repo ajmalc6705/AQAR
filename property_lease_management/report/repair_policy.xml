@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="rent_repair_report_tag" model="ir.actions.report">
+            <field name="name">Repair Policy</field>
+            <field name="model">property.rent</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">property_lease_management.repair_policy_template</field>
+            <field name="report_file">property_lease_management.repair_policy_template</field>
+            <field name="print_report_name">'Repair Policy-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_policies"/>
+            <field name="binding_model_id" ref="model_property_rent"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="repair_policy_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <img t-if="docs[0].company_id.report_image1"
+                         t-att-src="image_data_uri(docs[0].company_id.report_image1)"
+                         style="max-height: 110px;width:150px" alt="Logo"/>
+                    <div class="row">
+                        <center>
+                            <h1>
+                                <strong><u>NOTICE</u>
+                                    <br/>
+                                </strong>
+                            </h1>
+                            <span style="color:black;border-bottom:1px solid !important;">
+                                For ordinary repair &amp; maintenance, visit will be every
+                                <strong>SATURDAY</strong> only.
+                            </span>
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                </div>
+                <div class="row" style="">
+                    <div style="text-align:justify;font-size:14px;!important;">
+                        <strong>REPAIRS POLICY &amp; PROCEDURE</strong>
+                        <br/>
+                        <br/>
+                        In the event that you require repairs and maintenance to be carried out at the property you must
+                        first contact Aqar Real Estate (via the maintenance-in-charge) Mr Duraid
+                        <span style="color:blue;">duraid.aqar@gmail.com</span>
+                        and report what the problem is. Once we have discussed the matter with the Landlord we will
+                        arrange for the relevant personnel to carry out the required work which tenant should allow us
+                        to do so inside the flat. If you seek the services of a third party without notifying and
+                        approval from Aqar Real Estate, you will be liable for the cost of the repair.
+                        <br/>
+                        <br/>
+                        <strong>ONLY</strong>
+                        calls and report from the
+                        <strong>TENANT REGISTRED</strong> in the Tenancy Agreement will be entertained.
+                        <br/>
+                        <br/>
+                        <strong>TAKE CARE OF YOUR PROPERTY</strong>
+                        <br/>
+                        <br/>
+                        You need to look after the property and avoid causing any damage. Your responsibilities as a
+                        tenant include:
+                        <br/>
+                        <br/>
+                        • &#160;&#160;Cleanliness – your home must be kept clean-fair wear and tear is accepted, damage is not
+                        <br/>
+                        • &#160;&#160;Carrying out basic maintenance – for example checking alarms work, changing light bulbs etc.
+                        <br/>
+                        • &#160;&#160;Tenants are not authorized to carry forward any work from outside and in order to proceed the
+                        work from in house the gate pass must require from
+                        <strong>AQAR REAL ESTATE.</strong>
+                        <br/>
+                        <br/>
+                        If you cause any damage to the property or the furniture, fixtures and fittings in the property,
+                        either accidentally or on purpose, your Landlord is entitled to make you pay for the damage. In
+                        some cases, your Landlord may ask you to carry out the repairs yourself if it is deemed as your
+                        responsibility.
+                        <br/>
+                        <br/>
+                        <strong>OUT-OF-HOURS AND EMERGENCY CALL-OUTS</strong>
+                        <br/>
+                        <br/>
+                        Aqar Real Estate is open <strong>Sunday to Thursday from 8:00am – 6:00pm.</strong> You can
+                        contact the
+                        maintenance-in-charge at any time during these hours to report a repair.
+                        <br/>
+                        <br/>
+                        If the problem is <strong>not an emergency</strong> you must wait and contact Aqar Real Estate
+                        <strong>during office hours.
+                            <u>An Emergency is classed as a situation which is sudden and dangerous, an impending
+                                situation that may cause injury, loss of life or severe damage to the property.
+                            </u>
+                        </strong>
+                        <br/>
+                        <br/>
+                        <br/>
+                        Thank you.
+                        <br/>
+                        <br/>
+                        <strong>The Management</strong>
+                        <br/>
+                        <br/>
+                        <strong>Maintenance-in-Charge:</strong> (79434430), you may also contact Caretaker of the respected building for
+                        the same.
+                        <br/>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="borrowing_type_tree" model="ir.ui.view">
+        <field name="name">borrowing.type.tree</field>
+        <field name="model">borrowing.type</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="seq"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="borrowing_type_form" model="ir.ui.view">
+        <field name="name">borrowing.type.form</field>
+        <field name="model">borrowing.type</field>
+        <field name="arch" type="xml">
+            <form string="Bank Borrowing Type">
+                <sheet>
+                     <group>
+                    <group>
+                        <field name="seq"/>
+                        <field name="name"/>
+                    </group>
+                </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+    <record id="action_bank_borrowings_type" model="ir.actions.act_window">
+        <field name="name">Bank Borrowings Type</field>
+        <field name="res_model">borrowing.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Borrowing Type
+            </p>
+        </field>
+    </record>
+    <menuitem id="bank_borrowings_type_menu" name="Bank Borrowings Type"
+              action="action_bank_borrowings_type" parent="account.menu_finance_configuration"/>
+</odoo>

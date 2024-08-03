@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_rent_offer_report" model="ir.actions.report">
+        <field name="name">Rent Offer</field>
+        <field name="model">crm.lead</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aqar_crm.report_rent_offer</field>
+        <field name="report_file">aqar_crm.report_rent_offer</field>
+    </record>
+
+    <template id="report_rent_offer">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div>
+                            <center>
+                                <strong>
+                                    <div>
+                                        <span>
+                                            <u>
+                                                Memorandum of Understanding
+                                            </u>
+                                        </span>
+                                    </div>
+                                </strong>
+                            </center>
+                        </div>
+                        <br/>
+                        <span t-field="o.enquiry_date"/>
+                        <br/>
+                        <br/>
+                        <strong>
+                            <span>Tenant:</span>
+                        </strong>
+
+                        <br/>
+                        <span t-field="o.partner_id.name"/>
+                        <br/>
+                        <span>CR/ID No :</span>
+                        <span t-field="o.partner_id.id_number"/>
+                        <br/>
+                        <span t-field="o.partner_id.street"/>
+                        <br/>
+                        <br/>
+                        <strong>
+                            <span>Landlord</span>
+                        </strong>
+                        <br/>
+                        <span t-field="o.building_id.partner_id.name"/>
+                        <br/>
+                        <span>CR/ID No :</span>
+                        <span t-field="o.building_id.partner_id.id_number"/>
+                        <br/>
+                        <span t-field="o.building_id.partner_id.street"/>
+                        <br/>
+                        <br/>
+                        <strong>
+                            <span>Property Address</span>
+                        </strong>
+                        <br/>
+                        <span t-field="o.unit_id.name"/>
+                        <br/>
+                        <table class="table table-sm" style="border: 1pt solid black;">
+                            <thead>
+                                <tr>
+                                    <th>Property Details</th>
+                                    <th>Monthly rent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.unit_type_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.unit_id.rent_monthly"/>
+                                        <span>+</span>
+                                        <t t-foreach="o.vat_taxes_ids" t-as="tax">
+                                            <t t-if="tax.description">
+                                                <span t-field="tax.description"/>
+                                            </t>
+                                            <t t-if="not tax.description">
+                                                <span t-field="tax.name"/>
+                                            </t>
+                                        </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>Area
+                                            <span t-field="o.unit_id.area"/>
+                                        </p>
+
+                                    </td>
+                                    <td>
+                                        <p>Municipality tenancy agreement period
+                                            <span t-field="o.rental_period"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td>
+                                        <p>Security Deposit
+                                            <span t-field="o.security_deposit"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <strong>
+                            The following terms have been mutually agreed upon and accepted by both the tenant and the
+                            landlord:
+                        </strong>
+                        <br/>
+                        <p>
+                            The tenancy agreement will be in effect for a duration of
+                            <span t-field="o.rental_period"/>
+                        </p>
+                        <br/>
+                        <p>
+                            The Tenancy Agreement will commence on
+                            <span t-field="o.rent_start_date"/>
+                        </p>
+                        <br/>
+                        <span>Sign by the Tenant:</span>
+                        <br/>
+                        <span>
+                            Sign by the Landlord:
+                        </span>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

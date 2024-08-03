@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="property_mulkiya_tree" model="ir.ui.view">
+        <field name="name">property.mulkiya.transfer.tree</field>
+        <field name="model">property.mulkiya.transfer</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="mulkiya_seq"/>
+                <field name="partner_id"/>
+                <field name="mulkiya_transfer_date"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Mulkiya form-->
+    <record id="property_mulkiya_form" model="ir.ui.view">
+        <field name="name">property.mulkiya.transfer.form</field>
+        <field name="model">property.mulkiya.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                    <button name="%(transfer_cancel_action)d" string="Cancel" data-hotkey="l" title="Cancel"
+                            type="action" context="{'default_property_mulkiya_id': active_id}"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_sale" string="Sale" icon="fa-file"
+                                attrs="{'invisible': [('sale_id', '=', False)]}"
+                        >
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="mulkiya_seq" placeholder="e.g. Mulkiya Transfer"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" />
+                            <field name="building_id"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                  />
+                            <field name="unit_ids" invisible="1"/>
+                            <field name="unit_sales_price" readonly="1"/>
+                            <field name="unit_type_id" />
+                            <field name="mortage_bank" />
+                            <field name="inform_bank" />
+                            <field name="balance_amount" />
+                            <field name="company_id" />
+                        </group>
+                        <group>
+                            <field name="sale_id"/>
+                            <field name="mulkiya_transfer_date" />
+                            <field name="mulkiya_mortgage" readonly="1"/>
+                            <field name="parking_price" />
+                            <field name="terms_conditions_id" />
+                            <field name="payment_term_id"/>
+                            <field name="enquiry_date" invisible="1"/>
+                            <field name="offer_valid_date" invisible="1"/>
+                            <field name="sales_price" />
+                            <field name="untaxed_amount" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Terms &amp; Conditions" String="Terms &amp; Conditions">
+                            <field name="notes" />
+                        </page>
+                        <page name="Payment Terms" String="Payment Terms">
+                            <field name="payment_terms"/>
+                        </page>
+                        <page name="Parking Slots" string="Parking Slots">
+                            <field name="parking_line_ids" widget="one2many_list"
+                                   >
+                                <tree string="Parking Slot">
+                                    <field name="parking_no"/>
+                                    <field name="name"/>
+                                    <field name="park_no"/>
+                                    <field name="sales_price"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="specifications" string="Specifications">
+                            <field name="specifications" readonly="1"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="doc_ids" widget="one2many_list">
+                                <tree string="Documents" editable="bottom" sample="1">
+                                    <field name="name"/>
+                                    <field name="doc_no"/>
+                                    <field name="doc_type"/>
+                                    <field name="doc_dec"/>
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    Mulkiya Tranfer Action-->
+    <record id="action_mulkiya_transfer" model="ir.actions.act_window">
+        <field name="name">Mulkiya Transfer</field>
+        <field name="res_model">property.mulkiya.transfer</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Property Mulkiya Transfer
+            </p>
+        </field>
+    </record>
+    <!--    Menu item-->
+    <menuitem id="property_mulkiya_transfer_menu" name="Property Mulkiya Transfer" parent="property_sale_main_menu"
+              action="action_mulkiya_transfer" sequence="60"/>
+</odoo>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="community_budget_tree" model="ir.ui.view">
+        <field name="name">community.budget.tree</field>
+        <field name="model">community.budget</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="budget_seq"/>
+                <field name="community_id"/>
+                <field name="doc_date"/>
+                <field name="partner_id"/>
+                <field name="building_id"/>
+                <field name="sub_levy_id"/>
+                <field name="levy_id"/>
+                <field name="budget_units"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="total_amount" optional="hide"/>
+                <field name="type" optional="hide"/>
+                <field name="budget_amount" optional="hide"/>
+                <field name="total_net_amount" optional="show" sum="Total Net" digits="[12,3]"/>
+                <field name="total_disc_amount" optional="show" sum="Total Disc" digits="[12,3]"/>
+                <field name="total_gross_amount" optional="show" sum="Total Gross" digits="[12,3]"/>
+                <field name="total_expenses" optional="show"/>
+                <field name="stage_id" optional="show" widget="badge"/>
+            </tree>
+
+        </field>
+    </record>
+    <record id="community_budget_form" model="ir.ui.view">
+        <field name="name">community.budget.form</field>
+        <field name="model">community.budget</field>
+        <field name="arch" type="xml">
+            <form string="Community Budget">
+                <header>
+
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                    <button name="action_compute" class="oe_highlight" string="Compute"
+                            type="object" attrs="{'invisible' : [('is_confirmed', '=', True)]}"
+                    />
+                    <button name="action_confirm" class="oe_highlight" string="Confirm"
+                            type="object" attrs="{'invisible' : [('is_confirmed', '=', True)]}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" name="action_view_account_move_line_select" type="object"
+                                icon="fa-bars">
+                            <div class="o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="total_expenses"/>
+                                </span>
+                                <span class="o_stat_text">
+                                    Total Expenses
+                                </span>
+                            </div>
+                        </button>
+
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="budget_seq" placeholder="e.g. Community"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Community Details">
+                            <field name="doc_date" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="partner_id" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <label for="period_start" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <div class="oe_inline">
+                                <field name="period_start" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                                <field name="period_end" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            </div>
+                            <field name="community_id" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="total_amount" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="type" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="budget_amount" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="is_confirmed" invisible="1"/>
+                        </group>
+                        <group string="Units">
+                            <field name="building_id" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="total_area" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="actual_units" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="excluded_units" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="budget_units" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="company_id" options='{"no_open": True, "no_create": True}' readonly="1"/>
+
+                        </group>
+                        <group string="Levy Details">
+                            <field name="levy_id" readonly="1"/>
+                            <field name="sub_levy_id" readonly="1"/>
+
+                            <field name="sub_levy_account_id" readonly="1"/>
+                            <!--                            <field name="sub_levy_name" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>-->
+
+                        </group>
+                        <group string="Amounts">
+                            <field name="total_expenses"/>
+                            <field name="total_net_amount"/>
+                            <field name="total_disc_amount"/>
+                            <field name="total_gross_amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="budget_line" string="Budget Line"
+                              attrs="{'readonly' : [('is_confirmed', '=', True)]}"
+                        >
+                            <field name="budget_lines">
+                                <tree editable="bottom">
+                                    <field name="unit_id" required="1"/>
+                                    <field name="unit_ids" invisible="1"/>
+                                    <field name="landlord_id"/>
+                                    <field name="from_date"/>
+                                    <field name="to_date"/>
+                                    <field name="unit_area"/>
+                                    <field name="rate_unit" digits="[12,3]"/>
+                                    <field name="due_date" invisible="1"/>
+                                    <field name="disc_amount"/>
+                                    <field name="net_amount"/>
+                                    <field name="levy_id"/>
+                                    <field name="exclude_compute"/>
+
+                                    <field name="unit_ids" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_community_budget_filter" model="ir.ui.view">
+        <field name="name">community.budget.search</field>
+        <field name="model">community.budget</field>
+        <field name="arch" type="xml">
+            <search string="Search Community Budget">
+                <field name="budget_seq" string="Name"
+                       filter_domain="['|', '|', ('budget_seq', 'ilike', self), ('partner_id', 'ilike', self), ('building_id', ''ilike', self)]"/>
+                <field name="partner_id"/>
+                <field name="community_id"/>
+                <separator/>
+
+                <group string="Group By">
+                    <filter string="Community" name="group_by_community" domain="[]"
+                            context="{'group_by':'community_id'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="action_community_budget" model="ir.actions.act_window">
+        <field name="name">Community Budget</field>
+        <field name="res_model">community.budget</field>
+        <field name="view_mode">tree,form</field>
+        <!--        <field name="context">{'search_default_group_by_community': 1}</field>-->
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Community Budget
+            </p>
+        </field>
+    </record>
+</odoo>

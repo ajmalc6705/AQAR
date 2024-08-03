@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="action_investment_company" model="ir.actions.act_window">
+        <field name="name">Investment Company</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+         <field name="domain">[('is_investment_company', '=', True)]</field>
+        <field name="context">{'default_is_investment_company': True,'default_company_type':'company'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Investment Company
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="investment_company_menu" name="Investment Company" parent="investment_config_menu"
+              action="action_investment_company"/>
+</odoo>

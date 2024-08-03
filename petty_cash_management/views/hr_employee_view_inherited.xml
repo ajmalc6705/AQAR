@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+        <record id="view_employee_form_inherited" model="ir.ui.view">
+            <field name="name">Hr Employee Form View</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='personal_information']/group" position="inside">
+                    <group string="Accounting">
+                        <field name="petty_cash"/>
+                    </group>
+                </xpath>
+                <xpath expr="//page[@name='hr_settings']/group/group[@name='active_group']/field[@name='user_id']" position="attributes">
+                        <attribute name="domain">[]</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Multi - Company Rules for Property Community -->
+    <record id="multi_company_rule_for_property_community" model="ir.rule">
+        <field name="name">Multi company rules: Property Community</field>
+        <field name="model_id" ref="model_property_community"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Property Levy Master -->
+    <record id="multi_company_rule_for_property_community_levy_master" model="ir.rule">
+        <field name="name">Multi company rules: Property Levy Master</field>
+        <field name="model_id" ref="model_levy_master"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Property Levy Master -->
+    <record id="multi_company_rule_for_property_community_sub_levy_line" model="ir.rule">
+        <field name="name">Multi company rules: Property Sub Levy Master</field>
+        <field name="model_id" ref="model_sub_levy_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!--  Property Community User Own Document Rule -->
+    <record id="user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Property Community</field>
+        <field name="model_id" ref="property_community.model_property_community"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|','|', ('create_uid', '=', user.id), ('create_uid','=',False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_community.group_property_community_user_own'))]"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="af_external_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+            <t t-call="atheer_hr.af_external_layout_standard">
+                <t t-raw="0"/>
+            </t>
+        </template>
+
+        <template id="af_external_layout_header">
+            <style>
+
+                <![CDATA[
+                  @font-face {
+                      font-family: 'Serif Semi Bold';
+                      font-style: normal;
+                      font-weight: normal;
+                      src: url('/atheer_hr/static/src/font/SourceSerifPro-Semibold.ttf.woff') format('woff');
+                  }
+                  @font-face {
+                      font-family: 'Sans Regular';
+                      font-style: normal;
+                      font-weight: normal;
+                      src: url('/atheer_hr/static/src/font/SourceSansPro-Regular.otf.woff') format('woff');
+                  }
+                  th, td {
+                    border: 1px solid black;
+                    font-size: 18px;
+                    padding: 7px;
+                    font-family: 'Sans Regular';
+                  }
+                  .side-head{
+                      font-family:'Serif Semi Bold'!important;
+                      font-size: 21px;
+                      color: #875a7b;
+                      text-decoration: underline;
+                      font-weight: bold;
+                      margin-bottom: 15px;
+                  }
+                  .mini-head{
+                      font-family:'Serif Semi Bold'!important;
+                      display: list-item;
+                      list-style-type: square;
+                      list-style-position: inside; 
+                      font-size: 21px;
+                      margin-left: 14px;
+                      margin-bottom: 8px;
+                  }
+                  .mini-p{
+                      font-family: 'Sans Regular';
+                      margin-top: 10px;text-align: match-parent;
+                      font-size: 21px;
+                      margin-left: 32px;
+                  }
+                  .bullet-p{
+                      font-family: 'Sans Regular';
+                      display: list-item;
+                      list-style-type: circle;
+                      list-style-position: inside; 
+                      margin-left: 32px;
+                      margin-top: 2px;
+                      margin-bottom: 3px;
+                  }
+                  .date-div{
+                    text-align: right;
+                    font-size: 24px;
+                }
+                .letter-address{
+                    font-family:'Serif Semi Bold'!important;
+                    font-size: 24px;
+                }
+                .letter-head{
+                    text-align: center;
+                    font-size: 26px;
+                    font-family: 'Serif Semi Bold' !important;
+                    margin-top: 20px;
+                }
+                .letter-body{
+                    font-family: 'Sans Regular';
+                    margin-top: 40px;
+                    font-size: 24px;
+                }
+              ]]>
+            </style>
+            <div class="row">
+                <div class="col-12 mb4">
+                    <t t-set="company" t-value="request.env.company"/>
+                    <img t-if="company.report_image2" t-att-src="image_data_uri(company.report_image2)"
+                         style="max-height: 100px;margin-bottom: 20px;" alt="Logo"/>
+                    <img t-if="company.report_image4" t-att-src="image_data_uri(company.report_image4)"
+                         style="max-height: 100px;margin-left: 15%;margin-bottom: 20px;" alt="Logo"/>
+                    <img t-if="company.report_image3" t-att-src="image_data_uri(company.report_image3)"
+                         style="max-height: 100px;margin-left: 15%;margin-bottom: 20px;" alt="Logo"/>
+                </div>
+
+            </div>
+
+        </template>
+        <template id="af_external_layout_standard">
+            <style type="text/css">
+                <![CDATA[
+                        @font-face {
+                            font-family: 'Serif Semi Bold';
+                            font-style: normal;
+                            font-weight: normal;
+                            src: url('/action_file/static/src/font/SourceSerifPro-Semibold.ttf.woff') format('woff');
+                        }
+                        @font-face {
+                            font-family: 'Sans Regular';
+                            font-style: normal;
+                            font-weight: normal;
+                            src: url('/action_file/static/src/font/SourceSansPro-Regular.otf.woff') format('woff');
+                        }
+
+                    ]]>
+            </style>
+            <div class="article">
+                <t t-raw="0"/>
+            </div>
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;font-family:Sans Regular!important;">
+                    <!--                            <t t-if="company.website">Website:-->
+                    <!--                                <span t-esc="company.website"/>-->
+                    <!--                            </t>-->
+
+                    <div t-if="report_type == 'pdf'" class="text-muted">
+                        Page:
+                        <span class="page"/>
+                        /
+                        <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+
+        </template>
+
+    </data>
+</odoo>

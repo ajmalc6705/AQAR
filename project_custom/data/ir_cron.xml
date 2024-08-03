@@ -1,0 +1,71 @@
+<odoo>
+    <data noupdate="1">
+        <function model="project.task.type" name="_init_fold_statusbar"/>
+        <!--        <record id="gate_pass_exp" model="ir.cron">-->
+        <!--            <field name="name">Gate Pass Exp</field>-->
+        <!--            <field name="model_id" ref="model_project_gate_pass"/>-->
+        <!--            <field name="state">code</field>-->
+        <!--            <field name="code">model.gate_pass_expiry()</field>-->
+        <!--            <field name="user_id" ref="base.user_root" />-->
+        <!--            <field name="interval_number">1</field>-->
+        <!--            <field name="interval_type">days</field>-->
+        <!--            <field name="numbercall">-1</field>-->
+        <!--            <field name="doall" eval="True"/>-->
+        <!--        </record>-->
+
+
+        <record id="cron_tender_submission" model="ir.cron">
+            <field name="name">Tender Submission Reminder</field>
+            <field name="model_id" ref="project_custom.model_project_tender"/>
+            <field name="state">code</field>
+            <field name="code">model.tender_submission_reminder()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="DateTime.now() + relativedelta(days=1)"/>
+        </record>
+
+
+        <record id="manpower_transfer_update" model="ir.cron">
+            <field name="name">Manpower Transfer</field>
+            <field name="model_id" ref="model_manpower_transfer"/>
+            <field name="state">code</field>
+            <field name="code">model.update_manpower_transfer()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(minute=30) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="employees_on_leave_update" model="ir.cron">
+            <field name="name">Employees on leave</field>
+            <field name="model_id" ref="model_project_tender_location"/>
+            <field name="state">code</field>
+            <field name="code">model.get_employees_on_leave()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="nextcall"
+                   eval="(DateTime.now().replace(minute=30) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="location_employee_exit_update" model="ir.cron">
+            <field name="name">Update employee exit in location</field>
+            <field name="model_id" ref="model_project_tender_location"/>
+            <field name="state">code</field>
+            <field name="code">model.update_employee_exit()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+    </data>
+</odoo>

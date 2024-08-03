@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_project_work_slip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="project_custom.munanoor_external_layout">
+                        <div class="page">
+                            <div class="row">
+                                <div class="col-4"></div>
+                                <div class="col-4 text-center">
+                                    <h4>(Pest Control Division)</h4>
+                                    <h3>
+                                        <u>WORK SLIP</u>
+                                    </h3>
+                                </div>
+                                <div class="col-4">
+                                    <div style="top: 50%;position: relative;">Date :</div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row col-12" style="border-top:1px solid #000;padding-left: 0px;">
+                                <div class="col-4"
+                                     style="border-right: 1px solid #000;margin-right: -4px;padding-left: 0px;">
+                                    <div class="col-12" style="height:150px;padding-left: 0px;">
+                                        <span>Contact No :</span>
+                                    </div>
+                                </div>
+                                <div class="col-8" style="border-left: 1px solid #000;margin-left: -4px;">
+                                    <div class="col-12" style="height:150px;">
+                                        <span>Customer :</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-12" style="border-top:1px solid #000;padding-left: 0px;">
+                                <div class="col-4"
+                                     style="border-right: 1px solid #000;margin-right: -4px;padding-left: 0px;">
+                                    <div class="col-12" style="height:300px;padding-left: 0px;">
+                                        <span>Operator/s</span>
+                                    </div>
+                                    <div class="col-12" style="height:420px;padding-left: 0px;">
+                                        <span>Chemicals</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <span>Operator's Signature</span>
+                                    </div>
+                                </div>
+                                <div class="col-8" style="border-left: 1px solid #000;margin-left: -4px;">
+                                    <div class="col-12" style="height:150px;">
+                                        <span>Type of Service :</span>
+                                    </div>
+                                    <div class="col-12" style="height:150px;">
+                                        <span>Premises</span>
+                                    </div>
+                                    <div class="col-12" style="height:420px;">
+                                        <span>Remarks :</span>
+                                    </div>
+                                    <div class="col-12">
+                                        <span>Customer - Signature</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

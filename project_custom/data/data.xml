@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Analytic Group for Project-->
+        <!--        # Commented By Ajmal-->
+        <!--        <record id="analytic_group_for_projects" model="account.analytic.group">-->
+        <!--            <field name="name">Projects</field>-->
+        <!--        </record>-->
+
+        <record id="mail_activity_tender_submission" model="mail.activity.type">
+            <field name="name">Submit Tender</field>
+        </record>
+
+        <record id="tender_type_1" model="project.tender.type">
+            <field name="name">Ministry</field>
+        </record>
+        <record id="tender_type_2" model="project.tender.type">
+            <field name="name">Private</field>
+        </record>
+
+        <record id="tender_type_3" model="project.tender.type">
+            <field name="name">Others</field>
+        </record>
+
+    </data>
+</odoo>
+

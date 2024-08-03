@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_accounts_move_users,accounts.move,model_account_move,aqar_accounting_updates.account_management_group_user,1,1,1,1
+access_bank_guarntee,access.bank.guarntee,model_bank_guarantee,base.group_user,1,1,1,1
+access_account_asset_location,access.asset.location,model_account_asset_location,base.group_user,1,1,1,1
+access_asset_valuation,access.asset.valuation,model_asset_valuation,base.group_user,1,1,1,1

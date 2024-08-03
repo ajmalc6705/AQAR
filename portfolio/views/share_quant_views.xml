@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="share_quant_tree_view" model="ir.ui.view">
+        <field name="name">share.quant.tree</field>
+        <field name="model">share.quant</field>
+        <field name="arch" type="xml">
+            <tree create="False" edit="False">
+                <field name="investment_id"/>
+                <field name="qty"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_share_quant" model="ir.actions.act_window">
+        <field name="name">Share Quant</field>
+        <field name="res_model">share.quant</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Share Quant
+            </p>
+        </field>
+    </record>
+    <menuitem id="share_quant_menu" name="Share Quant" parent="transactions_menu"
+              sequence="60"
+              action="action_share_quant"/>
+</odoo>

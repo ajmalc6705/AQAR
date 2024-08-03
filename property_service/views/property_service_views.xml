@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="property_service_tree" model="ir.ui.view">
+        <field name="name">property.service.tree</field>
+        <field name="model">property.service</field>
+        <field name="arch" type="xml">
+            <tree default_order="name desc">
+                <field name="name"/>
+                <field name="service_seq"/>
+                <field name="partner_id"/>
+                <field name="building_id"/>
+                <field name="unit_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="contract_categ_id" optional="hide"/>
+                <field name="contract_type" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="amount_untaxed" sum='Total Un tax Amount' optional="show" digits="[12,3]"/>
+                <field name="amount_total" sum='Total Amount' optional="show"  digits="[12,3]"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"
+                       decoration-info="state == 'draft'" decoration-muted="state == 'cancel'"
+                       decoration-warning="state == 'running'" optional="show"/>
+                <!--                <field name="stage_id"/>-->
+            </tree>
+        </field>
+    </record>
+    <!--    Property Service Form View-->
+    <record id="property_service_form" model="ir.ui.view">
+        <field name="name">property.service.form</field>
+        <field name="model">property.service</field>
+        <field name="arch" type="xml">
+            <form string="Property Service">
+                <header>
+                    <!--                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>-->
+
+                    <button name="button_action_running" class="oe_highlight" string="Running"
+                            type="object" states="draft"
+                    />
+                    <button name="button_action_done" class="oe_highlight" string="Mark As Completed"
+                            type="object" states="running"
+                    />
+                    <!--                    attrs="{'invisible':[('is_create_sale', '=', True)]}"-->
+                    <button name="action_create_sale" class="oe_highlight" string="Create Sale"
+                            type="object"
+                            attrs="{'invisible':['|',('state', 'in', ('done','cancel')),('is_create_sale', '=', True)]}"
+                            groups="sales_team.group_sale_salesman"/>
+                    <!--                ('state', 'in', ('done','cancel)),      ('state', 'in', ('done','cancel)),      groups="sale.group_service_user_sale"/>-->
+                    <button name="action_create_purchase" class="oe_highlight" string="Create Purchase"
+                            type="object"
+                            attrs="{'invisible':['|',('state', 'in', ('done','cancel')),('is_create_purchase', '=', True)]}"
+                            groups="purchase.group_purchase_user"/>
+
+                    <button name="button_action_cancel" class="btn btn-secondary" string="Cancel"
+                            confirm="Are you sure you want to cancel this Service? "
+                            type="object" attrs="{'invisible':[('state', 'in', ('draft', 'cancel'))]}"
+                    />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done" readonly="1"/>
+                    <!--                  button_action_running          groups="property_service.group_service_user_purchase"/>-->
+
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_sale" string="Sale Order" icon="fa-dollar"
+                                groups="sales_team.group_sale_salesman"
+                                attrs="{'invisible': [('is_create_sale', '=', False)]}"
+                        />
+                        <button class="oe_stat_button" type="object"
+                                name="action_purchase" string="Purchase Order" icon="fa-file"
+                                groups="purchase.group_purchase_user"
+                                attrs="{'invisible': [('is_create_purchase', '=', False)]}"
+                        />
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="service_seq" placeholder="e.g. Service"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" required="1" attrs="{'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="crm_id" required="1" attrs="{'readonly':[('is_create_sale', '=', True)]}"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="partner_id" required="1" attrs="{'readonly':[('is_create_sale', '=', True)]}"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="contract_id" attrs="{'readonly':[('is_create_sale', '=', True)]}"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="contract_categ_id" readonly="1"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="contract_type" readonly="1"/>
+                            <field name="sale_id" invisible="1"/>
+                            <field name="purchase_id" invisible="1"/>
+                            <field name="is_create_sale" invisible="1"/>
+                            <field name="is_create_purchase" invisible="1"/>
+                            <field name="company_id" readonly="1" options="{'no_open': True, 'no_quick_create': True}"
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="building_id" attrs="{'readonly':[('is_create_sale', '=', True)]}"
+                                   options="{'no_open': True, 'no_quick_create': True}"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                   attrs="{'readonly':[('is_create_sale', '=', True)]}"
+                                   options="{'no_open': True, 'no_quick_create': True}"
+                            />
+                            <field name="unit_ids" invisible="1" options="{'no_open': True, 'no_quick_create': True}"
+                                   attrs="{'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="contract_service_type" attrs="{'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="service"
+                                   attrs="{'invisible':[('contract_service_type','!=','others')], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="monthly_rent" digits="[12,3]"
+                                   attrs="{'invisible':[('contract_service_type','not in',['lease_agency_service'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="periods_in_months"
+                                   attrs="{'invisible':[('contract_service_type','not in',['lease_agency_service'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="sale_agency_amount" digits="[12,3]" readonly="0"
+                                   attrs="{'invisible':[('contract_service_type','not in',['sale_agency'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="total_amount" digits="[12,3]" readonly="1" force_save="1"
+                                   attrs="{'invisible':[('contract_service_type','not in',['lease_agency_service'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="commission_percent" digits="[12,3]"
+                                   attrs="{'invisible':[('contract_service_type','not in',['lease_agency_service','sale_agency'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <!--                             widget="percentage"-->
+                            <field name="commission_amount" digits="[12,3]" readonly="1" force_save="1"
+                                   attrs="{'invisible':[('contract_service_type','not in',['lease_agency_service','sale_agency'])], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="from_date"
+                                   attrs="{'invisible':[('contract_service_type','!=','lease_agency_service')], 'readonly':[('is_create_sale', '=', True)]}"/>
+                            <field name="to_date"
+                                   attrs="{'invisible':[('contract_service_type','!=','lease_agency_service')], 'readonly':[('is_create_sale', '=', True)]}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Line" name="line">
+                            <field name="service_line_ids" required="1"
+                                   attrs="{'readonly':[('is_create_sale', '=', True)]}">
+                                <tree string="Order Line" editable="bottom">
+                                    <field name="product_id" required="1"/>
+                                    <field name="name" readonly="0"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="discount"/>
+                                    <field name="price_reduce" invisible="1"/>
+                                    <field name="tax_ids" widget="many2many_tags"
+                                           domain="[('type_tax_use','=','sale')]"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="sub_total" widget='monetary'/>
+                                    <field name="company_id" invisible="1"/>
+                                </tree>
+
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0"
+                                   attrs="{'readonly':[('is_create_sale', '=', True)]}">
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="amount_untaxed" colspan="2" readonly="1" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_total" colspan="2" readonly="1" widget="monetary"
+                                           options="{'currency_field': 'currency_id','precision': 3}"/>
+                                </group>
+                                <div class="clearfix"/>
+                            </group>
+                        </page>
+                        <page string="Documents Details" name="document_details">
+                            <field name="document_ids" attrs="{'readonly':[('is_create_sale', '=', True)]}">
+                                <tree string="Documents" editable="bottom" sample="1">
+                                    <field name="doc_type"/>
+                                    <field name="doc_no"/>
+                                    <field name="name"/>
+                                    <field name="doc_dec" optional="hide"/>
+                                    <field name="issue_date" string="Issue Date" readonly="1"/>
+                                    <field name="expiry_date" string="Expiry Date" readonly="1"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="attachment_ids" filename="file_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!--    Property Service Search View-->
+    <record id="property_service_view_search" model="ir.ui.view">
+        <field name="name">property.service.search</field>
+        <field name="model">property.service</field>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+
+            <search string="Property Services">
+                <field name="name"
+                       filter_domain="['|', '|', ('name','ilike',self), ('service_seq','ilike',self), ('partner_id','ilike',self)]"/>
+                <field name="company_id"/>
+                <separator/>
+                <filter string="Own Documents" name="own_services" domain="[('create_uid', '=', uid)]"/>
+                <separator/>
+                <!--                <filter string="Quotations" name="draft" domain="[('state','in',('draft', 'sent'))]"/>-->
+                <!--                <filter string="Sales Orders" name="sales" domain="[('state','in',('sale','done'))]"/>-->
+                <separator/>
+                <filter string="Create Date" name="filter_create_date" date="create_date"/>
+            </search>
+        </field>
+    </record>
+    <!--    window action for property service-->
+    <record id="action_service" model="ir.actions.act_window">
+        <field name="name">Property Service</field>
+        <field name="res_model">property.service</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="context">{'search_default_own_services': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Property Service
+            </p>
+        </field>
+    </record>
+    <!--Service Menu -->
+    <menuitem id="property_service_main_menu" name="Property Service"
+              web_icon="property_service,static/description/odoo_icon.png"
+              groups="group_service_user_own"
+    />
+    <menuitem id="property_service_menu" name="Property Service" parent="property_service_main_menu"
+              action="action_service" sequence="30"/>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_report_sublevy_budget">
+        <field name="name">report.sublevy.budget.form</field>
+        <field name="model">report.sublevy.budget</field>
+        <field name="arch" type="xml">
+            <form string="Sublevy Budget">
+                <sheet>
+                    <group>
+                        <field name="budget_id"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_report" type="object" string="Create Report" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+
+     <record id="action_report_sublevy_budget" model="ir.actions.act_window">
+        <field name="name">Sublevy Budget</field>
+        <field name="res_model">report.sublevy.budget</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="sublevy_budget_report_menu" name="Report Sublevy Budget" action="action_report_sublevy_budget"
+              parent="community_report_menu"
+    />
+</odoo>

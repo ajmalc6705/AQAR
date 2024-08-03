@@ -1,0 +1,55 @@
+<odoo>
+    <!--attendance inherit search view-->
+    <record id="hr_attendance_view_search_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance.search.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='employee']" position="after">
+                <filter string="Attendance Type" name='attendance_type'
+                        context="{'group_by':'attendance_type'}"/>
+            </xpath>
+        </field>
+    </record>
+    <!--    attendance tree view-->
+    <record id="view_hr_attendance_tree_inherit" model="ir.ui.view">
+        <field name="name">hr.attendance</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position='after'>
+                <field name="amendment_true" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='check_in']" position='before'>
+                <field name="date" required="1"/>
+                <field name="is_late"/>
+                <field name="is_early"/>
+                <field name="late_time" widget="float_time"/>
+                <field name="early_time" widget="float_time"/>
+            </xpath>
+            <xpath expr="//field[@name='check_out']" position='after'>
+                <field name="attendance_type" attrs="{'required': [('check_out_true','=',True)]}"/>
+                <field name="check_out_true" invisible="1"/>
+                <field name="amendment_attendance_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='check_in']" position='attributes'>
+                <attribute name="required">0</attribute>
+                <attribute name="attrs">{'required': [('attendance_type', 'in', ['partial_day','pr_present'])]}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='worked_hours']" position='after'>
+                <button string="View Amendment " type="object" name="action_view_amendment"
+                        class="oe_highlight" attrs="{'invisible': [('amendment_true', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+<!--    <menuitem id="hr_attendance.menu_hr_attendance_my_attendances" name="Check In / Check Out"-->
+<!--              parent="hr_attendance.menu_hr_attendance_root"-->
+<!--              sequence="1" groups="make_invisible" action="hr_attendance.hr_attendance_action_my_attendances"/>-->
+<!--    <menuitem id="hr_attendance.menu_hr_attendance_kiosk_no_user_mode" name="Kiosk Mode"-->
+<!--              parent="hr_attendance.menu_hr_attendance_root"-->
+<!--              sequence="10" groups="make_invisible" action="hr_attendance.hr_attendance_action_kiosk_mode"/>-->
+
+</odoo>

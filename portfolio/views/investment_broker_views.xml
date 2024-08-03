@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit_investment_broker" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit.investment.broker</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='sales_purchases']/group" position="inside">
+                    <group name="investment" string="Investment">
+                        <field name="is_investment_broker"/>
+                        <field name="is_investor"/>
+                        <field name="is_investment_company"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+    <record id="action_investment_broker" model="ir.actions.act_window">
+        <field name="name">Investment Broker</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+         <field name="domain">[('is_investment_broker', '=', True)]</field>
+        <field name="context">{'default_is_investment_broker': True,}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Investment Brokers
+            </p>
+        </field>
+    </record>
+    <menuitem id="investment_config_menu" name="Configuration" parent="portfolio_main_menu"
+              sequence="30" groups="portfolio.group_portfolio_admin"/>
+    <menuitem id="investment_broker_menu" name="Investment Broker" parent="investment_config_menu"
+              action="action_investment_broker" />
+    
+</odoo>

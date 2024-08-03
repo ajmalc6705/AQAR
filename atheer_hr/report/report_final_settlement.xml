@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_af_increment_and_promotion" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
+        <template id="report_final_settlement">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <xpath expr="//div[@hasclass='header']" position="replace">
+                            <div class="header">
+                                <div class="col-12 row">
+                                    <div class="col-6 text-left">
+                                        <img t-if="o.company_id.report_image1"
+                                             t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.report_image1)"
+                                             style="max-height: 75px;" alt="Logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer"/>
+                        </xpath>
+                        <div class="page" style="padding: 14px;font-size:18px;">
+                            <h6 style="font-family:'Serif Semi Bold'!important;text-align: center;margin-bottom: 40px;font-size: 28px;font-weight: bold;">
+                                <u>Final Settlement</u>
+                            </h6>
+                            <table style="width:100%;padding:5px;">
+                                <tr>
+                                    <td style="width:30%;">
+                                        <span>
+                                            <strong>
+                                                Final Settlement No.
+                                            </strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.name"/>
+                                    </td>
+                                    <td style="width:38%;">
+                                        <span>
+                                            <strong>Last Rejoin Date from AL</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.last_rejoin_date_from_al"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Document Date</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.document_date"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Last Rejoin Date from AL</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.no_of_up_after_rejoin_from_al"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Final Settlement as on</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.final_settlement_date"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>No. of UP taken from the Joining</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.no_of_up_taken_from_joining"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <table style="width:100%;padding:5px;">
+                                <tr>
+                                    <td style="width:28%;">
+                                        <span>
+                                            <strong>Employee Id</strong>
+                                        </span>
+                                    </td>
+                                    <td style="width:18%;">:
+                                        <span t-esc="o.employee_id.id"/>
+                                    </td>
+                                    <td style="width:38%;">
+                                        <span>
+                                            <strong>Date of Travelling</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.date_of_travelling"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Name</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.employee_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Flight Name</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.flight_name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Designation</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.designation.name"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Flight Departure Time</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.flight_departure_time"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Passport No.</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.passport_no"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Ticket Fare</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.ticket_fare"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Passport Expiry</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.passport_expiry_date"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Last Date of Duty</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.last_date_of_duty"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Civil Card No.</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.civil_card_no"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Total Days completed from Joining</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.total_days_completed_from_joining"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Civil Card Expiry</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.civil_card_expire_date"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Eligible Leave Days</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.eligible_leave_days"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Date of Joining</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="o.joining_date"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Eligible Gratuity Days</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.eligible_gratuity_days"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <t t-if="o.salary_package_ids">
+                                <span style="font-size:22px;">
+                                    <strong>
+                                        <center>
+                                            <u>Salary &amp; Benefit Details</u>
+                                        </center>
+                                    </strong>
+                                </span>
+                                <table style="width:100%;padding:5px;">
+                                    <thead>
+                                        <th width="30%;"
+                                            style="padding:5px;text-align:left;border-top: 1px Solid #000000!important;border-bottom: 1px Solid #000000 !important;border-left: 1px Solid #000000 !important;border-right: 1px Solid #000000 !important;">
+                                            Component
+                                        </th>
+                                        <th style="padding:5px;text-align:right;border-top: 1px Solid #000000!important;border-bottom: 1px Solid #000000 !important;border-right: 1px Solid #000000 !important;">
+                                            Amount Per Month
+                                        </th>
+                                    </thead>
+                                    <t t-foreach="o.salary_package_ids" t-as="line">
+                                        <tr>
+                                            <td style="width:50%;padding:5px;text-align:left;border-bottom: 1px Solid #000000 !important;border-left: 1px Solid #000000 !important;border-right: 1px Solid #000000 !important;">
+                                                <t t-esc="line.component.name"/>
+                                            </td>
+                                            <td style="padding:5px;text-align:right;border-bottom: 1px Solid #000000 !important;border-right: 1px Solid #000000 !important;">
+                                                <t t-esc="'%.3f'% line.amount_per_month"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </t>
+                            <br/>
+                            <table style="width:100%;padding:5px;">
+                                <tr>
+                                    <td style="width:30%;">
+                                        <span>
+                                            <strong>Leave Salary</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.leave_salary"/>
+                                    </td>
+                                    <td style="width:38%;">
+                                        <span>
+                                            <strong>Loan Deduction</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.loan_deduction"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Gratuity Amount</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.gratuity_amount"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Medical Deduction</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.medical_deduction"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Previous Month Salary</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.previous_month_salary"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Air ticket deduction</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.air_ticket_deduction"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Current Month Salary</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.current_month_salary"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Other Deduction</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.other_deduction"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Total OT amount</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.total_ot_amount"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Visa deduction</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.visa_deduction"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Other Additions</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.other_additions"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Air ticket Waiveoff</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.air_ticket_waive_off"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>
+                                            <strong>Total</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.total_allowances"/>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <strong>Total</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.total_deductions"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>&#160;</td>
+                                    <td>&#160;</td>
+                                </tr>
+                                <tr>
+                                    <td>&#160;</td>
+                                    <td>&#160;</td>
+                                    <td style="width:28%;">
+                                        <span>
+                                            <strong>Net Payable R.O</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.net_payable"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Leave Salary</strong>
+                                        <t t-if="o.leave_salary_taken==True">
+                                            <span>&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                            <input type="checkbox" id="approved" checked="checked"/>
+                                            <span>&#160;&#160;&#160;</span>
+                                            <label>Yes</label>
+                                        </t>
+                                        <t t-if="o.leave_salary_taken==False">
+                                            <input type="checkbox" id="approved2" checked="checked"/>
+                                            <span>&#160;&#160;&#160;</span>
+                                            <label>No</label>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <strong>Gratuity Amount</strong>
+                                        <t t-if="o.gratuity_amount_taken==True">
+                                            <span>&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                            <input type="checkbox" id="approved" checked="checked"/>
+                                            <span>&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                            <label>Yes</label>
+                                        </t>
+                                        <t t-if="o.gratuity_amount_taken==False">
+                                            <span>&#160;&#160;&#160;&#160;&#160;&#160;</span>
+                                            <input type="checkbox" id="g2" checked="checked"/>
+                                            <span>&#160;&#160;&#160;</span>
+                                            <label>No</label>
+                                        </t>
+                                    </td>
+                                    <td style="width:28%;">
+                                        <span>
+                                            <strong>Net Payable R.O</strong>
+                                        </span>
+                                    </td>
+                                    <td>:
+                                        <span t-esc="'%.3f'% o.total_net_payable"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <div class="col-12 row" style="margin-left:-20px;">
+                                <div class="col-11">
+                                    <span>
+                                        <strong>Amount in words</strong>
+                                    </span>
+                                    :
+                                    <span t-esc="o.total"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="col-12 row" style="margin-left:-20px;">
+                                <div class="col-4">
+                                    <span>
+                                        <strong>Prepared By</strong>
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <span style="margin-left:20%;">
+                                        <strong>Checked By</strong>
+                                    </span>
+                                </div>
+                                <div class="col-4">
+                                    <span style="margin-left:20%;">
+                                        <strong>Approved By</strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-12 row">
+                                <div class="col-4">
+                                    <t t-if="o.prepared_by">
+                                        <span t-esc="o.prepared_by.name"/>
+                                    </t>
+                                </div>
+                                <div class="col-4">
+                                    <t t-if="o.checked_by">
+                                        <span t-esc="o.checked_by.name"/>
+                                    </t>
+                                </div>
+                                <div class="col-4">
+                                    <t t-if="o.approved_by">
+                                        <span t-esc="o.approved_by.name"/>
+                                    </t>
+                                </div>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <strong>
+                                    <p>
+                                        I ,
+                                        <t t-if="o.employee_id.name">
+                                            <span t-esc="o.employee_id.name"/>
+                                        </t>
+                                        holder of
+                                        <t t-if="o.employee_id.country_id.name">
+                                            <span t-esc="o.employee_id.country_id.name"/>
+                                        </t>
+                                        Passport
+                                        <t t-if="o.passport_no">
+                                            <span t-esc="o.passport_no"/>
+                                        </t>
+                                        do hereby declares that, I have received
+                                        all my dues as per the agreement. I have no further claim against the company
+                                        for any amount whatsoever, and I have no complaint against my Employer. I am
+                                        making this declaration on my own free wil and responsibility
+                                    </p>
+                                </strong>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="col-12 text-right">
+                                <strong>
+                                    <span>Received By</span>
+                                </strong>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

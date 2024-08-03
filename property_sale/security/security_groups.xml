@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_category_property_sale">
+        <field name="name">Property Sale</field>
+        <field name="sequence">18</field>
+    </record>
+    <record id="group_sale_user_own" model="res.groups">
+        <field name="name">User : Own Docs</field>
+        <field name="category_id" ref="module_category_property_sale"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+     <record id="group_sale_user_all" model="res.groups">
+        <field name="name">User : All Docs</field>
+        <field name="implied_ids" eval="[(4, ref('group_sale_user_own'))]"/>
+        <field name="category_id" ref="module_category_property_sale"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+    <record id="group_sale_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="implied_ids" eval="[(4, ref('group_sale_user_own'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="category_id" ref="module_category_property_sale"/>
+    </record>
+
+</odoo>

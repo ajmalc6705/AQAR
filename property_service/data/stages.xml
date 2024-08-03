@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="quotation_stage" model="service.stage">
+        <field name="name">Quotation</field>
+    </record>
+    <record id="running_stage" model="service.stage">
+        <field name="name">Running</field>
+    </record>
+    <record id="completed_stage" model="service.stage">
+        <field name="name">Completed</field>
+    </record>
+</odoo>

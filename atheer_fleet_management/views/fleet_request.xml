@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_fleet_Request_form" model="ir.ui.view">
+            <field name="name">fleet.request.form</field>
+            <field name="model">fleet.request</field>
+            <field name="arch" type="xml">
+                <form string="Fleet Request">
+                    <header>
+                        <button string="Confirm" name="confirm" type="object" states="draft" class="oe_highlight"/>
+                        <button string="Return" name="returned" type="object" states="confirmed" class="oe_highlight"/>
+                        <button string="Reset To Draft" name="reset_to_draft" type="object" states="confirmed"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="vehicle_id" required="1"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="vin_sn" attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="number_plate"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="odometer_reading"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="is_chargeable" widget="radio"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="amount" required="1" attrs="{'readonly': [('state', 'not in', ('draft'))],
+                                'invisible': [('is_chargeable','=','no')]}"/>
+                            </group>
+                            <group>
+                                <field name="requested_by" attrs="{'readonly': [('state', 'in', ('confirmed','returned'))],
+                                'required': [('state', 'in', ('draft'))]}"/>
+                                <field name="date" attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="date_from"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="date_to"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                                <field name="company_id"
+                                       attrs="{'readonly': [('state', 'in', ('confirmed','returned'))]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Return Details" name="return_details"
+                                  attrs="{'invisible': [('state','=','draft')]}">
+                                <group>
+                                    <group>
+                                        <field name="inspected_by" attrs="{'readonly': [('state', 'in', ('draft','returned'))],
+                                        'required': [('state', 'not in', ('draft','returned'))]}"/>
+                                        <field name="return_date" attrs="{'readonly': [('state', 'in', ('draft','returned'))],
+                                        'required': [('state', 'not in', ('draft','returned'))]}"/>
+                                        <field name="condition"
+                                               attrs="{'readonly': [('state', 'in', ('draft','returned'))]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="actual_return_date" attrs="{'readonly': [('state', 'in', ('draft','returned'))],
+                                        'required': [('state', 'not in', ('draft','returned'))]}"/>
+                                        <field name="odometer_reading_return" attrs="{'readonly': [('state', 'in', ('draft','returned'))],
+                                        'required': [('state', 'not in', ('draft','returned'))]}"/>
+                                        <field name="return_remark"
+                                               attrs="{'readonly': [('state', 'in', ('draft','returned'))]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fleet_Request_tree_new" model="ir.ui.view">
+            <field name="name">fleet.request.tree</field>
+            <field name="model">fleet.request</field>
+            <field name="arch" type="xml">
+                <tree string="Fleet Request">
+                    <field name="name"/>
+                    <field name="vehicle_id"/>
+                    <field name="vin_sn"/>
+                    <field name="number_plate"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_fleet_request" model="ir.actions.act_window">
+            <field name="name">Fleet Request</field>
+            <field name="res_model">fleet.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_fleet_Request_tree_new"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data yet!
+                </p>
+                <p>
+                    Create Fleet Request
+                </p>
+            </field>
+
+        </record>
+        <menuitem id="menu_fleet_request" name="Fleet Request" parent="fleet.fleet_vehicles"
+                  sequence="15"
+                  action="action_fleet_request"/>
+    </data>
+</odoo>

@@ -1,0 +1,141 @@
+<odoo>
+    <data>
+        <record id="view_annual_bonus_tree" model="ir.ui.view">
+            <field name="name">Annual Bonus tree</field>
+            <field name="model">annual.bonus</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Annual Bonus">
+                    <field name="reference"/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="effective_date"/>
+                    <field name="bonus_amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_annual_bonus_form" model="ir.ui.view">
+            <field name="name">Annual Bonus</field>
+            <field name="model">annual.bonus</field>
+            <field name="arch" type="xml">
+                <form string="Annual Bonus">
+                    <header>
+                        <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state','not in',['ceo'])]}"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','not in',['ceo'])]}"
+                                groups="atheer_hr.group_hr_ceo"/>
+                        <button name="sent_to_ceo" type="object" groups="atheer_hr.group_hr_manager"
+                                string="SENT TO CEO" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'hr')]}"/>
+                        <button name="approve" type="object" groups="atheer_hr.group_hr_ceo"
+                                string="Approve" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'ceo')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="hr,ceo,approved"/>
+                    </header>
+                    <sheet>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" options="{'no_create': True, 'no_open': True}"
+                                       attrs="{'readonly': [('state', 'in', ['reject','approved'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Employee Details">
+                            <group>
+                                <field name="designation" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="department_id" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                        </group>
+
+                        <group string="Bonus Details">
+                            <group>
+                                <field name="effective_date"
+                                       attrs="{'readonly': [('state', 'in', ['reject','approved'])]}"/>
+                            </group>
+                            <group>
+                                <field name="bonus_amount"
+                                       attrs="{'readonly': [('state', 'in', ['reject','approved'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Approval Section" attrs="{'invisible':[('state','!=','approved')]}">
+                            <group>
+                                <field name="approval_person" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="today_date" force_save="1"/>
+                            </group>
+                        </group>
+                        <group string="Remarks">
+                            <group>
+                                <field name="hr_remarks" force_save="1" attrs="{'readonly':[('state','!=','hr')]}"/>
+                            </group>
+                            <group>
+                                <field name="ceo_remarks" force_save="1" attrs="{'readonly':[('state','!=','ceo')]}"/>
+                            </group>
+                        </group>
+                        <group string="Refused Details" attrs="{'invisible':[('state','!=','reject')]}">
+                            <group>
+                                <field name="rejected_by" options='{"no_open": True, "no_create": True}'
+                                       attrs="{'invisible':[('state','!=','reject')]}"/>
+                            </group>
+                            <group>
+                                <field name="rejected_date" attrs="{'invisible':[('state','!=','reject')]}"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="annual_bonus_view_search" model="ir.ui.view">
+            <field name="name">annual.bonus.search</field>
+            <field name="model">annual.bonus</field>
+            <field name="arch" type="xml">
+                <search string="Annual Bonus">
+                    <separator/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('state', '=', 'hr')]" name="hr" string="HR Manager"/>
+                        <filter domain="[('state', '=', 'ceo')]" name="ceo" string="CEO"/>
+                        <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                        <filter domain="[('state', '=', 'reject')]" name="reject" string="Reject"/>
+                        <separator orientation="vertical"/>
+                        <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_annual_bonus" model="ir.actions.act_window">
+            <field name="name">Annual Bonus</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">annual.bonus</field>
+        </record>
+
+        <menuitem name="Annual Bonus" action="action_annual_bonus" parent="atheer_hr.increment_and_promotion"
+                  id="annual_bonus" groups="group_hr_manager,group_hr_ceo,base.user_admin"/>
+
+    </data>
+</odoo>

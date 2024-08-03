@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Multi - Company Rules -->
+    <record id="atheer_documents_multi_company_rule" model="ir.rule">
+        <field name="name">Atheer Document Multi company rules</field>
+        <field name="model_id" ref="model_atheer_documents"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!--    <record id="user_rule_for_document_type" model="ir.rule">-->
+    <!--        <field name="name">User Rule for Document Type</field>-->
+    <!--        <field name="model_id" ref="model_document_type"/>-->
+    <!--        <field name="active" eval="True"/>-->
+    <!--        <field name="domain_force">[('user_ids','in',user.id)]</field>-->
+    <!--        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_user'))]"/>-->
+    <!--    </record>-->
+
+    <record id="admin_rule_for_document_type" model="ir.rule">
+        <field name="name">Admin Rule for Document Type</field>
+        <field name="model_id" ref="model_document_type"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_admin'))]"/>
+    </record>
+
+    <record id="user_rule_for_atheer_documents" model="ir.rule">
+        <field name="name">User Rule for Atheer Document</field>
+        <field name="model_id" ref="model_atheer_documents"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[('user_ids','in',user.id)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_user'))]"/>
+    </record>
+
+    <record id="admin_rule_for_document_type" model="ir.rule">
+        <field name="name">Admin Rule for Atheer Document Type</field>
+        <field name="model_id" ref="model_atheer_documents"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_admin'))]"/>
+    </record>
+
+
+</odoo>

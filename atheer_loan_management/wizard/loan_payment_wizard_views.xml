@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="loan_payment_view" model="ir.ui.view">
+        <field name="name">Loan Payment Wizard</field>
+        <field name="model">loan.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="loan_id" invisible="1"/>
+                        <field name="loan_installment_id" invisible="1"/>
+                        <field name="debit_account"/>
+                    </group>
+                    <group>
+                        <field name="journal_id"/>
+                        <field name="credit_account"/>
+                        <field name="amount"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="create_entry" string="Create Entry" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_loan_payment_wizard" model="ir.actions.act_window">
+        <field name="name">Loan Payment Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">loan.payment.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

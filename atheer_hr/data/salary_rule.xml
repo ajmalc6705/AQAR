@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="salary_structure_af" model="hr.payroll.structure">
+        <field name="name">Atheer Salary Structure</field>
+        <field name="type_id" ref="hr_contract.structure_type_employee"/>
+        <field name="rule_ids" eval="[]"/>
+    </record>
+
+    <record id="hr_salary_rule_transport_allowance" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.name == 'TA').mapped('amount_per_month'))</field>
+        <field name="code">TA</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Transport Allowance</field>
+        <field name="sequence" eval="4"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_hra" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.name == 'HRA').mapped('amount_per_month'))</field>
+        <field name="code">HRA</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">House Rent Allowance</field>
+        <field name="sequence" eval="4"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_medical_allowance" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.name == 'Medical Allowance').mapped('amount_per_month'))</field>
+        <field name="code">MED</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Medical Allowance</field>
+        <field name="sequence" eval="4"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_special_allowance" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.name == 'Special Allowance').mapped('amount_per_month'))</field>
+        <field name="code">SPL</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Special Allowance</field>
+        <field name="sequence" eval="4"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_basic" model="hr.salary.rule">
+        <field name="name">Basic Salary</field>
+        <field name="sequence" eval="1"/>
+        <field name="code">BASIC</field>
+        <field name="category_id" ref="hr_payroll.BASIC"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.name == 'Basic').mapped('amount_per_month'))</field>
+        <field name="struct_id" ref="salary_structure_af"/>
+        <field name="basic" eval="True"/>
+    </record>
+
+    <record id="hr_salary_rule_gross" model="hr.salary.rule">
+        <field name="name">Gross</field>
+        <field name="sequence" eval="100"/>
+        <field name="code">GROSS</field>
+        <field name="category_id" ref="hr_payroll.GROSS"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories.BASIC + categories.ALW</field>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_net" model="hr.salary.rule">
+        <field name="name">Net Salary</field>
+        <field name="sequence" eval="200"/>
+        <field name="code">NET</field>
+        <field name="category_id" ref="hr_payroll.NET"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories.BASIC + categories.ALW + categories.DED</field>
+        <field name="struct_id" ref="salary_structure_af"/>
+        <field name="net_salary" eval="True"/>
+    </record>
+
+    <record id="hr_salary_rule_overtime_salary" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip.total_ot_amount</field>
+        <field name="code">OT</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Overtime Salary</field>
+        <field name="sequence" eval="50"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <!-- Additions and deductions from form -->
+    <record id="hr_salary_rule_other_addition" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip.loan_addition_amount</field>
+        <field name="code">ADD</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Other Additions</field>
+        <field name="sequence" eval="90"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_other_deduction" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = - payslip.loan_deduction_amount</field>
+        <field name="code">DED</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">Other Deductions</field>
+        <field name="sequence" eval="170"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_leave_salary" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = - payslip.leave_unpaid_amount</field>
+        <field name="code">LEV</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">Sick Leave Salary Dedcuctions</field>
+        <field name="sequence" eval="150"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_unpaid_leave_salary" model="hr.salary.rule">
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = - payslip.unpaid_leave_deductions</field>
+        <field name="code">ULD</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">Unpaid Leave Salary Deductions</field>
+        <field name="sequence" eval="150"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+        <record id="hr_salary_rule_pasi_deduction" model="hr.salary.rule">
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = employee.is_omani == 'omani'</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">SP = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.code == 'SP').mapped('amount_per_month'))
+TA = inputs.TELEPHONE.amount if inputs.TELEPHONE else 0
+total = (categories.GROSS - TA - SP) * 0.07
+if total > 210:
+    result = -210
+else:
+    result = -total</field>
+        <field name="code">PASI</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">PASI Deduction</field>
+        <field name="sequence" eval="150"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <record id="hr_salary_rule_job_security" model="hr.salary.rule">
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = employee.is_omani == 'omani'</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">SP = sum(contract.salary_package_ids.filtered(
+            lambda x: x.component.code == 'SP').mapped('amount_per_month'))
+TA = inputs.TELEPHONE.amount if inputs.TELEPHONE else 0
+total = (categories.GROSS - TA - SP) * 0.01
+if total > 30:
+    result = -30
+else:
+    result = -total</field>
+        <field name="code">PASI</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">PASI Deduction</field>
+        <field name="sequence" eval="150"/>
+        <field name="struct_id" ref="salary_structure_af"/>
+    </record>
+
+    <!-- Work entry type -->
+    <record id="work_entry_type_sl_25_perc" model="hr.work.entry.type">
+        <field name="name">Sick Leave 25%</field>
+        <field name="code">LEAVE25</field>
+        <field name="is_leave">True</field>
+        <field name="color">5</field>
+        <field name="pay_perc">25</field>
+    </record>
+
+    <record id="work_entry_type_sl_50_perc" model="hr.work.entry.type">
+        <field name="name">Sick Leave 50%</field>
+        <field name="code">LEAVE50</field>
+        <field name="is_leave">True</field>
+        <field name="color">5</field>
+        <field name="pay_perc">50</field>
+    </record>
+
+    <record id="work_entry_type_sl_75_perc" model="hr.work.entry.type">
+        <field name="name">Sick Leave 75%</field>
+        <field name="code">LEAVE75</field>
+        <field name="is_leave">True</field>
+        <field name="color">5</field>
+        <field name="pay_perc">75</field>
+    </record>
+
+
+</odoo>

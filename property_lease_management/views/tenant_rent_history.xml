@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="view_tenant_rent_history_form">
+        <field name="name">tenant.rent.history.form</field>
+        <field name="model">tenant.rent.history</field>
+        <field name="arch" type="xml">
+            <form string="Rent History" create="false" delete="false" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="tenant_id"/>
+                            <field name="building"/>
+                            <field name="property_id"/>
+                            <field name="rent_id"/>
+                        </group>
+                        <group>
+                            <field name="from_date"/>
+                            <field name="to_date"/>
+                        </group>
+                        <group>
+                            <field name="tenant_request_id"/>
+                            <field name="approved_rent" string="Rent Amount"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_tenant_rent_history_tree">
+        <field name="name">tenant.rent.history.tree</field>
+        <field name="model">tenant.rent.history</field>
+        <field name="arch" type="xml">
+            <tree string="Tenant Rent History" create="false" delete="false" edit="0">
+                <field name="tenant_id"/>
+                <field name="building"/>
+                <field name="property_id"/>
+                <field name="rent_id"/>
+                <field name="from_date"/>
+                <field name="to_date"/>
+                <field name="tenant_request_id"/>
+                <field name="approved_rent" string="Rent Amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="tenant_rent_history_search_view" model="ir.ui.view">
+        <field name="name">tenant.rent.history.search</field>
+        <field name="model">tenant.rent.history</field>
+        <field name="arch" type="xml">
+            <search string="Tenant Rent History">
+                <field name="property_id"/>
+                <field name="building"/>
+                <field name="rent_id"/>
+                <field name="tenant_id" string="Tenant"/>
+                <group expand="0" string="Group By">
+                    <filter string="Building" context="{'group_by':'building'}" name="group_by_building"/>
+                    <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                    <filter name="partner_filter" string="Tenant" context="{'group_by': 'tenant_id'}"/>
+                    <filter name="rent__filter" string="Rent Agreement" context="{'group_by': 'rent_id'}"/>
+                    <filter name="group_tenant_request_id" string="Tenant Request"
+                            context="{'group_by':'tenant_request_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--Customer issue action-->
+    <record id="action_tenant_rent_history" model="ir.actions.act_window">
+        <field name="name">Tenant Rent History</field>
+        <field name="res_model">tenant.rent.history</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to Tenant Rent History.
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_tenant_rent_history"
+              name="Tenant Rent History"
+              action="action_tenant_rent_history"
+              parent="property_lease_management.menu_reporting"
+              sequence="35"/>
+
+</odoo>

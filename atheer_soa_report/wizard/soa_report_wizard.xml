@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_customer_soa_report_wiz" model="ir.ui.view">
+            <field name="name">customer.soa.report.wiz</field>
+            <field name="model">soa.report.wiz</field>
+            <field name="arch" type="xml">
+                <form string="SOA Report">
+                    <group colspan="2" col="4">
+                        <field name="balance_as_of_date"/>
+                        <field name="partner_id"/>
+                        <field name="company_id"/>
+                        <field name="include_all" invisible="1"/>
+                        <field name="date" invisible="1"/>
+                    </group>
+                    <group></group>
+                    <group></group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight"
+                                type="object" icon="fa-print"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_wizard_soa_report_menu" model="ir.actions.act_window">
+            <field name="name">SOA Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">soa.report.wiz</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_customer_soa_report_wiz"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_customer_soa_report"
+                name="Partner Statement of Account"
+                sequence="41"
+                parent="account_reports.account_reports_audit_reports_menu"
+                action="action_wizard_soa_report_menu"
+        />
+
+    </data>
+</odoo>

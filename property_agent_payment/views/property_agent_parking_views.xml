@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_property_parking_reservation_inherit_agent_payment" model="ir.ui.view">
+        <field name="name">parking.reservation.form.inherit.agent.payment</field>
+        <field name="model">parking.reservation</field>
+        <field name="inherit_id" ref="parking_management.parking_reservation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_button_create_agent_payment" class="oe_highlight" string="Create Agent Payment"
+                        groups="property_agent_payment.group_agent_payment_user_own"
+                        type="object"
+                        attrs="{'invisible':[('state', '!=', 'done'),('is_agent_payment','=',True)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_agent_payment" invisible="1"/>
+                <field name="agent_payment_count" invisible="1"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+
+                <button class="oe_stat_button" type="object"
+                        name="action_show_agent_payment" string="Agent Payment" icon="fa-dollar"
+                        attrs="{'invisible': [('agent_payment_count', '=', 0)]}"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

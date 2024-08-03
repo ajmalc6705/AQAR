@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <record id="parking_tree" model="ir.ui.view">
+        <field name="name">parking.parking.tree</field>
+        <field name="model">parking.parking</field>
+        <field name="arch" type="xml">
+            <tree default_order="parking_no desc"  create="false" edit="false" delete="false">
+                <field name="parking_no"/>
+                <field name="name"/>
+                <field name="park_no"/>
+                <field name="building_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Parking Form View-->
+    <record id="parking_form" model="ir.ui.view">
+        <field name="name">parking.parking.form</field>
+        <field name="model">parking.parking</field>
+        <field name="arch" type="xml">
+            <form string="Parking Space" create="false" edit="false" delete="false">
+                <header>
+                    <button name="action_done" class="oe_highlight" states="available" string="Reserve"
+                            type="object" invisible="1"/>
+                    <button name="action_reset_draft" states="sold,reserved,rent" invisible="1"
+                            string="Reset to Available" type="object"/>
+                    <button name="action_sold" class="oe_highlight" states="reserved,available" invisible="1"
+                            string="Sold" type="object"/>
+                    <button name="action_rent" class="oe_highlight" states="reserved,available" invisible="1"
+                            string="Rent" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="parking_no" placeholder="Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="park_no" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="floor_no" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="is_sale" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="is_rent" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                        </group>
+                        <group>
+                            <field name="building_id" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                   attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="unit_ids" invisible="1"/>
+                            <field name="sales_price" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="parking_reservation_id" invisible="1"/>
+                            <field name="company_id" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Notes" String="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for Parking-->
+    <record id="action_parking" model="ir.actions.act_window">
+        <field name="name">Parking Space</field>
+        <field name="res_model">parking.parking</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Parking
+            </p>
+        </field>
+    </record>
+    <!--Parking Menu -->
+    <menuitem id="parking_main_menu" name="Parking" web_icon="parking_management,static/description/odoo_icon.png"
+    />
+    <menuitem id="parking_menu" name="Parking Space" parent="parking_main_menu" action="action_parking" sequence="60"/>
+</odoo>

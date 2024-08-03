@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_sale,access.property_sale,model_property_sale,base.group_user,1,1,1,1
+access_cancel_reason,access.cancel_reason,model_cancel_sale_reason,base.group_user,1,1,1,1
+access_cancel_mulkiya,access.cancel_mulkiya,model_cancel_mulkiya,base.group_user,1,1,1,1
+access_property_add_fee,access.property.fee,model_property_add_fee,base.group_user,1,1,1,1
+access_property_mulkiya,access.property.mulkiya,model_property_mulkiya_transfer,base.group_user,1,1,1,1
+access_property_mulkiya_stage,access.property.mulkiya.stages,model_mulkiya_stages,base.group_user,1,1,1,1
+access_property_resale,access.property.resale,model_property_resale,base.group_user,1,1,1,1
+access_resale_wizard,access.resale.wizard,model_resale_wizard,base.group_user,1,1,1,1

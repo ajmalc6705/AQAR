@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="purchase_order_kpis_tree_inherit_view" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="decoration-warning">state in ('po_authorizer','po_manager','gm','ceo') </attribute>
+                    purchase.purchase_order_kpis_tree
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_purchase_order_form_inherit_view" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="state" position="attributes">
+                    <attribute name="statusbar_visible">draft,sent</attribute>
+                </field>
+                <xpath expr="//field[@name='requisition_id']" position="after">
+                    <field name="is_vehicle_requisition" invisible="1" force_save="1"/>
+                    <field name="type_id" invisible="0" force_save="1"/>
+                    <field name="vehicle_id" required="0" force_save="1"
+                           attrs="{'invisible': [('is_vehicle_requisition', '=', False)]}"
+                           options="{'no_create': True, 'no_create_edit':True,'no_open': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="purchase_revision" attrs="{'invisible': [('purchase_revision', '=', 0)]}"
+                           readonly="1"/>
+                </xpath>
+                <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                    <field name="signature" widget="signature" invisible="1"/>
+                </xpath>
+                <xpath expr="//notebook//page[@name='purchase_delivery_invoice']" position="inside">
+                    <group string="Signature" col="2">
+                        <group>
+                            <field name="order_is_signed" readonly="1" invisible="1"/>
+                            <field name="is_sign_initials" readonly="1" invisible="1"/>
+                            <field name="user_signature" widget="signature" readonly="1"/>
+                        </group>
+                        <group></group>
+                    </group>
+                </xpath>
+                <xpath expr="//button[@name='button_cancel']" position="before">
+                    <button name="button_send_authorizer" class="oe_highlight" string="Send To Authorizer"
+                            states="sent"
+                            groups="purchase.group_purchase_user"
+                            type="object"/>
+
+                    <button name="button_send_to_manager" class="oe_highlight" string="Approve"
+                            attrs="{'invisible': [('state', '!=', 'po_authorizer')]}"
+                            groups="purchase_order_type.group_purchase_authorizer"
+                            type="object"/>
+
+                    <button name="button_send_to_gm" class="oe_highlight" string="Approve"
+                            attrs="{'invisible': [('state', '!=', 'po_manager')]}"
+                            groups="purchase_order_type.group_purchase_manager"
+                            type="object"/>
+
+                    <button name="button_send_to_ceo" class="oe_highlight" string="Approve"
+                            groups="purchase_order_type.group_purchase_general_manager"
+                            type="object" states="gm"/>
+
+                    <button name="action_send_back" class="btn btn-oe_highlight" string="Send Back"
+                            attrs="{'invisible': [('state', '!=', 'po_authorizer')]}"
+                            groups="purchase_order_type.group_purchase_authorizer"
+                            type="object"/>
+                    <button name="action_send_back" class="btn btn-oe_highlight" string="Send Back"
+                            attrs="{'invisible': [('state', '!=', 'po_manager')]}"
+                            groups="purchase_order_type.group_purchase_manager"
+                            type="object"/>
+                    <button name="action_send_back" class="btn btn-oe_highlight" string="Send Back"
+                            attrs="{'invisible': [('state', '!=', 'gm')]}"
+                            groups="purchase_order_type.group_purchase_general_manager"
+                            type="object"/>
+                    <button name="action_send_back" class="btn btn-oe_highlight" string="Send Back"
+                            attrs="{'invisible': [('state', '!=', 'ceo')]}"
+                            groups="purchase_order_type.group_purchase_ceo" state="ceo"
+                            type="object"/>
+
+                    <!--                    <button name="button_get_sign_initials" class="oe_highlight" string="Initial"-->
+                    <!--                            attrs="{'invisible': [('is_sign_initials', '=', True)]}"-->
+                    <!--                            type="object"/>-->
+
+                    <!--                    <button name="button_get_digital_signature" class="oe_highlight" string="Sign"-->
+                    <!--                            attrs="{'invisible': [('order_is_signed', '=', True)]}"-->
+                    <!--                            type="object"/>-->
+
+
+                    <button name="%(purchase_order_type.action_view_signature_initial_sign_password_check)d"
+                            type="action" attrs="{'invisible': [('is_sign_initials', '=', True)]}" states="ceo"
+                            string="Initial" class="oe_highlight"/>
+
+                    <button name="%(purchase_order_type.action_view_signature_password_check)d"
+                            type="action"
+                            attrs="{'invisible': [('state', '!=', 'ceo'), ('order_is_signed', '=', True) ]}"
+                            class="oe_highlight" string="Sign"/>
+
+                </xpath>
+                <xpath expr="//button[@name='button_confirm']" position="attributes">
+                    <attribute name="states">ceo</attribute>
+                    <attribute name="groups">purchase_order_type.group_purchase_ceo</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_cancel']" position="attributes">
+                    <attribute name="states">gm,ceo,done</attribute>
+                    <attribute name="string">Reject</attribute>
+                    <attribute name="groups">
+                        purchase_order_type.group_purchase_general_manager,purchase_order_type.group_purchase_ceo
+                    </attribute>
+                </xpath>
+            </field>
+
+        </record>
+
+
+        <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+            <field name="domain">[('purchase_type', '=', 'purchase')]</field>
+            <field name="context">{
+                'default_purchase_type': 'purchase',
+                }
+            </field>
+        </record>
+
+        <record id="action_work_order_purchase_orders" model="ir.actions.act_window">
+            <field name="name">Work Orders</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="purchase.purchase_order_tree"/>
+            <field name="domain">[('purchase_type', '=', 'work')]</field>
+            <field name="context">{
+                'default_purchase_type': 'work',
+                }
+            </field>
+        </record>
+
+        <menuitem id="menu_work_orders" name="Work Orders"
+                  parent="purchase.menu_purchase_root" sequence="20"
+                  action="purchase_order_type.action_work_order_purchase_orders"/>
+
+    </data>
+</odoo>

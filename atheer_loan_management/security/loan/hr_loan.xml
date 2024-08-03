@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data noupdate="0">
+        <record model="ir.rule" id="hr_loan_comp_rule">
+            <field name="name">HR Loan multi-company</field>
+            <field name="model_id" ref="model_hr_loan"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="hr_loan_installments_comp_rule">
+            <field name="name">HR Loan Installment multi-company</field>
+            <field name="model_id" ref="model_hr_loan_installments"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="hr_salary_advance_comp_rule">
+            <field name="name">HR Salary Advance multi-company</field>
+            <field name="model_id" ref="model_hr_salary_advance"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="hr_salary_installments_comp_rule">
+            <field name="name">HR Salary Installment multi-company</field>
+            <field name="model_id" ref="model_hr_salary_installments"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="hr_payslip_installments_comp_rule">
+            <field name="name">HR Payslip Installment multi-company</field>
+            <field name="model_id" ref="model_hr_payslip_installments"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+
+        <record model="ir.rule" id="hr_payslip_salary_installments_comp_rule">
+            <field name="name">HR Payslip Salary Installment multi-company</field>
+            <field name="model_id" ref="model_hr_payslip_sal_installments"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

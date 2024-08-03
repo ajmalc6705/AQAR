@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="fleet_vehicle_view_tree_inherit_name_seq" model="ir.ui.view">
+            <field name="name">fleet.vehicle.inherit.tree.name.ref</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='license_plate']" position="before">
+                    <field name="name_seq" string="Ref"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_fleet_vehicle_inherit_form" model="ir.ui.view">
+            <field name="name">fleet.vehicle.inherit.form</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="get_fuel_cards" type="object" class="oe_stat_button"
+                            string="Fuel Cards"
+                            icon="fa-file"/>
+                    <button name="get_fleet_insurance" type="object" class="oe_stat_button"
+                            string="Insurance"
+                            icon="fa-money"/>
+
+
+                    <button name="open_vehicle_battery_details" type="object" class="oe_stat_button"
+                            string="Battery Details"
+                            icon="fa-battery-full" help="show the Battery for this vehicle">
+                        <!--                        <i class="fa-sharp fa-solid fa-car-battery"></i>-->
+                        <field name="battery_count" widget="statinfo" string="Batteries"/>
+                    </button>
+
+                    <button name="open_vehicle_no_plate_details" type="object" class="oe_stat_button"
+                            string="Number Plates"
+                            icon="fa-file" help="show the no Plates for this vehicle">
+                        <field name="no_plate_count" widget="statinfo" string="No Plates"/>
+                    </button>
+
+                    <button name="open_vehicle_tyre_details" type="object" class="oe_stat_button"
+                            string="Tyres"
+                            icon="fa fa-tire" help="show the Tyres for this vehicle">
+                        <field name="tyre_count" widget="statinfo" string="Tyres"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//field[@name='image_128']" position="after">
+                    <field name="image_vehicle" invisible="1"/>
+                    <field name="image_vehicle" widget="image" class="oe_avatar m-0"
+                           options="{&quot;zoom&quot;: true, &quot;preview_image&quot;:&quot;image_vehicle&quot;}"/>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name_seq" readonly="True"/>
+                        </h1>
+                    </div>
+                </xpath>
+
+
+                <xpath expr="//field[@name='next_assignation_date']" position="after">
+                    <field name="vehicle_group"/>
+                    <field name="owner"/>
+                    <field name="mulkia_rop_number" options="{'no_create_edit': True}"/>
+                    <field name="accessories" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                    <field name="battery_details" options="{'no_create_edit': True}"/>
+                    <field name="insurance_details" options="{'no_create_edit': True}"/>
+                </xpath>
+                <xpath expr="//field[@name='acquisition_date']" position="before">
+                    <field name="service_warranty_expiry_date" options="{'no_create_edit': True}"/>
+                    <field name="ext_warranty_expiry_date" options="{'no_create_edit': True}"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='category_id']" position="before">
+                </xpath>
+                <xpath expr="//label[@for='license_plate']" position="replace">
+                    <label for="number_plate"/>
+                </xpath>
+                <xpath expr="//field[@name='license_plate']" position="replace">
+                    <field name="license_plate" readonly="1" force_save="1"/>
+                    <field name="number_plate" domain="[('sold', '=', False)]"/>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Tyre" name="tyre_master">
+                        <group>
+                            <group>
+                                <field name="rhs_front"/>
+                                <field name="lhs_front"/>
+                                <field name="rhs_rear"/>
+                                <field name="lhs_rear"/>
+                                <field name="spare_tyre"/>
+                            </group>
+                            <group>
+                                <field name="rhs_rear_out" required="1"/>
+                                <field name="lhs_rear_out" required="1"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Documents" name="atheer_documents">
+                        <field name="document_ids">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="doc_no"/>
+                                <field name="issue_date" required="1"/>
+                                <field name="expiry_date" required="1"/>
+                                <field name="doc_type"/>
+                                <field name="doc_dec"/>
+                                <field name="attachment_ids" widget="many2many_binary"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Parking Management ",
+    'version': "16.0.1.0.8",
+    'category': 'Industry',
+    'author': 'Atheer Global Solutions',
+    'company': 'Atheer Global Solutions',
+    'summary': 'This module helps to manage the parking of property',
+    'description': 'This module helps to manage the parking of property',
+    'maintainer': 'Global Solutions',
+    'website': 'https://www.atheerit.com',
+    'depends': ['base','property_lease_management'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/ir_rules.xml',
+        'data/parking_seq.xml',
+        'data/parking_reservation_seq.xml',
+        'views/parking_views.xml',
+        'views/property_building_views.xml',
+        'views/parking_reservation_views.xml',
+    ],
+    'license': 'AGPL-3',
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+}

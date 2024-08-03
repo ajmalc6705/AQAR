@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.property</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block"
+                     groups="property_lease_management.group_property_user"
+                     data-string="Property" string="Property" data-key="property_lease_management">
+                    <h2>Journal</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 o_setting_box">
+                            <h2>Property Lease Journal</h2>
+                            <group>
+                                <group>
+                                    <field name="journal"/>
+                                </group>
+                            </group>
+                        </div>
+                    </div>
+                    <h2>Property Notification</h2>
+                    <div class="row mt16 o_settings_container" name="asset_notification">
+
+                        <!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+                        <!--                            <div class="o_setting_right_pane">-->
+                        <!--                                <label for="maintenance_months_before" string="Asset Maintenance Due Date Notification"/>-->
+                        <!--                                <div class="text-muted">-->
+                        <!--                                    Configure the days or months to get the Asset Maintenance Due date notification-->
+                        <!--                                </div>-->
+                        <!--                                <div class="content-group">-->
+                        <!--                                    <div class="mt16 row">-->
+                        <!--                                        <label for="maintenance_months_before" string="Before"-->
+                        <!--                                               class="col-3 col-lg-3 o_light_label"/>-->
+                        <!--                                        <field name="maintenance_months_before" widget="many2many_tags"-->
+                        <!--                                               options="{'no_quick_create': True, 'no_create_edit' : False}"/>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+                        <!--                            <div class="o_setting_right_pane">-->
+                        <!--                                <label for="warranty_months_before" string="Asset Warranty Expiry Notification"/>-->
+                        <!--                                <div class="text-muted">-->
+                        <!--                                    Configure the days or months to get the Asset Warranty expiry date notification-->
+                        <!--                                </div>-->
+                        <!--                                <div class="content-group">-->
+                        <!--                                    <div class="mt16 row">-->
+                        <!--                                        <label for="warranty_months_before" string="Before"-->
+                        <!--                                               class="col-3 col-lg-3 o_light_label"/>-->
+                        <!--                                        <field name="warranty_months_before" widget="many2many_tags"-->
+                        <!--                                               options="{'no_quick_create': True, 'no_create_edit' : False}"/>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="col-12 col-lg-6 o_setting_box">-->
+                        <!--                            <div class="o_setting_right_pane">-->
+                        <!--                                <label for="doc_expiry_before_days" string="Document Expiry Notification"/>-->
+                        <!--                                <div class="text-muted">-->
+                        <!--                                    Configure the days or months to get the Document expiry notification-->
+                        <!--                                </div>-->
+                        <!--                                <div class="content-group">-->
+                        <!--                                    <div class="mt16 row">-->
+                        <!--                                        <label for="doc_expiry_before_days" string="Before"-->
+                        <!--                                               class="col-3 col-lg-3 o_light_label"/>-->
+                        <!--                                        <field name="doc_expiry_before_days" widget="many2many_tags"-->
+                        <!--                                               options="{'no_quick_create': True, 'no_create_edit' : False}"/>-->
+                        <!--                                    </div>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="property_config_settings_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'property_lease_management', 'bin_size': False}</field>
+    </record>
+
+    <menuitem id="property_menu_configuration"
+              name="Settings"
+              parent="property_lease_management.menu_property_config"
+              sequence="0"
+              action="property_config_settings_action"
+              groups="property_lease_management.group_property_user,property_lease_management.group_property_head"/>
+</odoo>

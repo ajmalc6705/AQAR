@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="partner_validations" model="ir.ui.view">
+        <field name="name">res.partner.form.validations</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <field name="website" position="before">
+                <field name="additional_email" string="Email 2"/>
+            </field>
+            <field name="vat" position="after">
+                <field name="id_type_id" string="ID Type"/>
+                <field name="id_number" string="ID Number"/>
+                <field name="customer_type_id" string="Customer Category"  widget="many2many_tags" context="{'contact_view': True}" options="{'no_create_edit': True,'no_create': True,}"/>
+            </field>
+            <field name="title" position="replace">
+            </field>
+            <xpath expr="//field[@name='name']/.." position="before">
+                <div>
+                    <field name="title" options="{'horizontal': false}"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

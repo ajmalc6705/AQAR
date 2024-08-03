@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--    Unit view Tree View-->
+    <record id="view_property_views_tree" model="ir.ui.view">
+        <field name="name">property.unit.views.tree</field>
+        <field name="model">property.unit.view</field>
+        <field name="arch" type="xml">
+            <tree string="Unit Views" sample="1" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+<!--    Unit View Action-->
+    <record id="action_unit_views" model="ir.actions.act_window">
+        <field name="name">Unit Views</field>
+        <field name="res_model">property.unit.view</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a Unit Views.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_unit_views" action="action_unit_views" parent="menu_property_config" sequence="1"/>
+</odoo>

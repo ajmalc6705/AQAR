@@ -1,0 +1,250 @@
+<odoo>
+    <data>
+        <record id="view_performance_evaluation_tree" model="ir.ui.view">
+            <field name="name">Performance Evaluation</field>
+            <field name="model">performance.evaluation</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Performance Evaluation">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="appraisal_for"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_performance_evaluation_form" model="ir.ui.view">
+            <field name="name">Performance Evaluation</field>
+            <field name="model">performance.evaluation</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Performance Evaluation" class="o_applicant_form">
+                    <header>
+
+                        <button name="send_back" string="Send Back" type="object"
+                                groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state', 'not in', ('ceo'))]}"/>
+                        <button name="send_back" string="Send Back" type="object" groups="atheer_hr.group_hr_hod"
+                                attrs="{'invisible': ['|',('state', 'not in', ('hod')),('employee_category', 'not in', ['expat_staff','omani_staff'])]}"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                groups="atheer_hr.group_hr_project_manager"
+                                attrs="{'invisible': ['|',('state', 'not in', ('project_manager')),('employee_category', 'not in', ['expat_labor','omani_labor'])]}"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state', 'not in', ('hr_two'))]}"/>
+                        <!--                        reject-->
+                        <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_hod"
+                                attrs="{'invisible': [('state', 'not in', ('hod'))]}"/>
+                        <button name="action_reject" string="Refuse" type="object"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state', 'not in', ('hr_two'))]}"/>
+                        <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state', 'not in', ('ceo'))]}"/>
+                        <button string="Send To HOD" type="object" name="send_to_hod" class="oe_highlight"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': ['|',('state','not in',('hr_one')),('employee_category', 'in', ['expat_labor','omani_labor'])]}"/>
+                        <button string="Send To HR" type="object" name="send_to_hr" class="oe_highlight"
+                                groups="atheer_hr.group_hr_hod"
+                                attrs="{'invisible': ['|',('state','not in','hod'),('employee_category', 'not in', ['expat_staff','omani_staff'])]}"/>
+                        <button string="Send To CEO" type="object" name="send_to_ceo" class="oe_highlight"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state','not in',('hr_two'))]}"/>
+                        <button string="Approve" type="object" name="to_approve" class="oe_highlight"
+                                groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state','not in',('ceo'))]}"/>
+                        <button name="action_reject" string="Refuse" type="object"
+                                groups="atheer_hr.group_hr_project_manager"
+                                attrs="{'invisible': [('state', 'not in', ('project_manager'))]}"/>
+                        <button string="Send To Project Manager" type="object" name="send_to_project_manager"
+                                class="oe_highlight" groups="atheer_hr.group_hr_site_engineer"
+                                attrs="{'invisible': ['|',('state','not in',('site_engineer')),('employee_category', 'not in', ['expat_labor','omani_labor'])]}"/>
+                        <button string="Send To HR" type="object" name="send_to_hr" class="oe_highlight"
+                                groups="atheer_hr.group_hr_project_manager"
+                                attrs="{'invisible': ['|',('state','not in','project_manager'),('employee_category', 'not in', ['expat_labor','omani_labor'])]}"/>
+                        <field name="employee_category" invisible="1"/>
+                        <field name="state" string="State"/>
+                    </header>
+                    <sheet>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_category"
+                                       attrs="{'readonly': [('state','not in',('site_engineer','hr_one','hr_two'))]}"/>
+                            </group>
+                        </group>
+                        <group col="4">
+                            <field name="employee_id" widget="selection" required="1"
+                                   options='{"no_open": True, "no_create": True}'
+                                   attrs="{'readonly': [('state','in',['approved','refuse'])]}"/>
+                            <field name="trade" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                            <field name="department_id" options='{"no_open": True, "no_create": True}' readonly="1"
+                                   force_save="1"/>
+                            <field name="hod_user_id" invisible="1" readonly="1" force_save="1"/>
+                        </group>
+                        <br/>
+                        <label for="appraisal_for"/>
+                        <br/>
+                        <field name="appraisal_for" widget="radio" options="{'horizontal': true}"
+                               attrs="{'readonly': [('state','not in',('site_engineer','hr_one','hr_two'))]}"/>
+                        <div class="oe_clear"/>
+                        <br/>
+                        <group>
+                            <group>
+                                <field name="joining_date" force_save="1" readonly="1" required="0"/>
+                                <field name="visa_expire_date" force_save="1" readonly="1" required="0"/>
+                                <field name="joining_salary" force_save="1" readonly="1" required="0"/>
+                                <field name="current_salary" force_save="1" readonly="1" required="0"/>
+                            </group>
+                        </group>
+                        <div class="oe_clear"/>
+                        <br/>
+                        <h4 style="text-align: center;">Performance Evaluation</h4>
+                        <p style="text-align: center;">(Please assess the company by selecting an appropriate grade.)
+                        </p>
+                        <field name="performance_evaluation_line_ids"
+                               attrs="{'readonly': [('state','in',['approved','refuse'])]}">
+                            <tree editable="bottom">
+                                <field name="evaluation_type" required="True"
+                                       options="{'no_create': True, 'no_create_edit':True}"/>
+                                <field name="employee_rating" required="True"/>
+                            </tree>
+                        </field>
+                        <group>
+                            <group>
+                                <field name="overall_rating" required="1" widget="radio"
+                                       options="{'horizontal': true}"/>
+                                <field name="prepared_by" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                                <field name="prepared_by_designation" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Site Details">
+                                <field name="site_in_charge_id"
+                                       attrs="{'readonly': [('state','in',['approved','refuse'])]}"/>
+                                <field name="site_remark"
+                                       attrs="{'readonly': [('state','not in',['site_engineer'])],'invisible': [('site_in_charge_id', '=', False)]}"/>
+                            </group>
+                            <group string="Recommendations">
+                                <field name="recommendations" widget="many2many_tags"   attrs="{'readonly': [('state','in',['approved','refuse'])]}"/>
+                                <field name="recommendation_remark"
+                                       attrs="{'readonly': [('state','in',['approved','refuse'])],'invisible': [('recommendations', '=', False)]}"/>
+                            </group>
+                        </group>
+                        <group string="Remarks">
+                            <group>
+                                <!-- invisible field after testing -->
+                                <field name="state" force_save="1" invisible="1"/>
+
+                                <field name="hr_remark" force_save="1"
+                                       attrs="{'readonly': [('state','not in',['hr_one','hr_two'])]}"/>
+                                <field name="pm_remark" force_save="1"
+                                       attrs="{'invisible': [('employee_category','not in',['omani_labor','expat_labor'])],'readonly': [('state','not in',['project_manager'])]}"/>
+                            </group>
+                            <group>
+                                <field name="ceo_remark" force_save="1"
+                                       attrs="{'readonly': [('state','not in',['ceo'])]}"/>
+                                <field name="hod_remark" force_save="1"
+                                       attrs="{'readonly': [('state','not in',['hod'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Approval Details" attrs="{'invisible': [('state','not in',['approved'])]}">
+                            <group>
+                                <field name="approval_note"
+                                       attrs="{'invisible': [('state','not in',['approved','refuse'])],'readonly': [('state','not in',['approved','refuse'])]}"/>
+                            </group>
+                            <group>
+                                <field name="approved_by" readonly="1" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                        </group>
+                        <group string="Refused Details" attrs="{'invisible':[('state','!=','refuse')]}">
+                            <group>
+                                <field name="rejected_person_id" force_save="1" readonly="1"
+                                       options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group>
+                                <field name="rejected_date" force_save="1" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- performance.evaluation.line form view -->
+        <record id="view_eperformance_evaluation_line_form" model="ir.ui.view">
+            <field name="name">Performance Evaluation</field>
+            <field name="model">performance.evaluation.line</field>
+            <field name="arch" type="xml">
+                <form string="Evaluation">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="evaluation_type" widget="selection"/>
+                            </group>
+                            <group>
+                                <field name="employee_rating"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- search view for performance.evaluation -->
+        <record id="view_eperformance_evaluation_search_form" model="ir.ui.view">
+            <field name="name">performance.evaluation.search.form</field>
+            <field name="model">performance.evaluation</field>
+            <field name="arch" type="xml">
+                <search string="Evaluation">
+                    <field name="employee_id" string="Employee"/>
+                    <group expand="0" string="Group By">
+                        <filter domain="[('state', '=', 'hr_one')]" name="hr_one" string="HR"/>
+                        <filter domain="[('state', '=', 'hod')]" name="hod" string="HOD"/>
+                        <filter domain="[('state', '=', 'site_engineer')]" name="site_engineer" string="Site Engineer"/>
+                        <filter domain="[('state', '=', 'project_manager')]" name="project_manager"
+                                string="Project Manager"/>
+                        <filter domain="[('state', '=', 'ceo')]" name="ceo" string="CEO"/>
+                        <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                        <filter domain="[('state', '=', 'refuse')]" name="refuse" string="Refused"/>
+                        <separator/>
+                        <filter string="Appraisal" name="appraisal_for" context="{'group_by': 'appraisal_for'}"/>
+                        <filter string="Employee Category" name="employee_category"
+                                context="{'group_by': 'employee_category'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_performance_evaluation" model="ir.actions.act_window">
+            <field name="name">Performance Evaluation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">performance.evaluation</field>
+            <field name="search_view_id" ref="view_eperformance_evaluation_search_form"></field>
+        </record>
+
+        <menuitem name="Evaluation" id="performance_evaluation_main_menu"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_hod,atheer_hr.group_hr_site_engineer,atheer_hr.group_hr_project_manager,atheer_hr.group_hr_ceo"
+                  web_icon="atheer_hr,static/src/img/performance-management.png" sequence="60"/>
+        <menuitem name="Performance Evaluation" action="action_performance_evaluation"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_hod,atheer_hr.group_hr_site_engineer,atheer_hr.group_hr_project_manager,atheer_hr.group_hr_ceo"
+                  parent="performance_evaluation_main_menu" id="performance_evaluation_menu"
+                  sequence="10"/>
+        <menuitem name="Configuration" parent="performance_evaluation_main_menu" id="configuration_menu"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"
+                  sequence="99"/>
+        <menuitem name="Report" parent="performance_evaluation_main_menu" id="report_menu" sequence="80"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+    </data>
+</odoo>

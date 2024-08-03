@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <record id="paperformat_srs_sheet" model="report.paperformat">
+            <field name="name">SRS Sheet</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">80</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="srs_sheet_report_customer_complaints" model="ir.actions.report">
+            <field name="name">SRS Sheet</field>
+            <field name="model">customer.complaints</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">property_lease_management.report_srs_sheet_template</field>
+            <field name="report_file">property_lease_management.report_srs_sheet_template</field>
+            <field name="print_report_name">'SRS Sheet - %s' %(time.strftime('%Y-%m-%d'))</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_srs_sheet"/>
+            <field name="binding_model_id" ref="model_customer_complaints"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="srs_sheet_header">
+            <div class="header">
+                <table width="100%">
+                    <tr>
+                        <td width="30%" style="border:1px solid black; border-collapse:collapse; padding: 4px;">
+                            Date: <b><t t-esc="o.srs_date"/></b>
+                        </td>
+                        <td rowspan="2" width="40%" style="border:1px solid black; border-collapse:collapse;padding: 4px;">
+                            <img t-if="o.company_id.report_image1"
+                         t-att-src="image_data_uri(o.company_id.report_image1)"
+                         style="max-height: 90px;width:50%;display: block;margin-left: auto;margin-right: auto;" alt="Logo"/>
+                        </td>
+                        <td width="25%" style="border:1px solid black; border-collapse:collapse; padding: 4px;">
+                            SRS Reference: <b><t t-esc="o.srs_reference"/></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="30%" style="border:1px solid black; border-collapse:collapse; padding: 4px;">
+                            Project-Code<br/>Location: <b><t t-esc="o.srs_project_code_location"/></b>
+                        </td>
+                        <td width="25%" style="border:1px solid black; border-collapse:collapse; padding: 4px;">
+                            Attachments: <b><t t-esc="o.srs_attachments"/></b>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-call="web.address_layout" />
+                <t t-raw="0" />
+            </div>
+            <div class="footer">
+                <table width="100%">
+                    <thead>
+                        <td width="30%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Requested By:</td>
+                        <td width="40%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Property Head:</td>
+                        <td width="30%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Procurement Department:</td>
+                    </thead>
+                    <tr>
+                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">
+                            <t t-esc="o.srs_requested_by.name"/>
+                        </td>
+                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">
+                            <t t-esc="o.srs_project_head.name"/>
+                        </td>
+                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">
+                            <t t-esc="o.srs_procurement_head.name"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </template>
+
+
+        <template id="report_srs_sheet_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="property_lease_management.srs_sheet_header">
+                        <div class="page">
+                            <div class="col-12" style="text-align:center;">
+                                <h3>Service Requisition Sheet</h3>
+                            </div>
+
+                            <table width="100%">
+                                <t t-set="sno" t-value="1"/>
+                                <thead>
+                                    <td width="3%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">#</td>
+                                    <td width="39%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Materials Description</td>
+                                    <td width="15%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Required Date</td>
+                                    <td width="15%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Allocated Budget (R.O)</td>
+                                    <td width="28%" style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;">Remarks</td>
+                                </thead>
+                                <t t-foreach="o.srs_sheet_ids" t-as="line">
+                                    <tr>
+                                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:center;"><t t-esc="sno"/></td>
+                                        <t t-set="sno" t-value="sno+1"/>
+                                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:left;"><t t-esc="line.description"/></td>
+                                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:left;"><t t-esc="line.required_date.strftime('%d-%m-%Y')"/></td>
+                                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:left;"><t t-esc="line.allocated_budget_ro"/></td>
+                                        <td style="border:1px solid black; border-collapse:collapse; padding: 4px; text-align:left;"><t t-esc="line.remarks"/></td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

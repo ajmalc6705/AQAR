@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="reject_reason_form_view" model="ir.ui.view">
+            <field name="name">reject.reason.view.form</field>
+            <field name="model">reject.reason</field>
+            <field name="arch" type="xml">
+                <form string="Reason" create="false" edit="false">
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="action_reject" string="Reject" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="cancel_reason_form_view" model="ir.ui.view">
+            <field name="name">cancel.reason.view.form</field>
+            <field name="model">cancel.reason</field>
+            <field name="arch" type="xml">
+                <form string="Reason" create="false" edit="false">
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="action_cancel" string="Confirm" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

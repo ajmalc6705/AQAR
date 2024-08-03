@@ -1,0 +1,53 @@
+
+.table-bo-bordered {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+}
+.table-bo-bordered > thead > tr > th,
+.table-bo-bordered > tbody > tr > th,
+.table-bo-bordered > tfoot > tr > th,
+.table-bo-bordered > thead > tr > td,
+.table-bo-bordered > tbody > tr > td,
+.table-bo-bordered > tfoot > tr > td {
+  border: 1px solid #000;
+}
+.table-bo-bordered > thead > tr > th,
+.table-bo-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+
+.table-bo-bordered > thead > tr > th:first-child,
+.table-bo-bordered > tbody > tr > th:first-child,
+.table-bo-bordered > thead > tr > td:first-child,
+.table-bo-bordered > tbody > tr > td:first-child{
+    border-left: 0;
+}
+
+.table-bo-bordered > thead > tr > th:last-child,
+.table-bo-bordered > tbody > tr > th:last-child,
+.table-bo-bordered > thead > tr > td:last-child,
+.table-bo-bordered > tbody > tr > td:last-child{
+    border-right: 0;
+}
+
+/* Day sheet report specific styles */
+.o_project_day_sheet {
+    word-spacing: 3px;
+    letter-spacing: 0.5px;
+}
+.o_project_day_sheet > .table-bo-bordered > thead > tr > th:first-child,
+.o_project_day_sheet > .table-bo-bordered > tbody > tr > th:first-child,
+.o_project_day_sheet > .table-bo-bordered > thead > tr > td:first-child,
+.o_project_day_sheet > .table-bo-bordered > tbody > tr > td:first-child{
+    border-right: 0;
+    padding-left: 0px;
+}
+
+.o_project_day_sheet > .table-bo-bordered > thead > tr > th:nth-child(2),
+.o_project_day_sheet > .table-bo-bordered > tbody > tr > th:nth-child(2),
+.o_project_day_sheet > .table-bo-bordered > thead > tr > td:nth-child(2),
+.o_project_day_sheet > .table-bo-bordered > tbody > tr > td:nth-child(2){
+    border-left: 0;
+}
+
+/* -------------------------------------------------- */

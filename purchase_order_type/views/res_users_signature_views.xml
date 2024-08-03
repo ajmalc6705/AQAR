@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="res_users_form_signature_password" model="ir.ui.view">
+            <field name="name">res.users.form.inherited.signature.password</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='signature']" position="after">
+                    <field name="sign_password" password="True" widget="password"
+                           groups="purchase_order_type.group_digital_signature"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_users_preferences_form_user_sign_signature" model="ir.ui.view">
+            <field name="name">res.users.preferences.form.inherited.sign.signature</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='signature']" position="after">
+                    <group string="Digital Signatures Detail" name="signature_password"
+                           groups="purchase_order_type.group_digital_signature">
+                        <field name="sign_password" widget="password" password="True"
+                               groups="purchase_order_type.group_digital_signature"/>
+                    </group>
+
+                    <group>
+                        <group name="sign_signature" groups="base.group_user">
+                            <label for="sign_signature" string="Digital Signature"/>
+                            <field name="sign_signature" widget="signature" nolabel="1"/>
+                        </group>
+                        <group name="signature" groups="base.group_user">
+                            <label for="sign_initials" string="Initial Signature"/>
+                            <field name="sign_initials" widget="signature" nolabel="1" options="{'size': [200,'']}"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

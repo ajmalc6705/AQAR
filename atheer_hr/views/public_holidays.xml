@@ -1,0 +1,96 @@
+<odoo>
+    <!--Leave Return Search View-->
+
+    <record id="view_public_holidays_tree" model="ir.ui.view">
+        <field name="name">old.public.holidays.tree</field>
+        <field name="model">public.holidays</field>
+        <field name="priority" eval="8"/>
+        <field name="arch" type="xml">
+            <tree string="Public Holidays">
+                <field name="year"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Degree Form View -->
+    <record model="ir.ui.view" id="view_public_holidays_form">
+        <field name="name">old.public.holidays.form</field>
+        <field name="model">public.holidays</field>
+        <field name="arch" type="xml">
+            <form string="Public Holidays">
+                <header>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="oe_highlight" states='draft'/>
+                    <button name="set_to_draft" string="Set To Draft"
+                            type="object" class="oe_highlight" states='approved'/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <label for="year" class="oe_edit_only"/>
+                        </h1>
+                        <h5>
+                            <field name="year" required="1" attrs="{'readonly': [('state', 'in', ['approved'])]}"/>
+                        </h5>
+                    </div>
+                    <group string="Public Holidays">
+                        <field name="resource_calendar_id" mode="tree" colspan="2" nolabel="1"
+                               attrs="{'readonly': [('state', 'in', ['approved'])]}">
+                            <tree editable="bottom" default_order="date_to asc">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                                <field name="name"/>
+                                <field name="work_entry_type_id" readonly="1" force_save="1"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group col="4">
+                                        <field name="date_from" readonly="1"/>
+                                        <field name="date_to" readonly="1"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="work_entry_type_id" readonly="1"
+                                               options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_public_holidays_search" model="ir.ui.view">
+        <field name="name">public.holidays.search</field>
+        <field name="model">public.holidays</field>
+        <field name="arch" type="xml">
+            <search string="Public Holidays">
+                <field name="year" string="Year"/>
+                <group expand="0" string="Group By">
+                    <filter domain="[('state', '=', 'draft')]" name="draft" string="Draft"/>
+                    <separator/>
+                    <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                    <separator/>
+                    <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_public_holidays" model="ir.actions.act_window">
+        <field name="name">Public Holidays</field>
+        <field name="res_model">public.holidays</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_public_holidays"
+              parent="hr_holidays.menu_hr_holidays_root"
+              name="Public Holidays"
+              action="action_public_holidays"
+              sequence="3"
+    />
+</odoo>

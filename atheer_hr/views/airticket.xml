@@ -1,0 +1,136 @@
+<odoo>
+    <data>
+        <record id="view_air_ticket_tree" model="ir.ui.view">
+            <field name="name">Air ticket tree</field>
+            <field name="model">air.ticket.management</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Airticket">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="ticket_type"/>
+                    <field name="travel_date"/>
+                    <field name="location"/>
+                    <field name="price"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_air_ticket_form" model="ir.ui.view">
+            <field name="name">Air Ticket</field>
+            <field name="model">air.ticket.management</field>
+            <field name="arch" type="xml">
+                <form string="Air ticket">
+                    <header>
+                        <button name="action_reject" string="Refuse" type="object"
+                                attrs="{'invisible': [('state','in',['reject','draft','approved'])]}"/>
+                        <button name="action_approve" type="object"
+                                string="Approve" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'draft')]}"/>
+                         <button name="action_reset_draft" type="object"
+                                string="Reset to Draft" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'approved')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_open_leave" type="object"
+                                    class="oe_stat_button" icon="fa-th-list" string="Annual Leave"
+                                    attrs="{'invisible':[('leave_check','=',False)]}">
+                            </button>
+                            <button name="action_open_resignation" type="object"
+                                    class="oe_stat_button" icon="fa-th-list" string="Resignation"
+                                    attrs="{'invisible':[('resignation_check','=',False)]}">
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group string="Employee Details">
+                            <group>
+                                <field name="employee_id" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"
+                                       options='{"no_open": True, "no_create": True}'/>
+                                <field name="designation" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group>
+                                <field name="department_id" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                        </group>
+                        <group string="Booking Details">
+                            <group>
+                                <field name="ticket_type"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="travel_date"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="attachment" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"
+                                       filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="leave_check" invisible="1"/>
+                                <field name="resignation_check" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="eligible_amount" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="deduction_amount" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="price" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="location" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="air_ticket_view_search" model="ir.ui.view">
+            <field name="name">air.ticket.management.search</field>
+            <field name="model">air.ticket.management</field>
+            <field name="arch" type="xml">
+                <search string="Airticket">
+                    <separator/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="ticket_type"/>
+                    <field name="location"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('ticket_type', '=', 'annual_leave')]" name="annual_leave"
+                                string="Annual Leave"/>
+                        <filter domain="[('ticket_type', '=', 'return_from_leave')]" name="return_from_leave"
+                                string="Return From Leave"/>
+                        <filter domain="[('ticket_type', '=', 'resignation')]" name="resignation" string="Resignation"/>
+                        <separator/>
+                        <filter domain="[('state', '=', 'draft')]" name="draft" string="Draft"/>
+                        <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                        <separator/>
+                        <filter string="Department" name='department_id' context="{'group_by':'department_id'}"/>
+                        <separator/>
+                        <filter string="Ticket Type" name='ticket_type' context="{'group_by':'ticket_type'}"/>
+                        <separator orientation="vertical"/>
+                        <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_air_ticket" model="ir.actions.act_window">
+            <field name="name">Air Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">air.ticket.management</field>
+            <!--            <field name="search_view_id" ref="air_ticket_view_search"></field>-->
+        </record>
+
+        <menuitem name="Air Ticket" action="action_air_ticket" parent="atheer_hr.hr_resignation"
+                  id="air_ticket_menu" sequence="99" groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+    </data>
+</odoo>

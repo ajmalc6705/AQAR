@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="group_access_mail_activity" model="res.groups">
+        <field name="name">Allow to Access Mail Activity</field>
+        <field name="category_id" ref="base.module_category_hidden"/>
+    </record>
+
+    <record id="base.group_erp_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('atheer_restriction.group_access_mail_activity'))]"/>
+    </record>
+    <!--    <record id="own_activity_rule" model="ir.rule">-->
+    <!--        <field name="name">Own Activity Rule</field>-->
+    <!--        <field name="model_id" ref="mail.model_mail_activity"/>-->
+    <!--        <field name="active" eval="True"/>-->
+    <!--        <field name="domain_force">[('user_id','=',user.id)]-->
+    <!--        </field>-->
+    <!--        <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+    <!--    </record>-->
+
+    <record id="activity_rule" model="ir.rule">
+        <field name="name">Activity Rule</field>
+        <field name="model_id" ref="mail.model_mail_activity"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_erp_manager'))]"/>
+    </record>
+</odoo>

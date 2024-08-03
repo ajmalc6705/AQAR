@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="work_completion_report_report_tag" model="ir.actions.report">
+            <field name="name">Work Completion Report</field>
+            <field name="model">property.maintenance</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Work Completion Report-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.work_completion_report_template</field>
+            <field name="report_file">property_lease_management.work_completion_report_template</field>
+            <field name="binding_model_id" ref="property_lease_management.model_property_maintenance"/>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_policies"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="work_completion_report_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <img t-if="docs[0].company_id.report_image1"
+                         t-att-src="image_data_uri(docs[0].company_id.report_image1)"
+                         style="max-height: 110px;width:150px" alt="Logo"/>
+                    <div class="row" style="color:black;">
+                        <center>
+                            <h1>
+                                <strong>
+                                    <u>Work Completion Report</u>
+                                </strong>
+                            </h1>
+                            <br/>
+                        </center>
+                    </div>
+                </div>
+                <div class="row" style="font-size:15px;!important;">
+                    <br/>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Date:&#160;
+                    </span>
+
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        <!--                        <t t-esc="docs[0].done_date"/>-->
+                        <t t-esc="time.strftime('%d-%m-%Y', time.strptime(str(docs[0].done_date),'%Y-%m-%d %H:%M:%S'))"/>
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                    <br/>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Building:&#160;
+                    </span>
+
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        <t t-esc="docs[0].building.name"/>
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Work Order No:&#160;
+                    </span>
+
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        <t t-esc="docs[0].name"/>
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                    <br/>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Remarks:&#160;
+                    </span>
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        <t t-esc="docs[0].description"/>
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+                    <h1 style="border-bottom:1px solid !important;"></h1>
+
+                    <br/>
+                    <span style="min-width=300px;">
+                        CareTaker Signature ( ):&#160;
+                    </span>
+                    <br/>
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                    <br/>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Maintenance Supervisor Signature ( ):&#160;
+                    </span>
+                    <br/>
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

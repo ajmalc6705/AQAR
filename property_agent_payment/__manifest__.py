@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Property Agent Payment ",
+    'version': "16.0.1.3.4",
+    'category': 'Industry',
+    'author': 'Atheer Global Solutions',
+    'company': 'Atheer Global Solutions',
+    'summary': 'This module helps to manage the agent payment of property',
+    'description': 'This module helps to manage the agent payment of property',
+    'maintainer': 'Global Solutions',
+    'website': 'https://www.atheerit.com',
+    'depends': ['base','property_lease_management','parking_management',
+                'property_service','property_sale'],
+    'data': [
+        'security/agent_payment_groups.xml',
+        'security/ir_rules.xml',
+        'security/ir.model.access.csv',
+        'data/agent_payment_seq.xml',
+        'views/account_move_views.xml',
+        'views/agent_payment_views.xml',
+        'views/property_agent_views.xml',
+        'views/property_service_views.xml',
+        'views/property_sale_views.xml',
+        'views/property_rent_views.xml',
+        'views/property_agent_parking_views.xml',
+
+    ],
+    'license': 'LGPL-3',
+    'installable': True,
+    'auto_install': False,
+    'application': False,
+}

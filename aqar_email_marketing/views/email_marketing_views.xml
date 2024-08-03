@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <!--   Mailing Form View Inherit -->
+    <record id="view_mail_mass_mailing_form_inherit_users" model="ir.ui.view">
+        <field name="name">mailing.mailing.form.inherit.users</field>
+        <field name="model">mailing.mailing</field>
+        <field name="inherit_id" ref="mass_mailing.view_mail_mass_mailing_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='campaign_id']" position="before">
+                <field name="user_ids" widget="many2many_tags"
+                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                />
+            </xpath>
+
+        </field>
+    </record>
+
+    <!--   Inherit Mailing List Form View-->
+    <record id="mailing_list_view_form_inherit_users" model="ir.ui.view">
+        <field name="name">mailing.list.form.inherit.users</field>
+        <field name="model">mailing.list</field>
+        <field name="inherit_id" ref="mass_mailing.mailing_list_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='is_public']" position="after">
+                <field name="user_ids" widget="many2many_tags"
+                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                />
+            </xpath>
+
+        </field>
+    </record>
+    <!--   Inherit Mailing Contact Form View-->
+    <record id="mailing_contact_view_form_inherit_users" model="ir.ui.view">
+        <field name="name">mailing.contact.form.inherit.users</field>
+        <field name="model">mailing.contact</field>
+        <field name="inherit_id" ref="mass_mailing.mailing_contact_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='country_id']" position="after">
+                <field name="user_ids" widget="many2many_tags"
+                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                />
+            </xpath>
+
+        </field>
+    </record>
+
+
+</odoo>

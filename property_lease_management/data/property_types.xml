@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="propert_type_1" model="property.type">
+            <field name="name">ATM</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_2" model="property.type">
+            <field name="name">Advertising board</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_3" model="property.type">
+            <field name="name">Commercial</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_4" model="property.type">
+            <field name="name">Commercial Office</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_5" model="property.type">
+            <field name="name">Flat</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_6" model="property.type">
+            <field name="name">Villa</field>
+            <field name="property_group">residence</field>
+        </record>
+        <record id="propert_type_7" model="property.type">
+            <field name="name">Room</field>
+            <field name="property_group">residence</field>
+        </record>
+    </data>
+</odoo>

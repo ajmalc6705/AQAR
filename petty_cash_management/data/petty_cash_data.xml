@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for petty cash expense -->
+        <record id="seq_petty_cash_expense" model="ir.sequence">
+            <field name="name">Petty Cash Expense</field>
+            <field name="code">petty.cash.expense</field>
+            <field name="prefix">PCSH</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!-- Sequences for add petty cash -->
+        <record id="seq_add_petty_cash" model="ir.sequence">
+            <field name="name">Add Petty Cash</field>
+            <field name="code">add.petty.cash</field>
+            <field name="prefix">PCSH</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

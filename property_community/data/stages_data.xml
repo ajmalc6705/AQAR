@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+<!--    <record id="enq_stage" model="community.stages">-->
+<!--        <field name="name">Enquiry &amp; Estimation</field>-->
+<!--    </record>-->
+<!--    <record id="confirm_stage" model="community.stages">-->
+<!--        <field name="name">Confirmed</field>-->
+<!--    </record>-->
+<!--    <record id="budget_stage" model="community.stages">-->
+<!--        <field name="name">Budgeting</field>-->
+<!--    </record>-->
+<!--    <record id="budget_approve_stage" model="community.stages">-->
+<!--        <field name="name">Budget Approved</field>-->
+<!--    </record>-->
+<!--    <record id="invoice_stage" model="community.stages">-->
+<!--        <field name="name">Invoice</field>-->
+<!--    </record>-->
+
+    <!--    Budget Stages-->
+    <record id="draft_stage" model="budget.stages">
+        <field name="name">Draft</field>
+    </record>
+    <record id="confirm_budget_stage" model="budget.stages">
+        <field name="name">Confirmed</field>
+    </record>
+    <record id="inv_stage" model="budget.stages">
+        <field name="name">Invoiced</field>
+    </record>
+
+    <!--    Sequence-->
+    <record id="community_sequence" model="ir.sequence">
+        <field name="name">Property Community</field>
+        <field name="code">community.sequence</field>
+        <field name="prefix">COMMUNITY/</field>
+        <field name="padding">3</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="budget_sequence" model="ir.sequence">
+        <field name="name">Community Budget</field>
+        <field name="code">budget.sequence</field>
+        <field name="prefix">BUDGET/</field>
+        <field name="padding">3</field>
+        <field name="number_increment">1</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_dispute_cheque_bounce_tree" model="ir.ui.view">
+            <field name="name">dispute.cheque.bounce.tree</field>
+            <field name="model">dispute.cheque.bounce</field>
+            <field name="arch" type="xml">
+                <tree string="Dispute Cheque Bounce" sample="1">
+                    <field name="sequence"/>
+                    <field name="rent_id"/>
+                    <field name="partner_id"/>
+                    <field name="building_id"/>
+                    <field name="property_id"/>
+                    <field name="state"
+                           decoration-info="(state == 'draft')"
+                           decoration-primary="(state == 'waiting')"
+                           decoration-success="state == 'approve'"
+                           decoration-warning="state == 'reject'"
+                           widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_dispute_cheque_bounce_form" model="ir.ui.view">
+            <field name="name">dispute.cheque.bounce.form</field>
+            <field name="model">dispute.cheque.bounce</field>
+            <field name="arch" type="xml">
+                <form string="Dispute Cheque Bounce">
+                    <header>
+                        <field name="notification" invisible="1"/>
+                        <button name="get_bounced_cheques" string="Get Bounced Cheques" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                states="draft"/>
+                        <button name="send_to_property_head" string="Send to Property Head" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                states="draft"/>
+                        <button name="approve" string="Approve" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="waiting"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="waiting"/>
+                        <button name="reject" string="Reject" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="waiting"/>
+                        <button name="resolved" string="Resolve" type="object"
+                                class="oe_highlight" states="resolved,refused"/>
+                        <button name="stop_notification" string="Stop Notification" type="object"
+                                class="oe_highlight" attrs="{'invisible': [('notification','=', False)]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,approved"/>
+                    </header>
+                    <sheet>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="sequence" class="oe_inline" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Dispute Information">
+                                <field name="rent_id" attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="partner_id" readonly="1" force_save="1"/>
+                            </group>
+                            <group string="Property Information">
+                                <field name="building_id"/>
+                                <field name="property_id"/>
+                            </group>
+                            <group string="Rent Information">
+                                <field name="lease_from_date"/>
+                                <field name="lease_to_date"/>
+                                <field name="period"/>
+                                <field name="installment_schedule"/>
+                                <field name="year_month_days"/>
+                                <field name="security_deposit"/>
+                                <field name="agreed_rent_amount"/>
+                            </group>
+                            <group string="Date Information">
+                                <field name="created_date" readonly="1"/>
+                                <field name="requested_date"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="approved_date"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="response_date"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                <field name="notes"  attrs="{'readonly':[('state', '!=', 'draft')]}"/>
+                                 <field name="company_id" readonly="1"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_open': True, 'no_edit': True}"
+                            />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Bounced Cheques" string="Bounced Cheques">
+                                <field name="bounced_cheque_ids" readonly="1" force_save="1">
+                                    <tree>
+
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="cheque_number"/>
+                                        <field name="collected_id"/>
+                                        <field name="period_ids"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="remarks" string="Remarks">
+                                <group>
+                                    <group>
+                                        <field name="account_remarks"/>
+                                    </group>
+                                    <group>
+                                        <field name="property_remarks"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="Notifications" string="Notifications">
+                                <field name="notification_ids" readonly="1">
+                                    <tree>
+                                        <field name="notification_date"/>
+                                        <field name="notification_type"/>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="notification_1"/>
+                                        <field name="notification_2"/>
+                                    </group>
+                                    <group>
+                                        <field name="notification_3"/>
+                                    </group>
+
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="dispute_cheque_bounce_search_view" model="ir.ui.view">
+            <field name="name">dispute.cheque.bounce.search</field>
+            <field name="model">dispute.cheque.bounce</field>
+            <field name="arch" type="xml">
+                <search string="Dispute Management">
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property_id"/>
+                        <filter string="Rent" context="{'group_by':'rent_id'}" name="group_by_rent_id"/>
+                        <filter string="Partner" context="{'group_by':'partner_id'}" name="group_by_partner_id"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_dispute_cheque_bounce" model="ir.actions.act_window">
+            <field name="name">Dispute Management</field>
+            <field name="res_model">dispute.cheque.bounce</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Create Dispute Cheque Bounce.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="main_menu_dispute_management"
+                  name="Dispute Management"
+                  parent="property_lease_management.menu_base_property"
+                  sequence="4"/>
+
+        <menuitem id="menu_cheque_bounce_details"
+                  name="Dispute Management"
+                  action="action_dispute_cheque_bounce"
+                  parent="property_lease_management.main_menu_dispute_management"
+                  sequence="1"/>
+
+        <menuitem id="menu_bounced_checks_history"
+                  name="Bounced Checks History"
+                  action="action_property_bounced_cheque"
+                  parent="property_lease_management.main_menu_dispute_management"
+                  sequence="1"/>
+
+    </data>
+</odoo>

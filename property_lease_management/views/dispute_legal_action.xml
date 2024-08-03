@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_dispute_legal_action_tree" model="ir.ui.view">
+            <field name="name">dispute.cheque.bounce.tree</field>
+            <field name="model">dispute.legal.action</field>
+            <field name="arch" type="xml">
+                <tree string="Dispute Legal Action" sample="1">
+                    <field name="sequence"/>
+                    <field name="partner_id"/>
+                    <field name="rent_id"/>
+                    <field name="building_id"/>
+                    <field name="property_id"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state"
+                           decoration-info="(state == 'draft')"
+                           decoration-primary="(state == 'waiting')"
+                           decoration-success="state == 'approve'"
+                           decoration-warning="state == 'reject'"
+                           widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="send_settlement_done_view_form" model="ir.ui.view">
+            <field name="name">settlement.done</field>
+            <field name="model">settlement.done</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="2">
+                        <field name="remarks"/>
+                    </group>
+                    <footer>
+                        <button string="Send" name="send_mail" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_dispute_legal_action_form" model="ir.ui.view">
+            <field name="name">dispute.legal.action.form</field>
+            <field name="model">dispute.legal.action</field>
+            <field name="arch" type="xml">
+                <form string="Dispute Legal Action">
+                    <header>
+                        <button name="send_to_property_head" string="Send to Property Head" type="object"
+                                class="oe_highlight" states="draft"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="send_to_senior" string="Approve" type="object"
+                                class="oe_highlight" states="waiting"
+                                groups="property_lease_management.group_property_head"
+                        />
+                        <button name="settlement_done" string="Settlement Done" type="object"
+                                class="oe_highlight" states="approved"
+                        />
+                        <button name="button_action_send_back" string="Send Back" type="object"
+                                state="waiting" groups="property_lease_management.group_property_head"
+                        />
+                        <button name="button_action_cancel" string="Reject" type="object"
+                                confirm="Are you sure you want to cancel this Record?"
+                                state="waiting" groups="property_lease_management.group_property_head"
+                        />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="open_tasks" type="object" class="oe_stat_button" icon="fa-bars"
+                                    string="Tasks">
+                            </button>
+                        </div>
+
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="sequence" class="oe_inline" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Dispute Information">
+                                <field name="rent_id"/>
+                                <field name="partner_id"/>
+<!--                                 domain="[('tenant','=',True), ('parent_id', '=', False)]"-->
+
+                            </group>
+                            <group string="Property Information">
+                                <field name="building_id"/>
+                                <field name="building_area_id"/>
+                                <field name="property_id" domain="[('id','in',unit_ids)]"/>
+                                <field name="unit_ids" invisible="1"/>
+                            </group>
+                            <group string="Rent Information">
+                                <field name="lease_from_date"/>
+                                <field name="lease_to_date"/>
+                                <field name="period"/>
+                                <field name="installment_schedule"/>
+                                <field name="agreed_rent_amount"/>
+                            </group>
+                            <group string="Date Information">
+                                <field name="response_date"/>
+                                <field name="hearing_date"/>
+                                <field name="verdict_date"/>
+                                <field name="settlement_remarks"
+                                       attrs="{'invisible':[('settlement_remarks','=', False)]}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+                            <group>
+                                <field name="notes"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Bounced Cheques" string="Bounced Cheques">
+                                <field name="bounced_cheque_ids" readonly="1" force_save="1">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="cheque_number"/>
+                                        <field name="collected_id"/>
+                                        <field name="period_ids"/>
+                                        <field name="sequence" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="name"/>
+                                        <field name="doc_type"/>
+                                        <field name="doc_dec"/>
+                                        <field name="issue_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" filename="file_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="dispute_legal_action_search_view" model="ir.ui.view">
+            <field name="name">dispute.legal.action.search</field>
+            <field name="model">dispute.legal.action</field>
+            <field name="arch" type="xml">
+                <search string="Dispute Legal Action">
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property_id"/>
+                        <filter string="Rent" context="{'group_by':'rent_id'}" name="group_by_rent_id"/>
+                        <filter string="Partner" context="{'group_by':'partner_id'}" name="group_by_partner_id"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_dispute_legal_action" model="ir.actions.act_window">
+            <field name="name">Dispute Legal Action</field>
+            <field name="res_model">dispute.legal.action</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Create Dispute Legal Action.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_legal_actions"
+                  name="Legal Actions"
+                  action="action_dispute_legal_action"
+                  parent="property_lease_management.main_menu_dispute_management"
+                  sequence="5"/>
+    </data>
+</odoo>

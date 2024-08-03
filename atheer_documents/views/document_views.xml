@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents_tree" model="ir.ui.view">
+        <field name="name">documents.tree</field>
+        <field name="model">atheer.documents</field>
+        <field name="arch" type="xml">
+            <tree default_order="doc_no desc">
+                <field name="doc_no"/>
+                <field name="name" optional="show"/>
+                <field name="doc_type" optional="show"/>
+                <field name="issued_authority" optional="show"/>
+                <field name="issue_date" optional="show"/>
+                <field name="expiry_date" optional="show"/>
+                <field name="file_name" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Documents Form View-->
+    <record id="documents_form" model="ir.ui.view">
+        <field name="name">documents.form</field>
+        <field name="model">atheer.documents</field>
+        <field name="arch" type="xml">
+            <form string="Documents">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="doc_no" placeholder="Document Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="issue_date"/>
+                            <field name="expiry_date"/>
+                            <field name="active" invisible="1"/>
+                            <field name="file_name"/>
+                            <field name="doc_link" string="Document Link" widget="url"
+                                   placeholder="e.g. https://www.youtube.com/watch?v=CP96yVnXNrY"/>
+                        </group>
+                        <group>
+                            <field name="doc_type" required="1"/>
+                            <field name="user_ids" widget="many2many_tags" force_save="1"
+                                   options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"/>
+                            <field name="issued_authority"/>
+                            <field name="company_id"/>
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Description" String="Description">
+                            <field name="doc_dec"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_doc_attachments_search" model="ir.ui.view">
+        <field name="name">doc.attachment.search</field>
+        <field name="model">atheer.documents</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="1" string="Group By">
+                    <filter name="groupby_doc_type" context="{'group_by': 'doc_type'}" string="Document Type"/>
+                    <filter name="groupby_issue_date" context="{'group_by': 'issue_date'}" string="Issue Date"/>
+                    <filter name="groupby_expiry_date" context="{'group_by': 'expiry_date'}" string="Expiry Date"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--    window action for Documents-->
+    <record id="action_documents" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">atheer.documents</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Documents
+            </p>
+        </field>
+    </record>
+    <!--Documents Menu -->
+    <menuitem id="document_main_menu" name=" Document Management"
+              groups="atheer_documents.group_doc_user,atheer_documents.group_doc_admin"
+              web_icon="atheer_documents,static/images/icon.png"
+
+    />
+    <menuitem id="document_menu" name="Documents"
+              parent="document_main_menu" action="action_documents"
+              sequence="10"/>
+</odoo>

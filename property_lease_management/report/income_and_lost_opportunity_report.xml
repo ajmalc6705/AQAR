@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data>
+        <template id="report_income_and_lost_opportunity_template">
+            <t t-call="web.external_layout">
+
+                <div class="page">
+                    <link rel='stylesheet' href='/property_management/static/src/css/report.css' />
+                    <div class="row">
+                        <center>
+                            <h1 class="p3 ft0">Real Income and Lost Opportunity</h1>
+                            <h>Bladg No
+                                <span t-field="o.name" />
+                            </h>
+                            <br />
+                            <h>From
+                                <span t-esc="formatLang(data['form']['date_from'], date=True)" />
+                                To
+                                <span t-esc="formatLang(data['form']['date_to'], date=True)" />
+                            </h>
+                            <t t-set="values" t-value="get_data(o.id, o.rent_price, data)" />
+                            <table width="95%">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center td5 ft2" width="3%">Sr.</th>
+                                        <th class="text-center td5 ft2" width="19%">Unit No.</th>
+                                        <th class="text-center td5 ft2" width="10%">Average Rent</th>
+                                        <th t-att-colspan="len(values['period'])+1" class="text-center td5 ft2">Period
+                                        </th>
+                                        <th class="text-center td5 ft2" width="12%">Total Lost</th>
+                                        <th class="text-center td5 ft2" width="13%">Total Rented</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tb0">
+                                    <tr>
+                                        <td rowspan="5" class="text-center td2 ft3"></td>
+                                        <td rowspan="5" class="text-center td2 ft3">
+                                            <span t-field="o.name" />
+                                        </td>
+                                        <td rowspan="5" class="td2 ft3 center">
+                                            <span t-field="o.rent_price" />
+                                        </td>
+                                        <td width="2%">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td class="td8 ft2">Amt.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="td9 ft2">From</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="td10 ft2">To</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="td11 ft2">Status</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="7%" t-foreach="values['period']" t-as="p">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td class="td8 ft3 center">
+                                                        <span t-esc="formatLang(p['amount'])" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="td9 ft3 center">
+                                                        <span t-esc="formatLang(p['fro_dt'], date=True)" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="td10 ft3 center">
+                                                        <span t-esc="formatLang(p['to_dt'], date=True)" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="p['status'] is 'Empty'">
+                                                        <td class="td11 ft3 center" style="color:red;">
+                                                            <span t-esc="p['status']" />
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="p['status'] is not 'Empty'">
+                                                        <td class="td11 ft3 center">
+                                                            <span t-esc="p['status']" />
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <!--<t t-set="p_length" t-value="5 - len(values['period'])" />-->
+                                        <!--<t t-if="p_length &lt; 5">-->
+                                        <!--<td width="7%" t-foreach="range(0, p_length)" t-as="i" >-->
+                                        <!--<table width="100%">-->
+                                        <!--<tr>-->
+                                        <!--<td class="ft3"></td>-->
+                                        <!--</tr>-->
+                                        <!--<tr >-->
+                                        <!--<td class="ft3"></td>-->
+                                        <!--</tr>-->
+                                        <!--<tr>-->
+                                        <!--<td class="ft3"></td>-->
+                                        <!--</tr>-->
+                                        <!--<tr>-->
+                                        <!--<td class="ft3"></td>-->
+                                        <!--</tr>-->
+                                        <!--</table>-->
+                                        <!--</td>-->
+                                        <!--</t>-->
+
+                                        <td rowspan="5" class="text-center td12 ft3">
+                                            <span t-esc="formatLang(values['total_lost'])" />
+                                        </td>
+                                        <td rowspan="5" class="text-center td15 ft3">
+                                            <span t-esc="formatLang(values['total_income'])" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <!--<tbody>-->
+                                <!--<tr>-->
+                                <!--<td t-att-colspan="4 + len(values['period'])"/>-->
+                                <!--<td class="text-center td13 ft2">Grand Total Lost</td>-->
+                                <!--<td class="text-center td14 ft2">Grand Total Income</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--<td t-att-colspan="4 + len(values['period'])"/>-->
+                                <!--<td class="text-center td16 ft3">0.0</td>-->
+                                <!--<td class="text-center td17 ft3">0.0</td>-->
+                                <!--</tr>-->
+                                <!--</tbody>-->
+                            </table>
+                        </center>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_income_and_lost_opportunity">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="property_management.report_income_and_lost_opportunity_template" />
+                </t>
+                <!--<t t-foreach="doc_ids" t-as="doc_id">-->
+                <!--<t t-raw="translate_qweb(doc_id, doc_model, user.lang, 'property_management.report_building_expenses_template')"/>-->
+                <!--</t>-->
+            </t>
+        </template>
+    </data>
+</odoo>

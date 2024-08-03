@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="key_turnover_report_tag" model="ir.actions.report">
+            <field name="name">Key Turn Over</field>
+            <field name="model">property.rent</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Key Turn Over-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.key_turnover_template</field>
+            <field name="report_file">property_lease_management.key_turnover_template</field>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="key_turnover_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="row" style="text-align:justify;font-size:16px;">
+                        <center>
+                            <strong>Key Turn-over Form</strong>
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                    <div class="row" style="margin-top:50px;text-align:justify;font-size:14px;">
+                        <div style="height=35px;">
+                            <strong>Date</strong>&#160;&#160;:
+                            <span style="border-bottom:1px solid !important;"
+                                  t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <div style="height=35px;display:inline;float:left;">
+                                <strong>To</strong>&#160;&#160;:
+                                <t t-esc="docs[0].building.partner_id.name"/>
+                            </div>
+                            <div style="height=35px;display:inline;float:right;">
+                                <strong>From : Aqar-Head Office</strong>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <center>
+                                <strong>
+                                    <u>Subject: Key Turn-over</u>
+                                    <br/>
+                                </strong>
+                            </center>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <strong>Please hand over the key to
+                                <u>
+                                    <t t-esc="docs[0].partner_id.name"/>
+                                </u>
+                                &#160;for
+                                <u>
+                                    <t t-esc="docs[0].building.name"/>/
+                                    <t t-esc="docs[0].property_id.name"/>
+                                </u>
+                                , upon presentation of this letter.
+                                <br/>
+                                <br/>
+                                Thank you.
+                                <br/>
+                                <br/>
+                                Signature :
+                                <span style="border-bottom:1px solid !important;">
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                </span>
+                            </strong>
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <center>
+                        <span style="border-bottom:1px dotted !important;">
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        </span>
+                    </center>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div class="row" style="text-align:justify;font-size:16px;">
+                        <center>
+                            <strong>Key Turn-over Form</strong>
+                            <br/>
+                            <br/>(Office Copy)
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                    <div class="row" style="text-align:justify;font-size:14px;">
+                        <div style="height=35px;">
+                            <strong>Date</strong>&#160;&#160;:
+                            <span style="border-bottom:1px solid !important;"
+                                  t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <div style="height=35px;display:inline;float:left;">
+                                <strong>To</strong>&#160;&#160;:
+                                <t t-esc="docs[0].building.partner_id.name"/>
+                            </div>
+                            <div style="height=35px;display:inline;float:right;">
+                                <strong>From : Aqar-Head Office</strong>
+                            </div>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <center>
+                                <strong>
+                                    <u>Subject: Key Turn-over</u>
+                                    <br/>
+                                </strong>
+                            </center>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div style="height=35px;">
+                            <strong>Please hand over the key to
+                                <u>
+                                    <t t-esc="docs[0].partner_id.name"/>
+                                </u>
+                                &#160;for
+                                <u>
+                                    <t t-esc="docs[0].building.name"/>/
+                                    <t t-esc="docs[0].property_id.name"/>
+                                </u>
+                                , upon presentation of this letter.
+                                <br/>
+                                <br/>
+                                Thank you.
+                                <br/>
+                                <br/>
+                                Signature :
+                                <span style="border-bottom:1px solid !important;">
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                    &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                                </span>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

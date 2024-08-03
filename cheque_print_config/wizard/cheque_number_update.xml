@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_update_cheque_number" model="ir.ui.view">
+            <field name="name">Update Cheque Number</field>
+            <field name="model">wizard.cheque.number.update</field>
+            <field name="arch" type="xml">
+                <form string="Update Cheque Number">
+                    <h4 style="color:red;">Update New Check Number</h4>
+                    <group>
+                        <field name="cheque_number" required="1"/>
+                        <field name="reason" required="1"/>
+                    </group>
+                    <footer>
+                        <button name="post" string="Update" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

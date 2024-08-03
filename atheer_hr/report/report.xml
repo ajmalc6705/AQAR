@@ -1,0 +1,119 @@
+<odoo>
+    <data noupdate="1">
+        <record id="paperformat_af" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!--        Increment and promotion form-->
+        <record id="action_increment_and_promotion" model="ir.actions.report">
+            <field name="name">Increment And Promotion</field>
+            <field name="model">increment.and.promotion</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_increment_and_promotion</field>
+            <field name="report_file">atheer_hr.report_increment_and_promotion</field>
+            <field name="print_report_name">'Increment And Promotion-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af_increment_and_promotion"/>
+            <field name="binding_model_id" ref="model_increment_and_promotion"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!--       final settlement form-->
+        <record id="report_action_final_settlement" model="ir.actions.report">
+            <field name="name">Final Settlement</field>
+            <field name="model">final.settlement</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_final_settlement</field>
+            <field name="report_file">atheer_hr.report_final_settlement</field>
+            <field name="print_report_name">'Final Settlement-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af"/>
+            <field name="binding_model_id" ref="model_final_settlement"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!--        payslip pdf report-->
+        <record id="payslip_report_pdf" model="ir.actions.report">
+            <field name="name">Payslip</field>
+            <field name="model">hr.payslip</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_af_payslip</field>
+            <field name="report_file">atheer_hr.report_af_payslip</field>
+            <field name="print_report_name">'Payslip-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af"/>
+            <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="hr_payroll.action_report_payslip" model="ir.actions.report">
+            <field name="name">Payslip</field>
+            <field name="model">hr.payslip</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hr_payroll.report_payslip_lang</field>
+            <field name="report_file">hr_payroll.report_payslip_lang</field>
+            <field name="print_report_name">'Payslip - %s' % (object.employee_id.name)</field>
+            <field name="binding_type">report</field>
+            <field name="binding_model_id" eval="False"/>
+            <field name="attachment_use">False</field>
+        </record>
+        <record id="action_report_payslip_batch" model="ir.actions.report">
+            <field name="name">Payslip Batch</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_payslip_batch</field>
+            <field name="report_file">atheer_hr.report_payslip_batch</field>
+            <field name="print_report_name">'Payslip Batch - %s' % (object.name)</field>
+            <field name="binding_type">report</field>
+            <field name="binding_model_id" ref="hr_payroll.model_hr_payslip_run"/>
+            <field name="attachment_use">False</field>
+        </record>
+
+        <record id="action_report_experience_certificate" model="ir.actions.report">
+            <field name="name">Experience Certificate</field>
+            <field name="model">hr.resignation</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_experience_certificate</field>
+            <field name="report_file">atheer_hr.report_experience_certificate</field>
+            <field name="print_report_name">'Experience Certificate - %s' % (object.employee_id.name)</field>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_af_experience_certificate"/>
+            <field name="binding_model_id" ref="atheer_hr.model_hr_resignation"/>
+        </record>
+
+        <!--        resignation print-->
+        <record id="action_print_resignation" model="ir.actions.report">
+            <field name="name">Resignation</field>
+            <field name="model">hr.resignation</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_print_resignation</field>
+            <field name="report_file">atheer_hr.report_print_resignation</field>
+            <field name="print_report_name">'Resignation-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af_resignation"/>
+            <field name="binding_model_id" ref="model_hr_resignation"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!--        leave request print-->
+        <record id="action_print_leave_request" model="ir.actions.report">
+            <field name="name">Leave Request</field>
+            <field name="model">hr.leave</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.report_print_leave_request</field>
+            <field name="report_file">atheer_hr.report_print_leave_request</field>
+            <field name="print_report_name">'Leave Request-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af_leave"/>
+            <field name="binding_model_id" ref="model_hr_leave"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

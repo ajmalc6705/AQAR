@@ -1,0 +1,367 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_tenant_request_tree" model="ir.ui.view">
+            <field name="name">tenant.request.tree</field>
+            <field name="model">tenant.request</field>
+            <field name="arch" type="xml">
+                <tree string="Tenant Requests" sample="1">
+                    <field name="sequence" string="Reference"/>
+                    <field name="partner_id"/>
+                    <field name="rent_id"/>
+                    <field name="property_id"/>
+                    <field name="building_id"/>
+                    <field name="request_type"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state"
+                           decoration-info="(state == 'draft')"
+                           decoration-success="state == 'approved'"
+                           decoration-muted="(state  == 'Property Head')"
+                           decoration-primary="(state == 'Accountant')"
+                           decoration-danger="(state == 'refused')"
+                           widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_tenant_request_form" model="ir.ui.view">
+            <field name="name">tenant.request.form</field>
+            <field name="model">tenant.request</field>
+            <field name="arch" type="xml">
+                <form string="Tenant Requests">
+                    <header>
+                        <field name="accountant_button" invisible="1"/>
+                        <field name="approve_button" invisible="1"/>
+                        <field name="renew_button_visibility" invisible="1"/>
+                        <button name="move_to_sales_head" string="Send to Property Head"
+                                type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user"
+                                states="draft"/>
+                        <button name="sales_head_approve" string="Send to Accountant" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_head"
+                                attrs="{'invisible':[('accountant_button','!=', True)]}"/>
+                        <button name="renewal_approve" string="Approve" type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible':[('approve_button','!=', True)]}"/>
+                        <button name="accountant_approve" string="Approve" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                states="Accountant"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant"
+                                states="Accountant"/>
+                        <button name="send_back_renewal" string="Send Back" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_head"
+                                states="Property Head"/>
+                        <button name="move_to_refuse" string="Reject" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_head,property_lease_management.group_property_accountant"
+                                states="Property Head,Accountant"/>
+                        <button name="send_email_document"
+                                string="Send Email Document"
+                                type="object"
+                                attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"
+                                class="oe_highlight"/>
+                        <button name="print_renewal_commercial" string="Print Renewal Commercial"
+                                type="object" class="oe_highlight" />
+                        <!--                         attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"-->
+                        <button name="print_renewal_sanad"
+                                string="Print Renewal Sanad"
+                                type="object"
+                                attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"
+                                class="oe_highlight"/>
+                        <button name="renew_contract"
+                                string="Renew Contract"
+                                type="object"
+                                groups="property_lease_management.group_property_head,property_lease_management.group_property_user"
+                                attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar"
+                               attrs="{'invisible':[('request_type','=', 'Renewal Request')]}"
+                               statusbar_visible="draft,Property Head,Accountant"/>
+                        <field name="state_renewal" widget="statusbar"
+                               attrs="{'invisible':[('request_type','!=', 'Renewal Request')]}"
+                               statusbar_visible="draft,Property Head"/>
+                    </header>
+                    <sheet>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <widget name="web_ribbon" title="Renewed"
+                                bg_color="bg-success"
+                                attrs="{'invisible':[('new_rent_id', '=', False)]}"/>
+                        <div class="oe_title">
+                            <label for="sequence" class="oe_edit_only" string="Ref"/>
+                            <h1>
+                                <field name="sequence" class="oe_inline" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+
+                                <field name="partner_id"
+                                       domain="[('tenant','=',True), ('parent_id', '=', False)]"
+                                       context="{'default_company_id':company_id,'default_landlord':0, 'default_tenant':1,'show_address': 1}"
+                                       attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="rent_id"
+                                       attrs="{'readonly':[('state','==', 'approved')]}"
+                                       domain="[('partner_id','=',partner_id)]"/>
+                                <field name="property_id" readonly="1"/>
+                                <field name="building_id" readonly="1"/>
+                                <field name="request_type" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+
+                            </group>
+                            <group string="Current Rental Details"
+                                     attrs="{'invisible':[('request_type','!=', 'Vacate Request')]}">
+                                <field name="rent_amount_total" force_save="1" readonly="1"/>
+                                <field name="lease_from_date" force_save="1" readonly="1"/>
+                                <field name="lease_to_date" force_save="1" readonly="1"/>
+                                <field name="installment_schedule" force_save="1" readonly="1"/>
+                                <field name="period" force_save="1" readonly="1"/>
+                            </group>
+                            <!--      Cheque Holding                      -->
+                            <group string="Cheque Holding"
+                                   attrs="{'invisible':[('request_type','!=', 'Cheque holding')]}">
+                                <field name="from_date" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="to_date" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="no_of_month" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                            </group>
+                            <!--    Rent Reduction      -->
+                            <group string="Rent Reduction"
+                                   attrs="{'invisible':[('request_type','!=', 'Rent Reduction')]}">
+                                <field name="effective_date"/>
+                                <field name="current_rent" readonly="1" force_save="1"/>
+                                <field name="proposed_rent" attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <field name="approved_rent" attrs="{'readonly':[('state','!=', 'Property Head')]}"/>
+                            </group>
+                            <!--    Renewal Request      -->
+                            <group string="Renewal Request"
+                                   attrs="{'invisible':[('request_type','!=', 'Renewal Request')]}">
+                                <field name="installment_schedule" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="period" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="lease_from_date" attrs="{'readonly':[('state','==', 'approved')]}"/>
+                                <field name="lease_to_date"/>
+                                <field name="year_month_days"/>
+                                <field name="new_rent_id"/>
+                            </group>
+
+                            <!--    Vacate Details      -->
+                            <group string="Vacate Details"
+                                   attrs="{'invisible':[('request_type','!=', 'Vacate Request')]}">
+                                <field name="vacate_date"/>
+                            </group>
+                            <group string="Installments"
+                                   attrs="{'invisible':[('request_type','!=', 'waiver_of_rent')]}">
+                                <field name="installment_ids" widget="many2many_tags"
+                                       domain="[('rent_id', '=', rent_id)]"
+                                       attrs="{'readonly':[('state','!=', 'draft')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="tenant_reason"/>
+                        </group>
+                        <notebook>
+                            <page name="signature" string="E-Signature">
+                                <field name="tenant_esignature_ids">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="signature_template"/>
+                                        <field name="partner_ids" widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="renewal" string="Renewal Approvals"
+                                  attrs="{'invisible':[('request_type','!=', 'Renewal Request')]}">
+                                <group>
+                                    <group string="Property Head Approval">
+                                        <field name="p_head_approved_by"
+                                               readonly="1"
+                                               string="Approved User"/>
+                                        <field name="p_head_approved_date"
+                                               readonly="1"
+                                               string="Approved Date"/>
+                                    </group>
+                                    <group string="Approval Dates">
+                                        <field name="commercial_approved_date"/>
+                                        <field name="sanad_approved_date"/>
+                                        <field name="sanad_tenant_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="atheer_docs" string="Additional Documents"
+                                  attrs="{'invisible':[('request_type','!=', 'Renewal Request')]}">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="doc_type" readonly="1"/>
+                                        <field name="doc_dec" readonly="1"/>
+                                        <field name="issue_date" readonly="1"/>
+                                        <field name="expiry_date" readonly="1"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" readonly="1" filename="file_name"
+                                               widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                                <!--                                <group>-->
+                                <!--                                    <group>-->
+                                <!--                                        <field name="doc_type"/>-->
+                                <!--                                    </group>-->
+                                <!--                                    <group>-->
+                                <!--                                        <button name="onchange_doc_type" type="object"-->
+                                <!--                                                class="oe_highlight"-->
+                                <!--                                                string="Fetch Documents"/>-->
+                                <!--                                    </group>-->
+                                <!--                                </group>-->
+                                <!--                                <field name="attachment_details" create="false" edit="false">-->
+                                <!--                                    <tree string="Documents" create="false" edit="false">-->
+                                <!--                                        <field name="doc_type"/>-->
+                                <!--                                        <field name="doc_no"/>-->
+                                <!--                                        <field name="doc_dec"/>-->
+                                <!--                                        <field name="file_name" invisible="1"/>-->
+                                <!--                                        <field name="attachment_ids" filename="file_name"/>-->
+                                <!--                                    </tree>-->
+                                <!--                                </field>-->
+                            </page>
+                            <page name="Cheque Details" string="Cheque Details"
+                                  attrs="{'invisible':[('request_type','!=', 'Cheque holding')]}">
+                                <field name="check_ids">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="check_no"/>
+                                        <field name="check_bearer"/>
+                                        <field name="check_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="remarks" string="Remarks">
+                                <group>
+                                    <group>
+                                        <field name="sales_remarks"
+                                               attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                        <field name="sales_head_remarks"
+                                               attrs="{'readonly':[('state','!=', 'Property Head')]}"/>
+                                        <field name="accountant_remarks"
+                                               attrs="{'readonly':[('state','!=', 'Accountant')]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- send email document wizard view -->
+
+        <record id="send_email_document_view_form" model="ir.ui.view">
+            <field name="name">send.email.document</field>
+            <field name="model">send.email.document</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="2">
+                        <label for="partner_id"/>
+                        <field name="partner_id" nolabel="1" context="{'force_email':True, 'show_email': True}"/>
+                        <label for="subject"/>
+                        <field name="subject" placeholder="Signature Request" nolabel="1"/>
+                        <label for="message"/>
+                        <field name="message" nolabel="1" placeholder="Optional Message..."/>
+                        <label for="attachment_ids"/>
+                        <field name="attachment_ids" nolabel="1" widget="many2many_binary"/>
+
+                    </group>
+                    <footer>
+                        <button string="Send" name="send_mail" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="tenant_request_search_view" model="ir.ui.view">
+            <field name="name">tenant.request.search</field>
+            <field name="model">tenant.request</field>
+            <field name="arch" type="xml">
+                <search string="Tenant Request">
+                    <field name="property_id"/>
+                    <field name="sequence" string="Sequence Number"/>
+                    <field name="partner_id" string="Tenant"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                        <filter name="partner_filter" string="Tenant" context="{'group_by': 'partner_id'}"/>
+                        <filter name="request_type_filter" string="Request Type"
+                                context="{'group_by': 'request_type'}"/>
+                        <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--Customer issue action-->
+        <record id="action_tenant_request" model="ir.actions.act_window">
+            <field name="name">Tenant Requests</field>
+            <field name="res_model">tenant.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to Tenant Requests.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_tenant_request"
+                  name="Tenant Requests"
+                  action="action_tenant_request"
+                  parent="property_lease_management.menu_base_property"
+                  sequence="3"/>
+
+        <record id="view_tenant_signature_template_form" model="ir.ui.view">
+            <field name="name">tenant.signature.template.form</field>
+            <field name="model">tenant.signature.template</field>
+            <field name="arch" type="xml">
+                <form string="Tenant Signature Template">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="signature_template"/>
+                                <field name="partner_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--        <record id="view_tenant_request_document_form" model="ir.ui.view">-->
+        <!--            <field name="name">tenant.request.documents.form</field>-->
+        <!--            <field name="model">tenant.request.documents</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <form string="Tenant Request Documents">-->
+        <!--                    <sheet>-->
+        <!--                        <group>-->
+        <!--                            <group>-->
+        <!--                                <field name="doc_type"/>-->
+        <!--                                <field name="doc_no"/>-->
+        <!--                                <field name="doc_dec"/>-->
+        <!--                                <field name="attachment_ids"/>-->
+        <!--                            </group>-->
+        <!--                        </group>-->
+        <!--                    </sheet>-->
+        <!--                </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+    </data>
+</odoo>

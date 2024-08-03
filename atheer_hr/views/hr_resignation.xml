@@ -1,0 +1,232 @@
+<odoo>
+    <data>
+        <record id="view_hr_resignation_tree" model="ir.ui.view">
+            <field name="name">hr.resignation.tree</field>
+            <field name="model">hr.resignation</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Resignation">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="type"/>
+                    <field name="resign_date"/>
+                    <field name="confirmed_travel_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_resignation_form_view" model="ir.ui.view">
+            <field name="name">hr.resignation.form</field>
+            <field name="model">hr.resignation</field>
+            <field name="arch" type="xml">
+                <form string="Resignation">
+                    <header>
+                        <button name="send_to_line_manager" string="Send to Line Manager" type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','!=','draft')]}"/>
+                        <button name="create_final_settlement" string="Create Final Settlement" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_line_manager"
+                                attrs="{'invisible': ['|',('need_final_settlement','=', False),('final_settlement','=',True)]}"/>
+                        <button name="send_to_hr" string="Send to HR" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_line_manager"
+                                attrs="{'invisible': [('state','!=', 'line_manager')]}"/>
+                        <button name="send_to_ceo" string="Send to CEO" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state','!=', 'hr')]}"/>
+                        <button name="send_to_finance" string="Send to Finance" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state','!=', 'ceo')]}"/>
+                        <button name="approve" string="Approve" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_accounts"
+                                attrs="{'invisible': [('state','!=', 'finance')]}"/>
+                        <!-- reject button-->
+                        <button name="action_reject" string="Refuse" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_line_manager"
+                                attrs="{'invisible': [('state','!=','line_manager')]}"/>
+                        <button name="action_reject" string="Refuse" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state','!=','hr')]}"/>
+                        <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_ceo"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','!=','ceo')]}"/>
+                        <button name="action_reject" string="Refuse" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_accounts"
+                                attrs="{'invisible': [('state','!=','finance')]}"/>
+                        <!-- send back button-->
+                        <button name="send_back" string="Send Back" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_line_manager"
+                                attrs="{'invisible': [('state','!=','line_manager')]}"/>
+                        <button name="send_back" string="Send Back" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state','!=','hr')]}"/>
+                        <button name="send_back" string="Send Back" type="object" groups="atheer_hr.group_hr_ceo"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','!=','ceo')]}"/>
+                        <button name="send_back" string="Send Back" type="object" class="oe_highlight"
+                                groups="atheer_hr.group_hr_accounts"
+                                attrs="{'invisible': [('state','!=','finance')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" options="{'no_open': True, 'no_create': True}"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject']),'|',('employee_category', 'in', ['omani_staff','expat_staff']),('type', '=', 'normal_resignation')]}"
+                                />
+                            </group>
+                        </group>
+                        <group string="Employee Information">
+                            <group>
+                                <field name="designation" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="department_id" options="{'no_open': True, 'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="send_back_flag" invisible="1"/>
+                                <field name="create_uid" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="lm_user_id" invisible="0"/>
+                                <field name="pm_user_id" invisible="1"/>
+                                <field name="left_hr_flag" invisible="1"/>
+                                <field name="left_pm_flag" invisible="1"/>
+                                <field name="employee_category"/>
+                                <field name="joining_date"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Type Of Resignation">
+                                <field name="type" force_save="1"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="resign_date"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="need_final_settlement"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="final_settlement" invisible="1"/>
+                            </group>
+                            <group string="Travel Information">
+                                <field name="travel_date"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="location" attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string=" Evaluation reference">
+                                <field name="evaluation" options="{'no_open': True, 'no_create': True}"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+                            <group string="Confirmation Section Information">
+                                <field name="confirmed_travel_date" force_save="1"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Remarks">
+                            <group>
+                                <field name="lm_remark" force_save="1"
+                                       attrs="{'readonly': [('state', '!=', 'line_manager')]}"/>
+                                <field name="ceo_remark" force_save="1"
+                                       attrs="{'readonly': [('state', '!=', 'ceo')]}"/>
+                                <field name="employee_remark" force_save="1"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+                            <group>
+                                <field name="hr_remark" force_save="1"
+                                       attrs="{'readonly': [('state', '!=', 'hr')]}"/>
+                                <field name="acc_remark" force_save="1"
+                                       attrs="{'readonly': [('state', '!=', 'finance')]}"/>
+
+                                <field name="reason_for_resignation"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                                <field name="provision_for_notice"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])]}"/>
+                            </group>
+
+                        </group>
+
+                        <group string="Refused Details" attrs="{'invisible':[('state','!=','reject')]}">
+                            <group>
+                                <field name="rejected_by" options='{"no_open": True, "no_create": True}'
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])],'invisible':[('state','!=','reject')]}"/>
+                            </group>
+                            <group>
+                                <field name="rejected_date"
+                                       attrs="{'readonly': [('state', 'in', ['approved','reject'])],'invisible':[('state','!=','reject')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_resignation_view_search" model="ir.ui.view">
+            <field name="name">hr.resignation.search</field>
+            <field name="model">hr.resignation</field>
+            <field name="arch" type="xml">
+                <search string="Increment">
+                    <separator/>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="type"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('type', '=', 'normal_resignation')]" name="normal_resignation"
+                                string="Resignation"/>
+                        <filter domain="[('type', '=', 'termination')]" name="termination" string="Termination"/>
+                        <filter domain="[('type', '=', 'absconding')]" name="absconding" string="Absconding"/>
+                        <filter domain="[('type', '=', 'exit_process')]" name="exit_process"
+                                string="Cancel- 180 days completion"/>
+                        <separator/>
+                        <filter domain="[('state', '=', 'site_engineer')]" name="site_engineer" string="Site Engineer"/>
+                        <filter domain="[('state', '=', 'hr1')]" name="hr1" string="HR Manager"/>
+                        <filter domain="[('state', '=', 'project_manager')]" name="project_manager"
+                                string="Project Manager"/>
+                        <filter domain="[('state', '=', 'employee')]" name="employee" string="Employee"/>
+                        <filter domain="[('state', '=', 'hr2')]" name="hr2" string="HR Manager"/>
+                        <filter domain="[('state', '=', 'line_manager')]" name="line_manager" string="Line Manager"/>
+                        <filter domain="[('state', '=', 'ceo')]" name="ceo" string="CEO"/>
+                        <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                        <filter domain="[('state', '=', 'reject')]" name="reject" string="Reject"/>
+                        <separator/>
+                        <filter string="Type" name='type' context="{'group_by':'type'}"/>
+                        <separator orientation="vertical"/>
+                        <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_resignation" model="ir.actions.act_window">
+            <field name="name">Resignation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.resignation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr_resignation_view_search"/>
+        </record>
+
+
+        <menuitem name="Resignation" id="hr_resignation"
+                  web_icon="atheer_hr,static/src/img/resignation.png" sequence="50"
+                  groups="atheer_hr.group_hr_employee_staff,atheer_hr.group_hr_accounts,atheer_hr.group_hr_site_engineer,atheer_hr.group_hr_line_manager,atheer_hr.group_hr_project_manager,atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+        <menuitem name="Resignation" action="action_resignation" parent="hr_resignation"
+                  id="resignation_menu" sequence="1"
+                  groups="atheer_hr.group_hr_employee_staff,atheer_hr.group_hr_site_engineer,atheer_hr.group_hr_line_manager,atheer_hr.group_hr_project_manager,atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+    </data>
+</odoo>

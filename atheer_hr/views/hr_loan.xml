@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_hr_payslip_form_inherit1" model="ir.ui.view">
+            <field name="name">hr.payslip.form.inherit1</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <page name="salary_computation" position="after">
+                    <page string="Loan, Advance Salary &amp; Fine">
+                        <group>
+                            <group>
+                                <field name="loan_addition_amount" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('loan_addition_amount', '=', 0)]}"/>
+                            </group>
+                            <group>
+                                <field name="loan_deduction_amount" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('loan_deduction_amount', '=', 0)]}"/>
+                            </group>
+                        </group>
+                        <separator string="Loan Installments"/>
+                        <field name="installments">
+                            <tree string="Installments" create="false" editable="bottom">
+                                <field name="loan_id" readonly="1"/>
+                                <field name="date_pay" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+                                <field name="paid_check" string="Deduct" help="Deduct From Payslip ?"/>
+                                <field name="notes"/>
+                                <field name="company_id" invisible="1"/>
+                                <button name="compute_loan" string="Deduct/Revert" type="object" icon="fa-undo"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="loan_id" options='{"no_open": True, "no_create": True}'
+                                               readonly="1"/>
+                                        <field name="date_pay" readonly="1"/>
+                                        <field name="amount" readonly="1"/>
+                                        <field name="paid_check" string="Deduct" help="Deduct From Payslip ?"/>
+                                    </group>
+                                    <group>
+                                        <field name="notes"/>
+                                        <field name="company_id" options='{"no_open": True, "no_create": True}'
+                                               invisible="1"/>
+                                        <button name="compute_loan" string="Deduct/Revert" type="object" icon="fa-undo"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="view_hr_loan_form" model="ir.ui.view">
+            <field name="name">hr.loan.form</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <form string="Loan Application">
+                    <header>
+                        <!--Workflow-->
+                        <button string="Refuse" type="object" name="refuse" groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': ['|',('payslip_generated','=',True),('state','!=','hr_manager')]}"/>
+                        <button string="Refuse" type="object" name="refuse" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': ['|',('payslip_generated','=',True),('state','!=','ceo')]}"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','!=','hr_manager')]}"
+                                groups="atheer_hr.group_hr_manager"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','!=','ceo')]}"
+                                groups="atheer_hr.group_hr_ceo"/>
+                        <button name="sent_to_hr_m" string="Send to HR Manager" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_employee_staff"
+                                attrs="{'invisible': [('state','not in',('draft'))]}"
+                        />
+                        <button name="sent_to_ceo" string="Send to CEO" type="object"
+                                class="oe_highlight" groups="atheer_hr.group_hr_manager"
+                                attrs="{'invisible': [('state','not in',('hr_manager'))]}"
+                        />
+                        <button string="Approve" type="object" name="approve"
+                                class="oe_highlight" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': [('state','not in',('ceo'))]}"
+                        />
+                        <button name="split_loan" string="Split Installments" type="object"
+                                attrs="{'invisible': [('state','not in',('approved'))]}"
+                                class="oe_highlight" groups="atheer_hr.group_hr_ceo"
+                        >
+                            <i class="fa fa-columns" aria-hidden="true" title="loan"/>
+                        </button>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,hr_manager,ceo,approved"/>
+                    </header>
+                    <sheet attrs="{'readonly': [('state', 'in', ['approved','cancel'])]}">
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group attrs="{'invisible': [('check_deserve_emp','!=', True)]}">
+                            <field name="check_deserve_emp" invisible="1"/>
+                            <div style="display: block;background: #a61300;color: white;text-align: center;z-index: 1000;padding: 4px 12px;font-size:medium;">
+                                Last Loan Recovery Less Than 6 Months
+                            </div>
+                        </group>
+
+                        <group string="Employee Details" col="4">
+                            <field name="employee_id" options='{"no_open": True, "no_create": True}'
+                                   attrs="{'readonly': [('state', 'in', ['done', 'approved', 'cancel'])]}"/>
+                            <field name="department" options='{"no_open": True, "no_create": True}'/>
+                            <field name="job_id" options='{"no_open": True, "no_create": True}'/>
+                            <field name="date_of_joining"/>
+                            <field name="gross_salary"/>
+                            <field name="visa_expire"/>
+                            <field name="is_omani" invisible="1"/>
+                            <field name="emp_id" invisible="1"/>
+                            <field name="payslip_generated" invisible="1"/>
+                        </group>
+
+                        <group col="6" colspan="2">
+                            <field name="date_request" readonly="1" force_save="1"/>
+                            <field name="date_approved" readonly="1" force_save="1"/>
+                            <field name="date_recovered" readonly="1" force_save="1"/>
+                        </group>
+                        <group>
+                            <group string="Computation Details">
+                                <field name="amount"
+                                       attrs="{'readonly': [('state', 'not in', ['draft','hr_manager'])]}"/>
+                                <field name="installment_type"
+                                       attrs="{'readonly': [('state', 'not in', ['draft','hr_manager'])]}"/>
+                                <field name="no_of_month"
+                                       attrs="{'readonly': [('state', 'not in', ['draft','hr_manager'])]}"
+                                       string="No. Of Periods / Amount"/>
+                                <field name="start_date_pay"
+                                       attrs="{'readonly': [('state', 'not in', ['draft','hr_manager'])]}"/>
+                            </group>
+                            <group string="Accounting Details"
+                                   groups="atheer_hr.group_hr_accounts"
+                                   attrs="{'invisible': [('state', 'in', ['draft','hr_manager'])]}">
+                                <field name="employee_acc" options='{"no_open": True, "no_create": True}'
+                                       attrs="{'readonly': [('state', 'in', ['done', 'approved', 'cancel'])]}"/>
+                                <field name="journal" options='{"no_open": True, "no_create": True}'
+                                       groups="atheer_hr.group_hr_accounts"
+                                       attrs="{'readonly': [('state', 'in', ['done', 'approved', 'cancel'])]}"/>
+                                <field name="treasury_acc" options='{"no_open": True, "no_create": True}'
+                                       attrs="{'readonly': [('state', 'in', ['done', 'approved', 'cancel'])]}"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <group string="Remarks">
+                            <group>
+                                <field name="hr_remarks" force_save="1"
+                                       attrs="{'readonly': [('state', 'not in', ['hr_manager'])]}"/>
+                            </group>
+                            <group>
+                                <field name="ceo_remarks" force_save="1"
+                                       attrs="{'readonly': [('state', 'not in', ['ceo'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Refused Details" attrs="{'invisible':[('state','!=','cancel')]}">
+                            <group>
+                                <field name="rejected_by" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                            </group>
+                            <group>
+                                <field name="rejected_date" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Installments"
+                                  attrs="{'readonly': [('state', 'in', ['done', 'approved', 'cancel'])]}">
+                                <group>
+                                    <group>
+                                        <field name="journal_entry" options='{"no_open": True, "no_create": True}'
+                                               groups="atheer_hr.group_hr_accounts"
+                                               readonly="1" force_save="1"
+                                        />
+                                    </group>
+                                </group>
+                                <field name="installments">
+                                    <tree string="Installments" create="false" editable="bottom">
+                                        <field name="state" invisible="1"/>
+                                        <field name="date_pay" force_save="1"/>
+                                        <field name="amount"
+                                               attrs="{'readonly': [('state', 'not in', ['pa_admin', 'draft'])]}"
+                                               force_save="1"/>
+                                        <field name="paid" readonly=""/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="type" force_save="1"/>
+                                        <field name="notes" force_save="1"/>
+                                    </tree>
+                                    <form>
+                                        <group string="Installment Details" col="4">
+                                            <field name="date_pay"/>
+                                            <field name="amount"/>
+                                            <field name="type"/>
+                                            <field name="paid"/>
+                                            <field name="notes"/>
+                                            <field name="company_id" invisible="1"/>
+                                        </group>
+                                    </form>
+                                </field>
+                                <field name="notes" placeholder="Remarks ..." colspan="4"
+                                       attrs="{'readonly': [('state', 'not in', ['hr_manager'])]}"/>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="mrf_total">
+                                    <field name="amount_total" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_paid" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline">
+                                        <label for="amount_balance"/>
+                                    </div>
+                                    <field name="amount_balance" nolabel="1" class="oe_subtotal_footer_separator"
+                                           widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </page>
+                            <page name="payslips" string="Payslips">
+                                <field name="payslip_ids" widget="one2many_list"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_loan_tree" model="ir.ui.view">
+            <field name="name">hr.loan.tree</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <tree sample="1">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="date_request"/>
+                    <field name="start_date_pay"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="emp_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_loan_installment_tree" model="ir.ui.view">
+            <field name="name">hr.loan.installment.tree</field>
+            <field name="model">hr.loan.installments</field>
+            <field name="arch" type="xml">
+                <tree create="0" edit="0" delete="0" sample="1">
+                    <field name="employee_id" readonly="1"/>
+                    <field name="date_pay" readonly="1"/>
+                    <field name="amount" readonly="1"/>
+                    <field name="paid" readonly="1"/>
+                    <field name="loan_id" readonly="1"/>
+                    <field name="payslip_id" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="search_hr_loan_main" model="ir.ui.view">
+            <field name="name">hr.loan.search</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <search string="Search Loan">
+                    <filter name="state_draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="state_all" string="Processed"
+                            domain="[('state', 'not in', ('draft', 'done'))]" context="{'group_by':'state'}"/>
+                    <filter name="state_paid" string="Paid" domain="[('state', '=', 'done')]"/>
+
+                    <field name="name" string="Name"/>
+                    <field name="employee_id" string="Employee"/>
+                    <field name="department" string="Department"/>
+                    <field name="job_id" string="Job"/>
+                    <field name="date_request" string="Date Request"/>
+                    <field name="date_approved" string="Date Approved"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                        <filter name="employee" string="Employee" context="{'group_by':'employee_id'}"/>
+                        <filter name="department" string="Department" context="{'group_by':'department'}"/>
+                        <filter name="job" string="Job" context="{'group_by':'job_id'}"/>
+                        <separator/>
+                        <filter name="request_date" string="Date Request" context="{'group_by':'date_request'}"/>
+                        <filter name="approve_date" string="Date Approved" context="{'group_by':'date_approved'}"/>
+                        <filter name="payment_date" string="Date Payment" context="{'group_by':'start_date_pay'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="search_hr_loan_installment_main" model="ir.ui.view">
+            <field name="name">hr.loan.search</field>
+            <field name="model">hr.loan.installments</field>
+            <field name="arch" type="xml">
+                <search string="Search Loan Installments">
+                    <filter name="paid" string="Paid" domain="[('paid', '=', True)]"/>
+                    <field name="employee_id" string="Employee"/>
+                    <field name="date_pay" string="Installment Date"/>
+                    <field name="loan_id" string="Loan Reference "/>
+                    <group expand="0" string="Group By">
+                        <filter name="installment_date" string="Installment Date" context="{'group_by':'date_pay'}"/>
+                        <filter name="loan" string="Loan" context="{'group_by':'loan_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_hr_loan" model="ir.actions.act_window">
+            <field name="name">Loan &amp; Advance Salary</field>
+            <field name="res_model">hr.loan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_type':'loan', 'type':'loan'}</field>
+        </record>
+
+        <record id="action_hr_loan_installment" model="ir.actions.act_window">
+            <field name="name">Employee Loans Installments</field>
+            <field name="res_model">hr.loan.installments</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record forcecreate="True" id="decimal_loan" model="decimal.precision">
+            <field name="name">Loan</field>
+            <field name="digits">3</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="res_compnay_view_form_gdrie" model="ir.ui.view">
+        <field name="name">res.company.view.form.inherit.google.drive</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[last()]" position="after">
+                <page string="Google Drive Folder" name="google_drive_att">
+                    <group>
+                        <group>
+                            <field name="gdrive_client_id"/>
+                            <field name="gdrive_client_secret"/>
+                            <field name="is_google_drive_token_generated" invisible="1"/>
+                            <field name="gdrive_access_token" groups="base.group_no_one" readonly="1" password="True" />
+                            <field name="gdrive_refresh_token" groups="base.group_no_one" readonly="1" password="True" />
+                            <field name="gdrive_token_validity" groups="base.group_no_one" readonly="1" password="True" />
+                            <button class="btn btn-link" attrs="{'invisible': [ ('gdrive_client_id', '=', False), ('gdrive_client_secret', '=', False)]}"
+                                name="action_get_gdrive_auth_code"
+                                type="object">
+                                <i class="fa fa-arrow-right"></i>
+                                Setup Token
+                                </button>
+                            <button class="btn btn-link" attrs="{'invisible': [ ('is_google_drive_token_generated', '=', False)]}"
+                                name="action_get_gdrive_auth_code"
+                                type="object">
+                                <i class="fa fa-arrow-right"></i>
+                                Reset Token
+                            </button>
+                        </group>
+                        <group>
+                            <field name="drive_folder_id"/>
+                            <field name="folder_type"/>
+                            <field name="model_ids" widget="many2many_tags" options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"/>
+                        </group>
+                        <div name="google_multi_folder_description" attrs="{'invisible': [('folder_type','!=','multi_folder')]}" >
+                            <p>
+                                Go to Settings -> Google Drive -> Manage Google Folders. You can configure multi folder here.
+                            </p>
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

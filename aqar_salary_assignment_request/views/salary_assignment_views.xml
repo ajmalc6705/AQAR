@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_hr_salary_assignment_tree" model="ir.ui.view">
+        <field name="name">hr.salary.assignment.tree</field>
+        <field name="model">hr.salary.assignment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ref"/>
+                <field name="employee_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Hr salary assignment Form View-->
+    <record id="view_hr_salary_assignment_form" model="ir.ui.view">
+        <field name="name">hr.salary.assignment.form</field>
+        <field name="model">hr.salary.assignment</field>
+        <field name="arch" type="xml">
+            <form string="Salary assignment">
+                <header>
+                    <button name="action_approve" type="object" string="Confirm"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" states="cancel,confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" placeholder="IoU"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bank_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bank_account" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bank_id" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </group>
+                        <group>
+
+                            <field name="new_bank_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="new_bank_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="new_bank_account" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bank_issued" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Remarks" string="Remarks">
+                            <field name="notes" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for Salary Assignment-->
+    <record id="action_salary_assignment" model="ir.actions.act_window">
+        <field name="name">Salary Assignment</field>
+        <field name="res_model">hr.salary.assignment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Salary Assignment
+            </p>
+        </field>
+    </record>
+    <menuitem id="hr_salary_assignment_menu" name="Salary Assignment" parent="hr.menu_hr_employee_user"
+              action="action_salary_assignment"/>
+</odoo>

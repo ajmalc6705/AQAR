@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Contract Categ Tree-->
+    <record id="aqar_contract_category_tree" model="ir.ui.view">
+        <field name="name">aqar.contract.category.tree</field>
+        <field name="model">aqar.contract.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Contract Categ Form-->
+    <record id="contract_categ_form" model="ir.ui.view">
+        <field name="name">contract.categ.form</field>
+        <field name="model">aqar.contract.category</field>
+        <field name="arch" type="xml">
+            <form string="Contract Category">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="name"/>
+                            <field name="email_notification"/>
+                            <field name="odoo_notification"/>
+                        </group>
+                        <group>
+                             <field name="user_ids" widget="many2many_tags" string="Allowed Users" invisible="1"/>
+                            <field name="company_id"/>
+                            <field name="user_notification_ids" widget="many2many_tags"/>
+                            <field name="doc_expiry_before_days" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    Window Action For Contract category-->
+    <record id="action_contract_category" model="ir.actions.act_window">
+        <field name="name">Contract Category</field>
+        <field name="res_model">aqar.contract.category</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Contract Category
+            </p>
+        </field>
+    </record>
+    <!--    MenuItem-->
+    <menuitem id="aqar_contract_categ_menu" name="Contract Category" parent="aqar_contract_main_menu"
+              action="action_contract_category" sequence="60" groups="aqar_contracts.group_contract_admin"/>
+
+</odoo>

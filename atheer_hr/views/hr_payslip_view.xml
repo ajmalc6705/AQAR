@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_hr_payroll_structure_inherit" model="ir.ui.view">
+            <field name="name">hr.payroll.structure.form.inherit</field>
+            <field name="model">hr.payroll.structure</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_employee_grade_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type_id']" position='after'>
+                    <field name="is_regular_pay"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="payslip_kanban_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.kanban.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_view_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('row')]" position="before">
+                    <div class="col-2" invisible="1">
+                        <span class="float-right badge badge-secondary">
+                            <field name="payroll_hold" invisible="1"/>
+                        </span>
+                    </div>
+                    <div class="ribbon ribbon-top-right">
+                        <span class="bg-danger" attrs="{'invisible': [('payroll_hold', '=', False)]}">
+                            Payroll Hold
+                        </span>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_hr_payslip_form_payslip" model="ir.ui.view">
+            <field name="name">hr.payslip.form.payslip</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_payslip_cancel']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_payslip_draft']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <button name="action_payslip_done" position="replace">
+                    <button string="Send To HR" name="send_to_hr" groups="atheer_hr.group_hr_manager"
+                            type="object" class="oe_highlight"
+                            states="draft,verify"/>
+                    <button string="Send To Accounts" name="send_to_accounts" groups="atheer_hr.group_hr_manager"
+                            type="object" class="oe_highlight"
+                            states="draft,verify"/>
+                    <button string="Send To CEO" name="send_to_ceo" groups="account.group_account_manager"
+                            type="object" class="oe_highlight"
+                            states="with_hr,verify"/>
+                    <button string="Approve" name="action_payslip_done" states="with_ceo"
+                            groups="atheer_hr.group_hr_ceo" type="object"
+                            class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
+                    <button string="Send Back" name="send_back"
+                            attrs="{'invisible': [('state','!=','with_hr')]}"
+                            groups="atheer_hr.group_hr_manager" type="object"/>
+                    <button string="Send Back" name="send_back"
+                            attrs="{'invisible': [('state','!=','accounts')]}"
+                            groups="account.group_account_manager" type="object"/>
+                    <button string="Send Back" name="send_back"
+                            attrs="{'invisible': [('state','!=','with_ceo')]}"
+                            groups="atheer_hr.group_hr_ceo" type="object"/>
+                    <button name="action_payslip_cancel" string="CANCEL PAYSLIP" type="object"
+                            groups="atheer_hr.group_hr_manager"
+                            attrs="{'invisible': [('state', '!=', 'with_hr')]}"/>
+                    <button name="action_payslip_cancel" string="CANCEL PAYSLIP" type="object"
+                            groups="atheer_hr.group_hr_ceo" attrs="{'invisible': [('state', '!=', 'with_ceo')]}"/>
+<!--                    <button string="Back" name="draft" type="object"/>-->
+                </button>
+
+                <button name="compute_sheet" position="replace">
+                    <button string="Compute Sheet" name="compute_sheet"
+                            groups="atheer_hr.group_hr_accounts,atheer_hr.group_hr_manager"
+                            type="object" states="draft"
+                            class="oe_highlight" title="Recompute the payslip lines"/>
+                </button>
+<!--                <button name="action_refresh_from_work_entries" position="replace">-->
+<!--                    <button string="Update Worked Days" name="action_refresh_from_work_entries" type="object"-->
+<!--                            groups="atheer_hr.group_hr_accounts"-->
+<!--                            title="Recompute the worked days lines and the payslip lines, in case you modified the work entries"-->
+<!--                            states="draft"/>-->
+<!--                </button>-->
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,with_hr,with_ceo,accounts,done,close"/>
+                </field>
+
+                <xpath expr="//field[@name='struct_id']" position="after">
+                    <field name="create_direct_flag" invisible="1"/>
+                    <field name="payroll_hold" invisible="1"/>
+                    <field name="bonus_check" invisible="1"/>
+                    <field name="salary_period" invisible="1"/>
+                    <field name="no_of_months" invisible="1"/>
+                    <field name="leave_unpaid_amount" invisible="1" force_save="1"/>
+                    <field name="unpaid_leave_deductions" invisible="1" force_save="1"/>
+                    <field name="currency_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//div[hasclass('oe_button_box')]" position="before">
+                    <field name="send_back_flag" invisible="1"/>
+                    <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                            attrs="{'invisible': ['|',('payroll_hold', '=', True),('send_back_flag', '=', False)]}"/>
+                    <widget name="web_ribbon" title="Payroll Hold" bg_color="bg-danger"
+                            attrs="{'invisible': [('payroll_hold', '=', False)]}"/>
+                </xpath>
+                <xpath expr="//button[@name='action_print_payslip']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='employee_id']" position="attributes">
+                    <attribute name="options">{'no_create': True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='contract_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='struct_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                    <attribute name="readonly">1</attribute>
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='journal_id']" position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='worked_days_input']//field[@name='worked_days_line_ids']//field[@name='work_entry_type_id']"
+                       position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+                <xpath expr="//page[@name='worked_days_input']//field[@name='worked_days_line_ids']//field[@name='contract_id']"
+                       position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+                <xpath expr="//page[@name='salary_computation']//field[@name='line_ids']//field[@name='category_id']"
+                       position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+                <xpath expr="//page[@name='salary_computation']//field[@name='line_ids']//field[@name='salary_rule_id']"
+                       position="attributes">
+                    <attribute name="options">{'no_create': True,"no_open": True}</attribute>
+                </xpath>
+                <page name="salary_computation" position="after">
+                    <page string="Loan, Advance Salary &amp; Fine">
+                        <group>
+                            <group>
+                                <field name="loan_addition_amount" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('loan_addition_amount', '=', 0)]}"/>
+                            </group>
+                            <group>
+                                <field name="loan_deduction_amount" readonly="1" force_save="1"
+                                       attrs="{'invisible': [('loan_deduction_amount', '=', 0)]}"/>
+                            </group>
+                        </group>
+                        <separator string="Loan Installments"/>
+                        <field name="loan_amount" invisible="1"/>
+                        <field name="installments">
+                            <tree string="Installments" editable="bottom" create="0" delete="0">
+                                <field name="loan_id" readonly="1"/>
+                                <field name="payslip_state" invisible="1"/>
+                                <field name="is_refund" invisible="1"/>
+                                <field name="date_pay" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+                                <field name="paid_check" string="Deduct" help="Deduct From Payslip ?" readonly="1"/>
+                                <field name="proposed_amount" attrs="{'invisible': [('is_refund', '=', True)]}"/>
+                                <field name="notes"/>
+                                <field name="company_id" invisible="1"/>
+                                <button name="compute_loan" string="Deduct/Revert" type="object" icon="fa-undo"
+                                        attrs="{'invisible': [('is_refund', '=', True)]}"/>
+                                <!-- attrs="{'invisible': [('payslip_state', 'in', ['done', 'cancel'])]}" -->
+
+                            </tree>
+                        </field>
+                        <!-- <separator string="Salary Advance Installment" />
+                        <field name="advance_installments">
+                            <tree string="Salary Advance Installments" create="false" editable="bottom">
+                                <field name="advance_id" readonly="1" />
+                                <field name="date_pay" readonly="1" />
+                                <field name="payslip_state" invisible="1" />
+                                <field name="amount" readonly="1" />
+                                <field name="paid_check" string="Deduct" help="Deduct From Payslip ?" />
+                                <field name="notes" />
+                                <field name="company_id" invisible="1" />
+                                <button name="compute_advance" string="Deduct/Revert" type="object" icon="fa-undo"
+                                        attrs="{'invisible': [('payslip_state', 'in', ['done', 'cancel'])]}" />
+                            </tree>
+                        </field> -->
+                        <group>
+                            <field name="loan_amount"/>
+                        </group>
+                    </page>
+                    <page string="Timesheet / Overtime">
+                        <separator string="Timesheet Lines"/>
+                        <field name="emp_timesheet" readonly="0" force_save="1"><!--
+                               attrs="{'invisible': [('employee_category', 'not in', ('omani_labor', 'expat_labor'))]}"-->
+                            <tree editable="bottom" create="0" delete="0" edit="0">
+                                <field name="bu_cc"/>
+                                <field name="ot_id"/>
+                                <field name="month" invisible="1"/>
+                                <field name="days_worked"/>
+                                <field name="hours" string="Total Hours" widget="float_time"/>
+                            </tree>
+                            <form>
+                                <sheet>
+                                    <group>
+                                        <field name="bu_cc" options='{"no_open": True, "no_create": True}'
+                                               string="Cost Center"/>
+                                        <field name="ot_id"/>
+                                        <field name="month" invisible="1"/>
+                                        <field name="days_worked"/>
+                                        <field name="hours" string="Total Hours" widget="float_time"/>
+                                    </group>
+                                </sheet>
+                            </form>
+                        </field>
+                        <separator string="Overtime Lines"/>
+                        <field name="emp_ot_lines" force_save="1" readonly="1"><!--
+                               attrs="{'invisible': [('employee_category', 'not in', ('omani_staff', 'expat_staff'))]}"-->
+                            <tree create="0" edit="0" delete="0">
+                                <field name="employee_id" invisible="1"/>
+                                <field name="date" />
+                                <field name="ot_day_type" />
+                                <field name="duration" />
+                            </tree>
+                        </field>
+                        <field name="employee_category" invisible="1"/>
+                        <field name="ot_eligibility" invisible="1" force_save="1"/>
+                        <field name="ph_ot_eligibility" invisible="1" force_save="1"/>
+                        <group col="4" string="Worked Days Summary">
+                            <field name="payslip_day"/>
+                            <field name="total_worked_days"/>
+                            <field name="total_timesheet" widget='float_time' invisible="1"/>
+                            <field name="no_of_leaves" force_save="1"/>
+                            <!--                            <field name="annual_leaves_cash" attrs="{'invisible': [('is_leave_cash', '=', True)]}"/>-->
+                            <field name="annual_leaves" force_save="1"/>
+                            <field name="other_leaves" force_save="1"/>
+                            <field name="payable_leaves" force_save="1"/>
+                            <field name="payable_days" force_save="1"/>
+                            <!--                            <field name="phone_deduction" />-->
+                            <field name="hours_lost" widget='float_time' invisible="1"/>
+                            <field name="display_worked_days" invisible="1"/>
+                        </group>
+                        <group string="Overtime">
+                            <field name="ot_hours" widget='float_time'/>
+                            <field name="normal_ot" force_save="1"/>
+                            <field name="weekend_ot" force_save="1"/>
+                            <field name="ph_ot" force_save="1"/>
+                            <field name="total_ot_amount" force_save="1"/>
+                        </group>
+                    </page>
+                    <page string="Bonus Details" attrs="{'invisible': [('bonus_check', '=', False)]}">
+                        <group>
+                            <field name="bonus_details" nolabel="1" readonly="0" force_save="1">
+                                <tree create="0" delete="0" default_order="effective_date asc">
+                                    <field name="effective_date"/>
+                                    <field name="bonus_amount"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <label for="bonus_amount"/>
+                        <field name="bonus_amount" force_save="1" readonly="1"/>
+                    </page>
+                </page>
+                <field name="struct_id" position="after">
+                    <field name="acc_gratuity" attrs="{'invisible': [('is_final', '!=', True)]}"/>
+                    <field name="leaves" attrs="{'invisible': [('is_final', '!=', True)]}"/>
+                </field>
+                <xpath expr="//group[@name='accounting']/.." position="after">
+                    <group col="4">
+                        <field name="is_leave"
+                           attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                        <field name="is_final"
+                               attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                        <field name="is_leave_cash"
+                               attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='worked_days_line_ids']/tree/field[@name='name']" position="attributes">
+                    <attribute name="force_save">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='worked_days_line_ids']/tree/field[@name='name']" position="after">
+                    <field name="max_days" invisible="1"/>
+                    <field name="effective_days" invisible="1"/>
+                    <field name="annual_leave" invisible="1"/>
+                    <field name="month" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@name='worked_days_input']" position="attributes">
+                    <attribute name="attrs">{'invisible': [('display_worked_days', '=', False)]}</attribute>
+                </xpath>
+<!--                <xpath expr="//field[@name='worked_days_line_ids']" position="after">-->
+<!--                    <separator string="Other Deduction And"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='worked_days_line_ids']/tree/field[@name='amount']" position="before">
+                    <field name="pay_perc"/>
+                    <field name="amount_orig" invisible="1"/>
+                    <field name="amount_unpaid" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='worked_days_line_ids']/tree/field[@name='amount']" position="attributes">
+                    <attribute name="digits">[16, 3]</attribute>
+                </xpath>
+                <xpath expr="//button[@name='refund_sheet']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='quantity']" position="attributes">
+                    <attribute name="digits">[16, 3]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='amount']" position="attributes">
+                    <attribute name="digits">[16, 3]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='total']" position="attributes">
+                    <attribute name="digits">[16, 3]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='input_line_ids']/tree/field[@name='input_type_id']" position="attributes">
+                    <attribute name="string">Salary Rule</attribute>
+                </xpath>
+                <xpath expr="//field[@name='input_line_ids']" position="after">
+                    <group string="Remarks">
+                        <group>
+                            <field name="accounts_remarks" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="hr_remarks" attrs="{'readonly':[('state','!=','with_hr')]}"/>
+                            <field name="ceo_remarks" attrs="{'readonly':[('state','!=','with_ceo')]}"/>
+                        </group>
+                    </group>
+                    <group string="Refused Details" attrs="{'invisible':[('state','!=','cancel')]}">
+                        <group>
+                            <field name="rejected_by" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                        </group>
+                        <group>
+                            <field name="rejected_date" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+        <record id="hr_payslip_run_form_inherit" model="ir.ui.view">
+            <field name="name">hr.payslip.run.form.inherit</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+            <field name="arch" type="xml">
+                <button name="action_draft" position="replace">
+                    <button string="SEND BACK" type="object" name="send_back" class="oe_highlight"
+                            attrs="{'invisible': [('state','!=','with_hr')]}"
+                            groups="atheer_hr.group_hr_manager"/>
+                    <button string="SEND BACK" type="object" name="send_back" class="oe_highlight"
+                            attrs="{'invisible': [('state','!=','with_ceo')]}"
+                            groups="atheer_hr.group_hr_ceo"/>
+                    <button string="SEND BACK" type="object" name="send_back" class="oe_highlight"
+                            attrs="{'invisible': [('state','!=','accounts')]}"
+                            groups="account.group_account_manager"/>
+                    <button name="cancel" string="CANCEL" type="object" class="oe_highlight"
+                            groups="atheer_hr.group_hr_manager"
+                            attrs="{'invisible': [('state', '!=', 'with_hr')]}"/>
+                    <button name="cancel" string="CANCEL" type="object" class="oe_highlight"
+                            groups="atheer_hr.group_hr_ceo" attrs="{'invisible': [('state', '!=', 'with_ceo')]}"/>
+                    <button string="SEND TO HR" name="send_to_hr" type="object" class="oe_highlight"
+                            groups="atheer_hr.group_hr_manager"
+                            states="draft"/>
+                    <button string="Send To Finance" name="send_to_accounts" type="object" class="oe_highlight"
+                            groups="atheer_hr.group_hr_manager"
+                            states="with_hr"/>
+                    <button string="SEND TO CEO" name="send_to_ceo" type="object" class="oe_highlight"
+                            groups="account.group_account_manager"
+                            states="accounts"/>
+                    <button string="Confirm Payslips" name="confirm_payslip_run_to_queue" class="oe_highlight"
+                            groups="atheer_hr.group_hr_ceo" attrs="{'invisible': [('state', '!=', 'with_ceo')]}"
+                            type="object"/>
+                    <button name="unlink_payslips" string="Delete Payslips"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state','not in',('cancel'))]}">
+                    </button>
+                </button>
+                <xpath expr="//button[@name='%(hr_payroll.action_hr_payslip_by_employees)d']" position="attributes">
+                    <attribute name="groups">atheer_hr.group_hr_accounts</attribute>
+                </xpath>
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,with_hr,accounts,with_ceo,close"/>
+                </field>
+                <sheet position="replace">
+                    <div attrs="{'invisible': [('create_cron','=', False)]}" class="alert alert-info" role="alert"
+                         style="margin-bottom:0px;">
+                        Payslip Creation Is Under Progress...
+                    </div>
+                    <div attrs="{'invisible': [('confirm_cron','=', False)]}" class="alert alert-info" role="alert"
+                         style="margin-bottom:0px;">
+                    </div>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_payslip_employee_list" class="oe_stat_button" icon="fa-book"
+                                    type="object"
+                                    help="Payslips Withheld" attrs="{'invisible': [('overlapping_count', '=', 0)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="overlapping_count"/>
+                                    </span>
+                                    <span class="o_stat_text">Overlapping</span>
+                                </div>
+                            </button>
+                            <button name="action_employee_list" class="oe_stat_button" icon="fa-book" type="object"
+                                    help="Payslips Withheld" attrs="{'invisible': [('payroll_hold_count', '=', 0)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="payroll_hold_count"/>
+                                    </span>
+                                    <span class="o_stat_text">Payslips Hold</span>
+                                </div>
+                            </button>
+                            <button name="action_open_payslips" groups="atheer_hr.group_hr_accounts"
+                                    class="oe_stat_button" icon="fa-book" type="object"
+                                    help="Generated Payslips" attrs="{'invisible': [('payslip_count', '=', 0)]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="payslip_count"/>
+                                    </span>
+                                    <span class="o_stat_text">Payslips</span>
+                                </div>
+                            </button>
+                        </div>
+                        <field name="employee_list" invisible="1"/>
+                        <field name="payslip_created" invisible="1"/>
+                        <field name="payroll_hold" invisible="1"/>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <label for="name" string="Batch Name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. April 2021"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <label for="date_start" string="Period"/>
+                                <div class="o_row">
+                                    <field name="date_start" class="oe_inline o_hr_narrow_field"/> - <field name="date_end" class="oe_inline o_hr_narrow_field"/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="country_id" invisible="1"/>
+                                <field name="country_code" invisible="1"/>
+                            </group>
+                        </group>
+                        <group col="4">
+                            <field name="confirm_cron" invisible="1"/>
+                            <field name="create_cron" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="total_wage"/>
+                            <field name="total_basic"/>
+                        </group>
+                        <field name="count_salary_hold" invisible="1"/>
+                        <group attrs="{'invisible': [('count_salary_hold','&lt;', 1)]}">
+                            <div style="display: block;
+        background: #a61300;
+        color: white;
+        text-align: center;
+        z-index: 1000;
+        padding: 4px 12px;
+        font-size:medium;">
+                                Some payslips are put on hold until the leave return forms are submitted.
+                            </div>
+                        </group>
+                        <separater name="payslip_ids" string="Payslips"/>
+                        <notebook>
+                            <page name="payslips" string="Payslips">
+                                <field name="slip_ids" default_order="number asc"/>
+                            </page>
+                            <!--                        <xpath expr="//field[@name='slip_ids]"-->
+                            <!--                               position="attributes">-->
+                            <!--                            <attribute name="groups">atheer_hr.group_hr_accounts</attribute>-->
+                            <!--                        </xpath>-->
+
+                        </notebook>
+                    </sheet>
+                </sheet>
+
+            </field>
+        </record>
+        <!-- tree view for sif payslip run-->
+        <record id="hr_payslip_run_tree_inherit2" model="ir.ui.view">
+            <field name="name">hr.payslip.run.tree.inherit2</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="inherit_id" ref="hr_payroll.hr_payslip_run_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="total_amount"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="hr_salary_rule_form_inherit" model="ir.ui.view">
+            <field name="name">hr.salary.rule.form.inherit</field>
+            <field name="model">hr.salary.rule</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+            <field name="arch" type="xml">
+                <field name="active" position="after">
+                    <field name="type"/>
+                </field>
+                <xpath expr="//page[@name='general']/group[@name='general_conditions']" position="after">
+                    <group string="Final Settlement Computation">
+                        <group>
+                            <field name="fs_amount_select" readonly="0" force_save="1"/>
+                            <field name="fs_amount_percentage_base" readonly="0" force_save="1"
+                                   attrs="{'invisible':[('fs_amount_select','!=','percentage')]}"/>
+                            <field name="fs_quantity" readonly="0" force_save="1"
+                                   attrs="{'invisible':[('fs_amount_select','=','code')]}"/>
+                            <field name="fs_amount_fix" readonly="0" force_save="1"
+                                   attrs="{'invisible':[('fs_amount_select','!=','fix')]}"/>
+                            <field name="fs_amount_percentage" readonly="0" force_save="1"
+                                   attrs="{'invisible':[('fs_amount_select','!=','percentage')]}"/>
+                            <field name="fs_amount_python_compute" readonly="0" force_save="1"
+                                   attrs="{'invisible':[('fs_amount_select','!=','code')]}"/>
+                        </group>
+                    </group>
+                    <!--                    <group>-->
+                    <group string="Rule Types">
+                        <field name="basic"/>
+                        <field name="bonus"/>
+                        <field name="net_salary"/>
+                        <field name="loan"/>
+                        <field name="addition"/>
+                        <field name="deletion"/>
+                        <field name="overtime"/>
+                    </group>
+                    <!--                    </group>-->
+                </xpath>
+            </field>
+        </record>
+        <!--        report for tree view payslip details-->
+        <record id="view_salary_details_tree" model="ir.ui.view">
+            <field name="name">Hr Payslip</field>
+            <field name="model">hr.payslip.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="employee_id" widget="many2one_clickable"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="slip_id" widget="many2one_clickable"/>
+                    <field name="category_id"/>
+                    <field name="code"/>
+                    <field name="amount"/>
+                    <field name="total"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_payroll.hr_payslip_action_view_to_pay" model="ir.actions.act_window">
+            <field name="name">Payslips To Pay</field>
+            <field name="res_model">hr.payslip</field>
+            <field name="view_mode">tree,kanban,form,pivot</field>
+            <field name="search_view_id" ref="hr_payroll.view_hr_payslip_filter"/>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--        search view-->
+        <record id="view_salary_details_filter_search" model="ir.ui.view">
+            <field name="name">hr.payslip.line.search</field>
+            <field name="model">hr.payslip.line</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="employee_id"/>
+                    <field name="amount" filter_domain="[('amount','ilike',self)]"/>
+                    <group string="Group By">
+                        <filter string="PASI" name="contract"
+                                domain="['|','|','|',('code', '=', 'DJSS'),('code', '=', 'DSI'),('code', '=', 'ASI'),('code', '=', 'AJSS')]"/>
+                        <filter string="Code" name="code" context="{'group_by':'code'}"/>
+                        <filter string="Date" name="date_from" context="{'group_by':'date_from'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--        action-->
+        <record id="action_salary_details" model="ir.actions.act_window">
+            <field name="name">Hr Payslip Details</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.payslip.line</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="view_id" ref="view_salary_details_tree"/>
+        </record>
+
+
+        <!--        menu -->
+        <menuitem name="Payslip Details" parent="hr_payroll.menu_hr_payroll_report" id="menu_open_view_salary_details"
+                  action="action_salary_details" sequence='20'/>
+
+        <record id="payroll_leave_hr_work_entry_type_view_form_inherit" model="ir.ui.view">
+            <field name="name">payroll.leave.hr.work.entry.type.view.form.inherit</field>
+            <field name="model">hr.work.entry.type</field>
+            <field name="inherit_id" ref="hr_work_entry.hr_work_entry_type_view_form"/>
+            <field name="arch" type="xml">
+                <group name="time_off" position="inside">
+                    <field name="pay_perc"/>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

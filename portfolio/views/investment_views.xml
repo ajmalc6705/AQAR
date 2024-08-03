@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="portfolio_investment_tree" model="ir.ui.view">
+        <field name="name">investment.tree</field>
+        <field name="model">portfolio.investment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="investment_company"/>
+                <field name="investor_id"/>
+                <field name="sector_id"/>
+                <field name="sub_sector_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state in ('done')"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Investment Form View-->
+    <record id="portfolio_investment_form" model="ir.ui.view">
+        <field name="name">investment.form</field>
+        <field name="model">portfolio.investment</field>
+        <field name="arch" type="xml">
+            <form string="My Portfolio">
+                <header>
+                    <button name="action_done" class="oe_highlight" states="draft" string="Done"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,done"
+                            string="Reset to draft" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <button name="action_cancel" class="oe_highlight" states="draft"
+                            string="Cancel" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div name="button_box" position="inside">
+                        <button class="oe_stat_button" type="object"
+                                name="get_purchases"
+                                icon="fa-pencil-square-o"
+                               attrs="{'invisible': [('purchase_count', '=', 0)]}">
+                            <field name="purchase_count" string="Purchases" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="get_sales"
+                                icon="fa-pencil-square-o"
+                               attrs="{'invisible': [('sale_count', '=', 0)]}">
+                            <field name="sale_count" string="Sales" widget="statinfo"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="get_dividends"
+                                icon="fa-pencil-square-o"
+                               attrs="{'invisible': [('dividend_count', '=', 0)]}">
+                            <field name="dividend_count" string="Dividend" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="portfolio_name" placeholder="e.g. Portfolio Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Portfolio">
+                            <field name="investor_id" domain="[('is_investor', '=', True)]"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="investment_company" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="invest_company_code" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="portfolio_type" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="sector_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="sub_sector_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="exchange_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="market_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                        <group string="Company Info">
+                            <field name="company_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="currency_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="country_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="target_date"/>
+                            <field name="target_rate"/>
+                            <field name="face_value" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="paid_up_capital" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="public_issue" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Additional Info" String="Additional Info">
+                            <group>
+                                <group>
+                                    <field name="share_in_hand" readonly="1"/>
+                                    <field name="invested_value" readonly="1"/>
+                                    <field name="cost_per_share" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="current_market_rate" readonly="1"/>
+                                    <field name="market_fare_value" readonly="1"/>
+                                    <field name="holding_share_percent" force_save="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="Notes" String="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for Portfolio-->
+    <record id="action_investment" model="ir.actions.act_window">
+        <field name="name">My Portfolio</field>
+        <field name="res_model">portfolio.investment</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                My Portfolio
+            </p>
+        </field>
+    </record>
+    <!--Portfolio Menu -->
+    <menuitem id="portfolio_main_menu" name="Portfolio"
+              web_icon="portfolio,static/description/icon.png" groups="portfolio.group_portfolio_user"/>
+    <menuitem id="investment_menu" name="My Portfolio" parent="portfolio_main_menu" action="action_investment"/>
+</odoo>

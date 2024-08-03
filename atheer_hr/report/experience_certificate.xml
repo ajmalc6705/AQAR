@@ -1,0 +1,105 @@
+<odoo>
+    <template id="report_experience_certificate">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="atheer_hr.af_external_layout">
+                    <div style="">
+                        <div class="page" style="padding: 14px;">
+                            <table width="100%" style="border:none;">
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>
+                                                <t t-esc="doc.name"/>
+                                            </span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>
+                                            <span>
+                                                <t t-esc="datetime.datetime.now().strftime('%d-%m-%Y')"/>
+                                            </span>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <div style="font-size:16px;width:100%">
+                                <span style="font-size:22px;">
+                                    <center>
+                                        <strong>
+                                            <u>WHOMSEVER&#160; MAY&#160; IT&#160; CONCERN</u>
+                                        </strong>
+                                    </center>
+                                </span>
+                                <br/>
+                                <p>This is to certify that, <strong>Mr.<t t-esc="doc.employee_id.name"/></strong>&#160;<t
+                                        t-if="doc.employee_id.is_omani=='expat'">holding <strong><t t-esc="doc.employee_id.country_id.name"/></strong> Passport Number
+                                   <strong> <t t-esc="doc.employee_id.passport_no"/></strong>&#160;and
+                                </t>
+                                    bearing resident card number&#160;
+                                    <strong><t t-esc="doc.employee_id.civil_card_no"/> </strong>&#160;has worked with us since &#160;<strong>
+                                        <t t-esc="doc.employee_id.joining_date.strftime('%d-%m-%Y')"/>
+                                    </strong> &#160;to till
+                                    date as
+                                    <strong><t t-esc="doc.resign_date.strftime('%d-%m-%Y')"/></strong>
+                                    in the &#160;
+                                    <strong> <t t-esc="doc.employee_id.department_id.name"/></strong>
+                                    division of our organization.
+                                </p>
+                                <br/>
+                                <br/>
+                                <p>
+                                    During the tenure of his period, we found him to be good at work. We wish him all
+                                    the very best in his future endeavors.
+                                </p>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <span>
+                                    <b>For Atheer Real Estate</b>
+                                </span>
+                                <br/>
+                                <br/>
+                                <span>
+                                    <b>VINOTH.K</b>
+                                </span>
+                                <br/>
+                                <span>
+                                    <b>ASST MANAGER-HR &amp; ADMIN</b>
+                                </span>
+                                <br/>
+                                <br/>
+                                <span>
+                                    <b>Human Resources Department</b>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+     <record id="paperformat_af_experience_certificate" model="report.paperformat">
+            <field name="name">Employe A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+
+
+</odoo>

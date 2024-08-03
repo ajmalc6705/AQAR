@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_account_payment_inherited" model="ir.ui.view">
+            <field name="name">account.payment.form.inherited</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account_check_printing.view_account_payment_form_inherited" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='print_checks']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_unmark_sent']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_void_check']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_payment_check" model="ir.ui.view">
+            <field name="name">account.payment.cheque.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <header position="after">
+<!--                    Cheque status for Payments / receipts-->
+                    <widget name="web_ribbon" title="Printed"
+                            attrs="{'invisible': [('cheque_state', '!=', 'printed')]}"/>
+                    <widget name="web_ribbon" title="Re-Print Requested"
+                            attrs="{'invisible': [('cheque_state', '!=', 're_print')]}"/>
+                    <widget name="web_ribbon" title="Re-Printed"
+                            attrs="{'invisible': [('cheque_state', '!=', 'reprint')]}"/>
+                </header>
+                <button name="action_post" position="before">
+                    <!--                check buttons-->
+                    <button name="print_check_v" class="oe_highlight" string="Print Cheque"
+                            type="object" attrs="{'invisible': ['|', ('state', '!=', 'posted'), ('cheque_state', 'not in', ('not_print', 'cheque_reprint'))]}" invisible="1">
+                    </button>
+                    <button name="request_reprint_check" class="oe_highlight" string="Request Reprint Cheque"
+                            type="object"
+                            attrs="{'invisible': ['|', ('state', '!=', 'posted'), ('cheque_state', '!=', 'printed')]}">
+                    </button>
+                    <button name="reprint_check" class="oe_highlight" string="Approve"
+                            type="object" groups="account.group_account_manager"
+                            attrs="{'invisible': ['|', ('state', '!=', 'posted'), ('cheque_state', '!=', 're_print')]}">
+                    </button>
+                    <button name="update_cheque_no" class="oe_highlight" string="Update Cheque Number"
+                            type="object"
+                            attrs="{'invisible': ['|', ('state', '!=', 'posted'), ('cheque_state', '!=', 'cheque_reprint')]}">
+                    </button>
+                    <button name="cheque_clear_pdc" class="oe_highlight" string="Check Cleared"
+                            type="object"
+                            attrs="{'invisible':['|', '|', ('transaction_type', 'not in', ('pdc')), ('cheque_state', '!=', 'printed'), ('pdc_state', 'not in', ('pending'))]}">
+                    </button>
+                </button>
+
+                <xpath expr="//field[@name='payment_method_line_id']" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </xpath>
+
+                <field name="partner_id" position="before">
+                    <field name="transaction_type" widget="radio"
+                           attrs="{'readonly': [('state', 'in', ['posted', 'cancel', 'cheque_printed', 'cheque_print_request', 'cheque_reprint'])]}"/>
+                </field>
+                <field name="date" position="after">
+                    <field name="cheque_state" invisible="1"/>
+                    <field name="effective_date" string="Payment Date"
+                           attrs="{'invisible': [('transaction_type','not in',('pdc'))],'required': [('transaction_type','in',('pdc'))],'readonly': [('state', 'in', ['posted', 'cancel', 'cheque_printed', 'cheque_print_request', 'cheque_reprint'])]}"/>
+                    <field name="pdc_state" invisible="1"/>
+                    <field name="pdc_move_id" invisible="1"/>
+                </field>
+                <field name="journal_id" position="after">
+                    <field name="bearer"
+                           attrs="{'readonly': [('state', 'in', ['posted', 'cancel', 'cheque_printed', 'cheque_print_request', 'cheque_reprint'])],'required':[('transaction_type', '=', 'pdc')]}"/>
+                    <field name="cheque_no"
+                           attrs="{'readonly': [('state', 'in', ['posted', 'cancel', 'cheque_printed', 'cheque_print_request', 'cheque_reprint'])]}"/>
+                    <field name="purpose_id" invisible="1"/>
+                </field>
+                <xpath expr="//form/sheet" position="inside">
+                    <notebook>
+                        <page invisible="1" name="cancelled_cheques" string="Cancelled Cheques" states="posted">
+                            <field name="cancelled_cheques">
+                                <tree create="0" delete="0" editable="bottom">
+                                    <field name="create_date" readonly="1"/>
+                                    <field name="create_uid" readonly="1"/>
+                                    <field name="cheque_number" readonly="1"/>
+                                    <field name="bearer" readonly="1"/>
+                                    <field name="amount" readonly="1"/>
+                                    <field name="remarks"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+         <record id="view_account_payment_tree_transaction" model="ir.ui.view">
+        <field name="name">account.payment.tree.transaction</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_tree" />
+        <field name="arch" type="xml">
+            <field name="journal_id" position="after">
+                <field name="transaction_type"/>
+            </field>
+            <field name="payment_method_line_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+
+            </field>
+        </field>
+    </record>
+
+    </data>
+</odoo>

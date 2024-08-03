@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="property_resale_tree" model="ir.ui.view">
+        <field name="name">property.resale.tree</field>
+        <field name="model">property.resale</field>
+        <field name="arch" type="xml">
+            <tree edit="False" create="False">
+                <field name="sale_id"/>
+                <field name="partner_id"/>
+                <field name="new_partner_id"/>
+                <field name="new_sale_date"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Resale Form-->
+    <record id="property_resale_form" model="ir.ui.view">
+        <field name="name">property.resale.form</field>
+        <field name="model">property.resale</field>
+        <field name="arch" type="xml">
+            <form edit="False" create="False">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_id"/>
+                            <field name="partner_id"/>
+                            <field name="sale_date"/>
+                            <field name="amount_total"/>
+                        </group>
+                        <group>
+                            <field name="new_partner_id"/>
+                            <field name="new_sale_date"/>
+                            <field name="new_sale_value"/>
+                            <field name="company_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_resale" model="ir.actions.act_window">
+        <field name="name">Resale</field>
+        <field name="res_model">property.resale</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Property Resale
+            </p>
+        </field>
+    </record>
+    <menuitem id="resale_menu" name="Resale" parent="property_sale_main_menu"
+              sequence="40"/>
+    <menuitem id="property_resale_menu" name="Resale" parent="resale_menu"
+              action="action_resale" sequence="60"/>
+</odoo>

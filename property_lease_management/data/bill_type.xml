@@ -1,0 +1,16 @@
+<odoo>
+	<data noupdate="1">
+        <record model="bill.type" id="atr_bill_type_electricity">
+            <field name="name">Electricity</field>
+        </record>
+        <record model="bill.type" id="atr_bill_type_water">
+            <field name="name">Water</field>
+        </record>
+        <record model="bill.type" id="atr_bill_type_wifi">
+            <field name="name">Wifi</field>
+        </record>
+        <record model="bill.type" id="atr_bill_type_sewage_removal">
+            <field name="name">Sewage removal</field>
+        </record>
+    </data>
+</odoo>

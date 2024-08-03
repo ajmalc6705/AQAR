@@ -1,0 +1,37 @@
+.o_kanban_view.o_property_kanban {
+    .ribbon {
+        &::before, &::after {
+            display: none;
+        }
+
+        span {
+            background-color: $o-brand-odoo;
+            padding: 5px;
+            font-size: small;
+            z-index: unset;
+        }
+    }
+    .ribbon-top-right {
+        margin-top: -9px;
+
+        span {
+            left: 12px;
+            right: 30px;
+            height: 25px;
+            top: 18px;
+        }
+    }
+}
+
+.property_checklist_form {
+    .o_group {
+        &.o_inner_group {
+            > tbody > tr > td {
+                &.o_td_label {
+                    width: 70% !important;
+                }
+            }
+        }
+    }
+}
+

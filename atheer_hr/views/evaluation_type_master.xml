@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_performance_evaluation_type_tree" model="ir.ui.view">
+            <field name="name">Evaluation Type</field>
+            <field name="model">performance.evaluation.type</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Evaluation Type" >
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_performance_evaluation_type_form" model="ir.ui.view">
+            <field name="name">Evaluation Type</field>
+            <field name="model">performance.evaluation.type</field>
+            <field name="arch" type="xml">
+                <form string="Evaluation Type" >
+                    <sheet>
+                        <group string="Evaluation Type"> 
+                            <group>
+                                <field name="name" />
+                            </group>
+                            <group> 
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_performance_evaluation_type" model="ir.actions.act_window">
+            <field name="name">Evaluation Type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">performance.evaluation.type</field>
+        </record>
+        <menuitem name="Evaluation Type" parent="configuration_menu" action="action_performance_evaluation_type" groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo" id="performance_evaluation_type_menu" sequence="10"/>
+    </data>
+</odoo>

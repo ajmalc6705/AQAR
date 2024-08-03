@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_res_config_settings_extra_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="hr.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='employee_rights_setting_container']" position="after">
+                    <h2>Annual Leave</h2>
+                    <div class="row mt16 o_settings_container" name="annual_leave_setting_container">
+                        <div class="col-12 o_setting_box" id="annual_leave_setting" title="Annual Leave">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="annual_leave_calc_rate" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="annual_leave_calc_rate" class="text-center oe_inline" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="annual_leave_type" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="annual_leave_type" class="text-center oe_inline" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Notifications</h2>
+                    <div class="row mt16 o_settings_container" name="notification_setting_container">
+                        <div class="col-12 o_setting_box" id="notification_setting_" title="Notifications">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="visa_notification" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="visa_notification" class="text-center oe_inline"
+                                                   widget="many2many_tags"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="passport_notification" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="passport_notification" class="text-center oe_inline"
+                                                   widget="many2many_tags"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="civil_notification" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="civil_notification" class="text-center oe_inline"
+                                                   widget="many2many_tags"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="contract_notification" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="contract_notification" class="text-center oe_inline"
+                                                   widget="many2many_tags"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="doc_notification" class="col-lg-3"/>
+                                        <div class="content-group">
+                                            <field name="doc_notification" class="text-center oe_inline"
+                                                   widget="many2many_tags"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <!--    settings grace minutes field-->
+        <record id="attendance_res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.attendance</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="70"/>
+            <field name="inherit_id" ref="hr_attendance.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='hr_attendance']" position="inside">
+                    <div class="app_settings_block" groups="hr_attendance.group_hr_attendance_manager">
+                        <h2>Grace Minutes</h2>
+                        <div class="row mt16 o_settings_container" name="grace_setting_container">
+                            <div class="col-12 col-lg-6 o_setting_box"
+                                 title="Set PIN codes in the employee detail form (in HR Settings tab).">
+                                <div class="o_setting_right_pane">
+                                    <!--                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."-->
+                                    <!--                                  aria-label="Values set here are company-specific." role="img"/>-->
+                                    <div class="text-muted">
+                                        Set grace minutes for employee for a month.
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="attendance_grace_minutes" string="Grace Minutes"
+                                                   class="col-lg-3 o_light_label"/>
+                                            <field name="attendance_grace_minutes"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maintenance_update_wizard" model="ir.ui.view">
+            <field name="name">Update Status</field>
+            <field name="model">maintenance.update</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <strong>Are You Sure want to Change the Status</strong>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="update_confirm" string="Send for Approval (All)" type="object"
+                                class="oe_highlight"/>
+                        <button name="update_new_approve" string="Approve (All)" type="object" class="oe_highlight"/>
+                        <button name="update_start_the_work" string="Start the Work (All)" type="object"
+                                class="oe_highlight"/>
+                        <button name="update_mark_completed" string="Mark as Completed (All)" type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+
+    <record id="maintenance_update_action" model="ir.actions.act_window">
+        <field name="name">Update Status</field>
+        <field name="res_model">maintenance.update</field>
+        <field name="binding_model_id" ref="model_property_maintenance"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <!--    <act_window name="Update Status"-->
+    <!--                id="maintenance_update_action"-->
+    <!--                res_model="maintenance.update"-->
+    <!--                binding_model="property.maintenance"-->
+    <!--                binding_views="list"-->
+    <!--                view_mode="form"-->
+    <!--                target="new"-->
+    <!--    />-->
+</odoo>

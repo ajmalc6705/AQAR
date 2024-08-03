@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="journal_cheque_params" model="ir.ui.view">
+            <field name="name">Cheque Field Positions</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page name="cheque_params" string="Cheque Printing" attrs="{'invisible': [('type', '!=', 'bank')]}">
+                        <p>Specify the dimensions in cm</p>
+                        <group>
+                            <group string="Cheque Date">
+                                <field name="date_top"/>
+                                <field name="date_left"/>
+                            </group>
+                             <group string="Payee">
+                                <field name="payee_top"/>
+                                <field name="payee_left"/>
+                            </group>
+                            <group string="Bearer">
+                                <field name="bearer_top"/>
+                                <field name="bearer_left"/>
+                            </group>
+                            <group string="Amount in Words(Line 1)">
+                                <field name="amt_line1_top"/>
+                                <field name="amt_line1_left"/>
+                                <field name="amt_line1_width"/>
+                            </group>
+                            <group string="Amount in Words(Line 2)">
+                                <field name="amt_line2_top"/>
+                                <field name="amt_line2_left"/>
+                            </group>
+                            <group string="Amount">
+                                <field name="amt_top"/>
+                                <field name="amt_left"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

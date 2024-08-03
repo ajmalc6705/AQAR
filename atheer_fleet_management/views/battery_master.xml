@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_master_battery_form" model="ir.ui.view">
+            <field name="name">master.battery.form</field>
+            <field name="model">master.battery</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="vehicle_id" required="1"/>
+                                <field name="purchased_date"/>
+                                <field name="model_number"/>
+                                <field name="brand_name" required="1"/>
+                                <field name="warranty_expiry_date"/>
+                            </group>
+                            <group>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <notebook invisible="1">
+                            <page string="Documents" name="atheer_documents">
+                                <field name="document_ids" widget="one2many">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="doc_type"/>
+                                        <field name="issue_date" required="1"/>
+                                        <field name="expiry_date" required="1"/>
+                                        <field name="doc_dec"/>
+                                        <field name="attachment_ids" widget="many2many_binary"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_master_battery_tree" model="ir.ui.view">
+            <field name="name">master.battery.tree</field>
+            <field name="model">master.battery</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="purchased_date"/>
+                    <field name="model_number"/>
+                    <field name="brand_name"/>
+                    <field name="warranty_expiry_date"/>
+                    <field name="company_id" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_master_battery" model="ir.actions.act_window">
+            <field name="name">Master Battery</field>
+            <field name="res_model">master.battery</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="atheer_fleet_management.view_master_battery_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data yet!
+                </p>
+                <p>
+                    Create New Battery
+                </p>
+            </field>
+
+        </record>
+        <menuitem id="menu_master_battery" name="Battery"
+                  parent="atheer_fleet_management.menu_master_masters"
+                  sequence="30"
+                  action="atheer_fleet_management.action_master_battery"/>
+    </data>
+</odoo>

@@ -1,0 +1,47 @@
+<odoo>
+	<data noupdate="1">
+        <record model="ir.sequence" id="atr_property_vacating_information_sequence">
+            <field name="name">Sequence For Vacating Information</field>
+            <field name="code">atr.vacating.information.sequence</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">VI/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record model="deduction.type" id="atr_deduction_type_rent">
+            <field name="name">Rent</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_office_comm">
+            <field name="name">Office Commission</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_municipality">
+            <field name="name">Municipality Attestation chrg</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_electric_bill">
+            <field name="name">Unpaid Electric Bil</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_Unpaid_Water_Bill">
+            <field name="name">Unpaid Water Bill</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_cleaning_of_the_unit">
+            <field name="name">Cleaning of the unit </field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_Other">
+            <field name="name">Other</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="deduction.type" id="atr_deduction_type_maitain">
+            <field name="name">Maintain Charge</field>
+            <field name="is_default_type">True</field>
+        </record>
+    </data>
+</odoo>

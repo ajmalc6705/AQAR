@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="investment_market_tree_view" model="ir.ui.view">
+        <field name="name">investment.market.tree</field>
+        <field name="model">investment.market</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_investment_market" model="ir.actions.act_window">
+        <field name="name">Market</field>
+        <field name="res_model">investment.market</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Investment Market
+            </p>
+        </field>
+    </record>
+    <menuitem id="investment_market_menu" name="Investment Market" parent="investment_config_menu"
+              sequence="60"
+              action="action_investment_market"/>
+</odoo>

@@ -1,0 +1,164 @@
+<odoo>
+
+    <record id="view_hr_payroll_release_form" model="ir.ui.view">
+        <field name="name">hr.payroll.release.form</field>
+        <field name="model">hr.payroll.release</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--Buttons-->
+                    <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_accounts"
+                            attrs="{'invisible': [('state','not in',['accounts'])]}"/>
+                    <button name="send_back" string="Send Back" type="object"
+                            attrs="{'invisible': [('state','!=','accounts')]}"
+                            groups="atheer_hr.group_hr_accounts"/>
+                    <button name="send_to_accounts"
+                            string="SEND TO ACCOUNTS"
+                            groups="atheer_hr.group_hr_manager"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'hr')]}"/>
+                    <button name="release"
+                            string="Release"
+                            type="object"
+                            class="oe_highlight" groups="atheer_hr.group_hr_accounts"
+                            attrs="{'invisible': [('state', '!=', 'accounts')]}"
+                    />
+                    <button name="create_addition"
+                            string="Create Addition"
+                            type="object"
+                            class="oe_highlight" groups="atheer_hr.group_hr_accounts"
+                            attrs="{'invisible': ['|',('state', '!=', 'released'),('addition_created', '=', True)]}"
+                    />
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="hr,accounts,released"/>
+                </header>
+                <sheet attrs="{'readonly': [('state', 'in', ['released','refuse'])]}">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_payroll_hold" type="object"
+                                class="oe_stat_button" icon="fa-th-list" string="Payroll Hold"
+                                attrs="{'invisible':[('state','!=','released')]}">
+                        </button>
+                    </div>
+                    <field name="send_back_flag" invisible="1"/>
+                    <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                            attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                    <h1>
+                        <label for="name"/>
+                        <field name="name" class="oe_inline" readonly="1"/>
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="payroll_hold_id" options='{"no_open": True, "no_create": True}'/>
+                        </group>
+                    </group>
+                    <group string="Payroll Hold Information">
+                        <group>
+                            <field name="employee_id" readonly="1" force_save="1"
+                                   options='{"no_open": True, "no_create": True}'/>
+                            <field name="company_id" invisible="1"/>
+                            <label for="date_from" string="Period"/>
+                            <div>
+                                <field name="date_from" class="oe_inline" readonly="1" force_save="1"/>
+                                -
+                                <field name="date_to" class="oe_inline"
+                                       readonly="1" force_save="1"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="designation" readonly="1" force_save="1"
+                                   options='{"no_open": True, "no_create": True}'/>
+                            <field name="department" readonly="1" force_save="1"
+                                   options='{"no_open": True, "no_create": True}'/>
+                            <field name="reason" readonly="1" force_save="1"/>
+                            <field name="addition_created" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="effective_date"/>
+                        </group>
+                    </group>
+                    <group string="Remarks">
+                        <group>
+                            <field name="hr_remarks" attrs="{'readonly':[('state','!=','hr')]}" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="account_remarks" attrs="{'readonly':[('state','!=','accounts')]}"
+                                   force_save="1"/>
+                        </group>
+                    </group>
+                    <group string="Refused Details" attrs="{'invisible':[('state','!=','refuse')]}">
+                        <group>
+                            <field name="rejected_by" options='{"no_open": True, "no_create": True}'
+                                   attrs="{'invisible':[('state','!=','refuse')]}"/>
+                        </group>
+                        <group>
+                            <field name="rejected_date" attrs="{'invisible':[('state','!=','refuse')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_payroll_release_search" model="ir.ui.view">
+        <field name="name">hr.payroll.release.search</field>
+        <field name="model">hr.payroll.release</field>
+        <field name="arch" type="xml">
+            <search string="Payroll Release">
+                <field name="name" string="No"/>
+                <field name="employee_id" string="Employees"
+                       filter_domain="[('employee_id.name','ilike',self)]"/>
+                <field name="department" string="Department"/>
+                <field name="designation" string="Designation"/>
+                <field name="reason"/>
+                <group expand="0" string="Group By">
+                    <filter domain="[('state', '=', 'hr')]" name="hr" string="HR"/>
+                    <filter domain="[('state', '=', 'accounts')]" name="accounts" string="Accounts"/>
+                    <filter domain="[('state', '=', 'released')]" name="released" string="Released"/>
+                    <filter name="group_employee" string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_payroll_release_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.release.tree</field>
+        <field name="model">hr.payroll.release</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="payroll_hold_id"/>
+                <field name="employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="reason"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_payroll_release" model="ir.actions.act_window">
+        <field name="name">Payroll Release</field>
+        <field name="res_model">hr.payroll.release</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_payroll_release_search"/>
+    </record>
+
+    <menuitem id="menu_payroll_release"
+              parent="atheer_hr.menu_hold"
+              name="Payroll Release"
+              action="action_hr_payroll_release"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"
+              sequence="100"
+    />
+</odoo>

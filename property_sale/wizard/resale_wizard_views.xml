@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_resale_wizard_form">
+        <field name="name">resale.wizard.form.inherit</field>
+        <field name="model">resale.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Community">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sale_id"/>
+                            <field name="partner_id"/>
+                            <field name="sale_date"/>
+                            <field name="amount_total"/>
+                        </group>
+                        <group>
+                            <field name="new_partner_id"/>
+                            <field name="new_sale_date"/>
+                            <field name="new_sale_value"/>
+                            <field name="company_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="create_resale" type="object" string="Create Resale" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_resale_wizard">
+        <field name="name">Resale</field>
+        <field name="res_model">resale.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

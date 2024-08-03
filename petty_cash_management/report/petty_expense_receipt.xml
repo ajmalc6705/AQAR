@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--report for petty_cash expense receipt-->
+        <template id="report_petty_cash_expense_receipt_custom">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <div class="row" width="100%" style="padding-top:35px;">
+                                <div class="col-3">
+                                    <table class="table table-sm" style="height:35px; width:80%;">
+                                        <tr class="border-black o_total" style="line-height: 68px;width:80%;">
+                                            <td sytle="text-align:left !important;">
+                                                Amount:
+                                                <span t-field="o.amount"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-4" style="text-align:center;font-weight:bold;color:#af9664;">
+                                    <u>
+                                        <h5>PETTY CASH VOUCHER</h5>
+                                    </u>
+                                </div>
+                                <div class="col-5" align="right">
+                                    <table class="table table-bordered"
+                                           style="height:32px; width:90%;margin-right:-5px;">
+                                        <tr class="border-black o_total">
+                                            <td sytle="text-align:left !important; width:40%;">
+                                                Created On :
+                                            </td>
+                                            <td sytle="text-align:left !important; width:60%;">
+                                                <!--                                                <t t-out="tx.create_date.date()"/>-->
+                                                <span t-field="o.create_date" t-options='{"format": "dd/MM/yyyy"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                Voucher No :
+                                            </td>
+                                            <td sytle="text-align:left !important;width:60%;">
+                                                <span t-field="o.name"/>
+                                            </td>
+                                        </tr>
+                                        <!--                                        <tr class="border-black o_total">-->
+                                        <!--                                            <td sytle="text-align:left !important;">-->
+                                        <!--                                                Date :-->
+                                        <!--                                            </td>-->
+                                        <!--                                            <td sytle="text-align:left !important;">-->
+                                        <!--                                                <span t-field="o.date"/>-->
+                                        <!--                                            </td>-->
+                                        <!--                                        </tr>-->
+                                        <tr>
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                Ref. Number :
+                                            </td>
+                                            <td sytle="text-align:left !important;width:60%;">
+                                                <span t-field="o.invoice_number"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-black o_total">
+                                            <td sytle="text-align:left !important; width:40%;">
+                                                Ref. Date :
+                                            </td>
+                                            <td sytle="text-align:left !important;width:60%;">
+                                                <span t-field="o.bill_date"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:30px;">
+                                <table class="table table-bordered" style="width:100%;">
+                                    <tbody class="sale_tbody">
+                                        <tr>
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                Paid To :
+                                                <t t-esc="o.paid_to"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                The Sum of :
+                                                <t t-esc="o.check_amount_in_words"/>
+                                                Only
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                Expense Type :
+                                                <t t-esc="o.expense_type_id.name"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr style="line-height: 58px">
+                                            <td sytle="text-align:left !important;width:40%;">
+                                                Being :
+                                                <!--                                                <span t-field="o.bill_ref" />-->
+                                                <span t-field="o.expense"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td sytle="width:40%;" class="text-start">
+                                                Employee Name :
+                                                <span t-field="o.user_id.name"/>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                            <div class="row" style="padding-top:200px;">
+                                <div class="col-4" style="text-align:left;">
+
+                                    ______________
+                                    <br/>
+                                    Received by
+                                </div>
+                                <div class="col-4" style="text-align:center;">
+
+                                    ______________
+                                    <br/>
+                                    Prepared by
+                                </div>
+                                <div class="col-4" style="text-align:right;">
+
+                                    ______________
+                                    <br/>
+                                    Approved by
+                                </div>
+
+                            </div>
+                            <!-- <div class="row">
+                                <br />
+                                <span>Attachment:</span>
+                                <center>
+                                    <t t-if="o.attachment">
+                                        <img t-att-src="image_data_uri(o.attachment)"
+                                             style="max-height: + 6rem; max-width: 100%;" />
+                                    </t>
+                                </center>
+
+                            </div> -->
+
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="action_petty_cash_expense_receipt_custom" model="ir.actions.report">
+            <field name="name">Petty Cash Voucher</field>
+            <field name="model">petty.cash.expense</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">petty_cash_management.report_petty_cash_expense_receipt_custom</field>
+            <field name="report_file">petty_cash_management.report_petty_cash_expense_receipt_custom</field>
+            <field name="print_report_name">'Petty Cash expense Report - %s' % (object.name)</field>
+            <!-- <field name="paperformat_id" ref="labelle_accounting.labelle_paper_format_check"/> -->
+            <field name="binding_model_id" ref="model_petty_cash_expense"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

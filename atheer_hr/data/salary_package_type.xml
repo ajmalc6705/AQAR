@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <!-- Salary package type -->
+        <record id="sal_pkg_type_basic" model="salary.package.type">
+            <field name="name">Basic</field>
+        </record>
+
+        <record id="sal_pkg_type_hra" model="salary.package.type">
+            <field name="name">HRA</field>
+        </record>
+
+        <record id="sal_pkg_type_ta" model="salary.package.type">
+            <field name="name">TA</field>
+        </record>
+
+        <record id="sal_pkg_type_medical" model="salary.package.type">
+            <field name="name">Medical Allowance</field>
+        </record>
+
+        <record id="sal_pkg_type_special" model="salary.package.type">
+            <field name="name">Special Allowance</field>
+        </record>
+
+    </data>
+</odoo>

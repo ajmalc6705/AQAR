@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_master_number_plate_form" model="ir.ui.view">
+            <field name="name">master.number.plate.form</field>
+            <field name="model">master.number.plate</field>
+            <field name="arch" type="xml">
+                <form string="Number Plate Form">
+                    <header>
+                        <button name="button_action_sold" data-hotkey="v" string="Sold" type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('sold', '=', True)]}"
+                        />
+                        <widget name="web_ribbon" title="sold" bg_color="bg-danger"
+                                attrs="{'invisible': [('sold', '=', False)]}"/>
+
+                    </header>
+
+                    <sheet>
+
+                        <field name="active" invisible="1"/>
+                        <field name="sold" invisible="1"/>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="vehicle_id" required="1"/>
+                                <field name="number_plate" required="1"/>
+                                <field name="owner" required="1"/>
+                                <field name="location"/>
+                                <field name="expiry_date"
+                                       attrs="{'required':[('location', '=', 'rop')], 'invisible':[('location', '!=', 'rop')]}"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <separator string="Purchase Details"/>
+                                <field name="vendor_id"/>
+                                <field name="purchase_date" attrs="{'required': [('vendor_id', '!=', False)]}"/>
+                                <field name="purchase_value" attrs="{'required': [('vendor_id', '!=', False)]}"/>
+
+                                <separator string="Sale Details"/>
+                                <field name="customer_id"/>
+                                <field name="sold_date" attrs="{'required': [('customer_id', '!=', False)]}"/>
+                                <field name="sold_value" attrs="{'required': [('customer_id', '!=', False)]}"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Documents" name="atheer_documents">
+                                <field name="document_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="doc_type"/>
+                                        <field name="issue_date" required="1"/>
+                                        <field name="expiry_date" required="1"/>
+                                        <field name="doc_dec"/>
+                                        <field name="attachment_ids" widget="many2many_binary"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_master_number_plate_tree" model="ir.ui.view">
+            <field name="name">master.number.plate.tree</field>
+            <field name="model">master.number.plate</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="vehicle_id"/>
+                    <field name="number_plate"/>
+                    <field name="owner" required="1"/>
+                    <field name="location"/>
+                    <field name="expiry_date"/>
+                    <field name="purchase_value" optional="hide"/>
+                    <field name="purchase_date"/>
+                    <field name="sold_value" optional="hide"/>
+                    <field name="sold_date"/>
+                    <field name="company_id" optional="hide"/>
+
+                </tree>
+            </field>
+        </record>
+        <record id="fleet_master_number_plate_search" model="ir.ui.view">
+            <field name="name">fleet.vehicle.number.plate.search</field>
+            <field name="model">master.number.plate</field>
+            <field name="arch" type="xml">
+                <search string="All vehicles">
+                     <field string="Name" name="name" filter_domain="[('name', 'ilike', self), ]"/>
+
+                    <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                    <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+
+                </search>
+            </field>
+
+        </record>
+
+        <record id="action_master_number_plate" model="ir.actions.act_window">
+            <field name="name">Master Number Plates</field>
+            <field name="res_model">master.number.plate</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="atheer_fleet_management.view_master_number_plate_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data yet!
+                </p>
+                <p>
+                    Create Number Plate data
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_master_number_plate" name="Number Plates"
+                  parent="atheer_fleet_management.menu_master_masters"
+                  sequence="5"
+                  action="action_master_number_plate"/>
+    </data>
+</odoo>

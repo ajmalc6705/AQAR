@@ -1,0 +1,249 @@
+<odoo>
+    <data>
+        <record id="view_increment_and_promotion_tree" model="ir.ui.view">
+            <field name="name">Increment and promotion tree</field>
+            <field name="model">increment.and.promotion</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Increment And Promotion">
+                    <field name="reference"/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="type"/>
+                    <field name="effective_date"/>
+                    <field name="promoted_designation"/>
+                    <field name="gross_salary"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_increment_and_promotion_form" model="ir.ui.view">
+            <field name="name">Increment and promotion</field>
+            <field name="model">increment.and.promotion</field>
+            <field name="arch" type="xml">
+                <form string="Increment and Promotion">
+                    <header>
+                        <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_ceo"
+                                attrs="{'invisible': ['|',('payslip_generated','=',True),('state','not in',['ceo'])]}"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','!=','ceo')]}"
+                                groups="atheer_hr.group_hr_ceo"/>
+                        <button name="sent_to_ceo" type="object" groups="atheer_hr.group_hr_manager"
+                                string="SENT TO CEO" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'hr')]}"/>
+                        <button name="approve" type="object" groups="atheer_hr.group_hr_ceo"
+                                string="Approve" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'ceo')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="hr,ceo,approved"/>
+                    </header>
+                    <sheet attrs="{'readonly': [('state', 'in', ['approved','reject'])]}">
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="reference"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" options='{"no_open": True, "no_create": True}'
+                                       attrs="{'readonly': [('state','in',['approved','reject'])]}"/>
+                            </group>
+                        </group>
+                        <group string="Employee Details">
+                            <group>
+                                <field name="designation" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group>
+                                <field name="department_id" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="increment_promotion" string="Increment and Promotion Details">
+                                <group>
+                                    <group>
+                                        <field name="type"
+                                               attrs="{'readonly': [('state','in',['approved','reject'])]}"/>
+                                        <field name="effective_date"
+                                               attrs="{'readonly': [('state','in',['approved','reject'])]}"/>
+                                        <field name="payslip_generated" invisible="1"/>
+                                        <field name="airticket_qty"
+                                               attrs="{'invisible': [('type','not in',['airticket_addition'])]}"/>
+                                        <field name="start_date"
+                                               attrs="{'invisible': [('type','not in',['airticket_addition'])]}"/>
+                                        <field name="end_date"
+                                               attrs="{'invisible': [('type','not in',['airticket_addition'])]}"/>
+                                        <field name="current_date"
+                                               attrs="{'invisible': [('type','not in',['airticket_addition'])]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="promoted_designation"
+                                               options='{"no_open": True, "no_create": True}'
+                                               string="Promoted/Demoted Designation"
+                                               attrs="{'invisible': [('type','not in',['promotion','salary_increment_plus_promotion','demotion','demotion_plus_salary_revision'])],'required': [('type','in',['promotion','salary_increment_plus_promotion','demotion','demotion_plus_salary_revision'])],'readonly': [('state','in',['approved','reject'])]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="salary_arrears"/>
+                                        <field name="last_payroll_processing_date"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string=" Current Salary Details">
+                                <group>
+                                    <field name="salary_package_ids" nolabel="1" readonly="1" force_save="1">
+                                        <tree editable="bottom">
+                                            <field name="component" width="35%"/>
+                                            <field name="amount_per_month" width="40%"/>
+                                        </tree>
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <group>
+                                                        <field name="component"
+                                                               options='{"no_open": True, "no_create": True}'/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="amount_per_month"/>
+                                                    </group>
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                        <field name="current_gross_salary" readonly="1" force_save="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Salary Information">
+                                <group string="New Salary Details" attrs="{'invisible': [('type', 'in',
+                                ['promotion','demotion'])]}">
+                                    <field name="new_salary_details" force_save="1" attrs="{'readonly': [('state', 'in',
+                                ['reject','approved'])]}">
+                                        <tree editable="bottom">
+                                            <field name="component" width="35%"/>
+                                            <field name="amount_per_month" width="40%"/>
+                                        </tree>
+                                        <form>
+                                            <sheet>
+                                                <group>
+                                                    <group>
+                                                        <field name="component" readonly="1" force_save="1"
+                                                               options='{"no_open": True, "no_create": True}'/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="amount_per_month" readonly="1" force_save="1"/>
+                                                    </group>
+                                                </group>
+                                            </sheet>
+                                        </form>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                        <field name="gross_salary" readonly="1" force_save="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Remarks">
+                                <group>
+                                    <group>
+                                        <field name="hr_remarks" force_save="1"
+                                               attrs="{'readonly': [('state','not in',['hr'])]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="ceo_remarks" force_save="1"
+                                               attrs="{'readonly': [('state','not in',['ceo'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Approval Section">
+                                <group>
+                                    <group attrs="{'invisible':[('state','!=','approved')]}">
+                                        <group>
+                                            <field name="approval_person"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                        </group>
+                                        <group>
+                                            <field name="today_date" force_save="1"/>
+                                        </group>
+                                    </group>
+                                    <group string="Refused Details" attrs="{'invisible':[('state','!=','reject')]}">
+                                        <group>
+                                            <field name="rejected_by" options='{"no_open": True, "no_create": True}'
+                                                   attrs="{'invisible':[('state','!=','reject')]}"/>
+                                        </group>
+                                        <group>
+                                            <field name="rejected_date"
+                                                   attrs="{'invisible':[('state','!=','reject')]}"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="job_description" readonly="0" force_save="1"
+                                               attrs="{'readonly': [('state','in',['approved','reject'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="increment_promotion_view_search" model="ir.ui.view">
+            <field name="name">increment.and.promotion.search</field>
+            <field name="model">increment.and.promotion</field>
+            <field name="arch" type="xml">
+                <search string="Increment">
+                    <separator/>
+                    <field name="employee_id"/>
+                    <field name="designation"/>
+                    <field name="department_id"/>
+                    <field name="type"/>
+                    <field name="promoted_designation"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('type', '=', 'salary_increment')]" name="salary_increment"
+                                string="Salary increment"/>
+                        <filter domain="[('type', '=', 'promotion')]" name="promotion" string="Promotion"/>
+                        <filter domain="[('type', '=', 'salary_increment_plus_promotion')]"
+                                name="salary_increment_plus_promotion" string="Salary increment + Promotion"/>
+                        <filter domain="[('type', '=', 'demotion')]" name="demotion" string="Demotion"/>
+                        <filter domain="[('type', '=', 'demotion_plus_salary_revision')]"
+                                name="demotion_plus_salary_revision" string="Demotion + Salary Revision"/>
+                        <separator/>
+                        <filter domain="[('state', '=', 'hr')]" name="hr" string="HR Manager"/>
+                        <filter domain="[('state', '=', 'ceo')]" name="ceo" string="CEO"/>
+                        <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                        <filter domain="[('state', '=', 'reject')]" name="reject" string="Reject"/>
+                        <separator/>
+                        <filter string="Type" name='type' context="{'group_by':'type'}"/>
+                        <separator orientation="vertical"/>
+                        <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_increment" model="ir.actions.act_window">
+            <field name="name">Increment &amp; Promotion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">increment.and.promotion</field>
+            <field name="search_view_id" ref="increment_promotion_view_search"></field>
+        </record>
+
+        <menuitem name="Increment &amp; Promotion" id="increment_and_promotion"
+                  web_icon="atheer_hr,static/src/img/increment.png" sequence="50"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+        <menuitem name="Increment &amp; Promotion" action="action_increment" parent="increment_and_promotion"
+                  id="increment_menu" sequence="1"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+    </data>
+</odoo>

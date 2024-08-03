@@ -1,0 +1,25 @@
+<odoo>
+    <data noupdate="1">
+        <record model="ir.sequence" id="atheer_loan_management_sequence">
+            <field name="name">Sequence For Hr Loan</field>
+            <field name="code">hr.loan.sequence</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">LN/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record model="ir.sequence" id="hr_salary_advance_sequence">
+            <field name="name">Sequence For Hr Advance Salary</field>
+            <field name="code">hr.salary.advance</field>
+            <field name="active">TRUE</field>
+            <field name="prefix">SAL/ADV/%(range_year)s/</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">0001</field>
+            <field name="padding">4</field>
+            <field name="implementation">no_gap</field>
+        </record>
+    </data>
+</odoo>

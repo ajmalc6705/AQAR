@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="adjustment_tree" model="ir.ui.view">
+        <field name="name">adjustment.tree</field>
+        <field name="model">investment.adjustment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="doc_id"/>
+                <field name="investment_id"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state in ('done')"
+                       decoration-danger="state == 'cancel'"/>
+            </tree>
+        </field>
+    </record>
+    <record id="investment_adjustment_form" model="ir.ui.view">
+        <field name="name">investment.adjustment.form</field>
+        <field name="model">investment.adjustment</field>
+        <field name="arch" type="xml">
+            <form string="Purchase">
+                <header>
+                    <button name="action_done" class="oe_highlight" states="draft" string="Done"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,done"
+                            string="Reset to draft" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <button name="action_cancel" class="oe_highlight" states="draft"
+                            string="Cancel" type="object" groups="portfolio.group_portfolio_admin"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="doc_id" placeholder="e.g. Doc"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="investment_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="adjustment_type" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="method_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="cut_off_date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                             <field name="shares_available" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="share_in_hand" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="extra_share" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="total_share" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Notes" String="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_investment_adjustment" model="ir.actions.act_window">
+        <field name="name">Investment Adjustment</field>
+        <field name="res_model">investment.adjustment</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Investment Adjustment
+            </p>
+        </field>
+    </record>
+    <menuitem id="investment_adjustment_menu" name="Investment Adjustments" parent="transactions_menu"
+              sequence="60"
+              action="action_investment_adjustment"/>
+</odoo>

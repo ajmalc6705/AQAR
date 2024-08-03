@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="ownership_change_tree" model="ir.ui.view">
+        <field name="name">ownership.change.tree</field>
+        <field name="model">ownership.change</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="building_id"/>
+                <field name="unit_id"/>
+                <field name="owner_id"/>
+                <field name="new_owner_id"/>
+                <field name="company_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ownership_change_form" model="ir.ui.view">
+        <field name="name">ownership.unit.change.form</field>
+        <field name="model">ownership.change</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" class="oe_highlight" states="draft" string="Confirm"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,confirm"
+                            string="Reset to Draft" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="building_id" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                            <field name="unit_ids" invisible="1"/>
+                            <field name="owner_id" readonly="1" force_save="1"
+                                   domain="[('is_community_owner','=',True), ('parent_id', '=', False)]"
+                                   context="{'default_company_id':company_id,'default_landlord':0, 'default_is_community_owner':1,'show_address': 1}"
+                            />
+                        </group>
+                        <group>
+                            <field name="date" string="Applicable Date"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"
+                            />
+                            <field name="new_owner_id"
+                                   domain="[('is_community_owner','=',True), ('parent_id', '=', False)]"
+                                   context="{'default_company_id':company_id,'default_landlord':0, 'default_is_community_owner':1,'show_address': 1}"
+                                   attrs="{'readonly':[('state','not in',['draft'])]}"
+                            />
+                            <field name="company_id" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_ownership_change" model="ir.actions.act_window">
+        <field name="name">Ownership Change</field>
+        <field name="res_model">ownership.change</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Ownership Change
+            </p>
+        </field>
+    </record>
+    <menuitem id="ownership_change_menu" name="Ownership Change" parent="management_menu"
+              action="action_ownership_change"
+              sequence="40"/>
+</odoo>

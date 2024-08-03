@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_service,access.property.service,model_property_service,base.group_user,1,1,1,0
+access_property_service_stage,access.property.service.stage,model_service_stage,base.group_user,1,1,1,1
+access_property_service_line,access.property.service.line,model_property_service_line,base.group_user,1,1,1,1

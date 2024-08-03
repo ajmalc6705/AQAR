@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+        <record id="action_report_wps_batch_bank" model="ir.actions.report">
+            <field name="name">WPS xlsx</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">atheer_hr.report_payslip_wps_batch_bank</field>
+            <field name="report_file">atheer_hr.report_payslip_wps_batch_bank</field>
+            <field name="report_file">WPS Report</field>
+            <field name="binding_model_id" ref="atheer_hr.model_hr_payslip_run"/>
+            <field name="binding_type">report</field>
+            <field name="binding_view_types">form</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_order_form_inherit_property_service" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.property.service</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="property_service_id" string='Service Ref' readonly="1"
+                       groups="property_service.group_service_user_own,property_service.group_service_user_all,property_service.group_service_admin"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_form_inherit_property_service" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.property.service</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="before">
+                <field name="property_service_id" string='Service Ref' readonly="1"
+                       groups="property_service.group_service_user_own,property_service.group_service_user_all,property_service.group_service_admin"
+                />
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

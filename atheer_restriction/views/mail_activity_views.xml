@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_mail_activity_search_view" model="ir.ui.view">
+        <field name="name">mail.activity.search.view.inherit</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='activittype']" position="after">
+                <filter string="Assigned To" name="assignedto" context="{'group_by': 'user_id'}"/>
+            </xpath>
+             <xpath expr="//filter[@name='activities_overdue']" position="attributes">
+                 <attribute name="invisible">0</attribute>
+                 <attribute name="string">Pending Activities</attribute>
+             </xpath>
+        </field>
+    </record>
+    <!--    window action for mail activity-->
+    <record id="action_activity" model="ir.actions.act_window">
+        <field name="name">Activity</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Activity
+            </p>
+        </field>
+    </record>
+    <!--    Menu item-->
+    <menuitem id="activity_main_menu" name="Activity" web_icon="atheer_restriction,static/description/odoo_icon.png"
+    groups="atheer_restriction.group_access_mail_activity"/>
+    <menuitem id="activity_menu" name="Activity" parent="activity_main_menu" action="action_activity" sequence="60"/>
+</odoo>

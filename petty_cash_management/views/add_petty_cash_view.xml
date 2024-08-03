@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="add_petty_cash_form_view" model="ir.ui.view">
+        <field name="name">add.petty_cash.form.view</field>
+        <field name="model">add.petty.cash</field>
+        <field name="arch" type="xml">
+            <form string="Add Petty Cash">
+                <header>
+                    <!--                    <button name="cancel" string="CANCEL"-->
+                    <!--                            type="object" class="oe_highlight"-->
+                    <!--                            attrs="{'invisible': [('status', 'not in', ('draft','confirm'))]}"/>-->
+
+                    <button name="cancel" string="Cancel"
+                            type="object" class="oe_highlight"
+                            groups="petty_cash_management.group_add_petty_cash_manager"
+                            attrs="{'invisible': [('status', '!=', 'waiting')]}"/>
+
+                    <button name="cancel" string="Cancel"
+                            type="object" class="oe_highlight"
+                            groups="petty_cash_management.group_add_petty_cash_ceo"
+                            attrs="{'invisible': [('status', '!=', 'verified')]}"/>
+
+                    <button name="action_button_send_back" string="Send Back"
+                            type="object" class="oe_highlight"
+                            groups="petty_cash_management.group_add_petty_cash_manager"
+                            attrs="{'invisible': [('status', '!=', 'waiting')]}"/>
+
+                    <button name="action_button_send_back" string="Send Back"
+                            type="object" class="oe_highlight"
+                            groups="petty_cash_management.group_add_petty_cash_ceo"
+                            attrs="{'invisible': [('status', '!=', 'verified')]}"/>
+
+                    <button name="action_send_authorizer" string="Send To Authorizer"
+                            groups="petty_cash_management.group_finance_manager"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'draft')]}"/>
+
+                    <button name="action_button_verify" string="Verify"
+                            groups="petty_cash_management.group_add_petty_cash_manager"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'waiting')]}"/>
+
+                    <button name="confirm" string="Approve"
+                            groups="petty_cash_management.group_add_petty_cash_ceo"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'verified')]}"/>
+
+                    <button name="reset_to_draft" string="SET TO DRAFT"
+                            groups="petty_cash_management.group_finance_manager"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'cancel')]}"/>
+
+                    <!--                    groups="petty_cash_management.group_finance_manager,petty_cash_management.group_add_petty_cash_manager,petty_cash_management.group_add_petty_cash_ceo"-->
+                    <field name="status" widget="statusbar" statusbar_visible="draft,confirm"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" attrs="{'readonly': [('status','!=','draft')]}"
+                                   options='{"no_open": True, "no_create": True}'/>
+                            <field name="amount" attrs="{'readonly': [('status','!=','draft')]}"/>
+                            <field name="memo" required="1" attrs="{'readonly': [('status','!=','draft')]}"/>
+                            <field name="company_id" readonly="1" options='{"no_open": True, "no_create": True}'
+                                   groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date" attrs="{'readonly': [('status','!=','draft')]}"/>
+                            <field name="in_hand_petty_cash"/>
+                            <field name="cheque_number" attrs="{'readonly': [('status','=','confirm')]}"/>
+                            <field name="cheque_date" attrs="{'readonly': [('status','=','confirm')]}"/>
+                            <!--                            <field name="analytic_distribution" widget="analytic_distribution"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Accounting">
+                            <group>
+                                <group>
+                                    <field name="journal" attrs="{'readonly': [('status','!=','draft')]}" required="1"
+                                           domain="[('type', '=', 'general')]"/>
+                                    <field name="check_amount_in_words" invisible="1"/>
+                                    <field name="currency_id"  readonly="1"
+                                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="journal_id" attrs="{'readonly': True}"/>
+                                </group>
+                                <group>
+                                    <field name="analytic_distribution" widget="analytic_distribution"
+                                           attrs="{'readonly': [('status','=','confirm')]}"
+                                           options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="debit" required="1" readonly="1" />
+                                    <field name="credit" required="1" attrs="{'readonly': [('status','=','confirm')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <div class="o_attachment_preview"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="add_petty_cash_tree_view" model="ir.ui.view">
+        <field name="name">add.petty.cash.view.tree</field>
+        <field name="model">add.petty.cash</field>
+        <field name="arch" type="xml">
+            <tree string="Expense">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="amount"/>
+                <field name="journal"/>
+                <field name="memo"/>
+                <field name="company_id" optional="hide"/>
+                <field name="status" widget="badge" decoration-muted="status == 'cancel'"
+                       decoration-info="status  == 'draft'" decoration-warning="status in ('waiting','verified')"
+                       decoration-danger="status == 'reject'" decoration-success="status == 'confirm'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="add_petty_cash_filter_view" model="ir.ui.view">
+        <field name="name">Add Petty Cash</field>
+        <field name="model">add.petty.cash</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="name"/>
+                <field name="journal"/>
+                <group expand="1" string="Group By">
+                    <filter name="User" string="Created User" context="{'group_by':'user_id'}"/>
+                    <filter name="Number" string="Created Date" context="{'group_by':'name'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_add_petty_cash" model="ir.actions.act_window">
+        <field name="name">Add Petty Cash</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">add.petty.cash</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Petty Cash
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

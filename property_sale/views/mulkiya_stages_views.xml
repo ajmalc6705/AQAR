@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mulkiya_stage_tree" model="ir.ui.view">
+        <field name="name">mulkiya.stage.tree</field>
+        <field name="model">mulkiya.stages</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Window action for mulkiya stages-->
+    <record id="action_stages" model="ir.actions.act_window">
+        <field name="name">Mulkiya Stages</field>
+        <field name="res_model">mulkiya.stages</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Mulkiya Stages
+            </p>
+        </field>
+    </record>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.property.sale</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="45"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="property_sale" string="Property Sale"
+                      data-key="property_sale">
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 o_setting_box">
+                            <h2>Property Sale Journal</h2>
+                            <group>
+                                <group>
+                                    <field name="sale_journal_id"/>
+                                </group>
+                            </group>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'property_sale'}</field>
+    </record>
+    <!--    Menu-->
+    <menuitem id="config_menu" name="Configuration" parent="property_sale_main_menu"
+              sequence="60"/>
+
+    <menuitem id="mulkiya_stages_menu" name="Mulkiya Stages" parent="config_menu"
+              action="action_stages" sequence="60"/>
+
+     <menuitem id="settings_menu" name="Settings" parent="config_menu"
+              action="action_settings" sequence="30"/>
+</odoo>

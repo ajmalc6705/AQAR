@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    window action for landlords-->
+    <record id="action_landlord" model="ir.actions.act_window">
+        <field name="name">Community Owners</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field eval="False" name="view_id"/>
+        <field name="domain">[('is_community_owner','=',1)]</field>
+        <field name="context">
+            {
+            'default_is_community_owner':1 ,'default_tenant': 0,
+            'res_partner_search_mode': 'supplier', 'default_is_company': True
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a Landlord.
+            </p>
+        </field>
+    </record>
+    <!--    Window Action for tenant-->
+    <record id="action_tenant" model="ir.actions.act_window">
+        <field name="name">Tenants</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('tenant','=',1), ('parent_id','=', False)]</field>
+        <field name="context">
+            {
+            'default_landlord':0 ,'default_tenant':1,
+            'res_partner_search_mode': 'customer', 'default_is_company': True
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a contact in your address book.
+            </p>
+            <p>
+                Odoo helps you easily track all activities related to
+                a customer: discussions, history of business opportunities,
+                documents, etc.
+            </p>
+        </field>
+    </record>
+    <!--    Window Action for Unit-->
+    <record id="action_unit" model="ir.actions.act_window">
+        <field name="name">Unit</field>
+        <field name="res_model">property.property</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Unit
+            </p>
+        </field>
+    </record>
+    <!--    Window action for building-->
+    <record id="action_building" model="ir.actions.act_window">
+        <field name="name">Building</field>
+        <field name="res_model">property.building</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Building
+            </p>
+        </field>
+    </record>
+    <!--    Menu item-->
+    <menuitem id="management_menu" name="Management" parent="property_community_main_menu" sequence="4"/>
+    <menuitem id="building_menu" name="Building" parent="management_menu" action="action_building"/>
+    <menuitem id="unit_menu" name="Unit" parent="management_menu" action="action_unit"
+              groups="property_community.group_hide_menu"
+    />
+    <menuitem id="tenant_menu" name="Tenant" parent="management_menu" action="action_tenant"
+              groups="property_community.group_hide_menu"
+    />
+    <menuitem id="landlord_menu" name="Community Owners" parent="management_menu" action="action_landlord"/>
+</odoo>

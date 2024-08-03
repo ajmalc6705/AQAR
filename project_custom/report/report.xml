@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_project_tender_xls" model="ir.actions.report">
+            <field name="name">Tender Report (XLSX)</field>
+            <field name="model">project.tender</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.report_project_tender_xls.xlsx</field>
+            <field name="report_file">project_custom.report_project_tender_xls.xlsx</field>
+            <field name="binding_model_id" ref="model_project_tender" />
+            <field name="binding_type">report</field>
+            <field name="attachment_use">False</field>
+        </record>
+
+        <record id="action_report_sub_contract_xls" model="ir.actions.report">
+            <field name="name">Sub Contract Summary</field>
+            <field name="model">sub.contract.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.report_project_sub_contract_xls.xlsx</field>
+            <field name="report_file">project_custom.report_project_sub_contract_xls.xlsx</field>
+            <field name="binding_model_id" eval="False" />
+            <field name="attachment_use">False</field>
+        </record>
+
+        <record id="action_report_project_receivable_xls" model="ir.actions.report">
+            <field name="name">Receivable Report</field>
+            <field name="model">project.receivable.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.report_project_receivable_xls.xlsx</field>
+            <field name="report_file">project_custom.report_project_receivable_xls.xlsx</field>
+            <field name="binding_model_id" eval="False" />
+            <field name="attachment_use">False</field>
+        </record>
+
+        <record id="action_report_project_payable_xls" model="ir.actions.report">
+            <field name="name">Payable Report</field>
+            <field name="model">project.payable.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.report_project_payable_xls.xlsx</field>
+            <field name="report_file">project_custom.report_project_payable_xls.xlsx</field>
+            <field name="binding_model_id" eval="False" />
+            <field name="attachment_use">False</field>
+        </record>
+
+        <record id="manpower_status_report_xls" model="ir.actions.report">
+            <field name="name">Manpower Status Report</field>
+            <field name="model">project.project</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.manpower_status_report.xlsx</field>
+            <field name="report_file">project_custom.manpower_status_report.xlsx</field>
+            <field name="binding_model_id" ref="project.model_project_project" />
+            <field name="attachment_use">False</field>
+            <!--            <field name="groups_id" eval="[(4, ref('project_custom.group_cons_ss')),(4, ref('project_custom.group_cons_pe'))]"/>-->
+            <field name="binding_view_types">form,list</field>
+        </record>
+
+        <record id="action_report_manpower_status" model="ir.actions.report">
+            <field name="name">Manpower Status Report</field>
+            <field name="model">manpower.status.report</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">project_custom.report_manpower_status</field>
+            <field name="report_file">project_custom.report_manpower_status</field>
+            <field name="print_report_name">'Manpower Status Report'</field>
+            <field name="binding_model_id" eval="False" />
+        </record>
+
+        <record id="action_report_manpower_status_xls" model="ir.actions.report">
+            <field name="name">Manpower Status Report</field>
+            <field name="model">manpower.status.report</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">project_custom.report_manpower_status_xls.xlsx</field>
+            <field name="report_file">project_custom.report_manpower_status_xls.xlsx</field>
+            <field name="binding_model_id" eval="False" />
+            <field name="attachment_use">False</field>
+        </record>
+
+<!--        <record id="action_project_day_sheet_report" model="ir.actions.report">-->
+<!--            <field name="name">Day Sheet</field>-->
+<!--            <field name="model">project.project</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">project_custom.report_project_day_sheet</field>-->
+<!--            <field name="report_file">project_custom.report_project_day_sheet</field>-->
+<!--            <field name="print_report_name">'Day Sheet'</field>-->
+<!--            <field name="binding_model_id" ref="project.model_project_project" />-->
+<!--            <field name="binding_view_types">form,list</field>-->
+<!--        </record>-->
+
+
+<!--        <record id="action_project_work_slip_report" model="ir.actions.report">-->
+<!--            <field name="name">Work Slip</field>-->
+<!--            <field name="model">project.project</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">project_custom.report_project_work_slip</field>-->
+<!--            <field name="report_file">project_custom.report_project_work_slip</field>-->
+<!--            <field name="print_report_name">'Work Slip'</field>-->
+<!--            <field name="binding_model_id" ref="project.model_project_project" />-->
+<!--            <field name="binding_view_types">form,list</field>-->
+<!--        </record>-->
+    </data>
+</odoo>

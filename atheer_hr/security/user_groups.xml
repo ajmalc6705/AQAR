@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Atheer co HR user groups-->
+        <record model="ir.module.category" id="atheer_hr_user_group_category">
+            <field name="name">Human Resources</field>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="group_hr_employee_staff" model="res.groups">
+            <field name="name">Employee Staff</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_responsible')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_hr_line_manager" model="res.groups">
+            <field name="name">Line Manager</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_responsible')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_hr_manager" model="res.groups">
+            <field name="name">HR Manager</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_user'),ref('hr_contract.group_hr_contract_manager'),ref('hr_attendance.group_hr_attendance_user'),ref('hr_payroll.group_hr_payroll_user')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_hr_site_engineer" model="res.groups">
+            <field name="name">Site Engineer</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_responsible'),ref('hr_contract.group_hr_contract_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_hr_project_manager" model="res.groups">
+            <field name="name">Project Manager</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_responsible'),ref('hr_contract.group_hr_contract_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_hr_accounts" model="res.groups">
+            <field name="name">Accounts</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_responsible'),ref('hr_contract.group_hr_contract_manager'),ref('hr_attendance.group_hr_attendance_user'),ref('hr_payroll.group_hr_payroll_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+        <record id="group_hr_hod" model="res.groups">
+            <field name="name">HOD</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_manager'),ref('hr_contract.group_hr_contract_manager'),ref('hr_attendance.group_hr_attendance_user'),ref('hr_payroll.group_hr_payroll_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_hr_commercial_head" model="res.groups">
+            <field name="name">Commercial Head</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_manager'),ref('hr_contract.group_hr_contract_manager'),ref('hr_payroll.group_hr_payroll_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_hr_coo" model="res.groups">
+            <field name="name">COO</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_user'),ref('hr_contract.group_hr_contract_manager'),ref('hr_attendance.group_hr_attendance_user'),ref('hr_payroll.group_hr_payroll_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record id="group_hr_ceo" model="res.groups">
+            <field name="name">CEO</field>
+            <field name="category_id" ref="atheer_hr.atheer_hr_user_group_category"/>
+            <field name="implied_ids"
+                   eval="[(6, 0, [ref('hr.group_hr_user'),ref('hr_holidays.group_hr_holidays_user'),ref('hr_contract.group_hr_contract_manager'),ref('hr_attendance.group_hr_attendance_user'),ref('hr_payroll.group_hr_payroll_manager')])]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+
+    </data>
+</odoo>

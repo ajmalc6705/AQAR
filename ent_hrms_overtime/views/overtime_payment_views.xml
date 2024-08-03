@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_overtime_payment_tree_view" model="ir.ui.view">
+        <field name="name">Overtime Payment</field>
+        <field name="model">overtime.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="ref"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <record id="hr_overtime_payment_form_view" model="ir.ui.view">
+        <field name="name">Overtime Payment</field>
+        <field name="model">overtime.payment</field>
+        <field name="arch" type="xml">
+            <form string="Overtime Payment">
+                <header>
+                    <button name="action_approve" type="object" string="Approve" states="draft"/>
+                    <button name="action_create_entry" type="object" string="Create Entry"
+                            attrs="{'invisible':[('create_move','=',True)]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="ref"/>
+                            <field name="total_bank_amount"/>
+                        </group>
+                        <group>
+                            <field name="total_cash_amount"/>
+                            <field name="account_debit_id" attrs="{'required':[('state','=','approve')]}"/>
+                            <field name="account_credit_id" attrs="{'required':[('state','=','approve')]}"/>
+                            <field name="journal_id" attrs="{'required':[('state','=','approve')]}"/>
+                            <field name="move_id" attrs="{'invisible':[('create_move','=',False)]}"/>
+                            <field name="create_move" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee Overtime Payment" name="employee_ot">
+                            <field name="employee_overtime_line_ids">
+                                <tree editable="bottom">
+                                    <field name="emp_id"/>
+                                    <field name="hours"/>
+                                    <field name="payment_type"/>
+                                    <field name="bank_ac_no"/>
+                                    <field name="bank_name"/>
+                                    <field name="amount"/>
+                                    <field name="analytic_distribution" widget="analytic_distribution"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"
+                           widget="mail_followers"
+                           groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="hr_overtime_payment_action" model="ir.actions.act_window">
+        <field name="name">Overtime Payment</field>
+        <field name="res_model">overtime.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="overtime_payment_menu" name="Overtime Payment" sequence="70"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+              action="hr_overtime_payment_action"/>
+</odoo>

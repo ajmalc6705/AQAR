@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_project_tender">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        <center>
+                            <h1 class="mt16">
+                                <span>Tender Report</span>
+                            </h1>
+                        </center>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-3">
+                                <strong>Tender No:</strong>
+                                <p t-esc="doc.tender_no"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Tender Reference:</strong>
+                                <p t-esc="doc.tender_ref"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Tender Title:</strong>
+                                <p t-esc="doc.tender_title"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Priority:</strong>
+                                <p t-esc="doc.priority"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-3">
+                                <strong>Type:</strong>
+                                <p t-esc="doc.tender_no"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Sub Type:</strong>
+                                <p t-esc="doc.tender_ref"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Contract Type:</strong>
+                                <p t-esc="doc.tender_title"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Location:</strong>
+                                <p t-esc="doc.priority"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-3">
+                                <strong>Client:</strong>
+                                <p t-esc="doc.client"/>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <h4 class="mt16">
+                            <strong>Estimation Details</strong>
+                        </h4>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-3">
+                                <strong>Manpower Required:</strong>
+                                <p class="m-0" t-field="doc.manpower"/>
+                            </div>
+                            <div
+                                    class="col-3">
+                                <strong>Project Duration:</strong>
+                                <p class="m-0" t-field="doc.project_duration"/>
+                            </div>
+                            <div
+                                    class="col-auto col-3">
+                                <strong>Mobilisation Duration:</strong>
+                                <p class="m-0" t-field="doc.mobilization_duration"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Extended Days:</strong>
+                                <p class="m-0" t-field="doc.extended_days"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-3">
+                                <strong>Project Cost:</strong>
+                                <p class="m-0" t-field="doc.project_cost"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Project Buffer Amount:</strong>
+                                <p class="m-0" t-field="doc.project_buffer_amount"/>
+                            </div>
+                            <div class="col-3">
+                                <strong>Minimum Monthly Claim:</strong>
+                                <p class="m-0" t-field="doc.minimum_monthly_claim"/>
+                            </div>
+
+                            <div class="col-auto col-3">
+                                <strong>Profit %:</strong>
+                                <p class="m-0" t-field="doc.profit_perc"/>
+                            </div>
+
+
+                        </div>
+                        <br/>
+                        <div class="row mt32">
+                            <div class="col-auto col-3">
+                                <strong>Project Total:</strong>
+                                <p class="m-0" t-field="doc.project_total"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <h4 class="mt16">
+                            <strong>Description</strong>
+                        </h4>
+                        <br/>
+                        <p t-field="doc.description"/>
+
+                        <t t-if="doc.competitor_ids">
+                            <h4 class="mt16">
+                                <strong>Competitor Details</strong>
+                            </h4>
+                            <table class="table table-sm o_main_table">
+                                <thead style="display: table-row-group">
+                                    <tr>
+                                        <th name="th_description" class="text-left">Company Name</th>
+                                        <th name="th_description" class="text-right">Value</th>
+                                        <th name="th_description" class="text-right">Position</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="sale_tbody">
+                                    <t t-foreach="doc.competitor_ids" t-as="line">
+                                        <tr>
+                                            <td name="td_name">
+                                                <span t-field="line.company_name"/>
+                                            </td>
+                                            <td name="td_name">
+                                                <span t-field="line.value"/>
+                                            </td>
+                                            <td name="td_name">
+                                                <span t-field="line.position"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

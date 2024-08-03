@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_property_reservation,access.property_reservation,model_property_reservation,base.group_user,1,1,1,1
+access_payment_terms,access.payment.terms,model_payment_term,base.group_user,1,1,1,1
+access_payment_plan,access.payment.plan,model_payment_plan,base.group_user,1,1,1,1
+access_cancel_reason_reservation,access.cancel.reason.reservation,model_cancel_reason_reservation,base.group_user,1,1,1,1

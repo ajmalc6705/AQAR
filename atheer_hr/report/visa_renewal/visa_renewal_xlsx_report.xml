@@ -1,0 +1,12 @@
+<odoo>
+    <record id="visa_renewal_report_xlsx" model="ir.actions.report">
+            <field name="name">Visa Renewal Report</field>
+            <field name="model">visa.renewal.report.wizard</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">atheer_hr.visa_renewal_report</field>
+            <field name="report_file">Visa Renewal Report</field>
+            <field name="binding_model_id" ref="atheer_hr.model_visa_renewal_report_wizard"/>
+            <field name="attachment_use">False</field>
+            <field name="binding_view_types">form,list</field>
+        </record>
+</odoo>

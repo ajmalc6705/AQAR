@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_scheduled_work_completion_wiz" model="ir.ui.view">
+            <field name="name">scheduled.work.completion.wiz.form</field>
+            <field name="model">scheduled.work.completion.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Scheduled Work Completion Report">
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="building_type" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                            <field name="building_ids" widget="many2many_tags" attrs="{'invisible':[('building_type','==', 'all')]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight" type="object"
+                                icon="fa-print"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_scheduled_work_completion_report">
+            <field name="name">Scheduled Work Completion Report</field>
+            <field name="res_model">scheduled.work.completion.wiz</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_scheduled_work_completion_report"
+                  name="Scheduled Work Completion Report"
+                  groups="base.group_user"
+                  action="action_scheduled_work_completion_report"
+                  parent="property_lease_management.menu_reporting" sequence="15"/>
+    </data>
+</odoo>

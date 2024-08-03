@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_add_petty_cash,Add Petty Cash ,model_add_petty_cash,base.group_user,1,1,1,0
+access_reject_reason,Reject Reason ,model_reject_reason,,1,1,1,1
+access_cancel_reason,Cancel Reason ,model_cancel_reason,,1,1,1,1
+access_petty_cash_expense_type,petty.cash.expense.type,model_petty_cash_expense_type,base.group_user,1,1,1,1
+access_petty_cash_finance_manager,Petty Cash finance manager,model_petty_cash_expense,petty_cash_management.group_finance_manager,1,1,1,0
+access_petty_cash_officer,Petty Cash officer,model_petty_cash_expense,petty_cash_management.group_officer,1,1,1,0
+access_petty_cash_employee,Petty Cash Employee,model_petty_cash_expense,petty_cash_management.group_employee,1,1,1,0

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_reservation_report" model="ir.actions.report">
+        <field name="name">RESERVATION DOCUMENT</field>
+        <field name="model">property.reservation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">property_reservation.report_reservation_doc</field>
+        <field name="report_file">property_reservation.report_reservation_doc</field>
+        <field name="binding_model_id" ref="model_property_reservation"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_reservation_doc">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center>
+                            <strong>
+                                RESERVATION DOCUMENT
+                            </strong>
+                        </center>
+                        <br/>
+                        <p>
+                            THIS OFFER is for the purchase of the Property (as defined hereunder) is dated the
+                            <span t-field="o.reservation_date"/>
+                            <strong>
+                                <span t-field="o.unit_id.name"/>
+                                <span t-field="o.unit_id.bld_number"/>
+                            </strong>
+                        </p>
+                        <br/>
+                        <br/>
+                        <u>
+                            <p>
+                                THE <strong>
+                                PURCHASER
+                            </strong> making the offer:
+                            </p>
+
+                        </u>
+                        <br/>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <span>NAME/COMPANY :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.name"/>
+                                </td>
+                                <td>
+                                    <span>ID Type :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.id_type_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Id Number :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.id_number"/>
+                                </td>
+                                <td>
+                                    <span>Email :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.email"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <strong>
+                            <u>
+                                CONTACT NOS
+                            </u>
+                        </strong>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <span>Mobile</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.mobile"/>
+                                </td>
+                                <td>
+                                    <span>Phone</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.phone"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <p>the
+                            <strong>“PURCHASER”</strong>
+                        </p>
+                        <strong>
+                            <u>
+                                <span>PARTICULARS OF THE PROPERTY:</span>
+                            </u>
+                        </strong>
+                        <br/>
+                        <p>The project is
+                            <strong>
+                                <span t-field="o.building_id.name"/>
+                            </strong>
+                        </p>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <span>Floor :</span>
+                                </td>
+                                <td>
+<!--                                    <span t-field="o.unit_id.floor_no"/>-->
+                                    <span t-field="o.unit_id.floor_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Office Unit :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.unit_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Unit measuring :</span>
+                                </td>
+                                <td>
+                                    <p>approximately<span t-field="o.unit_id.area"/>square meters, (the “Property”)
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                        <p>The developer is <strong>"Al Khonji Real Estate &amp; Development"</strong> as
+                            <strong>
+                                "AQAR"
+                            </strong>
+                        </p>
+                        <br/>
+                        <strong>
+                            <u>
+                                <span>PRICE:</span>
+                            </u>
+                        </strong>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <span>Unit Price OMR (In figures) :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.unit_sales_price"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Parking Price OMR (In figures) :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.parking_price"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>VAT OMR (In figures) :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.tax_amount"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Total Price including VAT OMR (In figures) :</span>
+                                </td>
+                                <td>
+                                    <span t-field="o.amount_total"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Omani Rials (In words)</span>
+                                </td>
+                                <td>
+                                    <span t-esc="o.currency_id.amount_to_text(o.amount_total)"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <span t-field="o.report_template"/>
+                        <br/>
+                        <strong>
+                            <u>
+                                CONFIRMED:
+                            </u>
+                        </strong>
+                        <div class="row">
+                            <div class="col-3">
+                                SIGNED for and on behalf of the Developer
+                                by its duly authorized representative:-
+                            </div>
+                            <div class="col-9" style="text-align:center;">
+                                <t t-if="o.dev_signature">
+                                    <img t-att-src="image_data_uri(o.dev_signature)"
+                                         style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                SIGNED by the Purchaser/Company Authorized Signatory
+                            </div>
+                            <div class="col-9" style="text-align:center;">
+                                <t t-if="o.partner_sign">
+                                    <img t-att-src="image_data_uri(o.partner_sign)"
+                                         style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+                                </t>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                SIGNED in the presence of:-
+                                Witness:
+                            </div>
+                            <div class="col-9" style="text-align:center;">
+                                <t t-if="o.witness_signature">
+                                    <img t-att-src="image_data_uri(o.witness_signature)"
+                                         style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

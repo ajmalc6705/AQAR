@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="aqar_insurance_tree" model="ir.ui.view">
+        <field name="name">aqar.insurance.tree</field>
+        <field name="model">aqar.insurance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ref"/>
+                <field name="employee_id"/>
+                <field name="insurance_company_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--    insurance Form View-->
+    <record id="aqar_insurance_form" model="ir.ui.view">
+        <field name="name">aqar.insurance.form</field>
+        <field name="model">aqar.insurance</field>
+        <field name="arch" type="xml">
+            <form string="Insurance">
+                <header>
+                    <button name="action_approve" type="object" string="Confirm"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" states="cancel,confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" placeholder="IoU"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="period" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="coverage_amount" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="insurance_type_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+
+                        </group>
+                        <group>
+                            <field name="insurance_company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"
+/>                            <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="currency_id" invisible="1"/>
+
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for Insurance-->
+    <record id="action_insurance" model="ir.actions.act_window">
+        <field name="name">Insurance</field>
+        <field name="res_model">aqar.insurance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Insurance
+            </p>
+        </field>
+    </record>
+    <menuitem id="insurance_menu" name="Insurance" parent="hr.menu_hr_employee_user"
+              action="action_insurance" sequence="30"/>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cheque_management,Cheque management,model_cheque_management,,1,1,1,1
+access_cheque_management_officer,Cheque management officer,model_cheque_management,cheque_management.group_officer,1,1,1,1
+access_cheque_management_finance_manager,Cheque management finance manager,model_cheque_management,cheque_management.group_finance_manager,1,1,1,1
+access_cheque_management_owner,Cheque management owner,model_cheque_management,cheque_management.group_owner,1,1,1,1
+access_cheque_management_base,Cheque management base,model_cheque_management,base.group_user,1,0,0,0
+access_account_payment_pdc,access_account_payment_pdc,model_account_payment,cheque_management.group_receive_pdc_notifications,1,1,1,0

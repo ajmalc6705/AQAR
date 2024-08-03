@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_assignment,project.project,model_project_project,aqar_project_assignment.group_assignment_user_own,1,1,1,0
+access_project_assignment_manager,project.project.task.,model_project_task,aqar_project_assignment.group_assignment_user_own,1,1,1,0

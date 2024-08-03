@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="maintenance_attachment_wizard" model="ir.ui.view">
+            <field name="name">Generate Quotation</field>
+            <field name="model">maintenance.attachment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <strong>Kindly upload the attachment.</strong>
+                            <field name="attachment_id" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="upload_attachment" string="Upload" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+
+    <record id="maintenance_attachment_action" model="ir.actions.act_window">
+        <field name="name">Generate Quotation</field>
+        <field name="res_model">maintenance.attachment</field>
+        <field name="binding_model_id" ref="model_property_maintenance"/>
+        <field name="binding_view_types">list</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <!--    <act_window name="Generate Quotation"-->
+    <!--                id="maintenance_attachment_action"-->
+    <!--                res_model="maintenance.attachment"-->
+    <!--                binding_model="property.maintenance"-->
+    <!--                binding_views="list"-->
+    <!--                view_mode="form"-->
+    <!--                target="new"-->
+    <!--    />-->
+</odoo>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="split_adjustment" model="adjustment.method">
+      <field name="name">Stock Split</field>
+    </record>
+     <record id="bonus_adjustment" model="adjustment.method">
+         <field name="name">Bonus</field>
+    </record>
+     <record id="dilution_adjustment" model="adjustment.method">
+         <field name="name">Dilution</field>
+    </record>
+</odoo>

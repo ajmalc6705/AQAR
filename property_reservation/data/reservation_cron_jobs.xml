@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.cron" id="action_property_reservation_offer">
+        <field name="name">Reservation Offer Date</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_property_reservation"/>
+        <field name="state">code</field>
+        <field name="code">model.offer_valid_notification()</field>
+    </record>
+</odoo>

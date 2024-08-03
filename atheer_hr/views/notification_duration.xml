@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <!--        tree view-->
+        <record id="view_notification_duration_tree" model="ir.ui.view">
+            <field name="name">notification.duration.tree</field>
+            <field name="model">notification.duration</field>
+            <field name="arch" type="xml">
+                <tree string="Duration">
+                 <field name="duration" string="Duration"/>
+                 <field name="period"/>
+                </tree>
+            </field>
+        </record>
+        <!-- form view -->
+        <record id="view_notification_duration_form" model="ir.ui.view">
+            <field name="name">notification.duration.form</field>
+            <field name="model">notification.duration</field>
+            <field name="arch" type="xml">
+                <form string="Duration">
+                    <sheet>
+                        <field name="name" invisible="1"/>
+                        <div>
+                            <label for="duration" string="Duration"/>
+                            <field name="duration" force_save="1" class="oe_inline" required="1"/>
+                            <label for="period" string="Period"/>
+                            <field name="period" class="oe_inline" required="1"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

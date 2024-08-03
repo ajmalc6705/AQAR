@@ -1,0 +1,84 @@
+<odoo>
+    <!--Leave Return Search View-->
+
+    <record id="view_hr_leave_salary_balance_search" model="ir.ui.view">
+        <field name="name">hr.leave.salary.balance.search</field>
+        <field name="model">hr.leave.salary.balance</field>
+        <field name="arch" type="xml">
+            <search string="Leave Salary Balance">
+                <field name="employee_id" string="Employee"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_employee" string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_leave_salary_balance_form" model="ir.ui.view">
+        <field name="name">hr.leave.salary.balance.from</field>
+        <field name="model">hr.leave.salary.balance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h2>
+                        <label for="employee_id" class="oe_inline"/>
+                        <field name="employee_id" class="oe_inline"/>
+                    </h2>
+                    <group>
+                        <group>
+                            <label for="date_from" string="Dates"/>
+                            <div>
+                                <field name="date_from" invisible="1"/>
+                                <field name="date_to" invisible="1"/>
+                                <div class="o_row o_row_readonly o_hr_holidays_dates">
+                                    <span class="oe_inline">
+                                        From
+                                    </span>
+                                    <field name="date_from" class="oe_inline" nolabel="1" required="1" force_save="1"/>
+                                    <span class="oe_inline">
+                                        To
+                                    </span>
+                                    <field name="date_to" class="oe_inline" required="1" force_save="1"/>
+                                </div>
+                            </div>
+                            <field name="days" required="1" force_save="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_leave_salary_balance_tree" model="ir.ui.view">
+        <field name="name">hr.leave.salary.balance.tree</field>
+        <field name="model">hr.leave.salary.balance</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="days"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_leave_salary_balance" model="ir.actions.act_window">
+        <field name="name">Leave Salary Balance</field>
+        <field name="res_model">hr.leave.salary.balance</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_leave_salary_balance"
+              parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+              name="Leave Salary Balance"
+              action="action_leave_salary_balance"
+              sequence="99"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"
+    />
+
+</odoo>

@@ -1,0 +1,136 @@
+<odoo>
+    <template id="visa_renewal_reports">
+        <t t-call="web.html_container">
+            <t t-call="atheer_hr.af_external_layout">
+                <div style="">
+
+                    <!--                        <t t-call="atheer_hr.af_external_layout_header"></t>-->
+                    <div class="row">
+                        <div class="col-12 mb4" style="align:center;">
+                            <t t-set="company" t-value="request.env.company"/>
+                            <img t-if="company.report_image2" t-att-src="image_data_uri(company.report_image2)"
+                                 style="max-height: 100px;margin-left: 10%;margin-bottom: 20px;" alt="Logo"/>
+                            <img t-if="company.report_image4" t-att-src="image_data_uri(company.report_image4)"
+                                 style="max-height: 100px;margin-left: 20%;margin-bottom: 20px;" alt="Logo"/>
+                            <img t-if="company.report_image3" t-att-src="image_data_uri(company.report_image3)"
+                                 style="max-height: 100px;margin-left: 25%;margin-bottom: 20px;" alt="Logo"/>
+                        </div>
+
+                    </div>
+                    <div class="page" style="padding: 14px;">
+                        <div class="oe_structure"/>
+                        <h2 style="font-family:'Serif Semi Bold'!important;text-align: center;margin-bottom: 40px;font-size: 28px;font-weight: bold;">
+                            <b>VISA RENEWAL REPORT</b>
+                        </h2>
+                        <table width="100%" style="border:none;font-family: 'Roboto', sans-serif;">
+                            <tr style="border:none;">
+                                <td t-if="start_date" width="15%" style="font-family: Sans Regular;border:none;">
+                                    <strong>
+                                        Start Date
+                                    </strong>
+                                </td>
+                                <td t-if="start_date" style="font-family: Sans Regular;border:none;">:
+                                    <t t-esc="datetime.datetime.strptime(start_date, '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                                </td>
+                                <td t-if="end_date" width="15%" style="font-family: Sans Regular;border:none;">
+                                    <strong>
+                                        End Date
+                                    </strong>
+                                </td>
+                                <td t-if="end_date" style="font-family: Sans Regular;border:none;">:
+                                    <t t-esc="datetime.datetime.strptime(end_date, '%Y-%m-%d').strftime('%d-%m-%Y')"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table style="width:100%;font-family: Sans Regular;">
+                            <thead>
+                                <tr>
+                                    <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Emp ID
+                                    </th>
+                                    <th style="text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Employee
+                                    </th>
+                                    <th style="text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Department
+                                    </th>
+                                    <th style="text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Designation
+                                    </th>
+                                    <th style="text-align: center;width:12%;font-family: Sans Regular;text-align: center;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Visa No
+                                    </th>
+                                    <th style="text-align: center;width:20%;font-family: Sans Regular;text-align: center;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Visa Start Date
+                                    </th>
+                                    <th style="text-align: center;width:20%;font-family: Sans Regular;text-align: center;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                        Visa Expiry Date
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="ids['data']" t-as="line">
+                                    <tr>
+                                        <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-esc="line['emp_id']"/>
+                                        </td>
+                                        <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-esc="line['emp_name']"/>
+                                        </td>
+                                        <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-esc="line['department']"/>
+                                        </td>
+                                        <td style="font-family: Sans Regular;text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-esc="line['designation']"/>
+                                        </td>
+                                        <td style="font-family: Sans Regular;text-align:center;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-esc="line['visa_no']"/>
+                                        </td>
+                                        <td style="font-family: Sans Regular;text-align:center;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                            <t t-if="line['visa_start_date']" t-esc="datetime.datetime.strptime(str(line['visa_start_date']), '%m-%d-%Y').strftime('%d-%m-%Y')"/>
+                                        </td>
+                                        <td style="font-family: Sans Regular;text-align:center;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                          <t t-if="line['visa_expire']" t-esc="datetime.datetime.strptime(str(line['visa_expire']), '%m-%d-%Y').strftime('%d-%m-%Y')"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </t>
+            <!--             </t> -->
+        </t>
+    </template>
+
+    <record id="paperformat_af_visa" model="report.paperformat">
+        <field name="name">European A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+       <record id="visa_renewal_report" model="ir.actions.report">
+            <field name="name">Visa Renewal Report</field>
+            <field name="model">performance.evaluation</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.visa_renewal_reports</field>
+            <field name="report_file">atheer_hr.visa_renewal_reports</field>
+            <field name="print_report_name">"Visa Renewal Report"</field>
+            <field name="paperformat_id" ref="paperformat_af_visa"/>
+            <field name="binding_model_id" ref="model_visa_renewal_report_wizard"/>
+            <field name="binding_type">report</field>
+        </record>
+
+</odoo>

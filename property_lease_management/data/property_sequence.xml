@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_tenant_ref" model="ir.sequence">
+            <field name="name">TNT</field>
+            <field name="code">res.partner</field>
+            <field name="padding">3</field>
+        </record>
+        <!-- Sequences for asset accessories type -->
+        <record id="seq_assets_accessrz_type_ref" model="ir.sequence">
+            <field name="name">Asset accessories type</field>
+            <field name="code">assets.accessrz.type</field>
+            <field name="active">TRUE</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1143</field>
+            <field name="implementation">no_gap</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- Sequences for property.rent -->
+        <record id="seq_property_rent_agreement" model="ir.sequence">
+            <field name="name">Property Rent Agreement</field>
+            <field name="code">property.rent</field>
+            <field name="prefix">RAG0%(day)s/%(year)s/</field>
+            <field name="padding">6</field>
+        </record>
+        <!--End-->
+
+        <!-- Sequences for property.rent.installment -->
+        <record id="seq_property_rent_installment" model="ir.sequence">
+            <field name="name">Property Rent Installment</field>
+            <field name="code">property.rent.installment</field>
+            <field name="prefix"></field>
+            <field name="padding">6</field>
+        </record>
+        <!--End-->
+
+        <!-- Sequences for property.broking -->
+        <record id="seq_property_broking_agreement" model="ir.sequence">
+            <field name="name">Property Broking Agreement</field>
+            <field name="code">property.broking</field>
+            <field name="prefix">BSI0%(day)s/%(year)s/</field>
+            <field name="padding">6</field>
+        </record>
+        <!--End-->
+
+        <!-- Sequences for property.maintenance -->
+        <record id="seq_property_maintenance" model="ir.sequence">
+            <field name="name">Building Maintenance</field>
+            <field name="code">property.maintenance</field>
+            <field name="prefix">MR/%(year)s/</field>
+            <field name="padding">6</field>
+        </record>
+        <!--End-->
+
+        <!-- Sequences for assets -->
+        <record id="seq_assets_accessories" model="ir.sequence">
+            <field name="name">Assets</field>
+            <field name="code">assets.accessrz</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for issue -->
+        <record id="seq_customer_issue" model="ir.sequence">
+            <field name="name">Customer Issue</field>
+            <field name="code">customer.issue</field>
+            <field name="prefix">CC/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!--        sequence for client information-->
+        <!--        <record id="seq_client_information" model="ir.sequence">-->
+        <!--            <field name="name">ClientInformation</field>-->
+        <!--            <field name="code">client.information</field>-->
+        <!--            <field name="prefix">CI/%(year)s/</field>-->
+        <!--            <field name="padding">5</field>-->
+        <!--            <field name="company_id" eval="False"/>-->
+        <!--        </record>-->
+        <!--        sequence for Tenant Request -->
+        <record id="seq_tenant_request" model="ir.sequence">
+            <field name="name">Tenant Request</field>
+            <field name="code">tenant.request</field>
+            <field name="prefix">TR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dispute_management" model="ir.sequence">
+            <field name="name">Dispute Management</field>
+            <field name="code">dispute.management</field>
+            <field name="prefix">DM/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_legal_action" model="ir.sequence">
+            <field name="name">Legal Action</field>
+            <field name="code">legal.action</field>
+            <field name="prefix">LA/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!--        sequence for Monthly bills -->
+        <record id="seq_monthly_bill" model="ir.sequence">
+            <field name="name">Monthly Bills</field>
+            <field name="code">monthly.bill</field>
+            <field name="prefix">MB/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        sequence for Property Maintenance -->
+        <record id="seq_all_property_maintenance" model="ir.sequence">
+            <field name="name">Unit Maintenance</field>
+            <field name="code">all.property.maintenance</field>
+            <field name="prefix">PR/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        Sequence for plot-->
+
+        <record id="seq_property_plot" model="ir.sequence">
+            <field name="name">Property Plot</field>
+            <field name="code">plot.sequence</field>
+            <field name="prefix">PLOT/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        Sequence for building-->
+        <record id="seq_property_building" model="ir.sequence">
+            <field name="name">Property Building</field>
+            <field name="code">building.sequence</field>
+            <field name="prefix">Building/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        sequence for unit-->
+        <record id="seq_property_unit" model="ir.sequence">
+            <field name="name">Property Unit</field>
+            <field name="code">unit.sequence</field>
+            <field name="prefix">Unit/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        Sequence for Amenities -->
+        <record id="seq_property_amenities" model="ir.sequence">
+            <field name="name">Property Amenities</field>
+            <field name="code">amenities.sequence</field>
+            <field name="prefix">AMENITIES/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!--        Sequence for Monthly Bills -->
+        <record id="seq_property_amenities" model="ir.sequence">
+            <field name="name">Monthly Bills</field>
+            <field name="code">monthly.bill</field>
+            <field name="prefix">MB/%(day)s/%(month)s/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!--        Sequence for Monthly Bills Approval -->
+        <record id="seq_property_amenities" model="ir.sequence">
+            <field name="name">Monthly Bills</field>
+            <field name="code">monthly.bill.approval</field>
+            <field name="prefix">MBA/%(year)s/%(month)s/%(day)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

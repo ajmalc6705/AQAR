@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!--        <record id="view_client_information_tree" model="ir.ui.view">-->
+<!--            <field name="name">client.information.tree</field>-->
+<!--            <field name="model">client.information</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Client Information" sample="1">-->
+<!--                    <field name="name"/>-->
+<!--                    <field name="sequence"/>-->
+<!--                    <field name="date"/>-->
+<!--                    <field name="email"  optional="hide"/>-->
+<!--                    <field name="mobile"  optional="hide"/>-->
+<!--                    <field name="property_id"  optional="hide"/>-->
+<!--                    <field name="building"  optional="hide"/>-->
+<!--                    <field name="state"-->
+<!--                           decoration-info="(state == 'draft')"-->
+<!--                           decoration-success="state == 'approved'"-->
+<!--                           decoration-muted="(state  == 'waiting')"-->
+<!--                           decoration-danger="(state == 'refused')"-->
+<!--                           widget="badge" optional="show"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+<!--        <record id="view_client_information_form" model="ir.ui.view">-->
+<!--            <field name="name">client.information.form</field>-->
+<!--            <field name="model">client.information</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Client Information">-->
+<!--                    <header>-->
+<!--                        <button name="request_for_approval" string="Request for Approval"-->
+<!--                                type="object" class="oe_highlight"-->
+<!--                                groups="amlak_property_management.group_property_sales_user"-->
+<!--                                states="draft"/>-->
+<!--                        <button name="client_approve" string="Approve" type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                groups="amlak_property_management.group_property_sales_admin"-->
+<!--                                states="waiting"/>-->
+<!--                        <button name="send_back" string="Send Back" type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                groups="amlak_property_management.group_property_sales_admin"-->
+<!--                                states="waiting"/>-->
+<!--                        <button name="move_to_refuse" string="Refuse" type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                states="waiting"/>-->
+<!--                        <button string="Muncipality Informations"-->
+<!--                                name="muncipality_informations_link"-->
+<!--                                type="object" default_focus="1" class="btn-primary" -->
+<!--                                attrs="{'invisible': [('state', 'not in',['approved'])]}"/>-->
+<!--                        <button string="Create Rent Agreement"-->
+<!--                                name="rent_agreement"-->
+<!--                                type="object" default_focus="1" class="btn-primary"-->
+<!--                                attrs="{'invisible': [('state', 'not in',['approved'])]}"/>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,approved"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        &lt;!&ndash;                        <div class="oe_button_box" name="button_box">&ndash;&gt;-->
+<!--                        &lt;!&ndash;                            <button class="oe_stat_button"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                    icon="fa-file"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                    name="mr_open" type="object" attrs="{'invisible': [('mrf_count', '&lt;', 1)]}">&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                <field name="mrf_count" widget="statinfo" string="MR"/>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                            </button>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
+
+<!--                        <field name="send_back_flag" invisible="1"/>-->
+<!--                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"-->
+<!--                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>-->
+<!--                        <div class="oe_title oe_left">-->
+<!--                            <h1>-->
+<!--                                <field name="sequence" class="oe_inline" nolabel="1"/>-->
+<!--                            </h1>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group string="Personal Details">-->
+<!--                                <field name="name" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="marital" widget="radio"-->
+<!--                                       attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="resident_card" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="nationality" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                            </group>-->
+<!--                            <group string="Property Informations">-->
+<!--                                <field name="building" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="property_id" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="tenancy_agreement" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="monthly_rental" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                            </group>-->
+<!--                            <group string="ID Informations">-->
+<!--                                &lt;!&ndash; <field name="driving_license" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/> &ndash;&gt;-->
+<!--                                <field name="passport" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="passport_expiry_date"-->
+<!--                                       attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                            </group>-->
+<!--                            <group string="Contact Details">-->
+<!--                                <field name="email" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="mobile" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="mobile_alternate" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="office_no" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                &lt;!&ndash; <field name="fax_no" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/> &ndash;&gt;-->
+<!--                            </group>-->
+<!--                            <group string="Company Information">-->
+<!--                                <field name="company" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="position" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="company_address" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="cr_number" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="commercial_activities" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                            </group>-->
+<!--                            <group string="Others">-->
+<!--                                <field name="date" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="referred_by" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="sales_coordinator" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                <field name="payment_status" attrs="{'readonly': [('state', 'not in', ['draft'])]}" />-->
+<!--                                <field name="approved_by" invisible="1"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <notebook>-->
+<!--                            <page name="friends" string="Friends Referrals">-->
+<!--                                <field name="referrals" attrs="{'readonly': [('state', 'not in', ['draft'])]}">-->
+<!--                                    <tree editable="bottom" sample="1">-->
+<!--                                        <field name="name"/>-->
+<!--                                        <field name="contact_no"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="remarks" string="Remarks">-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="sales_remarks" attrs="{'readonly':[('state','!=', 'draft')]}"/>-->
+<!--                                        <field name="sales_head_remarks"-->
+<!--                                               attrs="{'readonly':[('state','!=', 'waiting')]}"/>-->
+<!--                                        <field name="property_division_remarks"-->
+<!--                                               attrs="{'readonly':[('state','!=', 'approved')]}"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </page>-->
+<!--                            <page string="Documents" name="documents">-->
+<!--                                <field name="doc_ids" attrs="{'readonly': [('state', 'not in', ['draft'])]}">-->
+<!--                                    <tree string="Documents" editable="bottom" sample="1">-->
+<!--                                        <field name="client_id" invisible="1"/>-->
+<!--                                        <field name="doc_type"/>-->
+<!--                                        <field name="doc_no"/>-->
+<!--                                        <field name="doc_dec"/>-->
+<!--                                        <field name="file_name" invisible="1"/>-->
+<!--                                        <field name="attachment_ids" filename="file_name"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page name="approval" string="Approval Info">-->
+<!--                                <group>-->
+<!--                                    <group>-->
+<!--                                        <field name="approved_by" readonly="1"/>-->
+<!--                                        <field name="approved_date" readonly="1"/>-->
+<!--                                        <field name="company_id"-->
+<!--                                               attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>-->
+<!--                                        <field name="partner_id" readonly="1" string="Tenant Created"/>-->
+<!--                                    </group>-->
+<!--                                </group>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                    </sheet>-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids" groups="base.group_user"/>-->
+<!--                        <field name="message_ids"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        &lt;!&ndash;Customer issue action&ndash;&gt;-->
+<!--        <record id="action_client_information" model="ir.actions.act_window">-->
+<!--            <field name="name">Client Information</field>-->
+<!--            <field name="res_model">client.information</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">-->
+<!--                    Click to Client Information.-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+<!--        <menuitem id="menu_client_information"-->
+<!--                  name="Client Information"-->
+<!--                  action="action_client_information"-->
+<!--                  parent="amlak_property_management.menu_rent_and_sale"-->
+<!--                  sequence="1"/>-->
+
+<!--         <record id="view_referral_information_form" model="ir.ui.view">-->
+<!--            <field name="name">referral.information.form</field>-->
+<!--            <field name="model">referral.information</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Referral Information">-->
+<!--                    <sheet>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="name"/>-->
+<!--                                <field name="contact_no"/>-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="client_info" readonly="1"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+    </data>
+</odoo>

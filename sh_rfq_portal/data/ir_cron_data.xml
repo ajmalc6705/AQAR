@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    	<!-- Deactivate Portal access scheduler -->
+        <record id="cron_deactivate_portal_access_rfq" model="ir.cron">
+            <field name="name">Deactivate RFQ/PO Portal Access</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False" />
+            <field name="model_id" ref="purchase.model_purchase_order" />
+            <field name="code">model._run_auto_deactivate_po_portal_access()</field>
+            <field name="state">code</field>
+        </record>
+    </data>
+</odoo>

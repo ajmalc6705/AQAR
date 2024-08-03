@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <!-- master_insurance_views.xml -->
+        <record id="view_master_fuel_card_form" model="ir.ui.view">
+            <field name="name">master.fuel.card.form</field>
+            <field name="model">master.fuel.card</field>
+            <field name="arch" type="xml">
+                <form string="Master Fuel Card">
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="card_number" required="1"/>
+                                <field name="vehicle_id" required="1"/>
+                            </group>
+                            <group>
+                                <field name="petrol_limit_per_month" required="1"/>
+                                <field name="type_of_fuel_id" required="1"/>
+                                <field name="company_id" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_master_fuel_card_tree" model="ir.ui.view">
+            <field name="name">master.fuel.card.tree</field>
+            <field name="model">master.fuel.card</field>
+            <field name="arch" type="xml">
+                <tree string="Master Fuel Card">
+                    <field name="name"/>
+                    <field name="card_number"/>
+                    <field name="vehicle_id"/>
+                    <field name="petrol_limit_per_month"/>
+                    <field name="type_of_fuel_id"/>
+                    <field name="company_id" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_master_fuel_card" model="ir.actions.act_window">
+            <field name="name">Master Fuel Card</field>
+            <field name="res_model">master.fuel.card</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new Fuel Card
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_master_masters" name="Masters" parent="fleet.menu_root"
+                  sequence="20"
+                  action="atheer_fleet_management.action_master_fuel_card"/>
+        <menuitem id="menu_master_fuel_card" name="Fuel Cards"
+                  parent="atheer_fleet_management.menu_master_masters"
+                  sequence="10"
+                  action="atheer_fleet_management.action_master_fuel_card"/>
+    </data>
+</odoo>

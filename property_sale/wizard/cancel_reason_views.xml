@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+      <record id="cancel_sale_reason_view_form" model="ir.ui.view">
+            <field name="name">cancel.reason.form</field>
+            <field name="model">cancel.sale.reason</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Sale Reason">
+                    <group>
+                        <field name="reason" options="{'no_create_edit': True}" />
+                        <field name="date"/>
+                        <field name="amount"/>
+                    </group>
+                    <footer>
+                        <button name="action_cancel_apply" string="Cancel" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sale_cancel_action" model="ir.actions.act_window">
+            <field name="name">Cancel Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cancel.sale.reason</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cancel_sale_reason_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{
+                'dialog_size' : 'medium',
+            }</field>
+        </record>
+</odoo>

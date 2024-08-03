@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <!--        paper format forcancellation report-->
+        <record id="paperformat_cancellation" model="report.paperformat">
+            <field name="name">Cancellation</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">15</field>
+            <field name="margin_right">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">80</field>
+        </record>
+
+        <record id="cancellation_form_report" model="ir.actions.report">
+            <field name="name">Cancellation Form</field>
+            <field name="model">property.checklist.takeover</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Cancellation form'</field>
+            <field name="report_name">property_lease_management.cancellation_form_report_template</field>
+            <field name="report_file">property_lease_management.cancellation_form_report_template</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_cancellation"/>
+            <field name="binding_model_id" ref="model_property_checklist_takeover"/>
+            <field name="binding_type">report</field>
+
+        </record>
+
+        <template id="cancellation_form_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="page">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div style="padding:10px;">
+                                <!--                                <div class="">-->
+                                <hr style="margin-left:10px;border: 1px solid black;"/>
+                                <table width="100%" style="margin-left:20px;">
+                                    <tr>
+                                        <td width="20%">مسقط</td>
+                                        <td width="20%">لبلدية</td>
+                                        <td width="20%">العامة</td>
+                                        <td width="20%">بالمديرية</td>
+                                        <td width="20%">الأفاضل/</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" style="text-align:right">&#160;</td>
+                                        <td >المحترمين...</td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <table width="100%" class="table"
+                                       style="padding:40px !important;border: none;!important">
+<!--                                    <tr style="border:none;">-->
+<!--                                        <td width="50%" style="border:none;">-->
+<!--                                            المحترم-->
+<!--                                        </td>-->
+<!--                                        <td width="50%" style="text-align:right;border:none;">-->
+<!--                                            الفاضل / مدير دائرة الإدارة الداخلية والمالية-->
+<!--                                            <br/>-->
+<!--                                            <strong>المديرية العامة لبلدية مسقط</strong>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+<!--                                    <tr style="border:none;">-->
+<!--                                        <td width="50%" style="border:none;">-->
+
+<!--                                        </td>-->
+<!--                                        <td width="50%" style="text-align:right;border:none;">-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+                                    <tr style="border:none;">
+                                        <td width="50%" style="border:none;">
+                                        </td>
+                                        <td width="50%" style="text-align:right;border:none;">
+                                            <br/>
+                                            <strong>تحية طيبة وبعد ،،،</strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+
+                            </div>
+                            <center>
+                                    <h3><u>الموضوع : إلغاء عقد إيجار</u></h3>
+<!--                                <p>(<t t-esc="o.rent_id.name"/>الموضوع : إلغاء عقد الإيجار رقم(-->
+<!--                                </p>-->
+                            </center>
+                            <br/>
+                            <br/>
+                            <div class="row">
+                                <div style="text-align:right;font-size:14px;!important;">
+                                 <t t-if="o.rent_id.name">   <span> (</span><t t-esc="o.rent_id.name"/><span>)</span></t>
+                                    بالإشارة إلى الموضوع أعلاه
+                                    ، يرجى التكرم بإلغاء عقد
+                                     الإيجار رقم
+                                   <t t-if="o.inspection_date"><span> (</span><t t-esc="o.inspection_date"/><span>)</span></t>
+                                     إعتباراً من تاريخ
+
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </div>
+                            <table width="100%" class="table"
+                                   style="padding:40px !important;border: none;!important">
+                                <tr style="border:none;">
+                                    <td width="50%" style="border:none;">
+
+                                    </td>
+                                    <td width="50%" style="text-align:right;border:none;">
+                                        <strong>شاكرين لكم حسن تعاونكم ،،،</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <br/>
+                            <center>
+                                <strong>وتفضلوا بقبول فائق الإحترام والتقدير ،،،</strong>
+                            </center>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <table width="100%" class="table table-bordered" style="padding:40px !important;">
+                                <tbody>
+                                    <tr>
+                                        <td width="20%" style="text-align:right;">
+                                            التوقيع :
+                                        </td>
+                                        <td width="50%">
+                                            <!--                                            <t t-esc="o"/>-->
+                                            <t t-if="o.building">
+                                                <t t-if="o.building.partner_id">
+                                                    <t t-foreach='o.building.partner_id' t-as='landlord'>
+                                                        <t t-esc="landlord.arabic_name"/>,
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td width="30%" style="text-align:right;">
+                                            مالك العقار:
+                                            <br/>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="20%" style="text-align:right;">
+                                            التوقيع :
+                                        </td>
+                                        <td width="50%">
+                                            <t t-esc="o.partner_id.arabic_name"/>
+                                        </td>
+                                        <td width="30%" style="text-align:right;">
+                                            المستأجــــر:
+                                            <br/>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

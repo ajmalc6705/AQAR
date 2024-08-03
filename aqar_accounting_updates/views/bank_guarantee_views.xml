@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="bank_guarantee_tree" model="ir.ui.view">
+        <field name="name">bank.guarantee.tree</field>
+        <field name="model">bank.guarantee</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="seq"/>
+                <field name="doc_date"/>
+                <field name="name"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <record id="bank_guarantee_form" model="ir.ui.view">
+        <field name="name">bank.guarantee.form</field>
+        <field name="model">bank.guarantee</field>
+        <field name="arch" type="xml">
+            <form string="Bank Guarantee">
+                <header>
+                    <button name="action_approve" type="object" string="Confirm"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm,return"/>
+                    <button name="action_return" type="object" string="Return" class="btn-primary" states="confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Returned" bg_color="bg-info"
+                            attrs="{'invisible': [('return_bool', '=', False)]}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="seq" placeholder="Bank Guarantee"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="transaction" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="partner_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bgno" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="bank_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="branch_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="cheque_no" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="cheque_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="cheque_bank" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="expiry_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="issue_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="return_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="doc_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="return_value" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="return_bool" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Remarks" string="Remarks">
+                            <field name="remarks" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_bank_guarantee" model="ir.actions.act_window">
+        <field name="name">Bank Guarantee</field>
+        <field name="res_model">bank.guarantee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Bank Guarantee
+            </p>
+        </field>
+    </record>
+    <menuitem id="bank_guarantee_menu" name="Bank Guarantee"
+              action="action_bank_guarantee" parent="account.menu_finance_entries"/>
+</odoo>

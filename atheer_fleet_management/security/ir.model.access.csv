@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_number_plate,access_number_plate,model_master_number_plate,,1,1,1,1
+access_vehicle_accessory,access_vehicle_accessory,model_vehicle_accessory,,1,1,1,1
+access_master_battery,access_master_battery,model_master_battery,,1,1,1,1
+access_master_insurance,access_master_insurance,model_master_insurance,,1,1,1,1
+access_master_fuel_card,access_master_fuel_card,model_master_fuel_card,,1,1,1,1
+access_master_vehicle_tyres,access_master_vehicle_tyres,model_master_vehicle_tyres,,1,1,1,1
+access_master_vehicle_tyres,access_master_vehicle_tyres,model_master_vehicle_tyres,,1,1,1,1
+access_service_entry_parts,access_service_entry_parts,model_service_entry_parts,,1,1,1,1
+access_master_brand,access_master_brand,model_master_brand,,1,1,1,1
+access_fleet_inspection,access_fleet_inspection,model_vehicle_inspection,,1,1,1,1
+access_fleet_fuel,access_fleet_fuel,model_fleet_vehicle_type_of_fuel,,1,1,1,1
+access_fleet_fuel_card_entry,access_fleet_fuel_card_entry,model_fuel_card_entry,,1,1,1,1
+access_fleet_fuel_card_consumption,access_fleet_fuel_card_consumption,model_fuel_consumption,,1,1,1,1
+access_fleet_faccident,access_fleet_accident,model_accident_details,,1,1,1,1
+access_fleet_request,access_fleet_request,model_fleet_request,,1,1,1,1
+access_insurance_types,access_insurance_types,model_insurance_types,,1,1,1,1

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_document_attachment,access_document_attachment,model_document_attachments,,1,1,1,1
+access_multi_folder_drive,access_multi_folder_drive,model_multi_folder_drive,,1,1,1,1
+access_google_file_upload,access_google_file_upload,model_google_file_upload,,1,1,1,1

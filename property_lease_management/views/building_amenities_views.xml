@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_building_amenities_tree" model="ir.ui.view">
+        <field name="name">building.amenities.tree</field>
+        <field name="model">building.amenities</field>
+        <field name="arch" type="xml">
+            <tree string="Building Amenities" sample="1">
+                <field name="amenities_no"/>
+                <field name="building_id"/>
+                <field name="ameniti_type_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_building_amenities_form" model="ir.ui.view">
+        <field name="name">building.amenities.form</field>
+        <field name="model">building.amenities</field>
+        <field name="arch" type="xml">
+            <form string="Building Amenities">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="amenities_no" placeholder="e.g. Amenities Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="building_id"/>
+                        </group>
+                        <group>
+                            <field name="ameniti_type_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="notes" string="Description">
+                            <field name="notes"/>
+                        </page>
+                        <page name="inpsection_line" string="Inspection Line">
+                            <field name="inspection_line_ids">
+                                <tree editable="bottom">
+                                    <field name="amenities_id"/>
+                                    <field name="date"/>
+                                    <field name="user_id"/>
+                                    <field name="building_id" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_building_amenities" model="ir.actions.act_window">
+        <field name="name">Building Amenities</field>
+        <field name="res_model">building.amenities</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a Building Amenities.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_building_amenities" name="Building Amenities" action="action_building_amenities" parent="menu_property_config" sequence="10"/>
+<!--    Amenities TYpe-->
+     <record id="view_building_amenities_type_tree" model="ir.ui.view">
+        <field name="name">building.amenities.type.tree</field>
+        <field name="model">amenities.type</field>
+        <field name="arch" type="xml">
+            <tree string="Building Amenities Type" sample="1" editable="bottom">
+               <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+     <record id="action_building_amenities_type" model="ir.actions.act_window">
+        <field name="name">Building Amenities Type</field>
+        <field name="res_model">amenities.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a Building Amenities Type.
+            </p>
+        </field>
+    </record>
+
+
+     <menuitem id="menu_building_amenities_type" name="Building Amenities Type" action="action_building_amenities_type" parent="menu_property_config" sequence="10"/>
+</odoo>

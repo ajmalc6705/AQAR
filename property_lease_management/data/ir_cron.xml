@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="ir.cron" id="rent_check_renew_cron">
+            <field name="name">Check Rent For Renew</field>
+            <field name="model_id" ref="model_property_rent"/>
+            <field name="state">code</field>
+            <field name="code">model.check_renew()</field>
+            <field eval="True" name="active"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+        </record>
+
+        <!-- asset expiration: cron job -->
+        <record id="asset_notification_expiry" model="ir.cron">
+            <field name="name">Asset Notification</field>
+            <field name="model_id" ref="model_assets_accessrz"/>
+            <field name="state">code</field>
+            <field name="code">model.notify_asset_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <!-- document expiration: cron job -->
+<!--        <record id="document_notification_expiry" model="ir.cron">-->
+<!--            <field name="name">Document Notification</field>-->
+<!--            <field name="model_id" ref="model_atheer_documents"/>-->
+<!--            <field name="state">code</field>-->
+<!--            <field name="code">model.notify_document_expiry()</field>-->
+<!--            <field name="interval_number">1</field>-->
+<!--            <field name="interval_type">days</field>-->
+<!--            <field name="numbercall">-1</field>-->
+<!--            <field name="active" eval="True"/>-->
+<!--            <field name="doall" eval="False"/>-->
+<!--        </record>-->
+
+        <!-- property rent expiration: cron job -->
+        <!-- <record id="rent_agreement_expiry" model="ir.cron">
+            <field name="name">Rent Expiry Notification</field>
+            <field name="model_id" ref="model_property_rent"/>
+            <field name="state">code</field>
+            <field name="code">model.check_rent_expiry()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="False"/>
+        </record> -->
+
+        <record id="dispute_notification" model="ir.cron">
+            <field name="name">Dispute Notification</field>
+            <field name="model_id" ref="model_dispute_cheque_bounce"/>
+            <field name="state">code</field>
+            <field name="code">model.dispute_notification()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="doall" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

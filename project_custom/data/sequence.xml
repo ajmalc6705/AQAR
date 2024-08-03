@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_project_project_code" model="ir.sequence">
+            <field name="name">Project</field>
+            <field name="code">project.project.code</field>
+            <field name="prefix">PROJ/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_tender_main" model="ir.sequence">
+            <field name="name">tnd</field>
+            <field name="code">tnd</field>
+            <field name="prefix">TND/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_gate_pass" model="ir.sequence">
+            <field name="name">gp</field>
+            <field name="code">gp</field>
+            <field name="prefix">MN/GP/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_utility" model="ir.sequence">
+            <field name="name">util</field>
+            <field name="code">util</field>
+            <field name="prefix">MN/UTILITY/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_correspondence_log" model="ir.sequence">
+            <field name="name">cl</field>
+            <field name="code">cl</field>
+            <field name="prefix">MN/CRL/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_tender" model="ir.sequence">
+            <field name="name">tdr</field>
+            <field name="code">tdr</field>
+            <field name="prefix">MN/TENDER/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_site_visit" model="ir.sequence">
+            <field name="name">sv</field>
+            <field name="code">sv</field>
+            <field name="prefix">MN/SV/%(year)s/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <!-- LNC -->
+        <record id="seq_hr_manpower_transfer" model="ir.sequence">
+            <field name="name">manpower_transfer</field>
+            <field name="code">manpower.transfer</field>
+            <field name="prefix">MAN/TRANS/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_hr_manpower_transfer_project" model="ir.sequence">
+            <field name="name">manpower_transfer_project</field>
+            <field name="code">manpower.transfer.project</field>
+            <field name="prefix">PROJ/MAN/TRANS/</field>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="seq_project_sub_contract" model="ir.sequence">
+            <field name="name">project.sub.contract</field>
+            <field name="code">project.sub.contract</field>
+            <field name="prefix">PROJ/SUB/</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

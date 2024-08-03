@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+ <record id="hr_vacancy_request_tree" model="ir.ui.view">
+        <field name="name">hr.work.permit.tree</field>
+        <field name="model">hr.work.permit</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ref"/>
+                <field name="issue_date"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Hr Work Permit Form View-->
+    <record id="hr_vacancy_request_form" model="ir.ui.view">
+        <field name="name">hr.work.permit.form</field>
+        <field name="model">hr.work.permit</field>
+        <field name="arch" type="xml">
+            <form string="Work Permit">
+                <header>
+                    <button name="action_approve" type="object" string="Confirm"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" states="cancel,confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" placeholder="IoU"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="issue_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="expiry_date" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                            />
+                            <field name="gender" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                        <group>
+
+                            <field name="job_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="partner_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="utilized_workers" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="company_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Remarks" string="Remarks">
+                            <field name="notes" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for Work Permit-->
+    <record id="action_work_permit" model="ir.actions.act_window">
+        <field name="name">Work Permit</field>
+        <field name="res_model">hr.work.permit</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Work Permit
+            </p>
+        </field>
+    </record>
+    <menuitem id="work_permit_menu" name="Work Permit" parent="hr_recruitment.menu_hr_recruitment_root"
+              action="action_work_permit"/>
+</odoo>

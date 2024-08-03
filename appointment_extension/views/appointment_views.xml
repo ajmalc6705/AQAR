@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="appointment_validated_views" inherit_id="appointment.appointment_validated">
+        <xpath expr="//h1[hasclass('o_page_header')]" position="replace">
+            <h1 class="o_page_header mt32">
+                <t t-if="event.name">
+                    <span t-out="event.name"/>
+                </t>
+            </h1>
+        </xpath>
+        <xpath expr="//div[hasclass('o_appointment_validation_details')]" position="replace">
+            <div class="o_appointment_validation_details row justify-content-between pt-3 mb48">
+                <div t-attf-class="col-12 o_not_editable {{'col-md-8 pe-md-4 pe-lg-5' if staff_user else ''}}">
+                    <div class="alert alert-info pb16" t-if="state == 'new'" role="status">
+                        <p class="mb-0">
+                            <strong>Your appointment has been successfully booked!</strong>
+                            <a groups="appointment.group_appointment_manager"
+                               t-attf-href="/web#id=#{event.appointment_type_id.id}&amp;view_type=form&amp;model=appointment.type&amp;action=appointment.appointment_type_action">
+                                <span class="text-nowrap"><i class="fa fa-arrow-right mx-2"/>Back to edit mode
+                                </span>
+                            </a>
+                            <br/>
+                        </p>
+                    </div>
+                    <div class="alert alert-danger pb16" t-if="state == 'no-cancel'" role="alert">
+                        <p class="mb-0">
+                            <strong>Your appointment is in less than
+                                <t t-out="appointment_type.min_cancellation_hours"/>
+                                hours from now!
+                            </strong>
+                            It's too late to cancel online, please contact the attendees another way if you really can't
+                            make it.
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                            <label>When:</label>
+                        </div>
+                        <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                            <t t-out="datetime_start"/>
+                            <i class="text-muted text-xs-nowrap">(timezone:<t t-out="request.session.timezone"/>)
+                            </i>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                            <label>Duration:</label>
+                        </div>
+                        <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                            <t t-out="event.duration"
+                               t-options="{'widget': 'duration', 'unit': 'hour', 'round': 'minute'}"/>
+                        </div>
+                    </div>
+                    <div t-if="event.enable_meeting_link" class="row">
+                        <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                            <label class="form-label">How to Join:</label>
+                        </div>
+                        <div class="o_pt_2_px col-8 col-sm-9 col-xl-10 text-break">
+                            <label>
+                                <t t-if="event.get_base_url() in event.videocall_location">Join with Odoo Discuss</t>
+                                <t t-else="">Join at</t>
+                            </label>
+                            <br/>
+                            <a t-att-href="event.videocall_location" target="_blank" t-out="event.videocall_location"/>
+                        </div>
+                    </div>
+                    <div t-if="not is_html_empty(event.description)" class="row">
+                        <div class="col-4 col-sm-3 col-xl-2 pe-0">
+                            <label>Details:</label>
+                        </div>
+                        <div class="o_pt_2_px col-8 col-sm-9 col-xl-10">
+                            <div t-field="event.description"/>
+                        </div>
+                    </div>
+                    <div t-if="appointment_type" t-out="appointment_type.message_confirmation" class="mt-4"/>
+                </div>
+                <div t-if="staff_user" class="col-12 col-md-4">
+                    <article class="card o_appointment_user_short_card border-1 shadow-sm" itemscope="itemscope"
+                             itemtype="http://schema.org/Employee">
+                        <header t-if="appointment_type.avatars_display == 'show'"
+                                class="overflow-hidden bg-secondary rounded-top">
+                            <img t-attf-src="/appointment/#{appointment_type.id}/avatar?user_id=#{staff_user.id}"
+                                 class="w-100 h-100 o_object_fit_cover o_appointment_avatar_background"/>
+                        </header>
+                        <main class="card-body">
+                            <h2 class="mb-0" t-out="staff_user.name"/>
+                            <div class="o_appointment_card_user_fct text-black-50 h6">
+                                <div t-field="staff_user.partner_id.function" placeholder="Add a function here..."/>
+                            </div>
+                            <div t-if="staff_user.email" class="fs-6 lh-lg d-flex">
+                                <i class="fa fa-envelope o_appointment_fa_width text-center fs-5 me-2 pt-1"/>
+                                <span class="overflow-auto">
+                                    <t t-out="staff_user.email"/>
+                                </span>
+                            </div>
+                            <div t-if="staff_user.partner_id.phone" class="fs-6 lh-lg d-flex">
+                                <i class="fa fa-phone o_appointment_fa_width text-center fs-5 me-2 pt-1"/>
+                                <t t-out="staff_user.partner_id.phone"/>
+                            </div>
+                        </main>
+                    </article>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
+
+

@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <template id="atheer_soa_report.statement_document">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <div class="text-center" style="border-bottom: 1px solid black !important;">
+                        <div class="col-2 pull-left">
+                            <img t-if="data.get('company_id').logo" t-att-src="image_data_uri(data.get('company_id').logo)" style="width:150px;height:80px;" alt="Logo"/>
+                        </div>
+                        <h3>
+                            <center><t t-esc="data['company_id'].name"/></center>
+                        </h3>
+                        <span>
+                            <t t-if="data['company_id'].street"><t t-esc="data['company_id'].street"/>, </t>
+                            <t t-if="data['company_id'].street2"><t t-esc="data['company_id'].street2"/>, </t>
+                            <t t-if="data['company_id'].city"><t t-esc="data['company_id'].city"/>, </t>
+                            <t t-if="data['company_id'].state_id"><t t-esc="data['company_id'].state_id.name"/> </t>
+                            <t t-if="data['company_id'].zip"><t t-esc="data['company_id'].zip"/>, </t>
+                            <t t-if="data['company_id'].country_id"><t t-esc="data['company_id'].country_id.name"/>, </t>
+                            <t t-if="data['company_id'].phone">Tel:<t t-esc="data['company_id'].phone"/>, </t>
+                            <t t-if="data['company_id'].mobile">Mobile:<t t-esc="data['company_id'].mobile"/>, </t>
+                            <t t-if="data['company_id'].email">Email:<t t-esc="data['company_id'].email"/>, </t>
+                            <t t-if="data['company_id'].website">Website:<t t-esc="data['company_id'].website"/>, </t>
+                        </span>
+                    </div>
+                    <div>
+                        To,
+                        <div name="statement_address" style="padding-top:10px;" class="col-xs-5 col-xs-offset-7">
+                            <address t-esc="data['partner_id']"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                            <div t-if="data['partner_id'].vat" class="mt16"><t t-esc="data['partner_id'].country_id.vat_label or 'TIN'"/>:
+                                <span t-field="data['partner_id'].vat"/>
+                            </div>
+                            <span> Currency: <t t-esc="data['currency']"/> </span>
+                        </div>
+                        <h4>
+                            <center>Statement of Account on <t t-esc="data['balance_as_of_date']"/></center>
+                        </h4>
+<!--                        <p>-->
+<!--                            Date: <span t-esc=""/><br/>&lt;!&ndash;Today&ndash;&gt;-->
+<!--                            <t t-if="partner_id.name">Partner ref:<span t-esc="partner_id.name"/></t>-->
+<!--                        </p>-->
+
+                        <t t-if="docs">
+                            <br/>
+                                <table class="table table-bordered" style="font-size:13px;">
+                                    <thead>
+                                        <tr>
+                                            <th width="130px;">Trans Type</th>
+                                            <th>Bill No.</th>
+                                            <th width="100px;">Bill Date</th>
+                                            <th>Reference</th>
+                                            <th class="amount" width="130px;">Currency Amount</th>
+<!--                                            <th class="amount">Debit</th>-->
+<!--                                            <th class="amount">Credit</th>-->
+                                            <th class="amount" width="120px;">Balance(OMR)</th>
+<!--                                            <th>Currency</th>-->
+<!--                                            <th>Due Date</th>-->
+                                            <th>Age</th>
+                                        </tr>
+                                    </thead>
+
+<!--                                    <tr t-if="not data['include_all']">-->
+<!--&lt;!&ndash;                                        <t t-if="data['partner_id'].customer_rank &gt; 0">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td t-if="data['partner_id'].supplier_rank &gt; 0" colspan="5" style="border-top:1px !important;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                               <b> Initial Balance</b>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <td t-else="" colspan="4" style="border-top:1px !important;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                               <b> Initial Balance</b>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </t>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <t t-else="">&ndash;&gt;-->
+<!--                                            <td colspan="6" style="border-top:1px !important;">-->
+<!--                                               <b> Initial Balance in OMR</b>-->
+<!--                                            </td>-->
+<!--&lt;!&ndash;                                        </t>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <td class="amount" style="border-top:1px !important;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                           <b> <span t-esc="data['initial_debit']"/> </b>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <td class="amount" style="border-top:1px !important;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                           <b> <span t-esc="data['initial_credit']"/> </b>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </td>&ndash;&gt;-->
+<!--                                        <td class="amount" style="border-top:1px !important;">-->
+<!--                                            <b> <span t-esc="data['initial_balance']"/> </b>-->
+<!--                                        </td>-->
+<!--&lt;!&ndash;                                        <td style="border-top:1px !important;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            OMR&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </td>&ndash;&gt;-->
+<!--                                        <td/>-->
+<!--                                        <td/>-->
+<!--                                    </tr>-->
+
+                                    <tr t-foreach="docs" t-as="line">
+<!--                                            t-att-class="'statement-blocked' if line['blocked'] else ''">-->
+
+                                        <td>
+                                            <span t-esc="line['transfer_type']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['name']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['invoice_date']"/>
+                                        </td>
+<!--                                        <td>-->
+<!--                                            <span t-esc="line['sale_order']"/>-->
+<!--                                        </td>-->
+                                        <td>
+                                            <span t-esc="line['ref']"/>
+                                        </td>
+                                        <td class="amount">
+                                            <span t-esc="line['amount_currency']"/>
+                                        </td>
+<!--                                        <td class="amount">-->
+<!--                                            <span t-esc="line['debit']"/>-->
+<!--                                        </td>-->
+<!--                                        <td class="amount">-->
+<!--                                            <span t-esc="line['credit']"/>-->
+<!--                                        </td>-->
+                                        <td class="amount">
+                                            <span t-esc="line['balance']"/>
+                                        </td>
+<!--                                        <td>-->
+<!--                                            <span t-esc="line['move_id'].currency_id.name"/>-->
+<!--                                        </td>-->
+<!--                                            <td>-->
+<!--                                                <span t-esc="line.invoice_date_due"-->
+<!--                                                      t-options="{'widget': 'remaining_days'}"/>-->
+<!--                                            </td>-->
+<!--                                        <td>-->
+<!--                                            <span t-esc="line['invoice_date_due']"/>-->
+<!--                                        </td>-->
+                                        <td>
+                                            <span t-esc="line['age']"/>
+                                        </td>
+                                    </tr>
+                                    <t t-if="len(data['currency_ids'])>0">
+                                        <tr style="border-top:1px !important;" t-foreach="data['currency_ids']" t-as="currency">
+                                            <td colspan="4" style="border-top:1px !important;">
+                                                Total in <span t-esc="currency.name"/>
+                                            </td>
+                                            <td class="amount" style="border-top:1px !important;">
+                                                <span t-esc="data[currency.name]"/>
+                                            </td>
+<!--                                            <td style="border-top:1px !important;">-->
+<!--                                                <span t-esc="currency.name"/>-->
+<!--                                            </td>-->
+<!--                                            <td/>-->
+<!--                                            <td/>-->
+                                            <td/>
+                                            <td/>
+                                        </tr>
+                                    </t>
+
+                                    <tr>
+                                        <td colspan="5" style="border-top:1px !important;">
+<!--                                           <b> Total in OMR</b>-->
+                                           <b> Final Balance in OMR</b>
+                                        </td>
+<!--                                        <td class="amount" style="border-top:1px !important;">-->
+<!--                                           <b> <span t-esc="data['total_debit']"/> </b>-->
+<!--                                        </td>-->
+<!--                                        <td class="amount" style="border-top:1px !important;">-->
+<!--                                           <b> <span t-esc="data['total_credit']"/> </b>-->
+<!--                                        </td>-->
+                                        <td class="amount" style="border-top:1px !important;">
+                                            <b> <span t-esc="data['total_balance']"/> </b>
+                                        </td>
+<!--                                        <td style="border-top:1px !important;">-->
+<!--                                            OMR-->
+<!--                                        </td>-->
+                                        <td/>
+<!--                                        <td/>-->
+                                    </tr>
+
+                                </table>
+                        </t>
+                        <p t-if="not docs">
+                            <strong>This partner doesn't have due entries.</strong>
+                        </p>
+                        <div class="footer">
+                            <div t-if="report_type == 'pdf'" class="text-muted text-center" style="font-family:Sans Regular!important;">
+                                Page:
+                                <span class="page"/>
+                                /
+                                <span class="topage"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_partner_soa" model="report.paperformat">
+        <field name="name">SOA A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">1</field>
+        <field name="dpi">96</field>
+    </record>
+
+
+
+    <record id="action_customer_soa_report_pdf" model="ir.actions.report">
+        <field name="name">Statment of Account</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">atheer_soa_report.statement_document</field>
+        <field name="report_file">atheer_soa_report.statement_document</field>
+        <field name="binding_type">report</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="paperformat_id" ref="paperformat_partner_soa"/>
+    </record>
+</odoo>

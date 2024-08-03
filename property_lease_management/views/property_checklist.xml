@@ -1,0 +1,577 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--   HANDOVER CHECKLIST FORM     -->
+        <record id="view_checklist_form" model="ir.ui.view">
+            <field name="name">checklist.form</field>
+            <field name="model">property.checklist</field>
+            <field name="arch" type="xml">
+                <form string="Checklist" class="property_checklist_form" create="false">
+                    <header>
+                        <button name="confirm_check_list" class="oe_highlight" type="object" states='draft'
+                                string="Confirm"/>
+                        <button name="approve_check_list" class="oe_highlight" type="object" states='waiting'
+                                string="Confirm"/>
+                        <button name="send_back_check_list" class="oe_highlight" type="object" states='waiting'
+                                string="Send Back"/>
+                        <button name="select_all_working" class="oe_highlight" type="object" states='draft'
+                                string="Set All Working"/>
+                        <button name="select_all_not_working" class="oe_highlight" type="object" states='draft'
+                                string="Set All Not Working"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,confirm"/>
+                    </header>
+                    <sheet>
+                        <group string="Property Handover Check List">
+                            <group>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="company" invisible="1"/>
+                                <field name="building" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="inspection_date" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="checked" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+                            <group>
+                                <field name="elec_acc_no" invisible="1"/>
+                                <field name="elec_meter_no" invisible="1"/>
+                                <field name="elec_meter_reading" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="water_acc_no" invisible="1"/>
+                                <field name="water_meter_no" invisible="1"/>
+                                <field name="water_meter_reading" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="hand_over_checklist" string="Asset Details">
+                                <field name="hand_over_checklist" class="oe_clear">
+                                    <tree editable="bottom" decoration-bf="(session_head)" create="false" delete="false"
+                                          sample="1">
+                                        <field name="sl_no"
+                                               readonly="1"
+                                               style="width:100px !important"
+                                               attrs="{'invisible':[('session_head','=', False)]}"/>
+                                        <field name="description"
+                                               readonly="1"
+                                               style="width:350px !important"/>
+                                        <field name="session_head" invisible="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="quantity" readonly="1"
+                                               attrs="{'invisible':[('session_head','=', True)]}"/>
+                                        <field name="yes_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="not_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="remarks"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Electricity Account" string="Electricity Account">
+                                <field name="electricity_account_ids">
+                                    <tree create="0" editable="bottom">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                        <field name="meter_reading"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="water_account" string="Water Account">
+                                <field name="water_account_ids">
+                                    <tree create="0" editable="bottom">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                        <field name="meter_reading"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="remarks" string="Remarks">
+                                <field name="remarks"/>
+                            </page>
+                            <page name="Signature" string="Signature">
+                                <field name="signature" widget="signature" nolabel="0" string="Signature"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_takeover_checklist_form" model="ir.ui.view">
+            <field name="name">takeover.checklist.form</field>
+            <field name="model">property.checklist.takeover</field>
+            <field name="arch" type="xml">
+                <form string="Takeover Checklist" create="false">
+                    <header>
+                        <button name="confirm_check_list" class="oe_highlight" type="object" states='draft'
+                                string="Confirm"/>
+                        <button name="approve_check_list" class="oe_highlight" type="object" states='waiting'
+                                string="Confirm"/>
+                        <button name="send_back_check_list" class="oe_highlight" type="object" states='waiting'
+                                string="Send Back"/>
+                        <button name="select_all_working" class="oe_highlight" type="object" states='draft'
+                                string="Set All Working"/>
+                        <button name="select_all_not_working" class="oe_highlight" type="object" states='draft'
+                                string="Set All Not Working"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting,confirm"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="building" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="resolved"/>
+                            </group>
+                            <group>
+                                <field name="inspection_date" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="checked" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+                        </group>
+                        <group string="Rent Details">
+                            <group>
+                                <field name="agreement_no"/>
+                                <field name="expiry_date"/>
+                            </group>
+                            <group>
+                                <field name="municipality_agreement_no"
+                                />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Inspection Reports">
+                                <group>
+                                    <group>
+                                        <field name="elec_water_paid"/>
+                                        <field name="rent_paid"/>
+                                    </group>
+                                    <group>
+                                        <field name="maintenance_paid"/>
+                                        <field name="check_8"/>
+                                        <field name="inspection_report_date"
+                                               attrs="{'readonly': [('state','!=', 'draft')]}"
+                                        />
+                                        <field name="water_meter_reading" invisible="1"/>
+                                        <field name="water_acc_no" invisible="1"/>
+                                        <field name="water_meter_no" invisible="1"/>
+                                        <field name="elec_meter_reading" invisible="1"/>
+                                        <field name="elec_acc_no" invisible="1"/>
+                                        <field name="elec_meter_no" invisible="1"/>
+                                    </group>
+
+                                    <div>
+                                        <p>
+                                            <strong>Keys will be received only after completing the above items.
+                                            </strong>
+                                        </p>
+                                    </div>
+                                    <group/>
+                                    <group>
+                                        <field name="keys_received"/>
+                                    </group>
+
+                                </group>
+
+                                <group string="Details of Work to be Carried Out"/>
+
+                                <field name="inspection_report">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="sl_no" readonly="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="description" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="remarks" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="amount" attrs="{'readonly': [('state','!=', 'draft')]}"/>
+                                    </tree>
+                                </field>
+                                <div/>
+                                <group name="sub_total" col="6" class="mt-2 mt-md-0">
+                                    <group colspan="4">
+
+                                    </group>
+                                    <group class="oe_subtotal_footer" colspan="2" name="total_amount">
+                                        <field name="amount_total" force_save="1" readonly="1" digits="[12,3]"
+
+                                        />
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="dispute_management" string="Dispute Management">
+                                <field name="dispute_cheque_ids">
+                                    <tree create="false" delete="false"
+                                          sample="1">
+                                        <field name="partner_id"/>
+                                        <field name="building_id"/>
+                                        <field name="property_id"/>
+                                        <field name="rent_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="legal_action" string="Legal Action">
+                                <field name="legal_action_ids">
+                                    <tree create="false" delete="false"
+                                          sample="1">
+                                        <field name="partner_id"/>
+                                        <field name="building_id"/>
+                                        <field name="property_id"/>
+                                        <field name="rent_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Electricity Account" string="Electricity Account">
+                                <field name="electricity_account_ids">
+                                    <tree editable="bottom" create="0">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                        <field name="meter_reading"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="water_account" string="Water Account">
+                                <field name="water_account_ids">
+                                    <tree editable="bottom" create="0">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                        <field name="meter_reading"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="checklist" string="HandOver Checklist">
+                                <field name="hand_over_checklist" class="oe_clear" readonly="1">
+                                    <tree editable="bottom" decoration-bf="(session_head)" create="false" delete="false"
+                                          sample="1">
+                                        <field name="sl_no"
+                                               readonly="1"
+                                               style="width:100px !important"
+                                               attrs="{'invisible':[('session_head','=', False)]}"/>
+                                        <field name="description"
+                                               readonly="1"
+                                               style="width:350px !important"/>
+                                        <field name="session_head" invisible="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="quantity" readonly="1"
+                                               attrs="{'invisible':[('session_head','=', True)]}"/>
+                                        <field name="yes_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="not_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="remarks"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="turn_over_punch_list" string="Turn-Over Punchlist">
+                                <field name="take_over_checklist">
+                                    <tree editable="bottom" decoration-bf="(session_head)" create="false"
+                                          delete="false">
+                                        <field name="sl_no"
+                                               readonly="1"
+                                               style="width:100px !important"
+                                               attrs="{'invisible':[('session_head','=', False)]}"/>
+                                        <field name="description"
+                                               readonly="1"
+                                               style="width:350px !important"/>
+                                        <field name="session_head" invisible="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="quantity"
+                                               readonly="1"
+                                               attrs="{'invisible':[('session_head','=', True)]}"/>
+                                        <field name="yes_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="not_working"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                        <field name="remarks"
+                                               attrs="{'invisible':[('session_head','=', True)], 'readonly': [('state','!=', 'draft')]}"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="remarks" string="Remarks">
+                                <field name="remarks"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_checklist_tree" model="ir.ui.view">
+            <field name="name">checklist.tree</field>
+            <field name="model">property.checklist</field>
+            <field name="arch" type="xml">
+                <tree string="Checklist" sample="1" create="0" decoration-info="(state == 'draft')">
+                    <field name="partner_id"/>
+                    <field name="building"/>
+                    <field name="property_id"/>
+                    <field name="rent_id"/>
+                    <field name="company_id"/>
+                    <field name="state" widget="badge" decoration-danger="(state == 'waiting')"
+                           decoration-info="(state == 'draft')" decoration-success="(state == 'confirm')"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_checklist_takeover_tree" model="ir.ui.view">
+            <field name="name">checklist.takeover.tree</field>
+            <field name="model">property.checklist.takeover</field>
+            <field name="arch" type="xml">
+                <tree string="Takeover Checklist" sample="1" create="0" decoration-info="(state == 'draft')">
+                    <field name="partner_id"/>
+                    <field name="building"/>
+                    <field name="property_id"/>
+                    <field name="rent_id"/>
+                    <field name="company_id"/>
+                    <field name="state" widget="badge" decoration-danger="(state == 'waiting')"
+                           decoration-info="(state == 'draft')" decoration-success="(state == 'confirm')"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="checklist_takeover_search_view" model="ir.ui.view">
+            <field name="name">property.checklist.takeover.search</field>
+            <field name="model">property.checklist.takeover</field>
+            <field name="arch" type="xml">
+                <search string="Take over checklist">
+                    <field name="property_id"/>
+                    <field name="building"/>
+                    <field name="rent_id"/>
+                    <field name="partner_id" string="Tenant"/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" context="{'group_by':'state'}" name="group_by_state"/>
+                        <filter string="Building" context="{'group_by':'building'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                        <filter name="partner_filter" string="Tenant" context="{'group_by': 'partner_id'}"/>
+                        <filter name="rent_filter" string="Rent Agreement" context="{'group_by': 'rent_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="checklist_handover_search_view" model="ir.ui.view">
+            <field name="name">property.checklist.search</field>
+            <field name="model">property.checklist</field>
+            <field name="arch" type="xml">
+                <search string="Hand over checklist">
+                    <field name="property_id"/>
+                    <field name="building"/>
+                    <field name="rent_id"/>
+                    <field name="partner_id" string="Tenant"/>
+                    <group expand="0" string="Group By">
+                        <filter string="State" context="{'group_by':'state'}" name="group_by_state"/>
+                        <filter string="Building" context="{'group_by':'building'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                        <filter name="partner_filter" string="Tenant" context="{'group_by': 'partner_id'}"/>
+                        <filter name="rent_filter" string="Rent Agreement" context="{'group_by': 'rent_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_checklist" model="ir.actions.act_window">
+            <field name="name">Handover Checklist</field>
+            <field name="res_model">property.checklist</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="action_takeover_checklist" model="ir.actions.act_window">
+            <field name="name">Takeover Checklist</field>
+            <field name="res_model">property.checklist.takeover</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem id="menu_hand_over_checklist"
+                  name="Hand Over Checklists"
+                  action="action_checklist"
+                  parent="property_lease_management.menu_rent_and_sale" sequence="15"/>
+
+        <menuitem id="menu_takeover_checklist"
+                  name="Take Over Checklists"
+                  action="action_takeover_checklist"
+                  parent="property_lease_management.menu_rent_and_sale" sequence="16"/>
+
+        <record id="view_cancellation_form" model="ir.ui.view">
+            <field name="name">agreement.cancellation.form</field>
+            <field name="model">agreement.cancellation</field>
+            <field name="arch" type="xml">
+                <form string="Rent Agreement Cancellation">
+                    <header>
+                        <button name="button_confirm" string="Confirm" type="object"
+                                attrs="{'invisible':[('state','!=','draft')]}" class="oe_highlight"/>
+                        <button name="done" string="Done" type="object"
+                                attrs="{'invisible':[('state','!=','confirm')]}" class="oe_highlight"/>
+                        <button name="make_maintenance" string="Make Maintenance Job" type="object"
+                                class="oe_highlight" invisible="1" groups="base.group_user"
+                        />
+                        <!--                         attrs="{'invisible':[('state','!=','confirm')]}"-->
+                        <!--                            <button name="pay_deposit" string="Pay/Receive Deposit" type="object"-->
+                        <!--                                    attrs="{'invisible':[('state','!=','confirm')]}" class="oe_highlight"-->
+                        <!--                                    groups="base.group_user"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="rent_id" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="building" readonly="1"/>
+                                <field name="property_id" readonly="1"/>
+                            </group>
+                            <group>
+
+                                <field name="reason" attrs="{'readonly': [('state','=', 'done')]}"/>
+                                <field name="date_vacate"
+                                       attrs="{'invisible':[('reason','=','cancel')], 'readonly':[('state','!=','draft')]}"
+                                />
+                                <field name="remarks" attrs="{'readonly': [('state','=', 'done')]}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_cancellation_tree" model="ir.ui.view">
+            <field name="name">agreement.cancellation.tree</field>
+            <field name="model">agreement.cancellation</field>
+            <field name="arch" type="xml">
+                <tree string="Rent Agreement Cancellation" sample="1" create="0">
+                    <field name="rent_id"/>
+                    <field name="partner_id"/>
+                    <field name="building"/>
+                    <field name="property_id"/>
+                    <field name="reason"/>
+                    <field name="date_vacate" optional="hide"/>
+                    <field name="remarks" optional="hide"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state" decoration-info="(state == 'draft')" decoration-danger="(state == 'confirm')"
+                           decoration-success="state == 'done'" widget="badge" optional="show"
+                    />
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_agreement_cancel" model="ir.actions.act_window">
+            <field name="name">Rent Agreement Cancellation</field>
+            <field name="res_model">agreement.cancellation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem id="agreement_cancel"
+                  name="Cancelled Agreement"
+                  action="action_agreement_cancel"
+                  parent="property_lease_management.menu_rent_and_sale" sequence="20"/>
+
+        <record id="view_property_room_form" model="ir.ui.view">
+            <field name="name">property.room.form</field>
+            <field name="model">property.room</field>
+            <field name="arch" type="xml">
+                <form string="Room">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="type_id"/>
+                                <field name="property_id"/>
+                            </group>
+                            <group>
+                                <field name="room_length"/>
+                                <field name="room_width"/>
+                                <field name="room_height"/>
+                            </group>
+                            <group>
+                                <field name="asset_type_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_checklist_handover_assets_form" model="ir.ui.view">
+            <field name="name">checklist.handover.assets.form</field>
+            <field name="model">checklist.handover.assets</field>
+            <field name="arch" type="xml">
+                <form string="Handover Checklists">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="hand_over_checklist_id"/>
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="quantity"/>
+                            </group>
+                            <group>
+                                <field name="yes_working"/>
+                                <field name="not_working"/>
+                                <field name="remarks"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_checklist_takeover_assets_form" model="ir.ui.view">
+            <field name="name">checklist.takeover.assets.form</field>
+            <field name="model">checklist.takeover.assets</field>
+            <field name="arch" type="xml">
+                <form string="Takeover Checklists">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="turn_over_checklist_id"/>
+                                <field name="name"/>
+                                <field name="description"/>
+                                <field name="quantity"/>
+                            </group>
+                            <group>
+                                <field name="yes_working"/>
+                                <field name="not_working"/>
+                                <field name="remarks"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

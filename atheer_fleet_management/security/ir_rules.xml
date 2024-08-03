@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Multi - Company Rules -->
+    <record id="accident_details_multi__company_rule" model="ir.rule">
+        <field name="name">Accident Details Multi company rules</field>
+        <field name="model_id" ref="model_accident_details"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="master_battery_multi_company_rule" model="ir.rule">
+        <field name="name">Master Battery Multi company rules</field>
+        <field name="model_id" ref="model_master_battery"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="fleet_request_multi_company_rule" model="ir.rule">
+        <field name="name">Fleet Request Multi company rules</field>
+        <field name="model_id" ref="model_fleet_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="fuel_card_entry_multi_company_rule" model="ir.rule">
+        <field name="name">Fleet Card Entry Multi company rules</field>
+        <field name="model_id" ref="model_fuel_card_entry"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="master_fuel_card_multi_company_rule" model="ir.rule">
+        <field name="name">Fleet Card Master Multi company rules</field>
+        <field name="model_id" ref="model_master_fuel_card"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="master_insurance_multi_company_rule" model="ir.rule">
+        <field name="name">Master Insurance Multi company rules</field>
+        <field name="model_id" ref="model_master_insurance"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="master_number_plate_multi_company_rule" model="ir.rule">
+        <field name="name">Master Number Plate Multi company rules</field>
+        <field name="model_id" ref="model_master_number_plate"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="vehicle_inspection_multi_company_rule" model="ir.rule">
+        <field name="name">Vehicle Inspection Multi company rules</field>
+        <field name="model_id" ref="model_vehicle_inspection"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="master_vehicle_tyres_multi_company_rule" model="ir.rule">
+        <field name="name">Master Vehicle Tyres Multi company rules</field>
+        <field name="model_id" ref="model_master_vehicle_tyres"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="property_forcasting_excel_tag" model="ir.actions.report">
+            <field name="name">Property Forcasting Report</field>
+            <field name="model">property.forcasting.excel.wizard</field>
+            <field name="report_type">xlsx</field>
+            <field name="print_report_name">'Property Forcasting Report'</field>
+            <field name="report_name">property_lease_management.property_forcasting_report</field>
+            <field name="report_file">property_lease_management.property_forcasting_report</field>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

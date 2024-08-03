@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+civil_id_type,id_type,model_id_type,,1,1,1,1
+customer_type,customer_type,model_customer_type,,1,1,1,1
+
+

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="monthly_bill_approval_excel_report_tag" model="ir.actions.report">
+            <field name="name">Monthly Bill Excel</field>
+            <field name="model">monthly.bill.approval</field>
+            <field name="report_type">xlsx</field>
+            <field name="print_report_name">'Monthly Bill'</field>
+            <field name="report_name">property_lease_management.monthly_bill_excel</field>
+            <field name="report_file">property_lease_management.monthly_bill_excel</field>
+            <field name="binding_model_id" ref="property_lease_management.model_monthly_bill_approval"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="monthly_bill_approval_report_tag" model="ir.actions.report">
+            <field name="name">Monthly Bill PDF</field>
+            <field name="model">monthly.bill.approval</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Monthly Bill-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.monthly_bill_approval_template</field>
+            <field name="report_file">property_lease_management.monthly_bill_approval_template</field>
+            <field name="binding_model_id" ref="property_lease_management.model_monthly_bill_approval"/>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_monthly_bill"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="monthly_bill_approval_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-if="o.bill_type.name == 'Electricity'">
+                            <div>
+                                <h2>
+                                    <center>Monthly Electricity Bill</center>
+                                </h2>
+                                <br/>
+                                <strong>From :</strong>
+                                <span t-field="o.from_date"/>
+                                <br/>
+                                <br/>
+                                <strong>To :</strong>
+                                <span t-field="o.to_date"/>
+                                <br/>
+                                <br/>
+                                <table class="table table-bordered" width="100%"
+                                       style="border:solid 1px; border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Project
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Electricity
+                                                Account
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Previous Reading
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Current Reading
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Consumption KWH
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Consuming
+                                                readings
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Unit Rate
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                VAT Amount
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Total Amount
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach='o.monthly_bill_ids' t-as='line'>
+                                            <tr>
+                                                <td style="vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span style="text-align:left !important;"
+                                                          t-field="line.building_id"/>
+                                                </td>
+                                                <td style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.electricity_account"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.previous_reading"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.current_reading"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.kwh"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.consumed_reading"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.unit_rate"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.tax_amount"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.total_amount"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr style="text-align:right;">
+                                            <td colspan="8" style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>Grand Total:</strong>
+                                            </td>
+                                            <td style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>
+                                                    <span t-field="o.total_total_amount"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-if="o.bill_type.name == 'Water'">
+                            <div>
+                                <h2>
+                                    <center>Monthly Water Bill</center>
+                                </h2>
+                                <br/>
+                                <strong>From :</strong>
+                                <span t-field="o.from_date"/>
+                                <br/>
+                                <br/>
+                                <strong>To :</strong>
+                                <span t-field="o.to_date"/>
+                                <br/>
+                                <br/>
+                                <table class="table table-bordered" width="100%"
+                                       style="border:solid 1px; border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Project</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Water Account</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Previous Reading
+                                            </th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Current Reading
+                                            </th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Consuming
+                                                readings
+                                            </th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Unit Rate</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Sewage Rate</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">VAT Amount</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Total Amount</th>
+                                            <th style="border:solid 1px; border-collapse: collapse;">Note</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach='o.monthly_bill_ids' t-as='line'>
+                                            <tr>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.building_id"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.water_account"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.previous_reading"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.current_reading"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.consumed_reading"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.unit_rate"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.sewage_rate"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.tax_amount"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.total_amount"/>
+                                                </td>
+                                                <td style="border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.remarks"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr style="text-align:right">
+                                            <td colspan="8" style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>Grand Total:</strong>
+                                            </td>
+                                            <td colspan="2" style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                <strong>
+                                                    <span t-field="o.total_total_amount"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <t t-if="o.is_electricity == False">
+                            <div>
+                                <h2>
+                                    <center>Monthly <t t-esc="o.bill_type.name"/> Bill</center>
+                                </h2>
+                                <br/>
+                                <strong>From :</strong>
+                                <span t-field="o.from_date"/>
+                                <br/>
+                                <br/>
+                                <strong>To :</strong>
+                                <span t-field="o.to_date"/>
+                                <br/>
+                                <br/>
+                                <table class="table table-bordered" width="100%"
+                                       style="border:solid 1px; border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Project
+                                            </th>
+                                            
+                                            
+                                            <th style="text-align:Right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Total Amount
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach='o.monthly_bill_ids' t-as='line'>
+                                            <tr>
+                                                <td style="vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span style="text-align:left !important;"
+                                                          t-field="line.building_id"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.total_amount"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr style="text-align:right;">
+                                            <td colspan="" style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>Grand Total:</strong>
+                                            </td>
+                                            <td style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>
+                                                    <span t-field="o.total_total_amount"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t>
+                        <!-- <t t-if="o.bill_type.name == 'Wifi'">
+                            <div>
+                                <h2>
+                                    <center>Monthly Wifi Bill</center>
+                                </h2>
+                                <br/>
+                                <strong>From :</strong>
+                                <span t-field="o.from_date"/>
+                                <br/>
+                                <br/>
+                                <strong>To :</strong>
+                                <span t-field="o.to_date"/>
+                                <br/>
+                                <br/>
+                                <table class="table table-bordered" width="100%"
+                                       style="border:solid 1px; border-collapse: collapse;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Project
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Account
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Previous Reading
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Current Reading
+                                            </th>
+                                            
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Consuming
+                                                readings
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Unit Rate
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                VAT Amount
+                                            </th>
+                                            <th style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                Total Amount
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach='o.monthly_bill_ids' t-as='line'>
+                                            <tr>
+                                                <td style="vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span style="text-align:left !important;"
+                                                          t-field="line.building_id"/>
+                                                </td>
+                                                <td style="text-align:left;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.electricity_account"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.previous_reading"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.current_reading"/>
+                                                </td>
+                                                <td style="text-align:right;vertical-align:middle;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.consumed_reading"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.unit_rate"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.tax_amount"/>
+                                                </td>
+                                                <td style="text-align:right;border:solid 1px; border-collapse: collapse;">
+                                                    <span t-field="line.total_amount"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr style="text-align:right;">
+                                            <td colspan="7" style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>Grand Total:</strong>
+                                            </td>
+                                            <td style="border:solid 1px; border-collapse: collapse;">
+                                                <strong>
+                                                    <span t-field="o.total_total_amount"/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </t> -->
+                        <br/>
+                        <div style="height=35px;">
+                            <div style="height=35px;display:inline;float:left;">
+                                <strong>Prepared by:</strong>&#160;&#160;:
+                                <t t-esc="o.create_uid.name"/>
+                            </div>
+                            <div style="height=35px;display:inline;float:right;">
+                                <strong>Approved for all by:</strong>
+                                <t t-esc="o.approved_by.name"/>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

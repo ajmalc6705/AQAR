@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="property_sale_tree" model="ir.ui.view">
+        <field name="name">property.sale.tree</field>
+        <field name="model">property.sale</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sale_seq"/>
+                <field name="partner_id"/>
+                <field name="reservation_date"/>
+                <field name="state" decoration-info="state == 'reserve'" decoration-success="state == 'sold'"
+                       decoration-danger="state == 'cancel'" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Property Sale Form View-->
+    <record id="property_sale_form" model="ir.ui.view">
+        <field name="name">property.sale.form</field>
+        <field name="model">property.sale</field>
+        <field name="arch" type="xml">
+            <form string="Property Sale">
+                <header>
+                    <button name="%(sale_cancel_action)d" string="Cancel" data-hotkey="l" title="Cancel"
+                            type="action" context="{'default_property_sale_id': active_id}"
+                            attrs="{'invisible':[('state', '=', 'cancel')]}"/>
+                    <button name="action_sold" class="oe_highlight" states="reserve" string="Sold"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,sold"
+                            string="Reset to Reserve" type="object"/>
+                    <button name="action_resale" class="btn btn-primary"
+                            string="Resale" type="object" states="sold"/>
+                    <button name="action_create_transfer"
+                            string="Create Mulkiya Transfer" type="object"
+                            attrs="{'invisible':['|',('create_mulkiya','=',True),('state', '!=', 'sold')]}"/>
+
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Mulkiya Mortgage" bg_color="bg-danger"
+                            attrs="{'invisible': [('mulkiya_mortgage', '=', False)]}"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                                name="action_reservation" string="Reservation" icon="fa-file"
+                                attrs="{'invisible': [('reservation_id', '=', False)]}"
+                        >
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_mulkiya" string="Mulkiya Transfer" icon="fa-book"
+                                attrs="{'invisible': [('mulkiya_transfer_id', '=', False)]}"
+                        >
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_invoice_tree" string="Additional Fee" icon="fa-book"
+
+                        >
+<!--                            <field name="invoiced_amount" string="Invoiced Amount" widget="statinfo"/>-->
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sale_seq" placeholder="e.g. Sale"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="partner_id" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="reservation_date" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="building_id" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="unit_id" domain="[('id','in',unit_ids)]"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="unit_ids" invisible="1"/>
+                            <field name="unit_sales_price" readonly="1"/>
+                            <field name="unit_type_id" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="sale_date" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="lead_id" invisible="1"/>
+                            <field name="reservation_id" invisible="1"/>
+                            <field name="mulkiya_transfer_id" invisible="1"/>
+                            <field name="mortage_bank" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="company_id" readonly="1"
+                                   options="{'no_create': True, 'no_quick_create': True, 'no_open': True, 'no_edit': True}"
+                            />
+                            <field name="resale_count"/>
+                        </group>
+                        <group>
+                            <field name="enquiry_date" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="offer_valid_date" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="sales_price" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="parking_price" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="terms_conditions_id" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="payment_term_id" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="balance_amount" string="Balance Amount"
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_untaxed" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="tax_ids" widget="many2many_tags"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="amount_total" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"/>
+                            <field name="installation_amount" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="remaining_amount" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="journal_id" attrs="{'required':[('state','in',['sold'])]}"/>
+                            <field name="account_id" attrs="{'required':[('state','in',['sold'])]}"/>
+                            <field name="account_receivable_id" attrs="{'required':[('state','in',['sold'])]}"/>
+                            <field name="move_id" invisible="1"/>
+                            <field name="create_mulkiya" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="mulkiya_mortgage" readonly="1"/>
+                            <field name="date_of_spa" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="area_spa" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                            <field name="attachment_ids" widget="many2many_binary"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Terms &amp; Conditions" String="Terms &amp; Conditions">
+                            <field name="notes" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                        </page>
+                        <page name="Payment Terms" String="Payment Terms">
+                            <field name="payment_terms" attrs="{'readonly':[('state','not in',['reserve'])]}"/>
+                        </page>
+                        <page name="Payment Plans" string="Payment Plans">
+                            <field name="payment_plan_ids"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}">
+                                <tree editable="bottom">
+                                    <field name="due_date"/>
+                                    <field name="percent"/>
+                                    <field name="amount_untaxed" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_taxed" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="amount_total" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <button name="create_invoice" string="Create Invoice" type="object"
+                                            help="Creates Invoices"
+                                            attrs="{'invisible':[('is_create_move','=',True)]}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="move_id" attrs="{'invisible':[('is_create_move','=',False)]}"/>
+                                    <field name="is_create_move" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="Parking Slots" string="Parking Slots">
+                            <field name="parking_line_ids" widget="one2many_list"
+                                   attrs="{'readonly':[('state','not in',['reserve'])]}">
+                                <tree string="Parking Slot">
+                                    <field name="parking_no"/>
+                                    <field name="sales_price"/>
+                                    <field name="state" widget="badge"/>
+                                </tree>
+                            </field>
+                            <!--                            <field name="parking_ids" invisible="1"/>-->
+                        </page>
+                        <page name="specifications" string="Specifications">
+                            <field name="specifications" readonly="1"/>
+                        </page>
+                        <page name="signatures" string="Signatures">
+                            <separator string="Witness"/>
+                            <field name="witness_signature" attrs="{'readonly':[('state','not in',['reserve'])]}"
+                                   widget="signature"/>
+                            <separator string="Dev"/>
+                            <field name="dev_signature" attrs="{'readonly':[('state','not in',['reserve'])]}"
+                                   widget="signature"/>
+                            <separator string="Partner"/>
+                            <field name="partner_sign" attrs="{'readonly':[('state','not in',['reserve'])]}"
+                                   widget="signature"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="doc_ids" widget="one2many_list">
+                                <tree string="Documents" editable="bottom" sample="1">
+                                    <field name="name"/>
+                                    <field name="doc_no"/>
+                                    <field name="doc_type"/>
+                                    <field name="doc_dec"/>
+                                    <field name="attachment_ids" widget="many2many_binary"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Additional Fees">
+                            <field name="additional_fee_ids">
+                                <tree string="Additional Fees" editable="bottom">
+                                    <field name="product_id" required="1"/>
+                                    <field name="name"/>
+                                    <field name="qty"/>
+                                    <field name="price_unit" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+
+                                    <field name="sub_total" widget="monetary"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="is_create_move" invisible="1"/>
+                                    <button name="create_invoice" string="Create Invoice" type="object"
+                                            help="Creates Invoices"
+                                            attrs="{'invisible':[('is_create_move','=',True)]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="resale_history" string="Resale History"
+                              attrs="{'invisible': [('resale_count', '=', 0)]}">
+                            <field name="resale_ids">
+                                <tree edit="False" create="False">
+                                    <field name="partner_id"/>
+                                    <field name="sale_date"/>
+                                    <field name="amount_total"/>
+                                    <field name="new_partner_id"/>
+                                    <field name="new_sale_date"/>
+                                    <field name="new_sale_value"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <!--    window action for property sale-->
+    <record id="action_sale" model="ir.actions.act_window">
+        <field name="name">Property Sale</field>
+        <field name="res_model">property.sale</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Property Sale
+            </p>
+        </field>
+    </record>
+    <!--Sale Menu -->
+    <menuitem id="property_sale_main_menu" name="Property Sale"
+              web_icon="property_sale,static/description/odoo_icon.png"
+              groups="group_sale_user_own"
+    />
+    <menuitem id="property_sale_menu" name="Property Sale" parent="property_sale_main_menu"
+              action="action_sale" sequence="30"/>
+</odoo>

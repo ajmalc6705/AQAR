@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="doc_renewal_seq" model="ir.sequence">
+            <field name="name">Document Renewal</field>
+            <field name="code">document.renewal.sequence</field>
+            <field name="prefix">DOC/RENEW/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="doc_submission_seq" model="ir.sequence">
+            <field name="name">Document Submission</field>
+            <field name="code">document.submission.sequence</field>
+            <field name="prefix">DOC/SUBMIT/</field>
+            <field name="padding">3</field>
+            <field name="number_increment">1</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

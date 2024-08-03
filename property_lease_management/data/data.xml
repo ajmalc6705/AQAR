@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="decimal_property" model="decimal.precision">
+            <field name="name">Property</field>
+            <field name="digits">3</field>
+        </record>
+            <!--    Project Record-->
+        <record id="legal_action_id" model="project.project">
+            <field name="name">Legal Action</field>
+        </record>
+    </data>
+</odoo>

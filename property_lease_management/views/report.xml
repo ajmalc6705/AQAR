@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem name="Reports" id="menu_property_reports" parent="menu_base_property" sequence="99"/>
+
+        <!--        <report-->
+        <!--                id="action_report_building_expenses"-->
+        <!--                string="Property Expense Report"-->
+        <!--                model="property.voucher"-->
+        <!--                name="amlak_property_management.report_building_expenses"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                file="amlak_property_management.report_building_expenses"-->
+        <!--                menu="False"-->
+        <!--        />-->
+        <!--Property Income-->
+        <!--        <record id="action_report_cost_center_income" model="ir.actions.report">-->
+        <!--            <field name="name">Property Income Report</field>-->
+        <!--            <field name="model">property.cost.center</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_cost_center_income</field>-->
+        <!--            <field name="print_report_name">Property Income Report</field>-->
+        <!--            <field name="binding_model_id" eval="False" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+        <!--        &lt;!&ndash;Property List&ndash;&gt;-->
+        <!--        <record id="action_report_properties_data_list" model="ir.actions.report">-->
+        <!--            <field name="name">Properties Data List</field>-->
+        <!--            <field name="model">property.property</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_properties_data_list</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_properties_data_list</field>-->
+        <!--            <field name="print_report_name">Properties Data List</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_property" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--Income and Lost Opportunity-->
+        <record id="action_report_income_and_lost_opportunity" model="ir.actions.report">
+            <field name="name">Income and Lost Opportunity</field>
+            <field name="model">property.property</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">property_lease_management.report_income_and_lost_opportunity</field>
+            <field name="report_file">property_lease_management.report_income_and_lost_opportunity</field>
+            <field name="print_report_name">Income and Lost Opportunity</field>
+            <field name="paperformat_id" ref="property_lease_management.paperformat_income_and_lost_opportunity"/>
+            <field name="binding_model_id" eval="False"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!--Property Annual Details-->
+        <!--        <record id="action_report_property_annual_details" model="ir.actions.report">-->
+        <!--            <field name="name">Property Annual Details</field>-->
+        <!--            <field name="model">property.property</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_property_annual_details</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_property_annual_details</field>-->
+        <!--            <field name="print_report_name">Property Annual Details</field>-->
+        <!--            <field name="paperformat_id" ref="amlak_property_management.paperformat_income_and_lost_opportunity" />-->
+        <!--            <field name="binding_model_id" eval="False" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--Landlord List-->
+        <!--        <record id="action_report_landlord_data_list" model="ir.actions.report">-->
+        <!--            <field name="name">Landlord Data List</field>-->
+        <!--            <field name="model">res.partner</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_landlord_data_list</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_landlord_data_list</field>-->
+        <!--            <field name="print_report_name">'Landlord Data List'</field>-->
+        <!--            <field name="binding_model_id" ref="base.model_res_partner" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+        <!--Maintenance List-->
+        <!--        <record id="action_report_property_maintenance" model="ir.actions.report">-->
+        <!--            <field name="name">Property Maintenance</field>-->
+        <!--            <field name="model">property.maintenance</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_property_maintenance</field>-->
+        <!--            <field name="print_report_name">Property Maintenance</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_maintenance" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--Rent-->
+        <!--        <record id="action_report_rent_agreement" model="ir.actions.report">-->
+        <!--            <field name="name">Rent Agreement</field>-->
+        <!--            <field name="model">property.rent</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_agreement</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_rent_agreement</field>-->
+        <!--            <field name="print_report_name">'Rent Agreement - %s' % (object.name)</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_rent" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="action_report_rent_agreement_list" model="ir.actions.report">-->
+        <!--            <field name="name">Rent Agreement List</field>-->
+        <!--            <field name="model">property.rent</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_agreement_list</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_rent_agreement_list</field>-->
+        <!--            <field name="print_report_name">'Rent Agreement List'</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_rent" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="expire_rent_agreement_report" model="ir.actions.report">-->
+        <!--            <field name="name">Expire Rent Agreement</field>-->
+        <!--            <field name="model">property.rent</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_agreement_list</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_rent_agreement_list</field>-->
+        <!--            <field name="print_report_name">'Expire Rent Agreement'</field>-->
+        <!--            <field name="binding_model_id" eval="False" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="rent_agreement_groupby_report" model="ir.actions.report">-->
+        <!--            <field name="name">Rent Agreement Report</field>-->
+        <!--            <field name="model">property.rent</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_agreement_groupby</field>-->
+        <!--            <field name="report_file">amlak_property_management.report_rent_agreement_groupby</field>-->
+        <!--            <field name="print_report_name">Rent Agreement Report</field>-->
+        <!--            <field name="binding_model_id" eval="False" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="report_rent_collection_xlsx" model="ir.actions.report">-->
+        <!--            <field name="name">Rent Collection</field>-->
+        <!--            <field name="model">rent.collection.print</field>-->
+        <!--            <field name="report_type">xlsx</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_collection_xlsx.xlsx</field>-->
+        <!--            <field name="print_report_name">Rent Collection</field>-->
+        <!--            <field name="binding_model_id" eval="False" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+        <!--Sale-->
+        <!--        <record id="action_report_sail_agreement" model="ir.actions.report">-->
+        <!--            <field name="name">Sale Agreement</field>-->
+        <!--            <field name="model">property.sale</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_sale_agreement</field>-->
+        <!--            <field name="print_report_name">Sale Agreement</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_sale" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="action_report_sale_agreement_list" model="ir.actions.report">-->
+        <!--            <field name="name">Sale Agreement List</field>-->
+        <!--            <field name="model">property.sale</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_sale_agreement_list</field>-->
+        <!--            <field name="print_report_name">Sale Agreement List</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_sale" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+        <!--End-->
+
+        <!--Broking Service-->
+        <!--        <record id="action_report_broking_agreement" model="ir.actions.report">-->
+        <!--            <field name="name">Broking Service Agreement</field>-->
+        <!--            <field name="model">property.broking</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_broking_agreement</field>-->
+        <!--            <field name="print_report_name">Broking Service Agreement</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_broking" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="action_report_broking_agreement_list" model="ir.actions.report">-->
+        <!--            <field name="name">Broking Service Agreement List</field>-->
+        <!--            <field name="model">property.broking</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_broking_agreement_list</field>-->
+        <!--            <field name="print_report_name">Broking Service Agreement List</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_broking" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+        <!--End-->
+
+        <!--Installment Receipt-->
+        <!--        <record id="action_report_rent_installment_receipt" model="ir.actions.report">-->
+        <!--            <field name="name">Installment Receipt</field>-->
+        <!--            <field name="model">property.rent.installment</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_rent_installment_receipt</field>-->
+        <!--            <field name="print_report_name">Installment Receipt</field>-->
+        <!--            <field name="paperformat_id" ref="amlak_property_management.paperformat_income_and_lost_opportunity" />-->
+        <!--            <field name="binding_model_id" ref="model_property_rent_installment" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="action_report_sale_installment_receipt" model="ir.actions.report">-->
+        <!--            <field name="name">Installment Receipt</field>-->
+        <!--            <field name="model">property.sale.installment</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_sale_installment_receipt</field>-->
+        <!--            <field name="print_report_name">Installment Receipt</field>-->
+        <!--            <field name="paperformat_id" ref="amlak_property_management.paperformat_income_and_lost_opportunity" />-->
+        <!--            <field name="binding_model_id" ref="model_property_sale_installment" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="action_report_contract_installment_receipt" model="ir.actions.report">-->
+        <!--            <field name="name">Installment Receipt</field>-->
+        <!--            <field name="model">property.contract.installment</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_contract_installment_receipt</field>-->
+        <!--            <field name="print_report_name">Installment Receipt</field>-->
+        <!--            <field name="paperformat_id" ref="amlak_property_management.paperformat_income_and_lost_opportunity" />-->
+        <!--            <field name="binding_model_id" ref="model_property_contract_installment" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        &lt;!&ndash;Cost Center&ndash;&gt;-->
+        <!--        <record id="action_report_cost_centers_list" model="ir.actions.report">-->
+        <!--            <field name="name">Cost Centers List</field>-->
+        <!--            <field name="model">property.cost.center</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_cost_centers_list</field>-->
+        <!--            <field name="print_report_name">Cost Centers List</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_cost_center" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        &lt;!&ndash;Contract&ndash;&gt;-->
+        <!--        <record id="action_report_contact_list" model="ir.actions.report">-->
+        <!--            <field name="name">Contract Agreement List</field>-->
+        <!--            <field name="model">property.contract</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.report_contact_list</field>-->
+        <!--            <field name="print_report_name">Contract Agreement List</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_contract" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--        &lt;!&ndash;occupancy Report&ndash;&gt;-->
+        <!--        <record id="action_occupancy_report" model="ir.actions.report">-->
+        <!--            <field name="name">Occupancy Report</field>-->
+        <!--            <field name="model">property.maintenance</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">amlak_property_management.sabla_occupancy_report</field>-->
+        <!--            <field name="report_file">amlak_property_management.sabla_occupancy_report</field>-->
+        <!--            <field name="print_report_name">Occupancy Report</field>-->
+        <!--            &lt;!&ndash;            <field name="paperformat_id" ref="sabla_reports.paperformat_althabat" />&ndash;&gt;-->
+        <!--            <field name="binding_model_id" ref="model_property_maintenance" />-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+        <!--Property voucher-->
+
+        <!--        <report-->
+        <!--                id="action_report_property_voucher_receipt"-->
+        <!--                string="Installment Receipt"-->
+        <!--                model="property.voucher"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                name="amlak_property_management.report_property_voucher_receipt"-->
+        <!--                file="amlak_property_management.report_property_voucher_receipt"-->
+        <!--                paperformat_id="amlak_property_management.paperformat_income_and_lost_opportunity"-->
+        <!--        />-->
+
+        <!--        <report-->
+        <!--                id="action_report_property_voucher_receipt_list"-->
+        <!--                string="Installment Receipt List"-->
+        <!--                model="property.voucher"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                name="amlak_property_management.report_property_voucher_receipt_list"-->
+        <!--                file="amlak_property_management.report_property_voucher_receipt_list"-->
+        <!--                multi="True"-->
+        <!--        />-->
+        <!--End-->
+        <!--Account Statement-->
+        <!--        <report-->
+        <!--                id="action_report_account_statement_realestate"-->
+        <!--                string="Account statement Report"-->
+        <!--                model="account.move.line"-->
+        <!--                name="amlak_property_management.account_statement_realestate_report"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                file="amlak_property_management.account_statement_realestate_report"-->
+        <!--                menu="False"-->
+        <!--        />-->
+
+
+        <!-- Property Status Report -->
+        <!--        <report-->
+        <!--                id="property_status_report_xls"-->
+        <!--                model="property.property"-->
+        <!--                report_type="xlsx"-->
+        <!--                string="property status report"-->
+        <!--                name="amlak_property_management.property_status_report.xlsx"-->
+        <!--                file="amlak_property_management.property_status_report.xlsx"-->
+        <!--                attachment_use="False"-->
+        <!--        />-->
+
+        <!--        <record id="property_status_report_xls" model="ir.actions.report">-->
+        <!--            <field name="name">Property Status Report</field>-->
+        <!--            <field name="model">property.property</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_property" />-->
+        <!--            <field name="report_type">xlsx</field>-->
+        <!--            <field name="report_name">amlak_property_management.property_status_report.xlsx</field>-->
+        <!--            <field name="report_file">amlak_property_management.property_status_report.xlsx</field>-->
+        <!--            <field name="attachment_use">False</field>-->
+        <!--            <field name="binding_view_types">form,list</field>-->
+        <!--        </record>-->
+
+        <!--        &lt;!&ndash; Monthly Rent Collection Report &ndash;&gt;-->
+        <!--        <record id="rent_collection_report_xls" model="ir.actions.report">-->
+        <!--            <field name="name">Monthly Rent Collection report</field>-->
+        <!--            <field name="model">property.property</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_property" />-->
+        <!--            <field name="report_type">xlsx</field>-->
+        <!--            <field name="report_name">amlak_property_management.monthly_rent_collection_report.xlsx</field>-->
+        <!--            <field name="report_file">amlak_property_management.monthly_rent_collection_report.xlsx</field>-->
+        <!--            <field name="attachment_use">False</field>-->
+        <!--            <field name="binding_view_types">form,list</field>-->
+        <!--        </record>-->
+
+        <!--        &lt;!&ndash; Repair and maintenance Report &ndash;&gt;-->
+        <!--        <record id="repair_maintenance_report_xls" model="ir.actions.report">-->
+        <!--            <field name="name">Monthly Report for Repairs and Maintenance Cost Incurred</field>-->
+        <!--            <field name="model">property.property</field>-->
+        <!--            <field name="binding_model_id" ref="model_property_property" />-->
+        <!--            <field name="report_type">xlsx</field>-->
+        <!--            <field name="report_name">amlak_property_management.repair_maintenance_report.xlsx</field>-->
+        <!--            <field name="report_file">amlak_property_management.repair_maintenance_report.xlsx</field>-->
+        <!--            <field name="attachment_use">False</field>-->
+        <!--            <field name="binding_view_types">form,list</field>-->
+        <!--        </record>-->
+    </data>
+</odoo>

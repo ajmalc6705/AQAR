@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="community_tree" model="ir.ui.view">
+        <field name="name">community.tree</field>
+        <field name="model">property.community</field>
+        <field name="arch" type="xml">
+            <tree default_order="community_seq desc">
+                <field name="community_seq"/>
+                <field name="partner_id"/>
+                <field name="building_id"/>
+                <field name="prepared_by_id"/>
+                <field name="doc_date" optional="hide"/>
+                <field name="community_contract_id"/>
+                <field name="contract_start_date" optional="hide"/>
+                <field name="contract_end_date" optional="hide"/>
+                <field name="contract_days" optional="hide"/>
+                <field name="levy_id" widget="many2many_tags" optional="hide"/>
+                <field name="tentative_period" optional="hide"/>
+                <field name="previous_community_ids" widget="many2many_tags" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="state" widget="badge" decoration-info="state in ('draft','enquiry')"
+                       decoration-warning="state not in ( 'draft','enquiry', 'approved', 'invoice', 'cancel')"
+                       decoration-success="state == ('approved', 'invoice')"
+                />
+                <field name="community_status" readonly="1" widget="badge"
+                       decoration-info="community_status in ('draft')"
+                       decoration-warning="community_status not in ( 'draft', 'cancel')"
+
+                />
+            </tree>
+        </field>
+    </record>
+    <!--    Form view-->
+    <record id="community_form" model="ir.ui.view">
+        <field name="name">community.form</field>
+        <field name="model">property.community</field>
+        <field name="arch" type="xml">
+            <form string="Community">
+                <header>
+
+                    <button name="action_send_authorizer" class="oe_highlight" string="Send To Authorizer"
+                            type="object" attrs="{'invisible' : [('state', '!=', 'draft')]}"
+                            groups="property_community.group_community_user"
+                    />
+                    <button name="action_confirm" class="oe_highlight" string="Confirm"
+                            type="object" groups="property_community.group_community_authorizer"
+                            attrs="{'invisible' : ['|',('is_confirmed', '=', True), ('state', '!=', 'enquiry')]}"
+                    />
+                    <button name="action_budget" class="oe_highlight" string="Create Budget"
+                            type="object" groups="property_community.group_property_community_accountant"
+                            attrs="{'invisible' : ['|',('is_confirmed', '=', False),('is_budgeting','=',True)]}"
+                    />
+
+                    <button name="button_action_send_cm" class="oe_highlight" string="Send to CM"
+                            type="object" groups="property_community.group_property_community_accountant"
+                            attrs="{'invisible' : ['|',('is_budgeting','=',False),('state','!=','budget')]}"
+                    />
+                    <button name="action_verify_budget" class="oe_highlight" string="Verify Budget"
+                            type="object" groups="property_community.group_property_community_manager"
+                            attrs="{'invisible' : ['|',('is_budgeting','=',False),('state','!=','verify')]}"
+                    />
+                    <button name="button_action_reject" class="oe_highlight" string="Reject"
+                            type="object" groups="property_community.group_property_community_manager"
+                            attrs="{'invisible' : [('state','!=','verify')]}"
+                    />
+                    <button name="action_approve_budget" class="oe_highlight" string="Approve Budget"
+                            type="object" groups="property_community.group_property_community_ceo"
+                            attrs="{'invisible' : ['|',('is_budgeting','=',False),('state','!=','ceo')]}"
+                    />
+
+                    <button name="button_action_reject" class="oe_highlight" string="Reject"
+                            type="object" groups="property_community.group_property_community_ceo"
+                            attrs="{'invisible' : [('state','!=','ceo')]}"
+                    />
+
+                    <button name="action_add_summary" class="oe_highlight" string="Get Budget Summary" type="object"
+                            groups="property_community.group_property_community_accountant"
+                            attrs="{'invisible' : ['|',('is_budgeting','=',False), ('state', 'in', ('draft', 'enquiry', 'approved', 'cancel'))]}"
+                    />
+                    <!--                     groups="property_community.group_property_community_accountant"-->
+
+                    <button name="action_community_invoice" string="Create Invoice" class="oe_highlight" type="object"
+                            attrs="{'invisible' : ['|', ('is_budgeting','=',False),  ('state', 'not in', ('approved','invoice'))]}"
+                            groups="property_community.group_property_community_accountant"
+                            context="{'default_community_id': id}"
+                    />
+                    <button name="button_action_set_to_draft" string="Set To Draft" type="object"
+                            attrs="{'invisible' : [('state', '!=', 'cancel')]}"
+                            groups="property_community.group_property_community_accountant"
+                    />
+
+                    <button name="button_action_send_back" string="Send Back" class="oe_edit_only" type="object"
+                            attrs="{'invisible' : [('state', 'in', ('draft', 'approved', 'invoice', 'cancel'))]}"
+
+
+                    />
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,enquiry,approved, invoice"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="budget_count" invisible="1"/>
+                        <field name="prev_total_budget" invisible="1"/>
+                        <!--                         groups="account.group_account_invoice,account.group_account_readonly"
+                                                        context="{'default_partner_id': active_id}"-->
+                        <button type="object" class="oe_stat_button" icon="fa-th-list"
+                                name="action_show_budget" attrs="{'invisible': [('budget_count','=',0)]}"
+                        >
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_budget_amount"
+                                           widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"
+                                    />
+                                </span>
+                                <span class="o_stat_text">Budget</span>
+                            </div>
+                        </button>
+
+                        <button class="oe_stat_button" type="object"
+                                name="action_view_previous_budgets" string="Previous Budget" icon="fa-th-list"
+                                attrs="{'invisible': [('prev_total_budget','==',0)]}">
+                             <div class="o_form_field o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="prev_total_budget"/>
+                                </span>
+                                <span class="o_stat_text">Prev. Budget</span>
+                            </div>
+
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                                name="action_show_invoices" string="Invoices" icon="fa-th-list"
+                                attrs="{'invisible': [('is_invoiced','=',False)]}"
+                        />
+
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="community_seq" placeholder="e.g. Community"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"/>
+                            <field name="building_id" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="doc_date" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="prospect_name"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="enq_record_from" string="Enquiry Date" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="is_confirmed" invisible="1"/>
+                            <field name="is_budgeting" invisible="1"/>
+                            <field name="is_approved" invisible="1"/>
+                            <field name="is_invoiced" invisible="1"/>
+                            <field name="is_budget_summary" invisible="1"/>
+                            <field name="community_contract_id" required="1"
+                                   options="{'no_quick_create': True,}"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="contract_start_date"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="contract_end_date"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="contract_days"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="move_ids" widget="many2many_tags" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="community_status" readonly="1" widget="badge"
+                                   decoration-info="community_status in ('draft')"
+                                   decoration-warning="community_status not in ( 'draft', 'cancel')"
+
+                            />
+                            <!--                            decoration-success="state == ('approved', 'invoice')"-->
+                            <field name="levy_id" widget="many2many_tags"
+                                   attrs="{'invisible' : [('is_confirmed', '=', False)],'required': [('is_confirmed','=',True)],'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <label for="tentative_period">Tentative Period</label>
+                            <div class="o_row">
+                                <field name="tentative_period" nolabel="1" class="oe_inline"
+                                       attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                                />
+                                <span class="flex-grow-1">Month(s)</span>
+                            </div>
+
+                            <field name="expected_units" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="total_area" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="enquiry_no"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="valid_upto" required="1"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="payment_structure"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="prepared_by_id"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="previous_community_ids" widget="many2many_tags" options="{'no_create':True}"
+                                   attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                            />
+                            <field name="company_id" readonly="1" options="{'no_create':True, 'no_open':True}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Unit">
+                            <field name="unit_ids" widget="one2many_list" domain="[('id', 'in', unit_domain_ids)]"
+                                   required="1" attrs="{'readonly' : [('is_confirmed', '=', True)]}">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="unit_seq"/>
+                                    <field name="property_type_id"/>
+                                    <field name="community_landlord_id"/>
+                                </tree>
+                            </field>
+                            <field name="unit_domain_ids" invisible="1"/>
+                        </page>
+                        <page name="notes" string="Description"
+                              attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                        >
+                            <field name="notes"/>
+                        </page>
+                        <page name="terms_conditions" string="Terms &amp; Conditions"
+                              attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                        >
+                            <field name="terms_conditions"/>
+                        </page>
+                        <page name="doc" string="Documents"
+                              attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                        >
+                            <field name="documents_ids" widget="one2many_list">
+                                <tree editable="bottom">
+                                    <field name="doc_no"/>
+                                    <field name="name"/>
+                                    <field name="doc_type"/>
+                                    <field name="issue_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="doc_dec" optional="hide"/>
+                                    <field name="file_name" invisible="1"/>
+                                    <field name="attachment_ids" filename="file_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="Contract" attrs="{'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}">
+                            <field name="contract_ids" widget="one2many_list">
+                                <tree editable="bottom">
+                                    <field name="contract_seq"/>
+                                    <field name="name"/>
+                                    <field name="building_id"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page name="budget_summary" string="Budget Summary Line"
+                              attrs="{'invisible':[('state','in',('draft','enquiry', 'confirm'))], 'readonly':[('state', 'in', ('approved', 'cancel','invoice'))]}"
+                        >
+
+                            <field name="budget_summary_line_ids" readonly="1">
+                                <tree editable="bottom">
+                                    <field name="unit_id"/>
+                                    <field name="admin_fund" sum="Total Admin Fund" digits="[12,3]"/>
+                                    <field name="sinking_fund" sum="Total Sinking Fund" digits="[12,3]"/>
+                                    <field name="total_fund" sum="Total Fund" digits="[12,3]"/>
+                                    <field name="invoiced_fund"/>
+                                    <field name="outstanding_fund" digits="[12,3]"/>
+                                    <field name="unit_admin_fund" optional="hide" digits="[12,3]"/>
+                                    <field name="unit_sinking_fund" optional="hide" digits="[12,3]"/>
+                                    <field name="building_id" invisible="1"/>
+                                    <field name="move_ids" widget="many2many_tags" invisible="1"/>
+                                    <button class="oe_stat_button" type="object"
+                                            name="action_view_invoices" string="Invoices" icon="fa-th-list"
+                                            attrs="{'invisible':[('move_ids','==',False)]}"
+
+                                    />
+                                    <!--                                     attrs="{'invisible': [('is_invoiced','=',False)]}"-->
+
+                                </tree>
+                            </field>
+                            <group>
+                                <field name="total_admin_fund" invisible="1"/>
+                                <field name="total_sinking_fund" invisible="1"/>
+                                <field name="total_fund" invisible="1"/>
+                            </group>
+
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_community" model="ir.actions.act_window">
+        <field name="name">Community Management</field>
+        <field name="res_model">property.community</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Community
+            </p>
+        </field>
+    </record>
+    <menuitem id="community_menu" name="Community Management" action="action_community"
+              parent="property_community_main_menu"
+              sequence="1"/>
+
+    <!--    Property Views-->
+    <record id="property_inherited_view_form" model="ir.ui.view">
+        <field name="name">Property</field>
+        <field name="model">property.property</field>
+        <field name="inherit_id" ref="property_lease_management.view_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='options']/field[@name='owned']" position="before">
+                <field name="is_community"/>
+                <label for="is_community"/>
+            </xpath>
+            <xpath expr="//field[@name='mobile']" position="after">
+                <field name="community_landlord_id"
+                       domain="[('is_community_owner','=',True), ('parent_id', '=', False)]"
+                       context="{'default_landlord':0, 'default_is_community_owner':1,'show_address': 1}"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!--    Reporting Menu-->
+    <record id="action_levy_summary_report" model="ir.actions.act_window">
+        <field name="name">Levy Summary Report</field>
+        <field name="res_model">levy.summary.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <menuitem id="community_report_menu" name="Reporting"
+              parent="property_community_main_menu"
+              sequence="5"/>
+    <menuitem id="levy_summary_report_menu" name="Levy Summary Report" action="action_levy_summary_report"
+              parent="community_report_menu"
+    />
+
+</odoo>

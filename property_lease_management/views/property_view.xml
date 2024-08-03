@@ -1,0 +1,905 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <menuitem name="Property Lease" id="menu_base_property"
+                  groups="property_lease_management.group_property_user,property_lease_management.group_property_head,property_lease_management.group_property_accountant,property_lease_management.group_property_procurement,property_lease_management.group_property_commercial_head"
+                  web_icon="property_lease_management,static/description/icon.png"
+        />
+        <!--        property_lease_management.group_property_sales_user,property_lease_management.group_property_sales_admin,-->
+        <menuitem name="Management" id="menu_property" parent="menu_base_property" sequence="10"/>
+        <menuitem name="Reporting" id="menu_reporting" parent="menu_base_property" sequence="50"/>
+        <menuitem name="Configuration" id="menu_property_config" parent="menu_base_property" sequence="100"/>
+
+        <record id="view_property_building_tree" model="ir.ui.view">
+            <field name="name">property.building.tree</field>
+            <field name="model">property.building</field>
+            <field name="arch" type="xml">
+                <tree string="Buildings" sample="1">
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="parent_building"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_property_building_form" model="ir.ui.view">
+            <field name="name">property.building.form</field>
+            <field name="model">property.building</field>
+            <field name="arch" type="xml">
+                <form string="Building form">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="return_building_complaints" type="object" class="oe_stat_button"
+                                    icon="fa-building"
+                                    help="show the complaints of the building">
+                                <field string="Complaints" name="complaint_count" widget="statinfo"/>
+                            </button>
+                            <button name="return_building_maintenance" type="object" class="oe_stat_button"
+                                    icon="fa-tasks"
+                                    help="show the maintenance of the building">
+                                <field string="Maintenance" name="maintenance_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <h1>
+                            <field name="building_seq"/>
+                        </h1>
+                        <h2>
+                            <field name="ref" class="oe_inline"/>
+                        </h2>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="bld_no"/>
+                                <field name="way_no"/>
+                                <!--                                <field name="plot_no"/>-->
+                                <field name="plot_id"/>
+                                <field name="building_area"/>
+                                <field name="builtup_area"/>
+                                <field name="block_number"/>
+                                <field name="block_number_mulkia"/>
+                                <field name="partner_id" widget="many2many_tags" domain="[('landlord','=',True)]"
+                                       context="{'form_view_ref':'property_lease_management.landlord_form',
+                                       'default_landlord':1, 'search_default_landlord':1}"/>
+                                <field name="bu_cc"/>
+                                <field name="rent_full_building"/>
+                                <field name="sub_contract"/>
+                                <field name="electricity_account"
+                                       invisible="1"/>
+                                <field name="water_account"
+                                       invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="parent_building" domain="[('id', '!=', active_id)]"/>
+                                <label for="street" string="Address"/>
+                                <div>
+                                    <field name="street" placeholder="Street..."/>
+                                    <field name="street2"/>
+                                    <div class="address_format">
+                                        <field name="city" placeholder="City" style="width: 40%"/>
+                                        <field name="state_id" class="oe_no_button" placeholder="State"
+                                               style="width: 37%"
+                                               options="{'no_open': True}" on_change="onchange_state(state_id)"
+                                               domain="[('country_id','=',country_id)]"/>
+                                        <field name="zip" placeholder="ZIP" style="width: 20%"/>
+                                    </div>
+                                    <field name="country_id" placeholder="Country" class="oe_no_button"
+                                           options="{'no_open': True}"/>
+                                </div>
+                                <field name="type"/>
+                                <field name="purpose_of_contract"/>
+                                <field name="residential_usage_type"
+                                       attrs="{'readonly': [('purpose_of_contract', 'in', ['commercial', 'industrial'])]}"/>
+                                <field name="land_usage_purpose"/>
+                                <field name="krookie_number"/>
+                                <field name="commencement_date"/>
+                                <field name="completion_date"/>
+                                <field name="active" attrs="{'invisible': [('type', '!=', 'out')]}" string="Active"/>
+                                <!--<field name="commission" attrs="{'invisible':[('type','=','own')], 'required':[('type','=','out')]}"/>-->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Unit">
+                                <field name="property_ids"
+                                       context="{'default_parent_building': id, 'default_for_parking':False }">
+                                    <tree string="Unit" editable="bottom" sample="1">
+                                        <field name="unit_seq" readonly="1"/>
+                                        <field name="property_type_id" domain="[('is_for_parking', '=', False)]"/>
+                                        <field name="name"/>
+                                        <field name="sale_price" readonly="1"/>
+                                        <field name="floor_id" readonly="1"/>
+                                        <field name="area" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Building Amenities">
+                                <field name="building_amenties_ids">
+                                    <tree editable="bottom">
+                                        <field name="ameniti_type_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="doc_type" readonly="1"/>
+                                        <field name="doc_dec" readonly="1"/>
+                                        <field name="issue_date" readonly="1"/>
+                                        <field name="expiry_date" readonly="1"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" readonly="1" filename="file_name"
+                                               widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="specifications" string="Specifications">
+                                <field name="specifications"/>
+                            </page>
+                            <page name="reservationdocs" string="Reservation Docs">
+                                <field name="reservation_docs"/>
+                            </page>
+                            <page name="bank_details" string="Bank Details">
+                                <field name="bank_account_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="bank_account_id"/>
+                                        <field name="acc_number" force_save="1"/>
+                                        <field name="swift_code"/>
+                                        <field name="branch_name" force_save="1"/>
+                                        <field name="type"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_building" model="ir.actions.act_window">
+            <field name="name">Building</field>
+            <field name="res_model">property.building</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Building.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_building_child" action="action_property_building" parent="menu_property" sequence="1"/>
+
+        <!-- Property -->
+        <record id="view_property_tree" model="ir.ui.view">
+            <field name="name">property.property.tree</field>
+            <field name="model">property.property</field>
+            <field name="arch" type="xml">
+                <tree string="Property" sample="1">
+                    <field name="unit_seq"/>
+                    <field name="name"/>
+                    <field name="rent_monthly"/>
+                    <field name="rent_price"/>
+                    <field name="area"/>
+                    <field name="state" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_property_form" model="ir.ui.view">
+            <field name="name">property.property.form</field>
+            <field name="model">property.property</field>
+            <field name="arch" type="xml">
+                <form string="Property">
+                    <header>
+                        <button name="button_print_opportunity" string="Cost Of Lost Opportunity" type="object"/>
+                        <button name="toggle_active" string="Activate" attrs="{'invisible': [('active', '=', True)]}"
+                                class="oe_highlight" type="object" invisible="1"/>
+                        <button name="toggle_active" string="Deactivate" attrs="{'invisible': [('active', '=', False)]}"
+                                class="oe_highlight" type="object"/>
+                        <field name="state" widget="statusbar" statusbar_visible="open,reserve,rented,sold"/>
+                    </header>
+                    <sheet>
+
+                        <div class="oe_button_box" name="button_box">
+                            <button name="return_property_complaints" type="object" class="oe_stat_button"
+                                    icon="fa-building"
+                                    help="show the complaints of the building">
+                                <field string="Complaints" name="complaint_count" widget="statinfo"/>
+                            </button>
+                            <button name="return_property_maintenance" type="object" class="oe_stat_button"
+                                    icon="fa-building"
+                                    help="show the maintenance of the building">
+                                <field string="Maintenance" name="maintenance_count" widget="statinfo"/>
+                            </button>
+                            <button name="action_unit_history" type="object" class="oe_stat_button"
+                                    icon="fa-building" string="Unit History"
+                                    help="show the history of the rent ">
+                                <field string="Unit History" name="history_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+                        <field name="image_1920" widget="image" class="oe_avatar"
+                               options="{'preview_image': 'image_128'}"/>
+                        <div class="oe_title oe_left">
+                            <h1>
+                                <field name="unit_seq" placeholder="Unit No" readonly="1"/>
+                            </h1>
+                            <div class="oe_edit_only">
+                                <label for="name"/>
+                            </div>
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" class="oe_inline"
+                                       style="padding-right:10px"/>
+                                <field name="bhk" readonly="1" class="oe_inline"
+                                       attrs="{'invisible':[('property_group','not in', ['residence'])]}"/>
+                            </h1>
+                            <h2>
+                                <label class="oe_edit_only" for="parent_building"/>
+                                <field name="parent_building"/>
+                            </h2>
+                            <div class="oe_left" name="options">
+                                <field name="for_rent"/>
+                                <label for="for_rent"/>
+                                <field name="for_sale"/>
+                                <label for="for_sale"/>
+                                <field name="for_parking"/>
+                                <label for="for_parking"/>
+                                <field name="owned"/>
+                                <label for="owned"/>
+                                <field name="contract_type"/>
+                                <!--                                <label for="contract_type"/>-->
+                            </div>
+                            <div class="oe_edit_only">
+                                <label for="parent_id"/>
+                            </div>
+                            <field name="parent_id" on_change="onchange_parent_id(parent_id)"/>
+                            <field name="active" invisible="1"/>
+                        </div>
+                        <div class="oe_right oe_button_box" name="buttons"></div>
+                        <notebook colspan="4">
+                            <page name="property" string="Property Details">
+                                <group>
+                                    <group>
+                                        <field name="rent_id" readonly="1"/>
+                                        <field name="tenant_id" readonly="1"/>
+                                        <field name="cost_center_id"/>
+                                        <field name="property_type_id"
+                                               on_change="onchange_property_type(property_type_id)"/>
+                                        <field name="property_group" invisible="1"/>
+                                        <label for="street" string="Address" invisible="1"/>
+                                        <div class="property_address" invisible="1">
+                                            <field name="street" placeholder="Street..."/>
+                                            <field name="street2"/>
+                                            <div class="address_format">
+                                                <field name="city" placeholder="City" style="width: 40%"/>
+                                                <field name="state_id" class="oe_no_button" placeholder="State"
+                                                       style="width: 3 7%" options="{&quot;no_open&quot;: True}"
+                                                       on_change="onchange_state(state_id)"
+                                                       domain="[('country_id','=',country_id)]"/>
+                                                <field name="zip" placeholder="ZIP" style="width: 20%"/>
+                                            </div>
+                                            <field name="country_id" placeholder="Country" class="oe_no_button"
+                                                   options="{&quot;no_open&quot;: True}"/>
+                                        </div>
+                                        <!--                                        <field name="partner_id" domain="[('landlord','=',True)]" context="{'form_view_ref':'amlak_property_management.landlord_form',-->
+                                        <!--                                    'default_customer':0, 'default_supplier':0 ,'default_landlord':1, 'search_default_landlord':1}"-->
+                                        <!--                                               attrs="{'invisible': [('owned','=', True)]}"/>-->
+                                        <field name="bld_number"/>
+                                        <field name="phone" invisible="1"/>
+                                        <field name="fax" invisible="1"/>
+                                        <field name="mobile" invisible="1"/>
+                                        <field name="mulkiya_no"/>
+                                        <field name="muncipality_no"/>
+                                        <!--                                        <field name="floor_no"/>-->
+                                        <field name="floor_id"/>
+                                        <field name="open_from"/>
+                                        <field name="electricity_meter_no" invisible="1"/>
+                                        <field name="electricity_no" invisible="1"/>
+                                        <field name="water_meter_no" invisible="1"/>
+                                        <field name="water_account_no" invisible="1"/>
+                                        <field name="in_active_bol"/>
+                                        <field name="park_buy"/>
+                                        <field name="owner_name"/>
+                                        <field name="owner_agreement"/>
+                                        <field name="ownership_type"/>
+                                    </group>
+                                    <group>
+                                        <field name="area"/>
+                                        <field name="rentable_area"/>
+                                        <field name="outdoor_area"/>
+                                        <field name="indoor_area"/>
+                                        <field name="mulkiya_area"/>
+                                        <field name="unit_views_id" widget="many2many_tags"/>
+                                        <field name="furnished_type_id"/>
+                                        <field name="rent_sqm"
+                                               attrs="{'invisible': [('property_group','not in', ['shop'])]}"/>
+                                        <field name="rent_monthly" attrs="{'invisible': [('for_rent','!=', True)]}"/>
+                                        <field name="rent_price" attrs="{'invisible': [('for_rent','!=', True)]}"/>
+                                        <field name="sale_price" attrs="{'invisible': [('for_sale','!=', True)]}"/>
+
+                                        <field name="bed_rooms"
+                                               invisible="1"/>
+                                        <field name="kitchen"
+                                               invisible="1"/>
+                                        <field name="hall"
+                                               invisible="1"/>
+                                        <field name="bathroom"
+                                               invisible="1"/>
+                                        <field name="balcony"
+                                               invisible="1"/>
+                                        <field name="parking"/>
+                                        <field name="room_details_count">
+                                            <tree editable="bottom">
+                                                <field name="room_type_id"/>
+                                                <field name="type_count"/>
+                                            </tree>
+                                        </field>
+                                        <field name="doors"
+                                               invisible="1"/>
+                                        <field name="ac_type"
+                                               invisible="1"/>
+                                        <field name="sea_view"
+                                               invisible="1"/>
+                                        <field name="gym"
+                                               invisible="1"/>
+                                        <field name="health_club"
+                                               invisible="1"/>
+                                        <field name="maid"
+                                               invisible="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="room_details" string="Room Details">
+                                <field name="room_ids">
+                                    <tree string="Rooms" editable="bottom" sample="1">
+                                        <field name="name"/>
+                                        <field name="type_id"/>
+                                        <field name="room_length"/>
+                                        <field name="room_width"/>
+                                        <field name="room_height"/>
+                                        <!--                                        <field name="asset_type_ids"-->
+                                        <!--                                               options="{'no_quick_create': True, 'no_create_edit' : False}"-->
+                                        <!--                                               widget="many2many_tags"/>-->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Unit History">
+                                <field name="rent_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="building"/>
+                                        <field name="partner_id"/>
+                                        <field name="date"/>
+                                        <field name="state" widget="badge"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="doc_type" readonly="1"/>
+                                        <field name="doc_dec" readonly="1"/>
+                                        <field name="issue_date" readonly="1"/>
+                                        <field name="expiry_date" readonly="1"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" readonly="1" filename="file_name"
+                                               widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="asset_n_accessrz" string="Asset &amp; Accessories">
+                                <field name="accessrz_ids">
+                                    <tree editable="bottom" sample="1">
+                                        <field name="name"/>
+                                        <field name="desc"/>
+                                        <field name="asset_categ"/>
+                                        <field name="room_id" domain="[('id', 'in', parent.room_ids)]"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Electricity Account" string="Electricity Account">
+                                <field name="electricity_account_ids">
+                                    <tree editable="bottom">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="water_account" string="Water Account">
+                                <field name="water_account_ids">
+                                    <tree editable="bottom">
+                                        <field name="account_no"/>
+                                        <field name="meter_no"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="property_kanban_view" model="ir.ui.view">
+            <field name="name">property.property.kanban</field>
+            <field name="model">property.property</field>
+            <field name="arch" type="xml">
+                <kanban class="o_property_kanban">
+                    <field name="id"/>
+                    <field name="rent_price"/>
+                    <field name="area"/>
+                    <field name="rent_monthly"/>
+                    <field name="bhk"/>
+                    <field name="property_type_id"/>
+                    <field name="property_group"/>
+                    <field name="rent_sqm"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="ribbon ribbon-top-right">
+                                    <span class="bg-success" attrs="{'invisible': [('state', '!=', 'open')]}">
+                                        Available
+                                    </span>
+                                    <span class="bg-warning" attrs="{'invisible': [('state', '!=', 'take_over')]}">
+                                        Takeover
+                                    </span>
+                                    <span class="bg-danger" attrs="{'invisible': [('state', '!=', 'rented')]}">Rented
+                                    </span>
+                                    <span class="bg-info" attrs="{'invisible': [('state', '!=', 'sold')]}">Sold</span>
+                                    <span class="bg-gray-lighter" attrs="{'invisible': [('state', '!=', 'close')]}">
+                                        Closed
+                                    </span>
+                                </div>
+                                <a type="open" title="Open" href="#" class="o_kanban_image oe_kanban_action">
+                                    <img alt="Open"
+                                         t-att-src="kanban_image('property.property', 'image_128', record.id.raw_value)"
+                                         class="img-fluid" style="width:100px;"
+                                    />
+                                </a>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a type="open" title="Name" class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </a>
+                                    </h4>
+                                    <t t-if="record.property_group.value == 'shop'">
+                                        <ul>
+                                            <li>Area(Sqm) :
+                                                <field name="area"/>
+                                            </li>
+                                            <li>Rent(Sqm) :
+                                                <field name="rent_sqm"/>
+                                            </li>
+                                            <li>Rent (Monthly) :
+                                                <field name="rent_monthly"/>
+                                            </li>
+                                            <li>
+                                                <field name="state"/>
+                                            </li>
+                                        </ul>
+                                    </t>
+                                    <t t-if="record.property_group.value == 'residence'">
+                                        <ul>
+                                            <li>
+                                                <field name="bhk"/>
+                                            </li>
+                                            <li>Rent (Monthly) :
+                                                <field name="rent_monthly"/>
+                                            </li>
+                                            <li>
+                                                <field name="state"/>
+                                            </li>
+                                        </ul>
+                                    </t>
+                                    <t t-if="record.property_group.value == 'land' || record.property_group.value == 'camp'">
+                                        <ul>
+                                            <li>Rent (Monthly) :
+                                                <field name="rent_monthly"/>
+                                            </li>
+                                            <li>
+                                                <field name="state"/>
+                                            </li>
+                                        </ul>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="property_search_view" model="ir.ui.view">
+            <field name="name">property.property.search</field>
+            <field name="model">property.property</field>
+            <field name="arch" type="xml">
+                <search string="Property">
+                    <field name="name" string="Name"/>
+                    <field name="bld_number"/>
+                    <field name="cost_center_id"/>
+                    <field name="parent_id"/>
+                    <field name="property_type_id"/>
+                    <filter name="parent_property" string="Parent Property" domain="[('parent_id', '=', False)]"/>
+                    <filter name="for_rent" string="For Rent" domain="[('state','=','open'),('for_rent','=',True)]"/>
+                    <filter name="for_sale" string="For Sale" domain="[('state','=','open'),('for_sale','=',True)]"/>
+                    <group expand='0' string='Group by...'>
+                        <filter name="group_property_parent" string="Unit" context="{'group_by' : 'parent_id'}"/>
+                        <filter name="group_landlord" string='Landlord' domain="[]"
+                                context="{'group_by' : 'partner_id'}"/>
+                        <filter name="group_property_type" string='Unit Type'
+                                context="{'group_by' : 'property_type_id'}"/>
+                        <filter string="Building" context="{'group_by' :'parent_building'}" name="group_by_building"/>
+                        <filter string="Available" domain="[('state','=', 'open')]" name="group_by_avail"/>
+                        <filter string="Rented" domain="[('state','=', 'rented')]" name="group_by_rent"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_property" model="ir.actions.act_window">
+            <field name="name">Unit</field>
+            <field name="res_model">property.property</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="property_search_view"/>
+            <field name="context">{'search_default_group_by_building': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Property.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_property_child" action="action_property" parent="menu_property" sequence="2"/>
+        <!-- END -->
+
+        <!-- Property Type -->
+        <record id="view_property_type_tree" model="ir.ui.view">
+            <field name="name">property.type.tree</field>
+            <field name="model">property.type</field>
+            <field name="arch" type="xml">
+                <tree string="Unit Type" sample="1">
+                    <field name="name"/>
+                    <field name="property_group"/>
+                    <field name="is_for_parking" optional="hide"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_property_type_form" model="ir.ui.view">
+            <field name="name">property.type.form</field>
+            <field name="model">property.type</field>
+            <field name="arch" type="xml">
+                <form string="Property Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="property_group"/>
+                            <field name="is_for_parking"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_property_type" model="ir.actions.act_window">
+            <field name="name">Unit Types</field>
+            <field name="res_model">property.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Unit Type.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_property_types" action="action_property_type" parent="menu_property_config" sequence="1"/>
+        <!-- END -->
+
+        <record id="action_building_area" model="ir.actions.act_window">
+            <field name="name">Building Area</field>
+            <field name="res_model">building.area</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create an Area.
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_building_area"
+                  action="action_building_area"
+                  parent="menu_property_config"
+                  sequence="10"/>
+        <!-- Room Type -->
+        <record id="view_room_type_tree" model="ir.ui.view">
+            <field name="name">property.room.type.tree</field>
+            <field name="model">property.room.type</field>
+            <field name="arch" type="xml">
+                <tree string="Room Type" sample="1">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_room_type_form" model="ir.ui.view">
+            <field name="name">property.room.type.form</field>
+            <field name="model">property.room.type</field>
+            <field name="arch" type="xml">
+                <form string="Room Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_property_room_form" model="ir.ui.view">
+            <field name="name">property.room.form</field>
+            <field name="model">property.room</field>
+            <field name="arch" type="xml">
+                <form string="Room">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="type_id"/>
+                                <field name="property_id"/>
+                            </group>
+                            <group>
+                                <field name="room_length"/>
+                                <field name="room_width"/>
+                                <field name="room_height"/>
+                            </group>
+                            <group>
+                                <field name="asset_type_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_room_type" model="ir.actions.act_window">
+            <field name="name">Room Types</field>
+            <field name="res_model">property.room.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Room Type.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_room_types" action="action_room_type" parent="menu_property_config" sequence="3"/>
+
+        <!-- END -->
+
+        <!--Asset and accessories-->
+
+        <record id="view_asset_n_acces_tree" model="ir.ui.view">
+            <field name="name">assets.accessrz.tree</field>
+            <field name="model">assets.accessrz</field>
+            <field name="arch" type="xml">
+                <tree string="Asset and Accessories" sample="1">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="desc"/>
+                    <field name="asset_categ"/>
+                    <field name="warrnty_date"/>
+                    <field name="warrnty_date_to" string="Warranty To Date" widget="remaining_days" optional="show"/>
+                    <field name="property_id"/>
+                </tree>
+            </field>
+        </record>
+        <!-- create_maintenance_request wizard view -->
+        <record id="create_maintenance_request_view_form" model="ir.ui.view">
+            <field name="name">create_maintenance_request</field>
+            <field name="model">create.maintenance.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="from_date"/>
+                            <label for="recipient_ids"/>
+                            <field name="recipient_ids" placeholder="Recipients" nolabel="1" widget="many2many_tags"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="to_date"/>
+                        </group>
+                        <label for="subject"/>
+                        <field name="subject" placeholder="Maintenance Request" nolabel="1"/>
+                        <label for="message"/>
+                        <field name="message" nolabel="1" placeholder="Optional Message..."/>
+                        <!-- <field name="assets_ids" /> -->
+                    </group>
+                    <footer>
+                        <button string="Create Maintenance Request" name="create_maintenance_request" type="object"
+                                class="btn-primary"/>
+                        <button string="Send Mail" name="send_mail" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_asset_n_acces_search" model="ir.ui.view">
+            <field name="name">assets.accessrz.search</field>
+            <field name="model">assets.accessrz</field>
+            <field name="arch" type="xml">
+                <search string="Asset &amp; Accessories">
+                    <field name="building_id"/>
+                    <field name="property_id"/>
+                    <field name="room_id"/>
+                    <field name="asset_categ"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property_id"/>
+                        <filter string="Room" context="{'group_by':'room_id'}" name="group_by_room_id"/>
+                        <filter string="Asset Type" context="{'group_by':'asset_categ'}" name="group_by_asset_categ"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_asset_n_acces_form" model="ir.ui.view">
+            <field name="name">assets.accessrz.form</field>
+            <field name="model">assets.accessrz</field>
+            <field name="arch" type="xml">
+                <form string="Asset and Accessories">
+                    <header>
+                        <button name="create_periodic_maintenance" invisible="1"
+                                string="Create Maintenance Request"
+                                type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="return_asset_maintenance" type="object"
+                                    icon="fa-building" class="oe_stat_button">
+                                <field string="Maintenance Requests" name="maintenance_count" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" nolabel="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="property_id" required="1"/>
+                                <field name="building_id"/>
+                                <field name="room_id" required="1"/>
+                                <field name="asset_categ" required="1"/>
+                            </group>
+                            <group>
+                                <field name="supplier_id"/>
+                                <field name="invoice_date"/>
+                                <field name="brand"/>
+                                <field name="invoice_ref_no"/>
+                                <field name="helpdesk_no"/>
+                            </group>
+                        </group>
+                        <separator string="Warranty Period" colspan="3"/>
+                        <group>
+                            <group>
+                                <field name="warrnty_date_from"/>
+                            </group>
+                            <group>
+                                <field name="warrnty_date_to"/>
+                                <field name="expiry_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="desc" force_save="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="name" readonly="1"/>
+                                        <field name="doc_type" readonly="1"/>
+                                        <field name="doc_dec" readonly="1"/>
+                                        <field name="issue_date" readonly="1"/>
+                                        <field name="expiry_date" readonly="1"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" readonly="1" filename="file_name"
+                                               widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_acces_asset" model="ir.actions.act_window">
+            <field name="name">Asset &amp; Accessories</field>
+            <field name="res_model">assets.accessrz</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create your assets and accessories here.
+                </p>
+            </field>
+        </record>
+
+        <!--asset categ-->
+        <record id="view_asset_n_acces_type_tree" model="ir.ui.view">
+            <field name="name">assets.accessrz.type.tree</field>
+            <field name="model">assets.accessrz.type</field>
+            <field name="arch" type="xml">
+                <tree string="Asset and Accessories Type" sample="1">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_asset_n_acces_type_form" model="ir.ui.view">
+            <field name="name">assets.accessrz.type.form</field>
+            <field name="model">assets.accessrz.type</field>
+            <field name="arch" type="xml">
+                <form string="Asset and Accessories Type">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="name"/>
+                                <field name="parent_id"/>
+                            </group>
+                            <group>
+                                <!--                                <field name="code" />-->
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_acces_asset_categ" model="ir.actions.act_window">
+            <field name="name">Asset &amp;Accessories Type</field>
+            <field name="res_model">assets.accessrz.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create your assets and accessories here.
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_asset_n_accessories_categ" action="action_acces_asset_categ" parent="menu_property_config"
+                  sequence="15"/>
+        <!--end of categ-->
+
+        <menuitem id="menu_asset_n_accessories" action="action_acces_asset" parent="menu_property_config"
+                  sequence="18"/>
+        <!--end-->
+    </data>
+</odoo>

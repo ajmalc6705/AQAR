@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Multi - Company Rules -->
+    <record id="document_renewal_multi_company_rule" model="ir.rule">
+        <field name="name">Multi company rules for Document Renewal</field>
+        <field name="model_id" ref="model_document_renewal"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="document_submission_multi_company_rule" model="ir.rule">
+        <field name="name">Multi company rules for Document Submission</field>
+        <field name="model_id" ref="model_document_submission"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="user_rule_for_document_renewal" model="ir.rule">
+        <field name="name">User Rule for Document Renewal</field>
+        <field name="model_id" ref="model_document_renewal"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[('user_ids','in',user.id)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_user'))]"/>
+    </record>
+
+    <record id="admin_rule_for_document_renewal" model="ir.rule">
+        <field name="name">Admin Rule for Document Renewal</field>
+        <field name="model_id" ref="aqar_documents.model_document_renewal"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_admin'))]"/>
+    </record>
+
+    <!--    Rule for documents_submission-->
+
+<record id="user_rule_for_document_submission" model="ir.rule">
+        <field name="name">User Rule for Document Submission</field>
+        <field name="model_id" ref="model_document_submission"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[('user_ids','in',user.id)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_user'))]"/>
+    </record>
+    <record id="admin_rule_for_document_submission" model="ir.rule">
+        <field name="name">Admin Rule for Document Submission</field>
+        <field name="model_id" ref="aqar_documents.model_document_submission"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('atheer_documents.group_doc_admin'))]"/>
+    </record>
+
+
+</odoo>

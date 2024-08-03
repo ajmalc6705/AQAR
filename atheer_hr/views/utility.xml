@@ -1,0 +1,663 @@
+<odoo>
+    <data>
+        <!--        utility-->
+        <record id="view_utility_tree" model="ir.ui.view">
+            <field name="name">Utility</field>
+            <field name="model">utility.accounts</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Utility Bills">
+                    <field name="bill_type"/>
+                    <field name="acc_no"/>
+                    <field name="acc_user"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_utility_view" model="ir.actions.act_window">
+            <field name="name">Utility</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">utility.accounts</field>
+        </record>
+
+        <record id="view_utility_form" model="ir.ui.view">
+            <field name="name">Utility Bills</field>
+            <field name="model">utility.accounts</field>
+            <field name="arch" type="xml">
+                <form string="Utility Bills">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="bill_type"/>
+                                <field name="acc_user"/>
+                                <field name="account_id"/>
+                            </group>
+                            <group>
+                                <field name="acc_no"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="utility_bills_view_search" model="ir.ui.view">
+            <field name="name">utility.accounts.search</field>
+            <field name="model">utility.accounts</field>
+            <field name="arch" type="xml">
+                <search string="Utility Bills">
+                    <separator/>
+                    <field name="acc_no"/>
+                    <field name="acc_user"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('bill_type', '=', 'water')]" name="bill_type"
+                                string="Water"/>
+                        <filter domain="[('bill_type', '=', 'electricity')]" name="bill_type"
+                                string="Electricity"/>
+                        <filter domain="[('bill_type', '=', 'wifi')]" name="bill_type"
+                                string="Wi-Fi"/>
+                        <filter domain="[('bill_type', '=', 'mobile_bill')]" name="bill_type"
+                                string="Mobile Bill"/>
+                        <separator/>
+                        <filter string="Bill Type" name='bill_type' context="{'group_by':'bill_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--        utility analysis-->
+        <record id="view_utility_bill_details_tree" model="ir.ui.view">
+            <field name="name">Utility Bill Details</field>
+            <field name="model">utility.bill.details</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Utility Bill Details" create="false" edit="false">
+                    <field name="acc_no"/>
+                    <field name="acc_user"/>
+                    <field name="bill_type" invisible="1"/>
+                    <field name="bill_month" invisible="1"/>
+                    <field name="bill_year" invisible="1"/>
+                    <field name="last_reading" digits="[12,3]"/>
+                    <field name="current_reading" digits="[12,3]"/>
+                    <field name="consumed_unit" digits="[12,3]"/>
+                    <field name="tariff" digits="[12,3]"/>
+                    <field name="consumed_unit_amount" widget='monetary' digits="[12,3]"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="municipality_fees" digits="[12,3]"/>
+                    <field name="municipality_amount" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="total_amount" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="tax_id"/>
+                    <field name="vat_amount" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="sewage_unit_rate" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="sewage_amount" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="vat_amount_for_sewage" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="sewage_service_fee" digits="[12,3]" widget='monetary'
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="sewage_service_tax"/>
+                    <field name="sewage_service_tax_amount" digits="[12,3]"
+                           options="{'currency_field': 'currency_id'}"/>
+                    <field name="net_payable_amount" digits="[12,3]" sum="Total Amount"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_utility_analysis" model="ir.actions.act_window">
+            <field name="name">Utility Analysis</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">utility.bill.details</field>
+        </record>
+
+        <record id="utility_analysis_view_search" model="ir.ui.view">
+            <field name="name">utility.analysis.search</field>
+            <field name="model">utility.bill.details</field>
+            <field name="arch" type="xml">
+                <search string="Utility Approval">
+                    <separator/>
+                    <field name="acc_no"/>
+                    <field name="acc_user"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('bill_type', '=', 'water')]" name="bill_type"
+                                string="Water"/>
+                        <filter domain="[('bill_type', '=', 'electricity')]" name="bill_type"
+                                string="Electricity"/>
+                        <filter domain="[('bill_type', '=', 'wifi')]" name="bill_type"
+                                string="Wi-Fi"/>
+                        <filter domain="[('bill_type', '=', 'mobile_bill')]" name="bill_type"
+                                string="Mobile Bill"/>
+                        <separator/>
+                        <separator/>
+                        <filter string="Bill Type" name='bill_type' context="{'group_by':'bill_type'}"/>
+                        <separator/>
+                        <filter string="Bill Month" name='bill_month' context="{'group_by':'bill_month'}"/>
+                        <separator/>
+                        <filter string="Bill Year" name='bill_year' context="{'group_by':'bill_year'}"/>
+                        <separator orientation="vertical"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_utility_bill_details_form" model="ir.ui.view">
+            <field name="name">Utility Bill Details</field>
+            <field name="model">utility.bill.details</field>
+            <field name="arch" type="xml">
+                <form string="Utility Analysis" create="false" edit="false">
+                    <sheet>
+                        <group col="4" string="General Details">
+                            <field name="acc_no"/>
+                            <field name="acc_user"/>
+                            <field name="last_reading" digits="[12,3]"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="current_reading" digits="[12,3]"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="consumed_unit"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="tariff" options="{'currency_field': 'currency_id'}" widget='monetary'
+                                   digits="[12,3]"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="consumed_unit_amount" options="{'currency_field': 'currency_id'}"
+                                   widget='monetary' digits="[12,3]"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                        </group>
+                        <group col="4">
+                            <label for="municipality_fees"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['electricity'])]}"/>
+                            <div class="o_row" name="municipality_fees"
+                                 attrs="{'invisible': [('bill_type', 'not in', ['electricity'])]}">
+                                <field name="municipality_fees" digits="[12,3]"/>
+                                <span>%</span>
+                            </div>
+                            <field name="municipality_amount" options="{'currency_field': 'currency_id'}"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['electricity'])]}"
+                                   widget='monetary' digits="[12,3]"/>
+                            <field name="total_amount" options="{'currency_field': 'currency_id'}" widget='monetary'
+                                   digits="[12,3]"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="tax_id" options="{'no_create': True, 'no_open': True}"
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"/>
+                            <field name="vat_amount" options="{'currency_field': 'currency_id'}" widget='monetary'
+                                   attrs="{'invisible': [('bill_type', 'not in', ['water','electricity'])]}"
+                                   digits="[12,3]"/>
+                        </group>
+                        <group col="4" string="Sewage Details"
+                               attrs="{'invisible': [('bill_type', 'not in', ['water'])]}">
+                            <field name="sewage_unit_rate" options="{'currency_field': 'currency_id'}" widget='monetary'
+                                   digits="[12,3]"/>
+                            <field name="sewage_amount" options="{'currency_field': 'currency_id'}" widget='monetary'
+                                   digits="[12,3]"/>
+                            <field name="vat_amount_for_sewage" options="{'currency_field': 'currency_id'}"
+                                   widget='monetary' digits="[12,3]"/>
+                        </group>
+                        <group col="4" string="Sewage Service Details"
+                               attrs="{'invisible': [('bill_type', 'not in', ['water'])]}">
+                            <field name="sewage_service_fee" options="{'currency_field': 'currency_id'}"
+                                   widget='monetary' digits="[12,3]"/>
+                            <field name="sewage_service_tax" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="sewage_service_tax_amount" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}" digits="[12,3]"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="net_payable_amount" options="{'currency_field': 'currency_id'}"
+                                       widget='monetary'
+                                       digits="[12,3]"/>
+                            </group>
+                        </group>
+                        <field name="bill_type" invisible="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--        utility approval-->
+        <record id="view_utility_approval_tree" model="ir.ui.view">
+            <field name="name">Utility Approval</field>
+            <field name="model">utility.approval</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Utility Approval">
+                    <field name="reference"/>
+                    <field name="bill_type"/>
+                    <field name="bill_month"/>
+                    <field name="bill_year"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_utility_approval_form" model="ir.ui.view">
+            <field name="name">Utility Approval</field>
+            <field name="model">utility.approval</field>
+            <field name="arch" type="xml">
+                <form string="Utility Approval">
+                    <header>
+                        <button name="action_approve" type="object" groups="atheer_hr.group_hr_manager"
+                                string="Approve" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'hr')]}"/>
+                        <button name="action_create_bill" type="object" groups="atheer_hr.group_hr_manager"
+                                string="Create Bill" class="oe_highlight"
+                                attrs="{'invisible': ['|',('state', 'not in', 'approved'),('create_bill_flag','=',True)]}"/>
+                        <button name="action_bill_paid" type="object" groups="atheer_hr.group_hr_accounts"
+                                string="Bill Paid" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', 'approved')]}"/>
+                        <button name="action_print_report" type="object"
+                                string="Print" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', ['approved','bill_paid'])]}"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="hr,approved"/>
+                    </header>
+                    <sheet>
+                         <div class="oe_button_box" name="button_box">
+                         <button class="oe_stat_button" name="action_view_bill"
+                                    attrs="{'invisible': [('create_bill_flag','=', False)]}"
+                                    string="Bill" type="object" icon="fa-bars">
+                            </button>
+                         </div>
+                        <field name="send_back_flag" invisible="1"/>
+                        <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                                attrs="{'invisible': [('send_back_flag', '=', False)]}"/>
+                        <div class="oe_title">
+                            <label for="reference" class="oe_edit_only"/>
+                            <h2>
+                                <field name="reference"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="journal_id"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="bill_month"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="bill_type"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="create_uid" string="Created By"
+                                       options='{"no_open": True, "no_create": True}'/>
+                                <field name="company_id"/>
+                                <field name="create_bill_flag" invisible="1"/>
+                                <field name="bill_id" attrs="{'invisible':[('create_bill_flag','=',False)]}"/>
+                            </group>
+                            <group>
+                                <field name="bill_year"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="bill_date"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid','refused'])]}"/>
+                                <field name="create_date" string="Created On" readonly="1" force_save="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Utility Bill Details" name="bill_details">
+                                <field name="water_bill_ids" force_save="1" mode="tree"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid'])],
+                                       'invisible': [('bill_type', '!=', 'water')]}">
+                                    <tree editable="bottom" create="0">
+                                        <field name="acc_no" force_save="1"/>
+                                        <field name="account_id" force_save="1"/>
+                                        <field name="acc_user" force_save="1"/>
+                                        <field name="bill_type" invisible="1" force_save="1"/>
+                                        <field name="bill_month" invisible="1" force_save="1"/>
+                                        <field name="bill_year" invisible="1" force_save="1"/>
+                                        <field name="last_reading" digits="[12,3]"/>
+                                        <field name="current_reading" digits="[12,3]"/>
+                                        <field name="consumed_unit" digits="[12,3]" force_save="1"/>
+                                        <field name="tariff" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary'
+                                               digits="[12,3]"/>
+                                        <field name="consumed_unit_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="total_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="tax_id" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="vat_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="sewage_unit_rate" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="sewage_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="vat_amount_for_sewage" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="sewage_service_fee" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' digits="[12,3]" force_save="1"/>
+                                        <field name="sewage_service_tax" options="{'no_create': True, 'no_open': True}"
+                                               force_save="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="sewage_service_tax_amount" force_save="1"
+                                               options="{'currency_field': 'currency_id'}" widget='monetary'
+                                               digits="[12,3]"/>
+                                        <field name="untaxed_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary'
+                                               digits="[12,3]" force_save="1"/>
+                                        <field name="net_payable_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary'
+                                               digits="[12,3]" force_save="1"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group string="General Details">
+                                                <group>
+                                                    <field name="acc_no" force_save="1"/>
+                                                    <field name="last_reading" digits="[12,3]"/>
+                                                    <field name="consumed_unit" digits="[12,3]" force_save="1"/>
+                                                    <field name="consumed_unit_amount" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                    <field name="vat_amount" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="acc_user" force_save="1"/>
+                                                    <field name="current_reading" digits="[12,3]"/>
+                                                    <field name="tariff" options="{'currency_field': 'currency_id'}"
+                                                           widget='monetary' digits="[12,3]"/>
+                                                    <field name="tax_id"
+                                                           options="{'no_create': True, 'no_open': True}"/>
+                                                    <field name="total_amount" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                </group>
+                                            </group>
+                                            <group string="Sewage Details">
+                                                <group>
+                                                    <field name="sewage_unit_rate"
+                                                           options="{'currency_field': 'currency_id'}"
+                                                           widget='monetary' digits="[12,3]" force_save="1"/>
+                                                    <field name="sewage_amount" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="vat_amount_for_sewage" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                </group>
+                                            </group>
+                                            <group string="Sewage Service Details">
+                                                <group>
+                                                    <field name="sewage_service_fee" widget='monetary'
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"
+                                                           force_save="1"/>
+                                                    <field name="sewage_service_tax_amount" widget='monetary'
+                                                           force_save="1"
+                                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"/>
+                                                </group>
+                                                <group>
+                                                    <field name="sewage_service_tax"
+                                                           options="{'no_create': True, 'no_open': True}"
+                                                           force_save="1"/>
+                                                </group>
+                                            </group>
+                                            <group col="12">
+                                                <group class="oe_subtotal_footer oe_right" col="4">
+                                                    <label for="net_payable_amount"/>
+                                                    <field name="net_payable_amount" widget='monetary' nolabel="1"
+                                                           options="{'currency_field': 'currency_id'}"
+                                                           digits="[12,3]" force_save="1"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <field name="electricity_bill_ids" force_save="1" mode="tree"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid'])],
+                                       'invisible': [('bill_type', '!=', 'electricity')]}">
+                                    <tree editable="bottom" create="0">
+                                        <field name="acc_no" force_save="1"/>
+                                        <field name="account_id" force_save="1"/>
+                                        <field name="acc_user" force_save="1"/>
+                                        <field name="bill_type" invisible="1" force_save="1"/>
+                                        <field name="bill_month" invisible="1" force_save="1"/>
+                                        <field name="bill_year" invisible="1" force_save="1"/>
+                                        <field name="last_reading"/>
+                                        <field name="current_reading"/>
+                                        <field name="consumed_unit" digits="[12,3]" force_save="1"/>
+                                        <field name="tariff" digits="[12,3]" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' force_save="1"/>
+                                        <field name="consumed_unit_amount" digits="[12,3]"
+                                               options="{'currency_field': 'currency_id'}" widget='monetary'
+                                               force_save="1"/>
+                                        <field name="municipality_fees" digits="[12,3]"/>
+                                        <field name="municipality_amount" digits="[12,3]"
+                                               options="{'currency_field': 'currency_id'}" widget='monetary'
+                                               force_save="1"/>
+                                        <field name="total_amount" digits="[12,3]"
+                                               options="{'currency_field': 'currency_id'}" widget='monetary'
+                                               force_save="1"/>
+                                        <field name="tax_id" options="{'no_create': True, 'no_open': True}"
+                                               digits="[12,3]"
+                                               force_save="1"/>
+                                        <field name="vat_amount" digits="[12,3]"
+                                               options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' force_save="1"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="untaxed_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary'
+                                               digits="[12,3]" force_save="1"/>
+                                        <field name="net_payable_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary'
+                                               digits="[12,3]"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group string="General Details">
+                                                <group>
+                                                    <field name="acc_no" force_save="1"/>
+                                                    <field name="last_reading"/>
+                                                    <field name="consumed_unit" digits="[12,3]" force_save="1"/>
+                                                    <field name="consumed_unit_amount"
+                                                           options="{'currency_field': 'currency_id'}" widget='monetary'
+                                                           digits="[12,3]" force_save="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="acc_user" force_save="1"/>
+                                                    <field name="current_reading"/>
+                                                    <field name="tariff" options="{'currency_field': 'currency_id'}"
+                                                           widget='monetary' digits="[12,3]" force_save="1"/>
+                                                    <field name="tax_id" options="{'no_create': True, 'no_open': True}"
+                                                           digits="[12,3]" force_save="1"/>
+                                                </group>
+                                            </group>
+                                            <group string="Municipality Details">
+                                                <group>
+                                                    <label for="municipality_fees"/>
+                                                    <div class="o_row" name="municipality_fees">
+                                                        <field name="municipality_fees" digits="[12,3]"/>
+                                                        <span>%</span>
+                                                    </div>
+                                                </group>
+                                                <group>
+                                                    <field name="municipality_amount"
+                                                           options="{'currency_field': 'currency_id'}" widget='monetary'
+                                                           digits="[12,3]" force_save="1"/>
+                                                    <field name="currency_id" invisible="1"/>
+                                                </group>
+                                            </group>
+                                            <br/>
+                                            <group col="12">
+                                                <group class="oe_subtotal_footer oe_right" col="4">
+                                                    <field name="total_amount"
+                                                           options="{'currency_field': 'currency_id'}"
+                                                           widget='monetary' digits="[12,3]" force_save="1"/>
+                                                    <field name="vat_amount" options="{'currency_field': 'currency_id'}"
+                                                           widget='monetary' digits="[12,3]" force_save="1"/>
+                                                    <label for="net_payable_amount"
+                                                           class="oe_subtotal_footer_separator"/>
+                                                    <field name="net_payable_amount" widget='monetary' nolabel="1"
+                                                           options="{'currency_field': 'currency_id'}"
+                                                           digits="[12,3]" class="oe_subtotal_footer_separator"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <field name="other_bill_ids" force_save="1" mode="tree"
+                                       attrs="{'readonly': [('state','in',['approved','bill_paid'])],'invisible': [('bill_type', 'not in', ['wifi','mobile_bill','pasi','land_line'])]}">
+                                    <tree editable="bottom" create="0">
+                                        <field name="acc_no" force_save="1"/>
+                                        <field name="account_id" force_save="1"/>
+                                        <field name="acc_user" force_save="1"/>
+                                        <field name="bill_type" force_save="1" invisible="1"/>
+                                        <field name="bill_month" force_save="1" invisible="1"/>
+                                        <field name="bill_year" force_save="1" invisible="1"/>
+                                         <field name="untaxed_amount" options="{'currency_field': 'currency_id'}"
+                                               widget='monetary' string="Amount"
+                                               attrs="{'readonly': [('bill_type', 'not in', ['wifi','mobile_bill','pasi','land_line'])]}"
+                                               digits="[12,3]" force_save="1"/>
+                                        <field name="tax_id" options="{'no_create': True, 'no_open': True}"
+                                               digits="[12,3]"
+                                               force_save="1"/>
+                                        <field name="net_payable_amount" force_save="1"
+                                               options="{'currency_field': 'currency_id'}" widget='monetary'
+                                               attrs="{'readonly': [('bill_type', 'not in', ['wifi','mobile_bill','pasi','land_line'])]}"
+                                               digits="[12,3]"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="acc_no" force_save="1"/>
+                                                </group>
+                                                <group>
+                                                    <field name="acc_user" force_save="1"/>
+                                                </group>
+                                            </group>
+                                            <br/>
+                                            <group col="12">
+                                                <group class="oe_subtotal_footer oe_right" col="4">
+                                                    <label for="net_payable_amount"/>
+                                                    <field name="net_payable_amount" widget='monetary' nolabel="1"
+                                                           options="{'currency_field': 'currency_id'}"
+                                                           digits="[12,3]"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_amount" force_save="1" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}" digits="[12,3]"/>
+                                </group>
+                            </page>
+                            <page name="remarks" string="Remarks And Approval">
+                                <group string="Remarks">
+                                    <group>
+                                        <field name="hr_remarks" attrs="{'readonly': [('state','not in',['hr'])]}"
+                                               force_save="1"/>
+                                        <field name="account_remarks"
+                                               attrs="{'readonly': [('state','not in',['approved'])]}"
+                                               force_save="1"/>
+                                    </group>
+                                    <group>
+                                    </group>
+                                </group>
+                                <group string="Approval Details"
+                                       attrs="{'invisible':[('state','not in',['approved','bill_paid'])]}">
+                                    <group>
+                                        <field name="approval_person_id" options='{"no_open": True, "no_create": True}'
+                                               force_save="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="approval_date" force_save="1"/>
+                                    </group>
+                                </group>
+                                <group string="Refused Details" attrs="{'invisible':[('state','!=','refused')]}">
+                                    <group>
+                                        <field name="rejected_person_id" force_save="1" readonly="1"
+                                               options='{"no_open": True, "no_create": True}'/>
+                                    </group>
+                                    <group>
+                                        <field name="rejected_date" force_save="1" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="utility_approval_view_search" model="ir.ui.view">
+            <field name="name">utility.approval.search</field>
+            <field name="model">utility.approval</field>
+            <field name="arch" type="xml">
+                <search string="Utility Approval">
+                    <separator/>
+                    <field name="reference"/>
+                    <field name="create_uid"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter domain="[('bill_type', '=', 'water')]" name="bill_type"
+                                string="Water"/>
+                        <filter domain="[('bill_type', '=', 'electricity')]" name="bill_type"
+                                string="Electricity"/>
+                        <filter domain="[('bill_type', '=', 'wifi')]" name="bill_type"
+                                string="Wi-Fi"/>
+                        <filter domain="[('bill_type', '=', 'mobile_bill')]" name="bill_type"
+                                string="Mobile Bill"/>
+                        <separator/>
+                        <!--                        <filter string="Current Year" name="current_year"-->
+                        <!--                            domain="[('create_date','&lt;=',time.strftime('%%Y-%%m-%%d')), ('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>-->
+                        <!--                        <filter string="Last Year" invisible="1" name="year"-->
+                        <!--                                domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=365)).strftime('%%Y-%%m-%%d'))]"/>-->
+                        <!--                        <filter string="Last Year" name="year"-->
+                        <!--                                domain="[('create_date','&gt;=', (context_today() - datetime.timedelta(days=365)).strftime('%%Y-%%m-%%d'))]"/>-->
+                        <!--                        <filter string="Current Year" name="current_year"-->
+                        <!--                                domain="[('create_date','&lt;=',time.strftime('%%Y-%%m-%%d')), ('create_date','&gt;=',time.strftime('%%Y-01-01'))]"/>-->
+                        <separator/>
+                        <filter string="Bill Type" name='bill_type' context="{'group_by':'bill_type'}"/>
+                        <separator/>
+                        <filter string="Bill Month" name='bill_month' context="{'group_by':'bill_month'}"/>
+                        <separator/>
+                        <filter string="Bill Year" name='bill_year' context="{'group_by':'bill_year'}"/>
+                        <separator orientation="vertical"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_utility_approval" model="ir.actions.act_window">
+            <field name="name">Utility Approval</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">utility.approval</field>
+        </record>
+
+
+        <menuitem name="Utility Bills"
+                  id="utility_menu_id" sequence="99" web_icon="atheer_hr,static/src/img/utility.png"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"/>
+
+        <menuitem name="Utility Approval" action="action_utility_approval" parent="atheer_hr.utility_menu_id"
+                  id="utility_approval_id" sequence="99"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"/>
+
+        <menuitem name="Utility Analysis" action="action_utility_analysis" parent="atheer_hr.utility_menu_id"
+                  id="utility_analysis_id" sequence="99"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"/>
+
+        <menuitem name="Utility Accounts" action="action_utility_view" parent="atheer_hr.utility_menu_id"
+                  id="utility_id" sequence="99"
+                  groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"/>
+
+
+    </data>
+</odoo>

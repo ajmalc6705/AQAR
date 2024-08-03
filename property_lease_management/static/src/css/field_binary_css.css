@@ -1,0 +1,16 @@
+field.oe_form_field.field_binary {
+    width: 188px; //define the width here
+   }
+
+button.oe_button.oe_form_binary_file_save{
+    visibility: hidden;
+}
+button.oe_button.oe_form_binary_file_clear{
+  visibility: hidden ;
+}
+input.field_binary {
+    width:125px;
+}
+.openerp .oe_hidden_input_file {
+    overflow: inherit !important;
+}

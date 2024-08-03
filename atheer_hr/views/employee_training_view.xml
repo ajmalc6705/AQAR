@@ -1,0 +1,184 @@
+<odoo>
+    <!-- form master for the employee course -->
+    <record id="view_emp_course_form" model="ir.ui.view">
+        <field name="name">employee.course.master.form</field>
+        <field name="model">employee.course.master</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_hr_course_tree" model="ir.ui.view">
+        <field name="name">employee.course.master.tree</field>
+        <field name="model">employee.course.master</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_emp_course" model="ir.actions.act_window">
+        <field name="name">Employee Course</field>
+        <field name="res_model">employee.course.master</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- form for the employee request form -->
+    <record id="view_emp_training_request_form" model="ir.ui.view">
+        <field name="name">employee.training.form.master</field>
+        <field name="model">employee.training.form</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="approve" string="Approve" type="object"
+                            groups="atheer_hr.group_hr_manager"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','not in','draft')]}" />
+                     <button name="action_refuse" string="Refuse" type="object"
+                            groups="atheer_hr.group_hr_manager"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','not in','hr')]}" />
+                    <button name="action_reset" string="Reset to Draft" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','in',('draft'))]}" />
+                    <button name="cancel" string="Cancel" type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state','in',('approve','cancel','hr'))]}" />
+                    
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,manager,hr,approve" />
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" class="oe_inline" readonly="1" />
+                    </h1>
+                    <group>
+                        <group>
+                            <field name="employee_id" required="1" attrs="{'readonly': [('state','not in','draft')]}" />
+                            <field name="emp_code" readonly="1" force_save="1"/>
+                            <field name="emp_course" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+
+                        </group>
+                        <group>
+                            <field name="program_date" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                            <field name="end_date" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                            <field name="location" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                            <field name="trainer_id" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                            <field name="training_type" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                            <field name="training_institute" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                        </group>
+
+                    </group>
+                    <group>
+                        <field name="description" attrs="{'readonly': [('state','in',('approve','refuse','cancel'))]}" />
+                    </group>
+                    <br />
+                    <group string="SUPERVISOR AND/OR MANAGER" attrs="{'invisible': [('state','in',('draft','cancel'))]}" >
+            
+                    <field name="eligible1" widget="radio" options="{'horizontal': true}"  />
+                    <div class="oe_clear" />
+                    
+                        <field name="description1" />
+                    </group>
+                    <br />
+                     <group string="HR MANAGER" attrs="{'invisible': [('state','in',('draft','cancel'))]}">
+                    <field name="eligible2" widget="radio" options="{'horizontal': true}"
+                          />
+                    <div class="oe_clear" />
+                   
+                        <field name="cost" />
+                        <field name="description2"  />
+                    </group>
+                    <group string="TOP MANAGMENT" attrs="{'invisible': [('state','in',('draft','cancel'))]}">
+                        
+                        <field name="description3" attrs="{'readonly': [('state','not in',('approve'))]}" />
+                    </group>
+                    <notebook>
+                        <page name="feedback" string="Feedback">
+                            <field name="feedback" attrs="{'readonly': [('state','in',('approve'))]}"/>
+                        </page>
+                        <page string="Signature" name="emp_signature">
+                            <group>
+                                <group string="Employee Signature" attrs="{'invisible': [('state','in','cancel')]}" >
+                                    <field name="emp_signed_on" attrs="{'readonly': [('state','not in','draft')]}" />
+                                    <field name="emp_signature" widget="signature" attrs="{'readonly': [('state','not in','draft')]}"/>
+                                </group>
+                                <group string="Manager Signature"
+                                       attrs="{'invisible': [('state','in',('draft','cancel'))]}">
+                                    <field name="manager_signed_on" />
+                                    <field name="manager_signature" widget="signature" />
+                                </group>
+                                <group string="HR Signature"
+                                       attrs="{'invisible': [('state','in',('draft','cancel','manager'))]}">
+                                    <field name="hr_signed_on" />
+                                    <field name="hr_signature" widget="signature" />
+                                </group>
+                                <group string="Top Signature" attrs="{'invisible': [('state','in',('draft','cancel'))]}">
+                                    <field name="top_signed_on" attrs="{'readonly': [('state','not in','approve')]}"/>
+                                    <field name="top_signature" widget="signature" attrs="{'readonly': [('state','not in','approve')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_emp_training_request_tree" model="ir.ui.view">
+        <field name="name">employee.training.form.tree</field>
+        <field name="model">employee.training.form</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="emp_code" />
+                <field name="employee_id" />
+                <field name="emp_course" />
+                <field name="program_date" />
+                <field name="location" />
+                <field name="description" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_emp_training_request_form" model="ir.actions.act_window">
+        <field name="name">Employee Training Request Form</field>
+        <field name="res_model">employee.training.form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="main_menu_hr_training" name="Training" web_icon="atheer_hr,static/src/img/train.png" />
+    <menuitem id="sub_menu_hr_training" name="Training" parent="main_menu_hr_training" sequence="1" />
+    <menuitem id="menu_emp_training_request_form"
+              name="Training Request Form"
+              parent="sub_menu_hr_training"
+              action="action_emp_training_request_form"
+              sequence="1" />
+
+    <menuitem id="menu_confguration_hr_training" name="Configuration" parent="main_menu_hr_training" sequence="2" />
+    <menuitem id="menu_empl_course_master"
+              parent="menu_confguration_hr_training"
+              name="Employee Course"
+              action="action_emp_course"
+              sequence="3"
+    />
+</odoo>

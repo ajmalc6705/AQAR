@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_contract_view_form_inherit2" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.inherit2</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_start']" position="before">
+                    <label for="probation_days"/>
+                    <div class="o_row" name="probation_days">
+                        <field name="probation_days" nolabel="1"/>
+                        <span>days</span>
+                    </div>
+                    <field name="first_contract_date"/>
+                </xpath>
+                <xpath expr="//field[@name='wage']" position="attributes">
+                    <attribute name="force_save">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='structure_type_id']" position='after'>
+                    <field name="hours_per_day" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='hr_responsible_id']" position='attributes'>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <group name="yearly_advantages" position="replace">
+                </group>
+                <group name="salary_info" position="after">
+                    <field name="salary_package_ids" nolabel="1" context="{'default_employee_id': employee_id}">>
+                        <tree editable="bottom" options='{"no_open": True}'>
+                            <field name="component" width="50%"/>
+                            <field name="amount_per_month"/>
+                            <field name="employee_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group name="note_group" col="6" class="mt-2 mt-md-0">
+                        <field name="gross_salary" readonly="1" force_save="1" widget='monetary'
+                               options="{'currency_field': 'currency_id'}" digits="[12,3]"/>
+                        <div class="oe_clear"/>
+                    </group>
+                </group>
+                <page name="information" position="after">
+                    <page string="Basic Increment Details" name="increment_details">
+                        <button type="object" string="Basic 3% Increment" name="basic_inc"
+                                confirm="This will increase the basic of the Omani employee. Do you still want to proceed ?"/>
+
+                        <field name="salary_increment" mode="tree"
+                               context="{'default_hr_contract': active_id,'default_employee_id': employee_id}">
+                            <tree editable="bottom" delete="0">
+                                <field name="type" invisible="1"/>
+                                <field name="ttype" options='{"no_open": True, "no_create": True}'/>
+                                <field name="inc_date" required="1"/>
+                                <field name="basic"/>
+                                <field name="amount_inc" required="1"/>
+                                <field name="new_basic"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
+
+
+                <field name="employee_id" position="attributes">
+                    <attribute name="string">Employee Code</attribute>
+                </field>
+            </field>
+        </record>
+        <record id="hr_contract_view_form_inherited3" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.inherited3</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//label[@for='wage']" position="attributes">
+                    <attribute name="string">Basic</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr_contract_view_tree_inherited3" model="ir.ui.view">
+            <field name="name">hr.contract.view.tree.inherited3</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_start']" position="before">
+                    <field name="first_contract_date"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="hr_salary_packages_form_inherited3" model="ir.ui.view">
+            <field name="name">hr.salary.packages.form.inherited3</field>
+            <field name="model">salary.packages</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="component"/>
+                            </group>
+                            <group>
+                                <field name="amount_per_month"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

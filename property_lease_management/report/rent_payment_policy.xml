@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="rent_payment_policy_report_tag" model="ir.actions.report">
+            <field name="name">Rent Payment Policy</field>
+            <field name="model">property.rent</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="print_report_name">'Rent Payment Policy-%s' %(time.strftime('%d-%m-%Y'))</field>
+            <field name="report_name">property_lease_management.rent_payment_policy_template</field>
+            <field name="report_file">property_lease_management.rent_payment_policy_template</field>
+            <field name="binding_model_id" ref="property_lease_management.model_property_rent"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="rent_payment_policy_template">
+            <t t-call="web.html_container">
+                <div class="page">
+                    <img t-if="docs[0].company_id.report_image1"
+                         t-att-src="image_data_uri(docs[0].company_id.report_image1)"
+                         style="max-height: 110px;width:150px" alt="Logo"/>
+                    <div class="row" style="color:black;">
+                        <center>
+                            <h1>
+                                <strong>Rent Payment Policy<br/>Aqar Real Estate
+                                </strong>
+                            </h1>
+                            <br/>
+                            <br/>
+                        </center>
+                    </div>
+                </div>
+                <div class="row" style="font-size:15px;!important;">
+                    <div style="text-align:justify;font-size:15px;!important;">
+                        Your timely payment of rent is greatly appreciated. Please review these policies carefully to
+                        preserve your good credit with us. Our office policy concerning the payment of rent is as
+                        follows:
+                        <br/>
+                        <br/>
+                        1. Your monthly rent is due on the date of the check you issued to Aqar Real Estate.
+                        <br/>
+                        <br/>
+                        2. Post-dated checks are required to be submitted together with the Tenancy Agreement, to cover
+                        the monthly rental fee.
+                        <br/>
+                        <br/>
+                        3. Any returned checks will be <strong>re-deposited within 48 hours</strong> after Aqar advised
+                        the tenant regarding the matter, unless both parties agreed otherwise.
+                        <br/>
+                        <br/>
+                        4. Security deposit will be non-refundable if any of the tenant breach the contract between his
+                        tenancy periods.
+                        <br/>
+                        <br/>
+                        5. Make personal checks payable to Aqar Real Estate.
+                        <br/>
+                        <br/>
+                        6. Cash payments are <strong>not</strong> accepted in replacement of the checks.
+                        <br/>
+                        <br/>
+                        7. We will not hold a check for any period of time.
+                        <br/>
+                        <br/>
+                        8. Security deposits <strong>cannot</strong> be applied to the last month’s rent.
+                        <br/>
+                        <br/>
+                        9. Upon vacating your unit, the rent continues to accrue until the door key is returned to us.
+                        <br/>
+                        <br/>
+                        10. Agreement and cheques both are under the same name.
+                        <br/>
+                        <br/>
+                    </div>
+                    <br/>
+                    <div>
+                        <strong>Agreed and Accepted:</strong>
+                        <br/>
+                        <br/>
+                        <span style="border-bottom:1px solid !important;">
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        </span>
+                        <br/>
+                        Signature
+                    </div>
+                    <br/>
+                    <span style="min-width=300px;">
+                        Date:&#160;
+                    </span>
+                    <span style="border-bottom:1px solid !important; min-width=300px;">
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                    </span>
+                </div>
+                <div class="footer" style="margin-bottom: -4 !important%;">
+                    <div style="color:black;font-size:12px;">
+                        <div>
+                            <span t-field="docs[0].company_id.street" t-if="docs[0].company_id.street"/>
+                        </div>
+                        <div>
+                            <span t-field="docs[0].company_id.street2" t-if="docs[0].company_id.street2"/>
+                        </div>
+                        <div>
+                            <span t-field="docs[0].company_id.city" t-if="docs[0].company_id.city"/>&#160;
+                            <span t-field="docs[0].company_id.state_id" t-if="docs[0].company_id.state_id"/>&#160;
+                            <span t-field="docs[0].company_id.country_id" t-if="docs[0].company_id.country_id"/>&#160;
+                        </div>
+                        <div>
+                            <span t-field="docs[0].company_id.phone" t-if="docs[0].company_id.phone"/>
+                        </div>
+                        <div>
+                            <span t-field="docs[0].company_id.email" t-if="docs[0].company_id.email"/>
+                        </div>
+                        <div>
+                            <span t-field="docs[0].company_id.website" t-if="docs[0].company_id.website"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

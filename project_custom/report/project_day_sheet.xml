@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_project_day_sheet">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="project_custom.munanoor_external_layout">
+                        <div class="page o_project_day_sheet">
+                            <div class="text-center">
+                                <h4>Pest Control Division</h4>
+                                <h4>Rodent Control Programme</h4>
+                                <h3>DAY SHEET</h3>
+                            </div>
+                            <div class="row"
+                                 style="border-top: 1px solid #000;margin-left: 0px;margin-right: 0px;height:100px;">
+                                <div class="col-6" style="border-right: 1px solid #000;padding-left: 0px;">
+                                    <span>CUSTOMER :</span>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row" style="border-bottom: 1px solid #000;height: 50px;">
+                                        <div class="col-12">
+                                            <span style="width: 25%;display: block;">Poison used Traps/ Cages</span>
+                                        </div>
+                                    </div>
+                                    <div class="row"
+                                         style="height: 50px;
+                                                display: table;
+                                                width: 100%">
+                                        <div class="col-6"
+                                             style="border-right: 1px solid #000;
+                                                    vertical-align: middle;
+                                                    display: table-cell;width: 50%;">
+                                            <span>Rats</span>
+                                        </div>
+                                        <div class="col-6"
+                                             style="vertical-align: middle;
+                                                    display: table-cell;">
+                                            <span>Mice</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row"
+                                 style="border-top: 1px solid #000;
+                                        margin-left: 0px;
+                                        margin-right: 0px;
+                                        height:50px;">
+                                <div class="col-6" style="border-right: 1px solid #000;padding-left: 0px;">
+                                    <span style="width: 18%;display: block;">Type of Premises</span>
+                                </div>
+                                <div class="col-6">
+                                    <div class="row"
+                                         style="height: 50px;
+                                                display: table;
+                                                width: 100%">
+                                        <div class="col-6"
+                                             style="border-right: 1px solid #000;
+                                                    vertical-align: middle;
+                                                    display: table-cell;width: 50%;">
+                                            <span>Gerbils</span>
+                                        </div>
+                                        <div class="col-6"
+                                             style="vertical-align: middle;
+                                                    display: table-cell;">
+                                            <span>No-Problem</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-bo-bordered ">
+                                <tbody>
+                                    <tr>
+                                        <th rowspan="2" style="width: 12%;">
+                                            Balt point Numbers
+                                        </th>
+                                        <th rowspan="2" style="width: 15%;text-align: center;">
+                                            Place at which Balt Laid
+                                        </th>
+                                        <th colspan="4" style="text-align: center;">
+                                            Date of Visit/ Balting Record
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="border-right: 1px solid #000;"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th>1</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>2</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>3</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>4</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>5</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>6</th>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <div class="col-2">
+                                    <b>Remarks :</b>
+                                </div>
+                                <div class="col-10">KC- Klert wax KB- Klarat Bait P- Partial take NT- No take C-
+                                    Complete take
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="col-6">
+                                    <b>OPERATOR</b>
+                                </div>
+                                <div class="col-6 text-right">
+                                    <b>RESIDENTS</b>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

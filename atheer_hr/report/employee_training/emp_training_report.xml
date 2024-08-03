@@ -1,0 +1,315 @@
+<odoo>
+	<data>
+		<record id="action_emp_training_request_report" model="ir.actions.report">
+			<field name="name">Training Request Report</field>
+			<field name="model">employee.training.form</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">atheer_hr.training_request_report</field>
+			<field name="report_file">atheer_hr.training_request_report</field>
+			<field name="print_report_name">'Training Request Report-%s' %(time.strftime('%d-%m-%Y'))</field>
+			<field name="paperformat_id" ref="paperformat_af_employe_performance_evaluation"/>
+			<field name="binding_model_id" ref="model_employee_training_form"/>
+			<field name="binding_type">report</field>
+		</record>
+		<template id="training_request_report">
+			<t t-call="web.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<div class="page" style="padding: 14px;">
+						<t t-call="atheer_hr.af_external_layout">
+							<div class="oe_structure"/>
+							<style type="text/css">
+								<![CDATA[
+                                @font-face {
+                                    font-family: 'Serif Semi Bold';
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    src: url('/atheer_hr/static/src/font/SourceSerifPro-Semibold.ttf.woff') format('woff');
+                                }
+                                @font-face {
+                                    font-family: 'Sans Regular';
+                                    font-style: normal;
+                                    font-weight: normal;
+                                    src: url('/atheer_hr/static/src/font/SourceSansPro-Regular.otf.woff') format('woff');
+                                }
+                                .border td {
+                                    border: 1px solid black !important;
+                                    font-size: 12px;
+                                    padding: 7px;
+                                    font-family: 'Sans Regular';
+                                  }
+                                .active-appraisal {
+                                    background: #3cdd3c;
+                                }
+                                .table-evaluation td{
+                                    padding: 5px !important;
+                                }
+                                .table-bottam td{
+                                    padding: 5px !important;
+                                    border-top: 0px solid #ddd !important;
+                                    border: 0px solid white !important;
+                                }
+                                .table-bottam tr{
+                                    border: 0px solid white !important;
+                                }
+
+                            ]]>
+							</style>
+							<link rel="stylesheet"
+                                  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"></link>
+							<div class="col-12">
+								<div class="row">
+									<div class="col-2" style="text-align: left;">
+										<t t-set="company" t-value="request.env.company"/>
+										<img t-if="company.report_image1"
+                                                 t-att-src="image_data_uri(company.report_image1)"
+                                                 style="max-height: 100px;margin-bottom: 20px;" alt="Logo"/>
+									</div>
+									<div class="col-10" style="text-align: center;">
+										<h5 style="font-family:'Serif Semi Bold'!important;">
+											<u>
+												<b>TRAINING REQUEST FORM</b>
+											</u>
+										</h5>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12" style="font-size:12px;text-align: center;border-top: 0px solid #dee2e6;">
+                            (Personal Development)
+                            </div>
+								</div>
+								<div class="row">
+									<div class="col-5" style="text-align:left;font-family:'Serif Semi Bold'!important;">
+										<i>
+											<b> TO BE COMPLETED BY THE EMPLOYEE</b>
+										</i>
+									</div>
+									<div class="col-7" style="text-align:center;">
+                                Date:
+                                </div>
+								</div>
+								<br/>
+								<div class="row">
+									<table width="100%" class='table borderless'>
+										<tr>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            Employee Number
+                                        </th>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            
+												<t t-esc="doc.emp_code"/>
+											</th>
+										</tr>
+										<tr>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            Employee Name
+                                        </th>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            
+												<t t-esc="doc.employee_id.name"/>
+											</th>
+										</tr>
+										<tr>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                           Name of Program
+                                        </th>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            
+												<t t-esc="doc.emp_course.name"/>
+											</th>
+										</tr>
+										<tr>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                           Program Date(s) / Time(s)
+                                        </th>
+											<th width="40%" style="font-weight:normal;padding:5px;font-size:16px;">:
+                                            
+												<t t-if="doc.program_date">
+													<span t-esc="doc.program_date.strftime('%d-%m-%Y')"/>
+												</t>
+											</th>
+										</tr>
+										<tr>
+											<th colspan="2" width="80%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            Describe how this is directly related to your job (justification): 
+                                        </th>
+											
+										</tr>
+										<tr>
+											
+											<th colspan="2" width="80%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            <span t-esc="doc.description"/>
+                                        </th>
+										</tr>
+										<tr>
+											<th colspan="2"
+                                        width="80%" style="font-weight:normal;padding:5px;font-size:16px;">
+                                            If it is necessary to take time off from scheduled work, please list the time and dates
+                                        </th>
+										</tr>
+										<tr>
+											<th colspan="2"
+                                        width="80%" style="font-weight:normal;padding:5px;font-size:16px;"></th>
+										</tr>
+									</table>
+								</div>
+								<div class="row">
+									<div class="col-3">
+                                Employee Signature 
+                                </div>
+									<div class="col-9" style="text-align:center;">
+										<t t-if="doc.emp_signature">
+											 <img t-att-src="image_data_uri(doc.emp_signature)"
+                                 style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+										</t>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-3">
+                                Date 
+                                </div>
+									<div class="col-9" style="text-align:center;">
+										<t t-if="doc.emp_signed_on">
+											<span t-esc="doc.emp_signed_on.strftime('%d-%m-%Y')"/>
+										</t>
+									</div>
+								</div>
+								<p style="text-align: left;">
+                                (Attach a copy of brochure/program announcement, if applicable or available.)
+                            </p>
+							</div>
+							<div style="border-top: 2px solid black !important;"></div>
+							<div class="oe_clear"/>
+							<div class="row">
+								<div class="col-12" style="text-align:left;font-family:'Serif Semi Bold'!important;">
+									<i>
+										<b> TO BE RECOMMENDED BY SUPERVISOR AND/OR MANAGER</b>
+									</i>
+								</div>
+							</div>
+							<p style="text-align: left;">
+                           <t t-if="doc.eligible1">
+                            Employee eligible: <t t-esc="dict(doc.fields_get(allfields=['eligible1'])['eligible1']['selection'])[doc.eligible1]"/>
+							</t>
+                            </p>
+							<p>
+                            Justification for denial:&#160;
+							<t t-if="doc.description1">
+							<span t-field="doc.description1"/>
+							</t>
+							<t t-else=""> ___________________________________________________________________________________________
+_________________________________________________________________________________
+                            </t>
+							</p>
+							<div class="row">
+								<div class="col-6">
+                                Supervisor and/or Manager Signature 
+                                
+									<t t-if="doc.manager_signature">
+										 <img t-att-src="image_data_uri(doc.manager_signature)"
+                                 style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+									</t>
+								</div>
+								<div class="col-6">
+                                   
+                                   Date:
+                                        
+										<t t-if="doc.manager_signed_on">
+											<span t-esc="doc.manager_signed_on.strftime('%d-%m-%Y')"/>
+										</t>
+								</div>
+							</div>
+							<br/>
+							<div style="border-top: 2px solid black !important;"></div>
+							<div class="row">
+								<div class="col-12" style="text-align:left;font-family:'Serif Semi Bold'!important;">
+									<i>
+										<b> TO BE APPROVED BY HR MANAGER</b>
+									</i>
+								</div>
+							</div>
+							<p style="text-align: left;">
+							<t t-if="doc.eligible2">
+                            Employee eligible: <t t-esc="dict(doc.fields_get(allfields=['eligible2'])['eligible2']['selection'])[doc.eligible2]"/>
+							</t>
+                            </p>
+							<p>
+                            Approximate cost:  OMR&#160;<span t-field="doc.cost"/>
+                            </p>
+							<p>
+                            Justification for denial:&#160;
+							<t t-if="doc.description2">
+							<span t-field="doc.description2"/>
+							</t>
+							<t t-else=""> ___________________________________________________________________________________________
+_________________________________________________________________________________
+                           </t>
+						    </p>
+							<div class="row">
+								<div class="col-6">
+                                Signature 
+                                
+									<t t-if="doc.hr_signature">
+									 <img t-att-src="image_data_uri(doc.hr_signature)"
+                                 style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+									</t>
+								</div>
+								<div class="col-6">
+                                   
+                                   Date:
+                                        
+										<t t-if="doc.hr_signed_on">
+											<span t-esc="doc.hr_signed_on.strftime('%d-%m-%Y')"/>
+										</t>
+								</div>
+							</div>
+							<br/>
+							<div style="border-top: 2px solid black !important;"></div>
+							<div class="row">
+								<div class="col-12" style="text-align:left;font-family:'Serif Semi Bold'!important;">
+									<i>
+										<b> TO BE APPROVED BY TOP MANAGMENT</b>
+									</i>
+								</div>
+							</div>
+							<p style="text-align: left;">
+                            Approved &#160;<span t-field="doc.approved"/>&#160;Disapproved &#160;<span t-field="doc.disapproved"/>
+                            </p>
+							<p>
+                            Justification for denial:&#160;
+							<t t-if="doc.description3">
+							<span t-field="doc.description3"/>
+							</t>
+							<t t-else=""> ___________________________________________________________________________________________
+_________________________________________________________________________________
+                            </t>
+							</p>
+							<div class="row">
+								<div class="col-6">
+                                Signature 
+                                
+									<t t-if="doc.top_signature">
+									 <img t-att-src="image_data_uri(doc.top_signature)"
+                                 style="max-height: 4cm; max-width: 8cm;margin-top: -36px;"/>
+									</t>
+								</div>
+								<div class="col-6">
+                                   
+                                   Date:
+                                        
+										<t t-if="doc.top_signed_on">
+											<span t-esc="doc.top_signed_on.strftime('%d-%m-%Y')"/>
+										</t>
+								</div>
+							</div>
+							<p>
+								<b>Note:</b>If an overnight stay and/or commercial transportation is required, a Travel Authorization form must be completed prior to the trip. If not, appropriate expenses can be reimbursed on a Petty Cash Voucher (under OMR50) or Department Purchase Order (under OMR50).
+                                
+							</p>
+							<br/>
+						</t>
+					</div>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

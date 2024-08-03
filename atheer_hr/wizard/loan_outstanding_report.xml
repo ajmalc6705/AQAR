@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="loan_outstanding_report_form" model="ir.ui.view">
+        <field name="name">loan.outstanding.report.wiz.form</field>
+        <field name="model">loan.outstanding.report.wiz</field>
+        <field name="arch" type="xml">
+            <form string="Loan Outstanding Report">
+                <group>
+                    <field name="employee_id" widget="many2many_tags" placeholder="Optional...." />
+                </group>
+                <group>
+                    <field name="department_id" widget="many2many_tags" placeholder="Optional...." />
+                </group>
+                <footer>
+                    <button name="button_print_report" string="Print" class="oe_highlight"
+                            type="object" />
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="loan_outstanding_report_action">
+        <field name="name">Loan Outstanding Report</field>
+        <field name="res_model">loan.outstanding.report.wiz</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+      <menuitem id="loan_reports" name="Reports"
+                  parent="menu_hr_root_loans"/>
+        <menuitem id="menu_loan_outstanding_report" name="Loan Outstanding Report"
+                  parent="loan_reports"
+                  action="loan_outstanding_report_action"/>
+
+</odoo>

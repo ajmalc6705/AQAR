@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_af_increment_and_promotion" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
+        <template id="report_increment_and_promotion">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <xpath expr="//div[@hasclass='header']" position="replace">
+                            <div class="header">
+                                <div class="col-12 row">
+                                    <div class="col-6 text-left">
+                                        <img t-if="o.company_id.report_image1"
+                                             t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.report_image1)"
+                                             style="max-height: 75px;" alt="Logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer"/>
+                        </xpath>
+                        <div class="page" style="padding: 14px;font-size:18px;">
+                            <div class="col-12 row">
+                                <div class="col-6 text-left" style="margin-left:-15px;font-size:20px;">
+                                    <strong>
+                                        <span t-esc="o.reference"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class="col-12 row" tyle="margin-top:-30px;">
+                                <div class="col-6 text-left" style="margin-left:-15px;font-size:20px;">
+                                    <strong>
+                                        <span t-esc="o.date_today.strftime('%d th %b %Y')"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <br/>
+                            <t t-if="o.type=='salary_increment_plus_promotion' or o.type=='promotion' or o.type=='salary_increment'">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                To:
+                                                <span t-esc="o.employee_id.display_ename"/>
+                                            </strong>
+                                            <td>
+                                                &#160;
+                                            </td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Name
+                                        </td>
+                                        <td>
+                                            :
+                                            <span t-esc="o.employee_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Designation
+                                        </td>
+                                        <td>
+                                            :
+                                            <span t-esc="o.designation.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Id No -
+                                        </td>
+                                        <td>
+                                            :
+                                            <span t-esc="o.employee_id.id"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br/>
+                                <h4 style="font-family:'Serif Semi Bold'!important;text-align: center;margin-bottom: 40px;font-weight: bold;">
+                                    <u>
+                                        <center>
+                                            <t t-if="o.type">
+                                                <t t-esc="dict(o.fields_get(allfields=['type'])['type']['selection'])[o.type]"/>
+                                            </t>
+                                        </center>
+                                    </u>
+                                </h4>
+                                <div class="col-12 row">
+                                    <p>
+                                        <t t-if="o.type=='salary_increment_plus_promotion' or o.type=='promotion'or o.type=='salary_increment'">
+                                            We are pleased to inform you that your performance has been reviewed and
+                                            based on
+                                            this
+                                        </t>
+                                        <t t-if="o.type=='salary_increment_plus_promotion' or o.type=='promotion'">
+                                            appraisal, you are promoted as
+                                            <strong>
+                                                <span style="font-size:19px;" t-esc="o.promoted_designation.name"/>
+                                            </strong>
+                                        </t>
+                                        <t t-if="o.type=='salary_increment_plus_promotion'">
+                                            with an increased in
+                                            salary
+                                            mentioned below with effect from &#160;
+                                            <strong><span style="font-size:19px;"
+                                                          t-esc="o.effective_date.strftime('%d %B %Y')"/>.
+                                            </strong>
+                                        </t>
+                                        <t t-if="o.type=='salary_increment'">
+                                            you have increased in
+                                            salary
+                                            mentioned below with effect from &#160;
+                                            <strong><span style="font-size:19px;"
+                                                          t-esc="o.effective_date.strftime('%d %B %Y')"/>.
+                                            </strong>
+                                        </t>
+                                    </p>
+                                </div>
+                                <t t-if="o.type=='salary_increment_plus_promotion' or o.type=='salary_increment'">
+                                    <div class="col-12 row">
+                                        <div class="col-10" style="font-size:19px;margin-left:-10px;">
+                                            <p>
+                                                Your revised salary structure will be as follows:
+                                            </p>
+                                        </div>
+                                    </div>
+                                </t>
+                                <br/>
+                                <div class="col-12 row" style="margin-left:-20px;">
+                                    <div class="col-6 text-left" style="margin-left:-10px;">
+                                        <table width="100%">
+                                            <tr>
+                                                <td colspan="2"
+                                                    style="padding:5px;text-align:left;border-top: 2px  Solid #585858 !important;border-bottom: 2px  Solid #585858 !important;border-left: 2px  Solid #585858 !important;border-right: 2px  Solid #585858 !important;">
+                                                    <center>
+                                                        <strong>Present Salary</strong>
+                                                    </center>
+                                                </td>
+                                            </tr>
+                                            <t t-foreach="o.salary_package_ids" t-as="line">
+                                                <tr>
+                                                    <td style="padding:5px;text-align:left;border-top: 2px Solid #585858!important;border-bottom: 2px Solid #585858 !important;border-left: 2px Solid #585858 !important;border-right: 1px Solid #000000 !important;">
+                                                        <strong>
+                                                            <t t-esc="line.component.name"/>
+                                                        </strong>
+                                                    </td>
+                                                    <td style="padding:5px;text-align:center;border-top: 2px Solid #585858!important;border-bottom: 2px Solid #585858 !important;border-right: 2px Solid #585858 !important;">
+                                                        <center>
+                                                            <t t-esc="'%.3f'% line.amount_per_month"/>
+                                                        </center>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <td style="padding:5px;text-align:left;border-top: 2px  Solid #585858 !important;border-bottom: 2px  Solid #585858 !important;border-left: 2px  Solid #585858 !important;border-right: 1px  Solid #000000 !important;">
+
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td style="padding:5px;text-align:center;border-top: 2px  Solid #585858 !important;border-bottom: 2px  Solid #585858 !important;border-right: 2px  Solid #585858 !important;">
+                                                    <strong>
+                                                        <t t-esc="'%.3f'% o.current_gross_salary"/>
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <t t-if="o.type=='salary_increment_plus_promotion' or o.type=='salary_increment'">
+                                            <table width="100%">
+                                                <td colspan="2"
+                                                    style="padding:5px;text-align:left;border-top: 2px  Solid #585858 !important;border-bottom: 2px Solid #585858 !important;border-left: 2px  Solid #585858 !important;border-right: 2px Solid #585858 !important;">
+                                                    <center>
+                                                        <strong>Revised Salary</strong>
+                                                    </center>
+                                                </td>
+                                                <t t-foreach="o.new_salary_details" t-as="line">
+                                                    <tr>
+                                                        <td style="padding:5px;text-align:left;border-top: 1px Solid #585858 !important;border-bottom: 2px Solid #585858 !important;border-left: 2px Solid #585858 !important;border-right: 1px Solid #000000 !important;">
+                                                            <strong>
+                                                                <t t-esc="line.component.name"/>
+                                                            </strong>
+                                                        </td>
+                                                        <td style="padding:5px;text-align:center;border-top: 1px Solid #585858 !important;border-bottom: 2px Solid #585858 !important;border-right: 2px Solid #585858 !important;">
+                                                            <t t-esc="'%.3f'% line.amount_per_month"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <tr>
+                                                    <td style="padding:5px;text-align:left;border-top: 2px  Solid #585858 !important;border-bottom: 2px  Solid #585858 !important;border-left: 2px  Solid #585858 !important;border-right: 1px  Solid #000000 !important;">
+                                                        <strong>Total</strong>
+                                                    </td>
+                                                    <td style="padding:5px;text-align:center;border-top: 2px  Solid #585858 !important;border-bottom: 2px  Solid #585858 !important;border-right: 2px  Solid #585858 !important;">
+                                                        <strong>
+                                                            <t t-esc="'%.3f'% o.gross_salary"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </t>
+                                    </div>
+                                </div>
+                                <br/>
+                                <t t-if="o.promoted_designation.description">
+                                    <div class="col-12 row" style="margin-left:-20px;">
+                                        <div class="col-10" style="font-size:18px;">
+                                            <span>
+                                                <strong>
+                                                    Major Job Responsibilities:
+                                                </strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="col-12 row" style="width=100%;margin-left:20px;font-size:14px;">
+                                        <li>
+                                            <span t-esc="o.promoted_designation.description"/>
+                                        </li>
+                                    </div>
+                                </t>
+                                <br/>
+                                <div class="col-12 row" style="margin-left:-20px;">
+                                    <div class="col-10" style="font-size:16px;">
+                                        <p>Other terms &amp; conditions will be remaining same as per the previous
+                                            contract.
+                                        </p>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="col-12 row" style="font-size:16px;margin-left:-8px;">
+                                    <p>We wish you all the best in your future endeavors and expect you to perform and
+                                        contribute to the growth of the company.
+                                    </p>
+                                </div>
+                                <br/>
+                                <div class="col-12 row" style="margin-left:-20px;">
+                                    <div class="col-6 text-left">
+                                        <span>
+                                            <strong>With best regards,</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="col-12 row" style="margin-left:-20px;">
+                                    <div class="col-6 text-left">
+                                        <span>
+                                            <strong>Asst Manager – HR &amp; Admin</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="col-12 row">
+                                    <div class="col-6 text-left">
+                                        <span>
+                                            &#160;
+                                        </span>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span>
+                                            <strong>Accepted by</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

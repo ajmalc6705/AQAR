@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+<!--  Commented By Ajmal       <template id="assets_common_pm" inherit_id="web.report_assets_common">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <link type="text/scss" rel="stylesheet" href="/project_custom/static/src/css/report.css" />-->
+<!--            </xpath>-->
+<!--        </template>-->
+    </data>
+</odoo>

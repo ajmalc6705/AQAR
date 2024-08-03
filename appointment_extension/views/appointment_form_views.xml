@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="calendar_event_form_inherit_appointment_view" model="ir.ui.view">
+        <field name="name">calendar.event.form</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="enable_meeting_link"/>
+            </xpath>
+              <xpath expr="//field[@name='start_date']" position="after">
+                  <field name="ref_no"/>
+              </xpath>
+            <xpath expr="//field[@name='location']" position="attributes">
+                  <attribute name="invisible">1</attribute>
+              </xpath>
+            <xpath expr="//sheet" position="before">
+                    <header>
+                          <button name="action_done" class="oe_highlight" states="draft" string="Done"
+                            type="object"/>
+                    <button name="action_reset_draft" states="cancel,confirm"
+                            string="Reset to draft" type="object" />
+                        <button name="action_visited" states="confirm"
+                            string="Visited" type="object" />
+                    <button name="action_cancel" class="oe_highlight" states="draft,confirm,visit"
+                            string="Cancel" type="object"/>
+                         <field name="state" widget="statusbar"/>
+                    </header>
+                </xpath>
+            <xpath expr="//notebook//page[@name='page_invitations']" position="after">
+            <!-- Add notebook page for displaying questions -->
+            <page string="Questions and Answers" name="appointment_questions_page">
+                <field name="appointment_answer_input_ids">
+                    <tree>
+                        <field name="question_id"/>
+                        <field name="value_text_box"/>
+                    </tree>
+                </field>
+            </page>
+            <page string="Attachments">
+                <field name="attachment_ids" widget="many2many_binary"/>
+            </page>
+        </xpath>
+        </field>
+    </record>
+</odoo>

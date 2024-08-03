@@ -1,0 +1,134 @@
+<odoo>
+    <!--Leave Return Form-->
+
+    <record id="view_hr_loan_adjustment_form" model="ir.ui.view">
+        <field name="name">hr.loan.adjustment.form</field>
+        <field name="model">hr.loan.adjustments</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--Buttons-->
+                    <button name="approve"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'hr_manager')]}"
+                    />
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="hr_manager,approved"/>
+                </header>
+                <sheet>
+                    <h1>
+                        <label for="name"/>
+                        <field name="name" class="oe_inline" readonly="1"/>
+                    </h1>
+                    <group string="Employee Details">
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="designation"/>
+                        </group>
+                        <group>
+                            <field name="department"/>
+                        </group>
+                    </group>
+                    <group string="Loan">
+                        <group>
+                            <field name="loan_reference"/>
+                            <field name="install_amount" force_save="1"/>
+                        </group>
+                        <group>
+                            <field name="date_to_be_affected"/>
+                            <field name="check" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Loan Adjustment">
+                        <group>
+                            <field name="type"/>
+                        </group>
+                        <field name="adjustment_description" nolabel="1" style="margin-left:14%;" force_save="1"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="new_payment_date"
+                                   attrs="{'required': [('type', 'in', ['add_to_next_month_by_deducting','full_amount_paid_with_next_installment'])],'invisible': [('type', 'not in', ['add_to_next_month_by_deducting','full_amount_paid_with_next_installment'])]}"/>
+                        </group>
+                        <group>
+                            <field name="amount_to_be_paid"
+                                   attrs="{'required': [('type', '=', 'add_to_next_month_by_deducting')],'invisible': [('type', '!=', 'add_to_next_month_by_deducting')]}"/>
+                            <field name="description" force_save="1"
+                                   attrs="{'invisible': ['|',('check','=',True),('type', 'not in', ['add_to_next_month_by_deducting','full_amount_paid_with_next_installment'])]}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_loan_adjustments_search" model="ir.ui.view">
+        <field name="name">hr.loan.adjustments.search</field>
+        <field name="model">hr.loan.adjustments</field>
+        <field name="arch" type="xml">
+            <search string="Loan Adjustment">
+                <field name="name" string="No."/>
+                <field name="employee_id" string="Employees"
+                       filter_domain="[('employee_id.name','ilike',self)]"/>
+                <field name="department" string="Department"/>
+                <field name="designation" string="Designation"/>
+                <field name="loan_reference"/>
+                <field name="install_amount"/>
+                <group expand="0" string="Group By">
+                   <filter domain="[('state', '=', 'hr_manager')]" name="hr_manager" string="HR Manager"/>
+                   <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                 <separator/>
+                    <filter domain="[('type', '=', 'full_amount_shifted')]" name="full_amount_shifted" string="Shift To Next Month"/>
+                   <filter domain="[('type', '=', 'add_to_next_month_by_deducting')]" name="add_to_next_month_by_deducting" string="Partial"/>
+                   <filter domain="[('type', '=', 'full_amount_paid_with_next_installment')]" name="full_amount_paid_with_next_installment" string="Add to next month"/>
+                    <filter name="group_employee" string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_type" string="Type" domain="[]" context="{'group_by':'type'}"/>
+                    <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_loan_adjustment_tree" model="ir.ui.view">
+        <field name="name">hr.loan.adjustment.tree</field>
+        <field name="model">hr.loan.adjustments</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="type"/>
+                <field name="loan_reference"/>
+                <field name="install_amount"/>
+                <field name="date_to_be_affected"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_loan_adjustments" model="ir.actions.act_window">
+        <field name="name">Loan Adjustment</field>
+        <field name="res_model">hr.loan.adjustments</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_loan_adjustments_search"/>
+    </record>
+
+    <menuitem id="menu_loan_adjustments"
+              parent="atheer_hr.hr_loan_sub_menu"
+              name="Loan Adjustments"
+              action="action_hr_loan_adjustments"
+              sequence="3" groups="atheer_hr.group_hr_manager"
+    />
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_category_petty_cash_management">
+        <field name="name">Petty Cash Management</field>
+        <field name="description">User access levels for Petty Cash Management module</field>
+    </record>
+
+    <record id="group_employee" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_officer" model="res.groups">
+        <field name="name">Verifier</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+    </record>
+
+    <record id="group_gm_approved" model="res.groups">
+        <field name="name">Approver</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+    </record>
+
+    <record id="group_finance_manager" model="res.groups">
+        <field name="name">Accountant</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+    </record>
+
+    <record id="group_add_petty_cash_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+    </record>
+
+    <record id="group_add_petty_cash_ceo" model="res.groups">
+        <field name="name">CEO</field>
+        <field name="category_id" ref="petty_cash_management.module_category_petty_cash_management"/>
+    </record>
+</odoo>

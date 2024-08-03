@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_doc_master_tree" model="ir.ui.view">
+            <field name="name">Employee documents</field>
+            <field name="model">doc.master</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Employee documents" >
+                    <field name="name"/>
+                    <field name="comments" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_doc_master_form" model="ir.ui.view">
+            <field name="name">Employee documents</field>
+            <field name="model">doc.master</field>
+            <field name="arch" type="xml">
+                <form string="Employee documents" >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                            <group>
+                                <field name="comments" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="view_hr_employee_docs_form" model="ir.ui.view">
+            <field name="name">Employee documents</field>
+            <field name="model">hr.employee.docs</field>
+            <field name="arch" type="xml">
+                <form string="Employee documents" >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="exp_date"/>
+                                <field name="attachment"/>
+                            </group>
+                            <group>
+                                <field name="doc_id" />
+                                <field name="comments" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_doc_master_form" model="ir.actions.act_window">
+            <field name="name">Employee documents</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">doc.master</field>
+        </record>
+        <menuitem name="Employee documents" parent="hr.menu_config_employee" action="action_doc_master_form"
+                  id="doc_master_request_menu" sequence="20"/>
+    </data>
+</odoo>

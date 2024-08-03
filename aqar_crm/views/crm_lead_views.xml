@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="form_lead_property_inherited" model="ir.ui.view">
+        <field name="name">form.lead.property.inherited</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position='inside'>
+                <h3>
+                    <field class="text-break" name="seq_no"/>
+                </h3>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position='before'>
+                <field name="enquiry_date"/>
+                <field name="offer_valid_date"/>
+                <field name="offer_send_date"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position='after'>
+                <field name="rent_offer_sent" invisible="1"/>
+                <field name="sale_offer_sent" invisible="1"/>
+                <field name="vat_taxes_ids" widget="many2many_tags"/>
+                <field name="property_tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+            </xpath>
+            <xpath expr="//field[@name='lost_reason_id']" position='before'>
+                <field name="sales_price"/>
+                <field name="building_id"/>
+                <field name="unit_id" domain="[('id','in',unit_ids)]"/>
+                <field name="unit_ids" invisible="1"/>
+                <field name="unit_type_id"/>
+                <field name="sub_types"/>
+                <field name="terms_conditions_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position='attributes'>
+                <attribute name="string">Consultant</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="before">
+                <button string="Send Rent Offer" name="action_send_rent_offer" type="object" class="oe_highlight"
+                        attrs="{'invisible': [('rent_offer_sent', '=', True)]}"/>
+                <button string="Send Sale Offer" name="action_send_sale_offer" type="object" class="oe_highlight"
+                        attrs="{'invisible': [('sale_offer_sent', '=', True)]}"/>
+            </xpath>
+            <xpath expr="//page[@name='lead']" position='after'>
+                <page name="notes" string="Terms &amp; Conditions">
+                    <field name="notes"/>
+                </page>
+                <page name="sale_offer_notes" string="Sale Offer Notes">
+                    <field name="sale_offer_notes" widget="Html"/>
+                </page>
+                 <page name="rent_offer_notes" string="Rent Offer Notes">
+                    <field name="rent_offer_notes" widget="Html"/>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

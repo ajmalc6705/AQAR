@@ -1,0 +1,201 @@
+<odoo>
+    <!--addition deduction form view-->
+
+    <record id="view_hr_loan_types_form" model="ir.ui.view">
+        <field name="name">hr.loan.types.form</field>
+        <field name="model">hr.loan.types</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <!--Buttons-->
+                    <button name="approve"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"
+                    />
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,approved"/>
+                </header>
+                <sheet attrs="{'readonly': [('state', 'in', ['approved'])]}">
+                    <h1>
+                        <label for="name"/>
+                        <field name="name" class="oe_inline" readonly="1"/>
+                    </h1>
+                    <group string="Employee Details">
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="designation"/>
+                            <field name="department"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="reason_type"/>
+                            <field name="amount" widget='monetary'
+                                   options="{'currency_field': 'currency_id'}" digits="[12,3]"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="effective_date"/>
+                        </group>
+                        <group string="Accounting Details">
+                            <field name="accounting_date"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"/>
+                            <field name="journal_id"/>
+                            <field name="debit_account_id"/>
+                            <field name="credit_account_id"/>
+                            <field name="move_id" attrs="{'invisible': [('move_id', '=', False)]}"/>
+                        </group>
+                    </group>
+                    <group string="Remarks">
+                        <group>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_loan_types_search" model="ir.ui.view">
+        <field name="name">hr.loan.types.search</field>
+        <field name="model">hr.loan.types</field>
+        <field name="arch" type="xml">
+            <search string="Addition Deletion">
+                <field name="name" string="No."/>
+                <field name="employee_id" string="Employees"
+                       filter_domain="[('employee_id.name','ilike',self)]"/>
+                <field name="department" string="Department"/>
+                <field name="designation" string="Designation"/>
+                <field name="reason_type"/>
+                <field name="amount"/>
+                <group expand="0" string="Group By">
+                    <filter domain="[('state', '=', 'draft')]" name="draft" string="Draft"/>
+                    <filter domain="[('state', '=', 'approved')]" name="approved" string="Approved"/>
+                    <separator/>
+                    <filter domain="[('type', '=', 'addition')]" name="addition" string="Addition"/>
+                    <filter domain="[('type', '=', 'deduction')]" name="deduction" string="Deduction"/>
+                    <filter name="group_employee" string="Employee" domain="[]"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter name="group_type" string="Type" domain="[]" context="{'group_by':'type'}"/>
+                    <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_hr_loan_types_tree" model="ir.ui.view">
+        <field name="name">hr.loan.types.tree</field>
+        <field name="model">hr.loan.types</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="designation"/>
+                <field name="department"/>
+                <field name="type"/>
+                <field name="reason_type"/>
+                <field name="amount"/>
+                <field name="state"/>
+                <field name="company_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_loan_types" model="ir.actions.act_window">
+        <field name="name">Addition/Deduction</field>
+        <field name="res_model">hr.loan.types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_loan_types_search"/>
+    </record>
+
+    <!--    reason form view-->
+
+    <record id="view_reason_types_form" model="ir.ui.view">
+        <field name="name">reason.types.form</field>
+        <field name="model">reason.types</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!--    loan reason tree view-->
+    <record id="view_hr_loan_reason_tree" model="ir.ui.view">
+        <field name="name">reason.types.tree</field>
+        <field name="model">reason.types</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="type"/>
+            </tree>
+        </field>
+    </record>
+    <!--    reason search view-->
+    <record id="view_hr_loan_type_reason_search" model="ir.ui.view">
+        <field name="name">reason.types.search</field>
+        <field name="model">reason.types</field>
+        <field name="arch" type="xml">
+            <search string="Reason">
+                <field name="name" string="name"/>
+                <field name="type" string="Type"/>
+                <group expand="0" string="Group By">
+                    <filter domain="[('type', '=', 'addition')]" name="addition" string="Addition"/>
+                    <filter domain="[('type', '=', 'deduction')]" name="deduction" string="Deduction"/>
+                    <filter name="group_type" string="Type" domain="[]"
+                            context="{'group_by':'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--    reason act window-->
+    <record id="action_hr_loan_reason_types" model="ir.actions.act_window">
+        <field name="name">Reasons</field>
+        <field name="res_model">reason.types</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_hr_loan_type_reason_search"/>
+    </record>
+    
+    <menuitem id="menu_loan_types"
+              parent="atheer_loan_management.menu_hr_root_loans"
+              name="Addition/Deduction"
+              action="action_hr_loan_types"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_commercial_head,atheer_hr.group_hr_accounts"
+              sequence="20"
+    />
+
+    <menuitem id="menu_loan_configuration"
+              parent="atheer_loan_management.menu_hr_root_loans"
+              name="Configuration"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts"
+              sequence="100"
+    />
+    <menuitem id="menu_loan_reasons"
+              parent="menu_loan_configuration"
+              name="Reasons"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts"
+              action="action_hr_loan_reason_types"
+              sequence="10"
+    />
+</odoo>

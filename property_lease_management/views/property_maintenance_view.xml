@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- Property Maintenance  -->
+        <record id="view_property_maintenance_tree" model="ir.ui.view">
+            <field name="name">property.maintenance.tree</field>
+            <field name="model">property.maintenance</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance" sample="1" decoration-danger="(state == 'progress')"
+                      decoration-success="(state == 'done')" decoration-muted="(state == 'cancel')">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="supervisor"/>
+                    <field name="property_id"/>
+                    <field name="employee_ids" widget="many2many_tags"/>
+                    <field name="due_date" widget="remaining_days" optional="show"/>
+                    <field name="done_date"/>
+                    <field name="state" decoration-danger="state == 'progress'" decoration-success="state == 'done'"
+                           decoration-muted="(state == 'cancel')" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_maintenance_form" model="ir.ui.view">
+            <field name="name">property.maintenance.form</field>
+            <field name="model">property.maintenance</field>
+            <field name="arch" type="xml">
+                <form string="Property Type">
+                    <header>
+                        <button name="new_send_for_approval" string="Send for Approval" type="object"
+                                class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="draft"/>
+                        <button name="new_approve" string="Approve" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="send_for_approval"/>
+                        <button name="start_the_work" string="Start the Work" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="approved"/>
+                        <button name="mark_completed" string="Mark as Completed" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user,property_lease_management.group_property_head"
+                                states="start_the_work"/>
+                        <!--                        added for all property maintenance-->
+<!--                        <button name="action_pending_for_approval2" string="Pending for approval" type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                states="done"/>-->
+<!--                        <button name="action_complete_payment" string="Send to accountant" type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                states="pending_approval2"/>-->
+<!--                        <button name="action_paid" string="Mark as Paid" type="object" class="oe_highlight"-->
+<!--                                states="accountant"/>-->
+                        <button name="notify_employee_ids" string="Notify Employees" type="object" states="draft"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="complaint_id"
+                                       attrs="{                                       'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="supervisor"
+                                       attrs="{'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="building" attrs="{'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="property_id"
+                                       attrs="{'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="from_date"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="tenant_id"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="asset_id" domain="[('property_id','=',property_id)]"
+                                       attrs="{'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="employee_ids"
+                                       widget="many2many_tags"
+                                       attrs="{'readonly':[('state','=','done')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <!--                                <field name="description" string="Remarks"-->
+                                <!--                                       attrs="{'readonly':[('state','=','done')]}"/>-->
+                                <field name="company_id"/>
+                                <field name="property_maintenance_ids"/>
+                            </group>
+                            <group>
+                                <field name="date"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="due_date"
+                                       attrs="{                                       'readonly':[('state','=','done')]}"/>
+                                <field name="done_date"
+                                       attrs="{
+                                       'readonly':[('state','=','done')]}"/>
+                                <field name="maintenance_type"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="priority"/>
+                                <!--                                <field name="utility" invisible="1"/>-->
+                                <field name="utility_type" invisible="1"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="cost" attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="to_date"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="next_date"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                                <field name="attachment_id"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_type"/>
+                                        <field name="doc_no"/>
+                                        <field name="doc_dec"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" filename="file_name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="remarks" string="Remarks">
+                                <field name="description" string="Remarks"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                     <div class="oe_chatter">
+                         <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="search_property_maintenance" model="ir.ui.view">
+            <field name="name">property.maintenance.search</field>
+            <field name="model">property.maintenance</field>
+            <field name="arch" type="xml">
+                <search string="Search Building Maintenance">
+                    <filter name="open" string="Under Progress" domain="[('state', '=', 'progress')]"/>
+                    <filter name="done" string="Done" domain="[('state', '=', 'done')]"/>
+                    <field name="property_id"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_building" string="Building" domain="[]" context="{'group_by':'building'}"/>
+                        <filter name="group_property_id" string="Property" domain="[]"
+                                context="{'group_by':'property_id'}"/>
+                        <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="group_priority" string="Priority" domain="[]" context="{'group_by':'priority'}"/>
+                        <filter name="group_asset_id" string="Assets" domain="[]" context="{'group_by':'asset_id'}"/>
+                        <filter name="group_asset_type_id" string="Assets Type" domain="[]" context="{'group_by':'asset_type_id'}"/>
+                        <filter name="group_maintenance_type" string="Maintenance Type" domain="[]"
+                                context="{'group_by':'maintenance_type'}"/>
+                        <filter name="group_supervisor" string="Supervisor" domain="[]"
+                                context="{'group_by':'supervisor'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_property_maintenance" model="ir.actions.act_window">
+            <field name="name">Building Maintenance</field>
+            <field name="res_model">property.maintenance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_property_maintenance_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to insert a Maintenance Details of a Property .
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_property_maintenance_root"
+                  parent="menu_base_property"
+                  name="Complaints &amp; Maintenance"
+                  sequence="5"/>
+        <menuitem id="menu_property_maintenance" name="Building Maintenance"
+                  action="property_lease_management.action_property_maintenance"
+                  parent="property_lease_management.menu_property_maintenance_root" sequence="10"/>
+        <!-- End-->
+        <record id="view_property_utility_tree" model="ir.ui.view">
+            <field name="name">property.utility.tree</field>
+            <field name="model">property.maintenance</field>
+            <field name="arch" type="xml">
+                <tree string="Utility" sample="1" decoration-success="(state == 'done')"
+                      decoration-muted="(state == 'utility')">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="property_id"/>
+                    <field name="utility_type"/>
+                    <field name="from_date"/>
+                    <field name="to_date"/>
+                    <field name="state" decoration-success="(state == 'done')" decoration-muted="(state == 'utility')"
+                           widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_property_utility" model="ir.actions.act_window">
+            <field name="name">Utility Charge Updation</field>
+            <field name="res_model">property.maintenance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"default_utility":1}</field>
+            <field name="domain">[('utility','=',True)]</field>
+            <field name="view_id" ref="view_property_utility_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to add utility charges to Property .
+                </p>
+            </field>
+        </record>
+        <!--        <menuitem id="menu_property_utility" action="action_property_utility" parent="amlak_property_management.menu_property"-->
+        <!--                  sequence="2"/>-->
+
+        <!-- Maintenance Type -->
+
+        <record id="view_maintenance_type_tree" model="ir.ui.view">
+            <field name="name">property.maintenance.type.tree</field>
+            <field name="model">property.maintenance.type</field>
+            <field name="arch" type="xml">
+                <tree string="Expense Type" sample="1">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_maintenance_type_form" model="ir.ui.view">
+            <field name="name">property.maintenance.type.form</field>
+            <field name="model">property.maintenance.type</field>
+            <field name="arch" type="xml">
+                <form string="Expense Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_maintenance_type" model="ir.actions.act_window">
+            <field name="name">Expense Types</field>
+            <field name="res_model">property.maintenance.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Maintenance Type.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_maintenance_types" action="action_maintenance_type" parent="menu_property_config"
+                  sequence="1"
+        />
+        <!-- END -->
+
+        <!-- Income Type -->
+
+        <record id="view_income_type_tree" model="ir.ui.view">
+            <field name="name">property.income.type.tree</field>
+            <field name="model">property.income.type</field>
+            <field name="arch" type="xml">
+                <tree string="Income Type" sample="1">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_income_type_form" model="ir.ui.view">
+            <field name="name">property.income.type.form</field>
+            <field name="model">property.income.type</field>
+            <field name="arch" type="xml">
+                <form string="Income Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_income_type" model="ir.actions.act_window">
+            <field name="name">Income Types</field>
+            <field name="res_model">property.income.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a Maintenance Type.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_income_types" action="action_income_type" parent="menu_property_config" sequence="8"/>
+        <!-- END -->
+
+        <!--utility master form-->
+        <record id="view_utility_type_form" model="ir.ui.view">
+            <field name="name">utility.type.form</field>
+            <field name="model">utility.type</field>
+            <field name="arch" type="xml">
+                <form string="Utility Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_utility_type" model="ir.actions.act_window">
+            <field name="name">Utility Type</field>
+            <field name="res_model">utility.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create utility types.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_utility_type" action="action_utility_type"
+                  parent="property_lease_management.menu_property_config"
+                  sequence="6"/>
+
+        <!--end-->
+
+
+        <!--DOCUMENT TYPE MASTER FORM-->
+
+        <record id="view_document_type_form" model="ir.ui.view">
+            <field name="name">document.type.form</field>
+            <field name="model">document.type</field>
+            <field name="arch" type="xml">
+                <form string="Document Type">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_document_type" model="ir.actions.act_window">
+            <field name="name">Document Type</field>
+            <field name="res_model">document.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create document types.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_document_type" action="action_document_type"
+                  parent="property_lease_management.menu_property_config"
+                  sequence="7"/>
+
+        <!--end of document type-->
+
+    </data>
+</odoo>

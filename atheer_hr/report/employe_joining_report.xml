@@ -1,0 +1,311 @@
+<odoo>
+    <data>
+        <record id="paperformat_af_employe"
+                model="report.paperformat">
+            <field name="name">Employe A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+
+        <record id="atr_employe_joining_report" model="ir.actions.report">
+            <field name="name">Employee Joining Report</field>
+            <field name="model">hr.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">atheer_hr.employe_joining_report</field>
+            <field name="report_file">atheer_hr.employe_joining_report</field>
+            <field name="print_report_name">'Employe-joining-Report-%s'%(time.strftime('%d-%m-%Y'))</field>
+            <field name="paperformat_id" ref="paperformat_af_employe"/>
+            <field name="binding_model_id" ref="model_hr_employee"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <template id="employe_joining_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <div class="oe_structure"/>
+                        <style>
+                            th, td {
+                            border: 1px solid black;
+                            font-size: 18px;
+                            padding: 7px;
+                            }
+                        </style>
+                        <table width="100%" style="font-size:15px;">
+                            <tr>
+                                <th width="25%"
+                                    style="border-left: 0px solid white !important;border-top: 0px solid white !important;">
+                                    <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)"
+                                         style="max-height: 60px;" alt="Logo"/>
+                                </th>
+                                <th colspan="3" style="text-align: center;">
+                                    <h2>
+                                        <b>Joining Report</b>
+                                    </h2>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Employee Id No.</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.employee_id"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Name</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Designation</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.job_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Department</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.department_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Date Of Joining</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.joining_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Residence ID No.</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.civil_card_no"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Passport Number</b>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.passport_no"/>
+                                </td>
+                                <td>
+                                    <b>Passport Expiry Date</b>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.passport_expiry_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Visa Number</b>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.visa_no"/>
+                                </td>
+                                <td>
+                                    <b>Visa Expiry Date</b>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.visa_expire"/>
+                                </td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Date Of Birth</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.birthday"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Contact Number</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.mobile_phone"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Present Address</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.address_home_id.street"/>
+                                    <span t-if="doc.address_home_id.street2">,&#160;</span>
+                                    <t t-esc="doc.address_home_id.street2"/>
+                                    <span t-if="doc.address_home_id.city">,&#160;</span>
+                                    <t t-esc="doc.address_home_id.city"/>
+                                    <span t-if="doc.address_home_id.zip">,&#160;</span>
+                                    <t t-esc="doc.address_home_id.zip"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Address in Home country</b>
+                                </td>
+                                <td colspan="3">
+                                    <t t-esc="doc.address_home_country_id.street"/>
+                                    <span t-if="doc.address_home_country_id.street2">,&#160;</span>
+                                    <t t-esc="doc.address_home_country_id.street2"/>
+                                    <span t-if="doc.address_home_country_id.city">,&#160;</span>
+                                    <t t-esc="doc.address_home_country_id.city"/>
+                                    <span t-if="doc.address_home_country_id.zip">,&#160;</span>
+                                    <t t-esc="doc.address_home_country_id.zip"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                            <tr colspan="2">
+                                <td>
+                                    <b>Emergency Contact Name and Number</b>
+                                </td>
+                                <td>
+                                    <t t-esc="doc.emergency_contact"/>
+                                    <br/>
+                                    <t t-esc="doc.emergency_phone"/>
+                                </td>
+                                <td colspan="2" style="padding: 0px;">
+                                    <table class="small-table" width="100%">
+                                        <tr>
+                                            <td style="border: none;border-right: 1px solid black;">
+                                                <b>Visa duration Provided</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: none;border-right: 1px solid black;border-top: 1px solid black;">
+                                                <t t-if="doc.visa_duration=='renewable'">
+                                                    <span>2 years renewable</span>
+                                                </t>
+                                                <t t-if="doc.visa_duration=='non_renewable'">
+                                                    <span>2 years non renewable</span>
+                                                </t>
+                                                <t t-if="doc.visa_duration=='nine_month'">
+                                                    <span>9 month</span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr colspan="2">
+                                <td>
+                                    <b>Salary Details</b>
+                                </td>
+                                <td colspan="3" style="padding: 0px;">
+                                        <table class="small-table" style="margin-top:-3%;" width="100%">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:10%;padding:5px;text-align:center;border: none;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                        <strong>Sl No.</strong>
+                                                    </td>
+                                                    <td style="padding:5px;text-align:left;border: none;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                        <strong>Component</strong>
+                                                    </td>
+                                                    <td style="padding:5px;text-align:left;border: none;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                        <strong>Amount Per Month(In OMR)</strong>
+                                                    </td>
+                                                </tr>
+                                                <t t-set="i" t-value="1"/>
+                                                <t t-foreach="doc.emp_salary_package_ids" t-as="line">
+                                                    <tr>
+                                                        <td style="padding:5px;text-align:center;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                            <span t-esc="i"/>
+                                                            <t t-set="i" t-value="i+1"/>
+                                                        </td>
+                                                        <td style="padding:5px;text-align:left;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                            <t t-esc="line.component.name"/>
+                                                        </td>
+                                                        <td style="padding:5px;text-align:left;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                            <t t-esc="line.amount_per_month"/>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <tr>
+                                                    <td style="padding:5px;text-align:center;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;">
+                                                        &#160;
+                                                    </td>
+                                                    <td
+                                                            style="padding:5px;text-align:left;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-right: 1px Solid !important;">
+                                                        <span>
+                                                            <strong>Gross Salary</strong>
+                                                        </span>
+                                                    </td>
+                                                    <td style="padding:5px;text-align:left;border-top: 1px Solid !important;border-bottom: 1px Solid !important;border-left: 1px Solid !important;border-right: 1px Solid !important;">
+                                                        <strong>
+                                                            <span t-esc="doc.gross_salary"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Employee’s Signature</b>
+                                </td>
+                                <td colspan="3">
+                                </td>
+                            </tr>
+                            <tr>
+
+                            </tr>
+                            <tr colspan="2">
+                                <td>
+                                    <b>Remarks by H.O.D.</b>
+                                </td>
+                                <td colspan="3">
+                                    &amp;nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                        <table width="100%">
+                            <tr>
+                                <td width="25%">&amp;nbsp;</td>
+                                <td width="25%">&amp;nbsp;</td>
+                                <td width="25%">&amp;nbsp;</td>
+                                <td width="25%">&amp;nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>HR</b>
+                                </td>
+                                <td>
+                                    <b>H.O.D.</b>
+                                </td>
+                                <td>
+                                    <b>Director</b>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

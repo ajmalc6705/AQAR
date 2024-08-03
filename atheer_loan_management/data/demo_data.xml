@@ -1,0 +1,24 @@
+<odoo>
+    <data noupdate="1">
+        <record id="structure_new" model="hr.payroll.structure">
+            <field name="name">Structure With Loan Installments</field>
+            <field name="type_id" ref="hr_contract.structure_type_employee"/>
+            <field name="unpaid_work_entry_type_ids"
+                   eval="[(4, ref('hr_work_entry_contract.work_entry_type_unpaid_leave'))]"/>
+            <field name="country_id" eval="False"/>
+        </record>
+
+        <record id="hr_salary_rule_installments" model="hr.salary.rule">
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result = - payslip.loan_amount</field>
+            <field name="amount_percentage_base">contract.wage</field>
+            <field name="code">INS</field>
+            <field name="category_id" ref="hr_payroll.DED"/>
+            <field name="name">Loan Installments</field>
+            <field name="sequence" eval="5"/>
+            <field name="struct_id" ref="structure_new"/>
+        </record>
+    </data>
+
+
+</odoo>

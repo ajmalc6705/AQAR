@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_bank_guarantee">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <center>
+                            <u>
+                                <h2>Bank Guarantee Entry</h2>
+                            </u>
+
+                        </center>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <span>Doc. Id </span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.seq"/>
+                                </td>
+                                <td>
+
+                                    <span>Doc. Date </span>
+                                </td>
+                                <td>
+                                     <span>:</span>
+                                    <span t-field="o.doc_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Transaction </span>
+                                </td>
+                                <td>
+                                     <span>:</span>
+                                    <span t-field="o.transaction"/>
+                                </td>
+                                <td>
+                                    <span><![CDATA[&nbsp;]]></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>
+                                        <span>Name </span>
+                                    </b>
+                                </td>
+                                <td>
+                                    <b>
+                                         <span>:</span>
+                                        <span t-field="o.partner_id.name"/>
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>B.G No. </span>
+                                </td>
+                                <td>
+                                     <span>:</span>
+                                    <span t-field="o.bgno"/>
+                                </td>
+                                <td>
+                                    <span>Issue Date </span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.issue_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Cheque No. </span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.cheque_no"/>
+                                </td>
+                                <td>
+                                    <span>Cheque Date</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.cheque_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Cheque Bank</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.cheque_bank"/>
+                                </td>
+                                <td>
+                                    <b>
+                                        <span>Amount</span>
+                                    </b>
+                                </td>
+                                <td>
+                                    <b>
+                                        <span>:</span>
+                                        <span t-field="o.return_value"/>
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Expiry Date.</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.expiry_date"/>
+                                </td>
+                                <td>
+                                    <span>Return Date:</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.return_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span>Bank Name. :</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.bank_id.name"/>
+                                </td>
+                                <td>
+                                    <span>Branch Name:</span>
+                                </td>
+                                <td>
+                                    <span>:</span>
+                                    <span t-field="o.branch_name"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+                            <b>
+                                <span>Narration :</span>
+                            </b>
+                            <p>
+                                <span t-field="o.remarks"/>
+                            </p>
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td>
+                                    <strong>
+                                        Prepared By
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        Checked By
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        Approved By
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        Approved By
+                                    </strong>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>
+                                        ______________
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        ______________
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        ______________
+                                    </strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        ______________
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,159 @@
+<odoo>
+    <!--attendance amendment form view-->
+    <record id="hr_attendance_amendment_form" model="ir.ui.view">
+        <field name="name">hr.attendance.amendment</field>
+        <field name="model">hr.attendance.amendment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Confirm" type="object" name="action_confirm"
+                            groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"
+                            states="draft" class="oe_highlight"/>
+                    <button string="Set to Draft" type="object" name="action_set_to_draft"
+                            states="confirm" class="oe_highlight"
+                            groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="sequence" class="oe_inline" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <label for="date_from" string="Dates"/>
+                            <div>
+                                <field name="date_from" invisible="1"/>
+                                <field name="date_to" invisible="1"/>
+                                <div class="o_row o_row_readonly o_hr_holidays_dates">
+                                    <span class="oe_inline">
+                                        From
+                                    </span>
+                                    <field name="date_from" class="oe_inline" nolabel="1" force_save="1"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <span class="oe_inline">
+                                        To
+                                    </span>
+                                    <field name="date_to" class="oe_inline" force_save="1"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="attendance_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Employee's List">
+                            <field name="employee_amendment_ids" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                   force_save="1">
+                                <tree editable="bottom">
+                                    <field name="employee_id" readonly="1" force_save="1" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="attendance_type" invisible="1" readonly="1" force_save="1"/>
+                                    <field name="designation" string="Designation" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="amendment_attendance_type" readonly="0"/>
+                                    <field name="check_in"/>
+                                    <field name="check_out"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group col="4">
+                                            <field name="employee_id" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="attendance_type" invisible="1"/>
+                                            <field name="designation" string="Designation" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="amendment_attendance_type" readonly="0"/>
+                                            <field name="check_in"/>
+                                            <field name="check_out"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- attendance amendment tree-->
+    <record id="hr_attendance_amendment_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.amendment.tree</field>
+        <field name="model">hr.attendance.amendment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="attendance_type"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <!--attendance amendment search view-->
+    <record id="hr_attendance_amendment_view_search" model="ir.ui.view">
+        <field name="name">hr.attendance.amendment.search</field>
+        <field name="model">hr.attendance.amendment</field>
+        <field name="arch" type="xml">
+            <search string="Amendment">
+                <field string="Sequence" name="sequence"/>
+                <field name="date_from" string="Date"/>
+                <field name="date_to" string="Date"/>
+                <field string="Attendance Type" name="attendance_type"/>
+                <separator/>
+                <filter domain="[('state', '=', 'draft')]" string="Draft" name="draft"
+                        help="Amendment in draft states"/>
+                <filter domain="[('state', '=', 'confirm')]" string="Confirm" name="confirm"
+                        help="Amendment in Confirmed states"/>
+                <separator/>
+                <filter domain="[('attendance_type', '=', 'partial_day')]" string="Partial Day" name="partial_day"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'pr_present')]" string="PR- Present" name="pr_present"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'absent')]" string="A – Absent" name="absent"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'hd_holiday')]" string="HD- Holiday" name="hd_holiday"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'sick_leave')]" string="SL- Sick Leave" name="sick_leave"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'annual_leave')]" string="AL- Annual Leave"
+                        name="annual_leave"
+                        help="Attendance type in partial_day"/>
+                <filter domain="[('attendance_type', '=', 'emergency_leave')]" string="EL- Emergency Leave"
+                        name="emergency_leave"
+                        help="Attendance type in partial_day"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="State" domain="[]" context="{'group_by': 'state'}" name="state"/>
+                    <filter string="Attendance Type" domain="[]" context="{'group_by': 'attendance_type'}"
+                            name="attendance_type"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!--action-->
+    <record id="action_hr_attendance_action_amendment" model="ir.actions.act_window">
+        <field name="name">Attendance Amendment</field>
+        <field name="res_model">hr.attendance.amendment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_attendance_amendment_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Attendance Amendment
+            </p>
+        </field>
+    </record>
+
+
+    <menuitem id="menu_hr_attendance_amendment" name="Attendance Amendment"
+              parent="hr_attendance.menu_hr_attendance_root"
+              sequence="20" action="action_hr_attendance_action_amendment"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+</odoo>

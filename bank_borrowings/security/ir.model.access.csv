@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bank_borrowings,access.bank.borrowings,model_bank_borrowings,base.group_user,1,1,1,1
+access_borrowing_type,access.borrowing_type,model_borrowing_type,base.group_user,1,1,1,1
+access_bank_installments,access.bank.installments,model_bank_installments,base.group_user,1,1,1,1

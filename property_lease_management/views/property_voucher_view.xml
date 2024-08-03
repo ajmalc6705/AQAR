@@ -1,0 +1,511 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <!-- Payment Voucher-->
+
+<!--        <record id="view_property_payment_voucher_tree" model="ir.ui.view">-->
+<!--            <field name="name">property.voucher.tree</field>-->
+<!--            <field name="model">property.voucher</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Payment Voucher" sample="1">-->
+<!--                    <field name="date" />-->
+<!--                    <field name="number" />-->
+<!--                    <field name="journal_id" />-->
+<!--                    <field name="total_amount" />-->
+<!--                    <field name="state" />-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+<!--        <record id="view_property_payment_voucher_form" model="ir.ui.view">-->
+<!--            <field name="name">property.voucher.form</field>-->
+<!--            <field name="model">property.voucher</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Payment Voucher">-->
+<!--                    <header>-->
+<!--                        <button name="proforma_voucher" string="Validate" states="draft" type="object"-->
+<!--                                class="oe_highlight" />-->
+<!--                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="draft,proforma" />-->
+<!--                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="posted"-->
+<!--                                confirm="Are you sure you want to cancel this voucher?" />-->
+<!--&lt;!&ndash;                        <button name="action_cancel_draft" type="object" states="cancel" string="Set to Draft" />&ndash;&gt;-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"-->
+<!--                               statusbar_colors='{"proforma":"blue"}' />-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <h1 attrs="{'invisible': [('number','=',False)]}">-->
+<!--                            <field name="number" />-->
+<!--                        </h1>-->
+<!--                        <group>-->
+<!--                            <field name="currency_id" invisible="1" />-->
+<!--                            <field name="company_id" invisible="1" />-->
+<!--                            <group>-->
+<!--&lt;!&ndash;                                <field name="account_id"&ndash;&gt;-->
+<!--&lt;!&ndash;                                       domain="[('type','in', ['liquidity', 'payable', 'other'])]"&ndash;&gt;-->
+<!--&lt;!&ndash;                                />&ndash;&gt;-->
+<!--                                <field name="journal_id" string="Payment Method"-->
+<!--                                       domain="[('type','in',['bank', 'cash'])]" />-->
+<!--                                <field name="amount" string="Paid Amount" widget="monetary"-->
+<!--                                       options="{'currency_field': 'currency_id'}"-->
+<!--                                       attrs="{'invisible':[('cost_center_id','=', False)], 'required':[('cost_center_id','!=', False)]}"-->
+<!--                                />-->
+<!--                                <field name="partner_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                                <field name="cash_or_cheque" attrs="{'invisible':[('cost_center_id','=', False)]}" />-->
+
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="date" />-->
+<!--                                <field name="name" colspan="2" placeholder="e.g. First Installment" />-->
+<!--                                <field name="contract_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                                />-->
+<!--                                <field name="cost_center_id" />-->
+
+<!--                                <field name="property_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+
+<!--                                <field name="bank_name" attrs="{'invisible':[('cost_center_id','=', False)]}" />-->
+<!--                                <field name="cheque_number"-->
+<!--                                       attrs="{'invisible':[('cash_or_cheque','not in', ['cheque'])]}" />-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <notebook>-->
+
+<!--                            <page string="Expense Details" attrs="{'invisible':[('cost_center_id','!=', False)]}">-->
+<!--                                <field name="line_ids">-->
+<!--                                    <tree string="Expense Details" editable="bottom" sample="1">-->
+<!--                                        <field name="account_id" domain="[('internal_type','!=','view')]" />-->
+<!--                                        <field name="cheque_date" />-->
+<!--                                        <field name="cheque_number" />-->
+<!--                                        <field name="description" />-->
+<!--                                        <field name="amount" />-->
+<!--                                        <field name="cost_center_id" />-->
+<!--                                        <field name="expense_category_id"-->
+<!--                                               attrs="{'required':[('cost_center_id','=', False)]}" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page string="Note">-->
+<!--                                <field name="narration" />-->
+<!--                            </page>-->
+
+<!--                            <page string="Journal Items" attrs="{'invisible': [('state','!=','posted')]}">-->
+<!--                                <group col="4">-->
+<!--                                    <field name="period_id" />-->
+<!--                                </group>-->
+<!--                                <field name="move_ids" readonly="1">-->
+<!--                                    <tree string="Journal Items" sample="1">-->
+<!--                                        <field name="move_id" />-->
+<!--                                        <field name="ref" />-->
+<!--                                        <field name="date" />-->
+<!--                                        <field name="partner_id" />-->
+<!--                                        <field name="account_id" />-->
+<!--                                        <field name="name" />-->
+<!--                                        <field name="debit" />-->
+<!--                                        <field name="credit" />-->
+<!--                                        <field name="state" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                        <field name="type" invisible="1" />-->
+<!--                        <field name="account_type" invisible="1" />-->
+<!--                        <field name="installment_type" invisible="1" />-->
+<!--                        <field name="total_amount" invisible="1" />-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="action_expense_payment_voucher" model="ir.actions.act_window">-->
+<!--            <field name="name">Payment Voucher</field>-->
+<!--            <field name="res_model">property.voucher</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="domain">[('type','=','payment')]</field>-->
+<!--            <field name="context">{'default_type': 'payment', 'type': 'payment'}</field>-->
+
+<!--        </record>-->
+
+<!--        <menuitem id="menu_property_expense_payment_voucher" action="action_expense_payment_voucher"-->
+<!--                  parent="menu_rent_and_sale" sequence="6" />-->
+
+        <!--Payment Voucher Wizard-->
+<!--        <record model="ir.ui.view" id="view_property_payment_dialog_form">-->
+<!--            <field name="name">property.voucher.payment.dialog.form</field>-->
+<!--            <field name="model">property.voucher</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Payment">-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="state" invisible="1" />-->
+<!--                            <field name="partner_id" />-->
+<!--                            <field name="currency_id" invisible="1" />-->
+<!--                            <field name="amount" class="oe_inline"-->
+<!--                                   string="Paid Amount"-->
+<!--                                   widget='monetary' options='{"currency_field": "currency_id"}'-->
+<!--                                   attrs="{'invisible':[('cost_center_id','=', False)], 'required':[('cost_center_id','!=', False)]}"-->
+<!--                            />-->
+<!--                            <field name="journal_id"-->
+<!--                                   domain="[('type','in',['bank', 'cash'])]"-->
+<!--                                   widget="selection"-->
+<!--                                   string="Payment Method" />-->
+<!--                            options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            <field name="cash_or_cheque" />-->
+
+<!--                        </group>-->
+
+<!--                        <group>-->
+<!--                            <field name="date" />-->
+<!--                            <field name="name" colspan="2" placeholder="e.g. First Installment" />-->
+<!--                            <field name="period_id" invisible="1" />-->
+<!--                            <field name="account_id"-->
+<!--                                   domain="[('type','in', ['liquidity', 'payable', 'other'])]"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            />-->
+<!--                            &lt;!&ndash;                            <field name="contract_id"&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                   attrs="{'invisible':[('installment_type','in', ['fee'])],&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                        'required':[('account_type','not in', ['2']),('installment_type','not in', ['fee'])]} "/>&ndash;&gt;-->
+<!--                            <field name="property_id"-->
+<!--                                   attrs="{'invisible':[('installment_type','in', ['fee'])]}"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                            <field name="cost_center_id"-->
+<!--                                   attrs="{'required':'True'}"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                            <field name="type" invisible="True" />-->
+<!--                            <field name="account_type" invisible="True" />-->
+<!--                            <field name="installment_type" invisible="1" />-->
+<!--                            <field name="bank_name" />-->
+<!--                            <field name="cheque_number"-->
+<!--                                   attrs="{'invisible':[('cash_or_cheque','not in', ['cheque'])]}" />-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                    <footer>-->
+<!--                        <button name="button_proforma_voucher" context="{'journal_id':journal_id}"-->
+<!--                                string="Register Payment" class="oe_highlight" type="object" />-->
+<!--                        or-->
+<!--                        <button string="Cancel" class="oe_link" special="cancel" />-->
+<!--                    </footer>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!-- Receipt Voucher-->
+
+<!--        <record id="view_property_receipt_voucher_form" model="ir.ui.view">-->
+<!--            <field name="name">property.voucher.receipt.form</field>-->
+<!--            <field name="model">property.voucher</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Receipt Voucher">-->
+<!--                    <header>-->
+<!--                        <button name="proforma_voucher" string="Validate" states="draft" type="object"-->
+<!--                                class="oe_highlight" />-->
+<!--                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="draft,proforma" />-->
+<!--                        <button name="cancel_voucher" string="Cancel Voucher" type="object" states="posted"-->
+<!--                                confirm="Are you sure you want to cancel this voucher?" />-->
+<!--                        <button name="action_cancel_draft" type="object" states="cancel" string="Set to Draft" />-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,posted"-->
+<!--                               statusbar_colors='{"proforma":"blue"}' />-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <h1 attrs="{'invisible': [('number','=',False)]}">-->
+<!--                            <field name="number" />-->
+<!--                        </h1>-->
+<!--                        <group>-->
+<!--                            <field name="currency_id" invisible="1" />-->
+<!--                            <field name="company_id" invisible="1" />-->
+<!--                            <group>-->
+<!--                                <field name="account_id"-->
+<!--                                       domain="[('type','in', ['liquidity', 'receivable', 'other'])]" />-->
+<!--                                &lt;!&ndash;attrs="{'invisible':[('cost_center_id','=', False)], 'required':[('cost_center_id','!=', False)]}" />&ndash;&gt;-->
+<!--                                <field name="journal_id" string="Payment Method"-->
+<!--                                       domain="[('type','in',['bank', 'cash'])]" />-->
+<!--                                <field name="amount" string="Paid Amount"-->
+<!--                                       widget="monetary"-->
+<!--                                       options="{'currency_field': 'currency_id'}"-->
+<!--                                       attrs="{'invisible':[('cost_center_id','=', False)], 'required':[('cost_center_id','!=', False)]}" />-->
+<!--                                <field name="partner_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="date" />-->
+<!--                                <field name="name" colspan="2" placeholder="e.g. First Installment" />-->
+<!--                                <field name="agreement_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                                       domain="[('state','not in',['draft','close'])]" />-->
+<!--                                <field name="sale_agreement_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                                       domain="[('state','not in',['draft','close'])]" />-->
+<!--                                <field name="property_id"-->
+<!--                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                                <field name="cost_center_id" />-->
+<!--                                <field name="cash_or_cheque" attrs="{'invisible':[('cost_center_id','=', False)]}" />-->
+<!--                                <field name="bank_name" attrs="{'invisible':[('cost_center_id','=', False)]}" />-->
+<!--                                <field name="cheque_number"-->
+<!--                                       attrs="{'invisible':[('cash_or_cheque','not in', ['cheque']), ('cost_center_id','=', False)]}"-->
+<!--                                       widget="selection" create="0" edit="0" />-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                        <notebook>-->
+<!--                            <page string="Income Details" attrs="{'invisible':[('cost_center_id','!=', False)]}">-->
+<!--                                <field name="line_ids">-->
+<!--                                    <tree string="Income Details" editable="bottom">-->
+<!--                                        <field name="account_id" domain="[('internal_type','!=','view')]" />-->
+<!--                                        <field name="cheque_date" />-->
+<!--                                        <field name="cheque_number" />-->
+<!--                                        <field name="description" />-->
+<!--                                        <field name="amount" />-->
+<!--                                        <field name="cost_center_id" />-->
+<!--                                        <field name="income_category_id"-->
+<!--                                               attrs="{'required':[('cost_center_id','=', False)]}" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                            <page string="Note">-->
+<!--                                <field name="narration" />-->
+<!--                            </page>-->
+<!--                            <page string="Journal Items" attrs="{'invisible': [('state','!=','posted')]}">-->
+<!--                                <group col="4">-->
+<!--                                    <field name="period_id" />-->
+<!--                                </group>-->
+<!--                                <field name="move_ids" readonly="1">-->
+<!--                                    <tree string="Journal Items">-->
+<!--                                        <field name="move_id" />-->
+<!--                                        <field name="ref" />-->
+<!--                                        <field name="date" />-->
+<!--                                        <field name="partner_id" />-->
+<!--                                        <field name="account_id" />-->
+<!--                                        <field name="name" />-->
+<!--                                        <field name="debit" />-->
+<!--                                        <field name="credit" />-->
+<!--                                        <field name="state" />-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                        <field name="type" invisible="1" />-->
+<!--                        <field name="installment_type" invisible="1" />-->
+<!--                        <field name="account_type" invisible="1" />-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="action_property_receipt_voucher" model="ir.actions.act_window">-->
+<!--            <field name="name">Receipt Voucher</field>-->
+<!--            <field name="res_model">property.voucher</field>-->
+<!--            <field name="domain">[('type','=','receipt')]</field>-->
+<!--            <field name="context">{'default_type': 'receipt', 'type': 'receipt'}</field>-->
+<!--            <field name="view_id" eval="False" />-->
+<!--        </record>-->
+
+        <record id="action_property_receipt_voucher_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence" />
+            <field name="view_mode">tree</field>
+            <field name="act_window_id" ref="action_property_receipt_voucher" />
+        </record>
+        <record id="action_property_receipt_voucher_form" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence" />
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_property_receipt_voucher_form" />
+            <field name="act_window_id" ref="action_property_receipt_voucher" />
+        </record>
+
+        <menuitem id="menu_property_receipt_voucher" action="action_property_receipt_voucher"
+                  parent="menu_rent_and_sale" sequence="8" />
+
+        <!--Receipt Voucher Wizard-->
+<!--        <record model="ir.ui.view" id="view_property_receipt_dialog_form">-->
+<!--            <field name="name">property.voucher.receipt.dialog.form</field>-->
+<!--            <field name="model">property.voucher</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Receipt">-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="state" invisible="1" />-->
+<!--                            <field name="partner_id" />-->
+<!--                            <field name="currency_id" invisible="1" />-->
+<!--                            <field name="amount" class="oe_inline"-->
+<!--                                   string="Paid Amount"-->
+<!--                                   widget='monetary' options='{"currency_field": "currency_id"}'-->
+<!--                                   invisible="context.get('line_type', False)"-->
+<!--                            />-->
+<!--                            <field name="journal_id"-->
+<!--                                   domain="[('type','in',['bank', 'cash'])]"-->
+<!--                                   widget="selection"-->
+<!--                                   string="Payment Method" />-->
+<!--                            <field name="cash_or_cheque" />-->
+
+<!--                        </group>-->
+
+<!--                        <group>-->
+<!--                            <field name="date" />-->
+<!--                            <field name="period_id" invisible="1" />-->
+<!--                            <field name="name" colspan="2" placeholder="e.g. First Installment" />-->
+<!--                            <field name="account_id"-->
+<!--                                   domain="[('type','in', ['liquidity', 'receivable', 'other'])]"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                                   attrs="{'required':[('cost_center_id','!=', False)]}" />-->
+<!--                            <field name="agreement_id" domain="[('state','=','open')]"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            />-->
+<!--                            <field name="sale_agreement_id" domain="[('state','=','open')]"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            />-->
+<!--                            <field name="property_id"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                            <field name="cost_center_id"-->
+<!--                                   attrs="{'required':'True'}"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            />-->
+<!--                            <field name="income_category_id"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"-->
+<!--                            />-->
+<!--                            <field name="type" invisible="True" />-->
+<!--                            <field name="installment_type" invisible="1" />-->
+<!--                            <field name="account_type" invisible="True" />-->
+<!--                            <field name="bank_name" />-->
+<!--                            <field name="cheque_number" attrs="{'invisible':[('cash_or_cheque','not in', ['cheque'])]}"-->
+<!--                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}" />-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                    <footer>-->
+<!--                        <button name="button_proforma_voucher" string="Register Payment" class="oe_highlight"-->
+<!--                                type="object" />-->
+<!--                        or-->
+<!--                        <button string="Cancel" class="oe_link" special="cancel" />-->
+<!--                    </footer>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <!-- From module itis_cybro_estate -->
+
+        <!--payment voucher rent-->
+        <!--        <record id="view_property_voucher_inherit_form" model="ir.ui.view">-->
+        <!--            <field name="name">property.voucher.form</field>-->
+        <!--            <field name="model">property.voucher</field>-->
+        <!--            <field name="inherit_id" ref="property_management.view_property_receipt_dialog_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="property_id" position="before">-->
+        <!--                    <field name="building"/>-->
+        <!--                </field>-->
+        <!--                <field name="property_id" position="attributes">-->
+        <!--                    <attribute name="string">Flat/Villa</attribute>-->
+        <!--&lt;!&ndash;                    <attribute name="domain">[('parent_building','=',building)]</attribute>&ndash;&gt;-->
+        <!--                </field>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--payment voucher contract-->
+
+        <!--payment voucher -->
+        <!--        <record id="view_property_voucher_normal_inherit_form" model="ir.ui.view">-->
+        <!--            <field name="name">property.voucher.form</field>-->
+        <!--            <field name="model">property.voucher</field>-->
+        <!--            <field name="inherit_id" ref="property_management.view_property_payment_voucher_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="property_id" position="before">-->
+        <!--                    <field name="building"/>-->
+        <!--                </field>-->
+        <!--                <field name="property_id" position="attributes">-->
+        <!--                    <attribute name="string">Flat/Villa</attribute>-->
+        <!--                    <attribute name="domain">[('parent_building','=',building)]</attribute>-->
+        <!--                </field>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <!--payment Voucher dialog box-->
+        <!--        <record id="view_property_voucher_dialog_box_inherit_form" model="ir.ui.view">-->
+        <!--            <field name="name">property.voucher.receipt.dialog.inherit.form</field>-->
+        <!--            <field name="model">property.voucher</field>-->
+        <!--            <field name="inherit_id" ref="property_management.view_property_receipt_dialog_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="cheque_number" position="attributes">-->
+        <!--                    <attribute name="domain">[('rent_id', '=', agreement_id),('state', '=',-->
+        <!--                        'draft'),('cheque_number','!=',None)]-->
+        <!--                    </attribute>-->
+        <!--                </field>-->
+        <!--                <field name="cash_or_cheque" position="after">-->
+        <!--                    <field name="rent_period_id" domain="[('rent_ids', '=', agreement_id),('state', '!=', 'done')]"-->
+        <!--                           options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>-->
+        <!--                </field>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <!--receipt voucher -->
+        <!--        <record id="view_property_voucher_receipt_inherit_form" model="ir.ui.view">-->
+        <!--            <field name="name">property.voucher.form</field>-->
+        <!--            <field name="model">property.voucher</field>-->
+        <!--            <field name="inherit_id" ref="property_management.view_property_receipt_voucher_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="property_id" position="before">-->
+        <!--                    <field name="building"/>-->
+        <!--                </field>-->
+        <!--                <field name="property_id" position="attributes">-->
+        <!--                    <attribute name="string">Flat/Villa</attribute>-->
+        <!--                    <attribute name="domain">[('parent_building','=',building)]</attribute>-->
+        <!--                </field>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <!--partner form-->
+        <!--<record id="landlord_inherit_form" model="ir.ui.view">-->
+        <!--<field name="name">landlord.inherit.form</field>-->
+        <!--<field name="model">res.partner</field>-->
+        <!--<field name="inherit_id" ref="property_management.landlord_form" />-->
+        <!--<field name="arch" type="xml">-->
+
+        <!--<page string="Documents" position="replace">-->
+        <!--<page string="Documents">-->
+        <!--<field name="doc_ids">-->
+        <!--<tree string="Documents" editable="bottom" >-->
+        <!--<field  name="doc_type" />-->
+        <!--<field  name="doc_no"/>-->
+        <!--<field  name="doc_dec"/>-->
+        <!--<field name="file_name" invisible="1"/>-->
+        <!--<field  name="attachment_ids" filename="file_name"/>-->
+        <!--</tree>-->
+        <!--</field>-->
+        <!--</page>-->
+        <!--</page>-->
+
+
+        <!--</field>-->
+        <!--</record>-->
+
+
+        <!--        <record id="account_voucher_receipt" model="ir.ui.view">-->
+        <!--            <field name="name">Customer Receipts</field>-->
+        <!--            <field name="model">account.voucher</field>-->
+        <!--            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="line_cr_ids" position="replace">-->
+        <!--                    <field name="line_cr_ids" context="{'journal_id':journal_id, 'type':type, 'partner_id':partner_id}" on_change="onchange_line_ids(line_dr_ids, line_cr_ids, amount, currency_id, type, context)"-->
+        <!--                    attrs="{'readonly': [('state', 'in', ['posted', 'cancel', 'cheque_printed', 'cheque_print_request',-->
+        <!--                        'cheque_reprint'])]}">-->
+        <!--                        <tree string="Invoices and outstanding transactions" editable="bottom" colors="gray:amount==0">-->
+        <!--                            <field name="move_line_id" context="{'journal_id':parent.journal_id, 'partner_id':parent.partner_id}"-->
+        <!--                                on_change="onchange_move_line_id(move_line_id)"-->
+        <!--                                domain="[('account_id.type','in',('receivable','payable')), ('reconcile_id','=', False), ('partner_id','=',parent.partner_id)]"-->
+        <!--                                required="1"-->
+        <!--                                groups="account.group_account_user"/>-->
+        <!--                            <field name="analytic_account_id"/>-->
+        <!--                            <field name="account_id"  groups="base.group_no_one" domain="[('type','=','receivable')]"/>-->
+        <!--                            <field name="date_original" readonly="1"/>-->
+        <!--                            <field name="date_due" readonly="1"/>-->
+        <!--                            <field name="amount_original" readonly="1"/>-->
+        <!--                            <field name="amount_unreconciled" readonly="1" groups="account.group_account_user"/>-->
+        <!--                            <field name="reconcile" on_change="onchange_reconcile(reconcile, amount, amount_unreconciled, context)" groups="account.group_account_user"/>-->
+        <!--                            <field name="amount" sum="Total Allocation" on_change="onchange_amount(amount, amount_unreconciled, context)" string="Allocation"/>-->
+        <!--                        </tree>-->
+        <!--                    </field>-->
+        <!--                </field>-->
+        <!--            </field>-->
+
+        <!--        </record>-->
+    </data>
+</odoo>

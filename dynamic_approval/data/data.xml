@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mail_activity_data_approve" model="mail.activity.type">
+        <field name="name">Approve</field>
+        <field name="icon">fa-tasks</field>
+        <field name="delay_count">0</field>
+        <field name="sequence">16</field>
+    </record>
+</odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_levy_summary_report_form">
+        <field name="name">levy.summary.report.inherit</field>
+        <field name="model">levy.summary.report</field>
+        <field name="arch" type="xml">
+            <form string="Levy Summary Report">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_report" type="object" string="Create Report" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,140 @@
+<odoo>
+    <data>
+        <!--Form-->
+        <record id="hr_timesheet_main_form" model="ir.ui.view">
+            <field name="name">hr.timesheet.main.form</field>
+            <field name="model">hr.main.timesheet</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!-- todo set access to the buttons-->
+                    <header>
+                        <button string="Generate Timesheet" type="object" name="generate_timesheet"
+                                attrs="{'invisible': [('state','not in',('draft'))]}"/>
+                        <button string="Approve" type="object" name="ts_gen"
+                                attrs="{'invisible': [('state','not in',('draft'))]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,ts_gen"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="work_location_id"/>
+                                <field name="company_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <label for="date_start" string="Period"/>
+                                <div>
+                                    <field name="date_start" class="oe_inline"/>
+                                    -
+                                    <field name="date_end" class="oe_inline"/>
+                                </div>
+                                <field name="payslip_id"
+                                       attrs="{'invisible': [('state','not in',('payslip'))], 'readonly': [('state','in',('payslip'))]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="employee_ids" string="Employees" widget="many2many_tags"
+                                   options='{"no_open": True, "no_create": True}' force_save="1"
+                                   placeholder="Optional..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+<!--                        <group>-->
+<!--                            <field name="d_employee_ids" string="Employees To Remove" widget="many2many_tags"-->
+<!--                                   options="{'no_create_edit': true}"-->
+<!--                                   placeholder="Optional..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>-->
+<!--                        </group>-->
+                        <notebook>
+                            <page string="Employee Timesheet">
+                                <field name="timesheet_ids" options='{"always reload": True}' readonly="1"
+                                       force_save="1">
+                                    <tree editable="bottom" delete="0">
+                                        <field name="work_location_id" width="15%"/>
+                                        <field name="normal_ot" string="Working Days" width="15%"/>
+                                        <field name="weekend_ot" string="Weekends" width="15%"/>
+                                        <field name="ph_ot" string="Public Holidays" width="15%"/>
+                                        <field name="normal_ot_hours" width="15%"/>
+                                        <field name="weekend_ot_hours" width="15%"/>
+                                        <field name="ph_ot_hours" width="15%"/>
+                                        <field name="sheet_date" invisible="1"/>
+                                        <field name="actual_ot_hours" width="15%" string="Total Hours"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!--    tree-->
+        <record id="hr_timehseet_main_tree" model="ir.ui.view">
+            <field name="name">hr.main.timesheet.tree</field>
+            <field name="model">hr.main.timesheet</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="state"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="search_hr_main_timesheet_main" model="ir.ui.view">
+            <field name="name">Main Timesheet Search</field>
+            <field name="model">hr.main.timesheet</field>
+            <field name="arch" type="xml">
+                <search string="Main Timesheet">
+                    <field name="name" string="Reference" filter_domain="[('name', 'ilike', self)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter domain="[('state', '=', 'draft')]" name="draft" string="Draft"/>
+                        <filter domain="[('state', '=', 'ts_gen')]" name="ts_gen" string="Approved"/>
+                        <filter domain="[('state', '=', 'payslip')]" name="payslip" string="Payslips Generated"/>
+                        <filter domain="[('state', '=', 'cancel')]" name="cancel" string="Cancel"/>
+                        <separator/>
+                        <filter name="group_date_start" string="Date From" context="{'group_by':'date_start'}"/>
+                        <filter name="group_period_to" string="Date To" context="{'group_by':'date_end'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_hr_timesheet_main" model="ir.actions.act_window">
+            <field name="name">Employees Timesheet</field>
+            <field name="res_model">hr.main.timesheet</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" eval="False"/>
+            <!--            <field name="search_view_id" ref="search_hr_main_timesheet_main"/>-->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a timesheet
+                </p>
+                <p>
+                    With just a quick glance on the Odoo employee timesheet approval, you
+                    can easily find all the information you need for each batch;
+                </p>
+            </field>
+        </record>
+        <menuitem
+                id="menu_hr_main_timesheet"
+                action="action_hr_timesheet_main"
+                parent="hr_timesheet.timesheet_menu_root"
+                sequence="4"
+                groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_commercial_head,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"
+        />
+        <menuitem id="timesheet_menu_activity_all"
+                  name="All Timesheets"
+                  parent="hr_timesheet.timesheet_menu_root"
+                  action="hr_timesheet.timesheet_action_all"
+                  groups="hr_timesheet.group_hr_timesheet_approver"/>
+    </data>
+</odoo>

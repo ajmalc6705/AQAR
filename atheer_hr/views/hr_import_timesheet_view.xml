@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Search-->
+        <record id="search_hr_main_timesheet_import" model="ir.ui.view">
+            <field name="name">Main Timesheet Import Search</field>
+            <field name="model">hr.timesheet.import</field>
+            <field name="arch" type="xml">
+                <search string="Import Timesheet">
+                    <field name="work_location_id"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_work_location" string="Employee" domain="[]"
+                                context="{'group_by': 'work_location_id'}"/>
+                        <filter name="group_sheet_date" string="Timesheet Date" context="{'group_by':'sheet_date'}"/>
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <!--Form-->
+        <record id="hr_timehseet_import_form" model="ir.ui.view">
+            <field name="name">hr.timesheet.import.form</field>
+            <field name="model">hr.timesheet.import</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="work_location_id" required="True"
+                                       options='{"no_open": True, "no_create": True}'/>
+                                <field name="sheet_date"/>
+                            </group>
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="cost_center" required="1"/>
+                                <field name="actual_ot_hours"/>
+                                <field name="attendance_type" required="1"/>
+                                <field name="normal_ot" force_save="1" readonly="1" invisible="1"/>
+                                <field name="weekend_ot" force_save="1" readonly="1" invisible="1"/>
+                                <field name="ph_ot" force_save="1" readonly="1" invisible="1"/>
+                                <field name="normal_ot_hours" force_save="1" readonly="1" invisible="1"/>
+                                <field name="weekend_ot_hours" force_save="1" readonly="1" invisible="1"/>
+                                <field name="ph_ot_hours" force_save="1" readonly="1" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Timesheet Lines">
+                                <field name="timesheet_lines">
+                                    <tree editable="bottom">
+                                        <field name="employee_id"/>
+                                        <field name="act_date"/>
+                                        <field name="attendance_type"/>
+                                        <field name="cost_center" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="ot_id"/>
+                                        <field name="hours"/>
+                                        <field name="work_description"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group col="4" string="Timesheet Details">
+                                                <field name="act_date"/>
+                                                <field name="attendance_type"/>
+                                                <field name="cost_center" options='{"no_open": True, "no_create": True}'/>
+                                                <field name="ot_id"/>
+                                                <field name="hours"/>
+                                                <field name="work_description"/>
+                                                <field name="company_id" invisible="1"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_timehseet_import_tree" model="ir.ui.view">
+            <field name="name">hr.timesheet.import.tree</field>
+            <field name="model">hr.timesheet.import</field>
+            <field name="arch" type="xml">
+                <tree sample="1">
+                    <field name="work_location_id"/>
+                    <field name="sheet_date"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_timehseet_import_form" model="ir.actions.act_window">
+            <field name="name">Import Timesheets</field>
+            <field name="res_model">hr.timesheet.import</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="search_hr_main_timesheet_import"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Import an Employee Timesheet
+                </p>
+                <p>
+                    With just a quick glance on the employee timesheet screen, you
+                    can easily find all the timesheet information you need for each person..
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_hr_timehseet_import_form_button">
+            <field name="name">Import Timesheets</field>
+            <field name="res_model">hr.timesheet.import</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem
+                id="menu_hr_import_timehseet"
+                action="action_hr_timehseet_import_form"
+                parent="hr_timesheet.timesheet_menu_root"
+                sequence="-1"
+                groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_commercial_head,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"
+        />
+    </data>
+</odoo>

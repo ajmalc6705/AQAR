@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_af_payslip" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
+        </record>
+        <template id="report_af_payslip">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <xpath expr="//div[@hasclass='header']" position="replace">
+                            <div class="header">
+                                <div class="col-12 row">
+                                    <div class="col-6 text-left">
+                                        <img t-if="o.company_id.report_image1"
+                                             t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.report_image1)"
+                                             style="max-height: 75px;" alt="Logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer"/>
+                        </xpath>
+                        <div class="page" style="padding: 14px;font-size:18px;">
+                            <br/>
+                            <div
+                                    style="font-size:22px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                <div class="col-12 row"
+                                     style="margin-left:1px;font-size:22px;border-top: 1px Solid;border-bottom:  1px Solid;">
+                                    <div class="col-8 text-left">
+                                        <b>Salary for the month of</b>&#160;
+                                        <span t-esc="o.salary_period"/>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <t t-if="o.total_worked_days &gt; 31">
+                                            <b>Days Worked &gt;31</b>
+                                        </t>
+                                        <t t-if="o.total_worked_days &lt; 31">
+                                            <strong>Days Worked &lt; 31</strong>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="col-12 row"
+                                     style="margin-left:1px;font-size:20px;border-top: 1px Solid;border-bottom:  1px Solid;">
+                                    <table style="margin-left:-15px;width:104%;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding:5px;border-bottom: 1px Solid;width:18%;">
+                                                    <span>
+                                                        <strong>Employee ID</strong>
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;text-align:left;width:30%;border-right: 1px Solid;border-bottom: 1px Solid;">
+                                                    :
+                                                    <span t-esc="o.employee_id.employee_id"/>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">
+                                                    <span>
+                                                        <strong>Doc Date</strong>
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">:
+                                                    <span t-esc="o.today_date.strftime('%d-%m-%Y')"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">
+                                                    <span>
+                                                        <strong>Trade</strong>
+                                                    </span>
+                                                </td>
+                                                <td style="width:30%;padding:5px;text-align:left;border-right: 1px Solid;border-bottom: 1px Solid;">
+                                                    :
+                                                    <span t-esc="o.employee_id.job_id.name"/>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">
+                                                    <span>
+                                                        <strong>Employee Name</strong>
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">:
+                                                    <span t-esc="o.employee_id.name"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">
+                                                    <span>&#160;
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;text-align:left;border-right: 1px Solid;border-bottom: 1px Solid;">
+                                                    <span>&#160;
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">
+                                                    <span>
+                                                        <strong>Department</strong>
+                                                    </span>
+                                                </td>
+                                                <td style="padding:5px;border-bottom: 1px Solid;">:
+                                                    <span t-esc="o.employee_id.department_id.name"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br/>
+                                <div class="col-12 row">
+                                    <div class="col-12" style="margin-left:10px;">
+                                        <table style="padding:5px;width:100%;">
+                                            <th colspan="2"
+                                                style="font-size:18px;text-align:left;width:30%;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                <span>
+                                                    <strong>Component</strong>
+                                                </span>
+                                            </th>
+                                            <th style="font-size:18px;text-align:right;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                <span>
+                                                    <strong>RO.Bz</strong>
+                                                </span>
+                                            </th>
+                                            <th style="padding:5px;width:20%;">
+                                                <span>&#160;</span>
+                                            </th>
+                                            <th style="font-size:18px;text-align:right;width:15%;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                <span>
+                                                    <strong>Payable</strong>
+                                                </span>
+                                            </th>
+                                            <tbody>
+                                                <t t-set="total" t-value="0"/>
+                                                <t t-foreach="o.line_ids" t-as="lines">
+                                                    <t t-if="lines.category_id.code!='DED' and lines.salary_rule_id.overtime != True">
+                                                        <tr>
+                                                            <td colspan="2"
+                                                                style="font-size:16px;padding:5px;width:30%;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="lines.name"/>
+                                                            </td>
+                                                            <td style="text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="'%.3f'% lines.amount"/>
+                                                            </td>
+                                                            <td style="font-size:16px;padding:5px;width:20%;">
+                                                                &#160;
+                                                            </td>
+                                                            <td style="width:15%;text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="'%.3f'% lines.total"/>
+                                                                <t t-set="total" t-value="total + lines.total"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <tr>
+                                                    <td style="font-size:18px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <strong>Over Time</strong>
+                                                    </td>
+                                                    <td style="text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <t t-esc="'%.3f'% o.ot_hours"/>
+                                                    </td>
+                                                    <td style="font-size:16px;padding:5px;width:20%;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        &#160;<t t-if="o.ot_hours!=0">
+                                                        <span>Hrs</span>
+                                                    </t>
+                                                    </td>
+                                                    <td style="'%.3f'% font-size:16px;padding:5px;width:20%;">
+                                                        &#160;
+                                                    </td>
+                                                    <td style="text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <t t-esc="'%.3f'% o.total_ot_amount"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4"
+                                                        style="font-size:18px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <strong>Grand Total</strong>
+                                                    </td>
+
+                                                    <td style="text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <t t-esc="'%.3f'% (total + o.total_ot_amount)"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="col-12 row">
+                                    <div class="col-12" style="margin-left:10px;">
+                                        <table style="padding:5px;width:100%;">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <span style="font-size:18px;">
+                                                            <strong>Deduction</strong>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <t t-set="deduct" t-value="0"/>
+                                                <t t-foreach="o.line_ids" t-as="lines">
+                                                    <t t-if="lines.category_id.code=='DED'">
+                                                        <tr>
+                                                            <td colspan="2"
+                                                                style="font-size:16px;padding:5px;width:35%;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="lines.name"/>
+                                                            </td>
+                                                            <td style="text-align:right;font-size:16px;width:15%;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="'%.3f'% lines.amount"/>
+                                                            </td>
+                                                            <td style="font-size:16px;padding:5px;width:20%;">
+                                                                &#160;
+                                                            </td>
+                                                            <td style="width:15%;text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                                <t t-esc="'%.3f'% lines.total"/>
+                                                                <t t-set="deduct" t-value="deduct - lines.total"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <tr>
+                                                    <td colspan="4"
+                                                        style="font-size:18px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <span>Net Payable</span>
+                                                    </td>
+                                                    <td style="text-align:right;font-size:16px;padding:5px;border-top: 1px Solid;border-left:  1px Solid;border-right:  1px Solid;border-bottom:  1px Solid;">
+                                                        <span t-esc="'%.3f'% (total + o.total_ot_amount - deduct)"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br/>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

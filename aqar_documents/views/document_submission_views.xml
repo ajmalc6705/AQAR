@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents_submission_tree" model="ir.ui.view">
+        <field name="name">documents.submission.tree</field>
+        <field name="model">document.submission</field>
+        <field name="arch" type="xml">
+            <tree default_order="ref desc">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="doc_type"/>
+                <field name="issued_authority" optional="hide"/>
+                <field name="received_date" optional="hide"/>
+                <field name="issue_date" optional="hide"/>
+                <field name="expiry_date" optional="hide"/>
+                <field name="return_date" optional="hide"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Documents Form View-->
+    <record id="documents_submission_form" model="ir.ui.view">
+        <field name="name">documents.submission.form</field>
+        <field name="model">document.submission</field>
+        <field name="arch" type="xml">
+            <form string="Document Renewal">
+                <header>
+                    <button name="action_approve" type="object" string="Approve"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,return_back"/>
+                    <button name="action_return_back" type="object" string="Return Back" states="doc_with_company"/>
+                    <button name="action_return_company" type="object" string="Document With Company"
+                            states="return_back"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" states="cancel"/>
+                    <field name="state" widget="statusbar"/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" placeholder="Document Submission"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="doc_type" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="user_ids" widget="many2many_tags" force_save="1" invisible="1"
+                                   options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"/>
+                            <field name="employee_id" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"
+                                   options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"/>
+                            <field name="received_date"
+                                   attrs="{'readonly':[('state', '=', 'doc_with_company')]}"/>
+                            <field name="return_date"
+                                   attrs="{'required':[('state', '=', 'doc_with_company')], 'readonly':[('state', '=', 'return_back')]}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="issue_date" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="expiry_date" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="issued_authority" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="file_name" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="doc_link" string="Document Link" widget="url"
+                                   placeholder="e.g. https://www.youtube.com/watch?v=CP96yVnXNrY"/>
+                            <field name="attachment_ids" widget="many2many_binary"
+                                   attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                            <field name="company_id" readonly="1"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Description" String="Description">
+                            <field name="doc_dec" attrs="{'readonly': [('state', '=', 'doc_with_company')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_doc_submission_search" model="ir.ui.view">
+        <field name="name">doc.submission.search</field>
+        <field name="model">document.submission</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="1" string="Group By">
+                    <filter name="groupby_doc_type" context="{'group_by': 'doc_type'}" string="Document Type"/>
+                    <filter name="groupby_employee_id" context="{'group_by': 'employee_id'}" string="Employee"/>
+                    <filter name="groupby_issue_date" context="{'group_by': 'issue_date'}" string="Issue Date"/>
+                    <filter name="groupby_expiry_date" context="{'group_by': 'expiry_date'}" string="Expiry Date"/>
+                    <filter name="groupby_return_date" context="{'group_by': 'return_date'}" string="Return Date"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!--    window action for Documents-->
+    <record id="action_document_submission" model="ir.actions.act_window">
+        <field name="name">Document Submission</field>
+        <field name="res_model">document.submission</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Document Submission
+            </p>
+        </field>
+    </record>
+    <!--Documents Menu -->
+    <menuitem id="document_submission_menu" name="Document Submission"
+              parent="atheer_documents.document_main_menu"
+              sequence="30"
+              action="action_document_submission"/>
+</odoo>

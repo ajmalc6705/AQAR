@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_fuel_consumption_form" model="ir.ui.view">
+            <field name="name">fuel.card.entry.form</field>
+            <field name="model">fuel.card.entry</field>
+            <field name="arch" type="xml">
+                <form string="Fuel Card Entry">
+                    <header>
+                        <button string="Confirm" name="confirm" type="object" states="draft" class="oe_highlight"/>
+                        <button string="Reset to Draft" name="reset_to_draft" type="object" states="done"
+                                class="oe_highlight"/>
+                        <button string="Create Invoice" name="create_invoice" type="object" states="done"
+                                class="oe_highlight"/>
+                        <button name="action_generate_consumption_lines" type="object" string="Add Fuel Cards"
+                                style="width: 200px !important;" class="oe_highlight"
+                                attrs="{'invisible': [('is_fuel_consumption_lines_added', '=', True)]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="button_view_move"
+                                    type="object" class="oe_stat_button" icon="fa-bars">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Invoice</span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="partner_id" required="1"
+                                       attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                <field name="bill_date" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                <field name="bill_reference" required="1"
+                                       attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                <field name="company_id" attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                       options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="is_fuel_consumption_lines_added" invisible="1"/>
+
+
+                            </group>
+                            <group>
+
+                                <label for="date_from" string="Period"/>
+                                <div class="o_row"
+                                     attrs="{'readonly': [('state', 'not in', ('draft'))]}">
+                                    <span class="text-muted">From</span>
+                                    <field name="date_from" class="oe_inline" widget="daterange"
+                                           attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                           options="{'related_end_date': 'date_to'}" on_change="1"/>
+                                    <span class="text-muted">To</span>
+                                    <field name="date_to" class="oe_inline" widget="daterange"
+                                           options="{'related_end_date': 'date_from'}" on_change="1"
+                                    />
+                                </div>
+                                <field name="remarks" attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                <field name="journal_id" domain="[('type', '=', 'purchase')]"
+                                       attrs="{'readonly': [('state', '=', 'invoice')], 'invisible': [('state', '=', 'draft')]}"/>
+
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <page string="Consumptions" name="Consumptions">
+                                <field name="consumption_ids" attrs="{'readonly': [('state', 'not in', ('draft'))]}">
+                                    <tree string="Consumption" editable="bottom">
+                                        <field name="fuel_card" required="1"
+                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                        <field name="vehicle" required="1"
+                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                        <field name="analytic_distribution" widget="analytic_distribution"
+                                               string="Analytic Account"
+                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                        <field name="date" optional="hide"/>
+                                        <field name="odometer_reading"/>
+                                        <field name="fuel_consumption" optional="hide"/>
+                                        <field name="fuel_card_limit" optional="hide"/>
+                                        <field name="tax_amount" string="Consumed Amount"/>
+                                        <field name="tax_ids" widget="many2many_tags" string="VAT"/>
+                                        <field name="amount_vat" readonly="1" optional="hide"/>
+                                        <field name="amount" readonly="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="state" widget="badge" invisible="1"/>
+
+                                    </tree>
+                                </field>
+
+                                <!--                                <div class="float-end d-flex gap-1 mb-2 ms-1" name="costing_margin_below_order_lines"/>-->
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                    <group colspan="4" name="service_details" string="Service Details">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="service_charge" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"
+                                               attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                        <field name="analytic_distribution" widget="analytic_distribution"
+                                               string="Analytic Account"
+                                               options="{'no_quick_create': True, 'no_create_edit': True, 'no_open': True}"
+                                               attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                        <field name="service_tax_ids" widget="many2many_tags" string="Service VAT"
+                                               attrs="{'readonly': [('state', 'not in', ('draft'))]}"/>
+                                        <field name="total_service_amount" force_save="1" readonly="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+
+                                    </group>
+                                    <group class="oe_subtotal_footer" colspan="2" name="total_consumption"
+                                           string="Total Consumption Details">
+                                        <field name="total_amount" force_save="1" readonly="1"
+                                               string="Without Vat Amount"
+                                               widget="monetary" options="{'currency_field': 'currency_id'}"
+                                        />
+                                        <field name="total_amount_tax" force_save="1" readonly="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"
+                                        />
+                                        <field name="total_consumed_amount" force_save="1" readonly="1"
+                                               widget="monetary" options="{'currency_field': 'currency_id'}"
+                                        />
+                                    </group>
+                                    <group string="Total Bill Amount">
+                                        <field name="total_bill_amount" force_save="1" readonly="1" widget="monetary"
+                                               options="{'currency_field': 'currency_id'}"/>
+
+                                    </group>
+                                </group>
+                            </page>
+                            <!--                            <page string="Other Details" name="other_details">-->
+                            <!--                                <group>-->
+                            <!--                                    <group>-->
+                            <!--                                        <field name="fuel_charge_product" invisible="1"-->
+                            <!--                                               attrs="{'readonly': [('state', 'in', ('done'))]}"/>-->
+                            <!--                                        <field name="journal_id" domain="[('type', '=', 'purchase')]" required="1"-->
+                            <!--                                               attrs="{'readonly': [('state', 'in', ('done'))]}"/>-->
+                            <!--                                        <field name="tax_ids" widget="many2many_tags" invisible="1"-->
+                            <!--                                               attrs="{'readonly': [('state', 'in', ('done'))]}"/>-->
+                            <!--                                    </group>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_fuel_consumption_tree" model="ir.ui.view">
+            <field name="name">fuel.card.entry.tree</field>
+            <field name="model">fuel.card.entry</field>
+            <field name="arch" type="xml">
+                <tree string="Fuel Card Entry" decoration-info="state in ('draft', 'done')">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="create_uid"/>
+                    <field name="bill_date"/>
+                    <field name="service_charge" sum="Total Service Charge"/>
+                    <field name="total_amount" sum="Total Amount"/>
+                    <field name="company_id" optional="hide"/>
+                    <field name="state" decoration-info="state in ('draft', 'done')"
+                           decoration-success="state == 'invoice'" widget="badge"
+                    />
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_fuel_consumption" model="ir.actions.act_window">
+            <field name="name">Fuel Card Entry</field>
+            <field name="res_model">fuel.card.entry</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="atheer_fleet_management.view_fuel_consumption_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No data yet!
+                </p>
+                <p>
+                    Create New Fuel Card Entry
+                </p>
+            </field>
+
+        </record>
+        <menuitem id="menu_fuel_consumption" name="Fuel Card Entry" parent="fleet.fleet_vehicles"
+                  sequence="11"
+                  action="action_fuel_consumption"/>
+    </data>
+</odoo>

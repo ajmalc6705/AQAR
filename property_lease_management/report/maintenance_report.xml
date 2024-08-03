@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="scheduled_work_completion_report_tag" model="ir.actions.report">
+            <field name="name">Scheduled Work Completion Report</field>
+            <field name="model">scheduled.work.completion.wiz</field>
+            <field name="report_type">xlsx</field>
+            <field name="print_report_name">'Scheduled Work Completion Report'</field>
+            <field name="report_name">property_lease_management.work_completion_excel_report</field>
+            <field name="report_file">property_lease_management.work_completion_excel_report</field>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

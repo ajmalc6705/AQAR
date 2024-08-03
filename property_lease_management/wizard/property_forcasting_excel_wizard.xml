@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="property_forcasting_excel_wizard" model="ir.ui.view">
+            <field name="name">property.forcasting.excel.wizard.form</field>
+            <field name="model">property.forcasting.excel.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Property Forcasting Report">
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="building_select"/>
+                            <field name="building_ids" widget="many2many_tags"
+                                   attrs="{'invisible':[('building_select', '!=', 'choose')]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="button_print_report" string="Print"
+                                class="oe_highlight" type="object"
+                                icon="fa-print"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_property_forcasting_excel">
+            <field name="name">Property Forcasting Report</field>
+            <field name="res_model">property.forcasting.excel.wizard</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_property_forcasting_excel"
+                  name="Property Forcasting Report"
+                  groups="base.group_user"
+                  action="action_property_forcasting_excel"
+                  parent="property_lease_management.menu_reporting" sequence="25"/>
+    </data>
+</odoo>

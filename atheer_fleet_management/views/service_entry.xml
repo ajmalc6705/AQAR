@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_fleet_vehicle_log_inherit_services_form" model="ir.ui.view">
+            <field name="name">fleet.vehicle.log.services.inherit.form</field>
+            <field name="model">fleet.vehicle.log.services</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_log_services_view_form"/>
+            <field name="arch" type="xml">
+                <header>
+                    <button string="Confirm" name="confirm" type="object" states="new" class="oe_highlight"/>
+                    <button string="Done" name="done" type="object" states="running" class="oe_highlight"/>
+                    <button string="Cancel" name="cancel" type="object" states="new,running" class="oe_highlight"/>
+                </header>
+                <!--                <xpath expr="//field[@name='description']" position='before'>-->
+                <!--                    <field name="name" readonly="1"/>-->
+                <!--                </xpath>-->
+                <xpath expr="//div[hasclass('o_row')]" position="after">
+                    <field name="next_service_date" required="1"/>
+                    <!--                    <field name="next_odometer" required="1"/>-->
+                    <label for="next_odometer"/>
+                    <div class="o_row">
+                        <field name="next_odometer" class="w-25"/>
+                        <field name="odometer_unit" class="ps-1 ps-sm-0"/>
+                    </div>
+
+                    <field name="company_id" required="1"/>
+
+                </xpath>
+                <xpath expr="//group" position="after">
+                    <notebook>
+                        <page string="Parts Details" name="parts">
+                            <field name="parts_list" attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="qty"/>
+                                    <field name="rate"/>
+                                    <field name="remark"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Tyre Details" name="tyre">
+                            <group>
+                                <group string="Front">
+                                    <field name="rhs_front"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                    <field name="lhs_front"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                </group>
+                                <group string="Back">
+                                    <field name="rhs_rear"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                    <field name="lhs_rear"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                </group>
+                                <group string="OUT">
+                                    <field name="rhs_rear_out"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                    <field name="lhs_rear_out"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+
+                                </group>
+                                <group string="Spare">
+                                    <field name="spare_tyre"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Battery Details" name="battery">
+                            <group>
+                                <group>
+                                    <field name="battery_details"
+                                           attrs="{'readonly': [('state', 'in', ('done','cancelled'))]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </xpath>
+                <field name="description" position="before">
+                    <field name="name"/>
+                </field>
+
+
+                <field name="description" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="service_type_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="date" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="amount" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="vendor_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="vehicle_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="purchaser_id" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="odometer" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+                <field name="odometer_unit" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state', 'in', ('done','cancelled'))]}</attribute>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

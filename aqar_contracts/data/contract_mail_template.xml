@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="contract_letter_email" model="mail.template">
+            <field name="name">Contract Expiration</field>
+            <field name="model_id"
+                   ref="aqar_contracts.model_aqar_contract"/>
+            <field name="email_from">{{(user.email)}}</field>
+            <field name="subject">Expiry Notification of Contract {{ object.name }}</field>
+            <field name="description">Contract Expiry Notification mail.</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <div style="margin: 0px; padding: 0px;">
+                        <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                            Dear
+                            <br/>
+                            <br/>
+                            Your Contract
+                            <strong t-out="object.name or ''"/>
+                            is going to expire on
+                            <strong t-out="object.end_date or ''"/>
+                            <br/>
+                            <br/>
+                            Please renew it before the expiry date
+                            <br/>
+                            <br/>
+                            Regards,
+                            <br/>
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

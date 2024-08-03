@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_manpower_status_wiz" model="ir.ui.view">
+            <field name="name">manpower.status.report.wiz.form</field>
+            <field name="model">manpower.status.report.wiz</field>
+            <field name="arch" type="xml">
+                <form string="Manpower Status Report">
+                    <group>
+                        <field name="project_id" widget="many2many_tags" />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <group>
+                        <span />
+                    </group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight"
+                                type="object" icon="fa-print" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_lnc_manpower_status_report" model="ir.ui.view">
+            <field name="name">manpower.status.report.form</field>
+            <field name="model">manpower.status.report</field>
+            <field name="arch" type="xml">
+                <form string="Manpower Status">
+                    <group col="4">
+                        <field name="date" />
+                        <field name="project_id" />
+                        <field name="location_id" attrs="{'invisible': [('project_id', '=', False)]}" />
+                    </group>
+                    <footer>
+                        <button name="button_print_report" string="Print" class="oe_highlight"
+                                type="object" icon="fa-print" />
+                        <button name="print_xls" string="Print XLS Report" type="object"
+                                context="{'xls_export':1}" default_focus="1" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

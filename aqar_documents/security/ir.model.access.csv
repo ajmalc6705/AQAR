@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_documents_renewal_user,access.documents.renewal.user,model_document_renewal,atheer_documents.group_doc_user,1,1,1,0
+access_documents_renewal_admin,access.documents.renewal.admin,model_document_renewal,atheer_documents.group_doc_admin,1,1,1,1
+access_documents_submission_user,access.documents.submission_user,model_document_submission,atheer_documents.group_doc_user,1,1,1,0
+access_documents_submission_admin,access.documents.submission_admin,model_document_submission,atheer_documents.group_doc_admin,1,1,1,1

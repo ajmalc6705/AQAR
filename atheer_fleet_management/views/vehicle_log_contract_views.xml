@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="fleet_vehicle_log_contract_view_tree_inherit_log_sequence" model="ir.ui.view">
+        <field name="name">fleet_vehicle_log_contract_view_tree.inherit.log.sequence</field>
+        <field name="model">fleet.vehicle.log.contract</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="name_seq_ref"/>
+
+            </xpath>
+        </field>
+    </record>
+    <record id="fleet_vehicle_log_contract_view_form_inherit_log_sequence" model="ir.ui.view">
+        <field name="name">fleet.vehicle.log.contract.inherit.form</field>
+        <field name="model">fleet.vehicle.log.contract</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_log_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <div class="oe_title">
+                    <h1>
+                        <field name="name_seq_ref" readonly="True"/>
+                    </h1>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <!-- Loan Outstanding Report -->
+         <record id="loan_outstanding_report_xls" model="ir.actions.report">
+            <field name="name">Loan Outstanding Report</field>
+            <field name="model">hr.loan</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">atheer_hr.loan_outstanding_report.xlsx</field>
+            <field name="report_file">Loan Outstanding Report</field>
+        </record>
+    </data>
+</odoo>

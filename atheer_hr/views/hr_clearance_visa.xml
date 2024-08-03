@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_hr_clearance_form" model="ir.ui.view">
+            <field name="name">hr.clearance.form</field>
+            <field name="model">hr.clearance</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="action_visa_request"
+                                class="oe_stat_button"
+                                type="object"
+                                string="Applications">
+                            <field name="visa_applications" widget="statinfo"/>
+                        </button>
+                    </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group string="Clearance Details" name="clearance_details">
+                            <group>
+                                <field name="date_issue" />
+                                <field name="work_permit_duration" />
+                                <field name="total" />
+                                <field name="balance" />
+                            </group>
+                            <group>
+                                <field name="date_expiry" />
+                                <field name="labour_office" />
+                                <field name="used" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Clearance Details" name="clearance_details">
+                                <field name="clearance_lines" readonly="1">
+                                    <tree string="Clearance Details" editable="bottom">
+                                        <field name="job_code" />
+                                        <field name="job_id" />
+                                        <field name="total" />
+                                        <field name="visa_total" />
+                                        <field name="gender" />
+                                        <button string="Visa" name="create_visa_request" type="object" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_clearance_tree" model="ir.ui.view">
+            <field name="name">hr.clearance.tree</field>
+            <field name="model">hr.clearance</field>
+            <field name="arch" type="xml">
+                <tree string="Clearance Details" sample="1">
+                    <field name="name" />
+                    <field name="date_issue" />
+                    <field name="date_expiry" />
+                    <field name="total" />
+                    <field name="used" />
+                    <field name="balance" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_clearance_request_form" model="ir.ui.view">
+            <field name="name">hr.clearance.form</field>
+            <field name="model">hr.clearance.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!--                    todo button access-->
+                    <header>
+                        <button string="Send to Section Head" type="object" name="sent_forward" states="draft" />
+                        <button string="Send to PR Section" type="object" name="sent_forward" states="hr" />
+                        <button string="Done" type="object" name="sent_forward" states="pr" />
+
+                        <!--                        send back buttons-->
+                        <button string="Send Back" type="object" name="sent_forward" states="hr" />
+                        <button string="Send Back" type="object" name="sent_forward" states="pr" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title" attrs="{'invisible': [('state', '=', 'draft')]}" >
+                            <label for="name" string="Clearance Request"/>
+                            <h1>
+                                <field name="name" class="oe_inline"/>
+                            </h1>
+                        </div>
+                        <group string="Request Details">
+                            <field name="date_issue" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="create_uid" readonly="1" />
+                        </group>
+                        <group string="Count Details">
+                            <group>
+                                <field name="total" />
+                                <field name="used" />
+                            </group>
+                            <group>
+                                <field name="total_issued" />
+                                <field name="balance" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Clearance Details" name="clearance_details">
+                                <field name="clearance_lines"
+                                       attrs="{'invisible': [('state', 'not in', ('draft', 'hr'))]}">
+                                    <tree string="Clearance Details" editable="bottom">
+                                        <field name="job_code" />
+                                        <field name="job_id" />
+                                        <field name="division" />
+                                        <field name="total_issued" />
+                                        <field name="gender" />
+                                        <field name="state" invisible="1" />
+                                    </tree>
+                                </field>
+                                <field name="clearance_lines2"
+                                       attrs="{'invisible': [('state', 'in', ('draft', 'hr'))]}">
+                                    <tree string="Clearance Details" editable="bottom" create="0">
+                                        <field name="job_code" readonly="1" />
+                                        <field name="job_id" readonly="1" />
+                                        <field name="division" readonly="1" />
+                                        <field name="total_issued" readonly="1" />
+                                        <field name="gender" readonly="1" />
+                                        <field name="hr_clearance" />
+                                        <field name="total" />
+                                        <field name="state" invisible="1" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user" />
+                        <!--                    <field name="activity_ids" />-->
+                        <field name="message_ids" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_clearance_request_tree" model="ir.ui.view">
+            <field name="name">hr.clearance.tree</field>
+            <field name="model">hr.clearance.request</field>
+            <field name="arch" type="xml">
+                <tree string="Clearance Details" sample="1">
+                    <field name="name" />
+                    <field name="date_issue" />
+                    <field name="total" />
+                    <field name="total_issued" />
+                    <field name="used" />
+                    <field name="balance" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_clearance_details_form" model="ir.ui.view">
+            <field name="name">hr.clearance.details.form</field>
+            <field name="model">hr.clearance.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label for="hr_clearance" />
+                            <field name="hr_clearance" class="oe_inline" />
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="date_issue" />
+                                <field name="job_code" />
+                                <field name="division" />
+                            </group>
+                            <group>
+                                <field name="date_expiry" />
+                                <field name="job_id" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="total" />
+                                <field name="used" />
+                                <field name="balance" />
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Employees" name="employees">
+                                <field name="employees" widget="many2many_tags" readonly="True" />
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_clearance_details_tree" model="ir.ui.view">
+            <field name="name">hr.clearance.details_tree</field>
+            <field name="model">hr.clearance.details</field>
+            <field name="arch" type="xml">
+                <tree string="Clearance Details" sample="1">
+                    <field name="hr_clearance" />
+                    <field name="date_issue" />
+                    <field name="date_expiry" />
+                    <field name="job_code" />
+                    <field name="job_id" />
+                    <field name="division" />
+                    <field name="total" sum="Issued" />
+                    <field name="used" sum="Used" />
+                    <field name="balance" sum="Balance" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_hr_clearance_details_search">
+            <field name="name">Search view for Clearance Page</field>
+            <field name="model">hr.clearance.details</field>
+            <field name="arch" type="xml">
+                <search string="Search Clearance Details">
+                    <field name="hr_clearance" />
+                    <field name="date_issue" />
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_clearance" string="Clearance No." domain="[]"
+                                context="{'group_by':'hr_clearance'}" />
+                        <filter name="group_by_issue" string="Issue Date" domain="[]"
+                                context="{'group_by':'date_issue'}" />
+                        <filter name="group_by_expiry" string="Expiry Date" domain="[]"
+                                context="{'group_by':'date_expiry'}" />
+                        <filter name="group_by_job_code" string="Occupation Code" domain="[]"
+                                context="{'group_by':'job_code'}" />
+                        <filter name="group_by_job_id" string="Occupation " domain="[]"
+                                context="{'group_by':'job_id'}" />
+                        <filter name="group_by_division" string="Division " domain="[]"
+                                context="{'group_by':'division'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_hr_visa_form" model="ir.ui.view">
+            <field name="name">hr.visa.form</field>
+            <field name="model">hr.visa.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <!--                    todo button group access-->
+                    <header>
+                        <button string="Send to Section Head" type="object" name="sent_forward" states="draft" />
+                        <button string="Send to PR Section" type="object" name="sent_forward" states="hr" />
+                        <button string="Done" type="object" name="sent_forward" states="pr" />
+
+                        <!--                        send back buttons-->
+                        <button string="Send Back" type="object" name="sent_forward" states="hr" />
+                        <button string="Send Back" type="object" name="sent_forward" states="pr" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group string="Request Details">
+                            <field name="date_issue" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="create_uid" readonly="1" />
+                            <field name="clearance_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+<!--                            <field name="manpower_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />-->
+                        </group>
+                        <group string="Passport Details">
+                            <group>
+                                <field name="p_name" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="p_issue_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="nationality" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="passport_no" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="p_expiry" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="dob" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <group string="Job Details">
+                            <group>
+                                <field name="job_code" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="division" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="visa_number" attrs="{'readonly': [('state', '!=', 'pr')],'required': [('state', '=', 'pr')]}"/>
+                            </group>
+                            <group>
+                                <field name="job_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="job_ids" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="visa_issue_dt"
+                                       attrs="{'readonly': [('state', '!=', 'pr')],'required': [('state', '=', 'pr')]}"/>
+                            </group>
+                        </group>
+                        <!--                        <notebook>-->
+                        <!--                            <page string="Clearance Details">-->
+                        <!--                                <field name="clearance_lines" readonly="1">-->
+                        <!--                                    <tree string="Clearance Details" editable="bottom">-->
+                        <!--                                        <field name="job_code"/>-->
+                        <!--                                        <field name="job_id"/>-->
+                        <!--                                        <field name="division"/>-->
+                        <!--                                        <field name="total"/>-->
+                        <!--                                        <field name="total_issued"/>-->
+                        <!--                                        <field name="gender"/>-->
+                        <!--                                    </tree>-->
+                        <!--                                </field>-->
+                        <!--                            </page>-->
+                        <!--                        </notebook>-->
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user" />
+                        <field name="message_ids" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_visa_tree" model="ir.ui.view">
+            <field name="name">hr.visa.tree</field>
+            <field name="model">hr.visa.request</field>
+            <field name="arch" type="xml">
+                <tree string="Visa Details" sample="1">
+                    <field name="name" />
+                    <field name="date_issue" />
+                    <field name="create_uid" />
+                    <field name="passport_no" />
+                    <field name="p_expiry" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="open_view_hr_clearances_details" model="ir.actions.act_window">
+            <field name="name">Clearance Details</field>
+            <field name="res_model">hr.clearance.details</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_clearance_details_search" />
+            <!--            <field name="context">{'search_default_group_by_clearance':True}</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to here to create a new MRF.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hr_clearance_request">
+            <field name="name">Clearance Request</field>
+            <field name="res_model">hr.clearance.request</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create clearance request.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hr_clearance">
+            <field name="name">Clearance</field>
+            <field name="res_model">hr.clearance</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <!--            <field name="search_view_id" ref="view_hr_clearance_details_search"/>-->
+            <!--            <field name="context">{'search_default_group_by_clearance':True}</field>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create clearance.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="open_view_hr_visa_details">
+            <field name="name">Visa Request</field>
+            <field name="res_model">hr.visa.request</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create Visa request.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_hr_visa_cancellation_form" model="ir.ui.view">
+            <field name="name">hr.visa.cancel.request</field>
+            <field name="model">hr.visa.cancel.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Send to HR Head" type="object" name="sent_forward" states="draft"
+                                groups="atheer_hr.group_hr_pa_admin" />
+                        <button string="Send to PR Section" type="object" name="sent_forward" states="hr"
+                                groups="atheer_hr.group_top_hr_manager" />
+                        <button string="Done" type="object" name="sent_forward" states="pr"
+                                groups="atheer_hr.group_pr_admin,atheer_hr.group_pr_hod" />
+
+                        <!--                        send back buttons-->
+                        <button string="Send Back" type="object" name="sent_backward" states="hr"
+                                groups="atheer_hr.group_top_hr_manager" />
+                        <button string="Send Back" type="object" name="sent_backward" states="pr"
+                                groups="atheer_hr.group_pr_admin,atheer_hr.group_pr_hod" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                    </header>
+                    <sheet>
+
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" class="oe_inline" />
+                            </h1>
+                        </div>
+                        <group string="Employee Details">
+                            <group>
+                                <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}"
+                                       context="{'list_employee': True}" />
+                                <field name="department_id"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="date_joining" />
+                                <field name="passport_no" />
+                                <field name="p_expiry" />
+                            </group>
+                            <group>
+                                <label for="family_member" string="Family Members"/>
+                                <div>
+                                    <field name="family_member" class="oe_inline"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                </div>
+                                <field name="job_id" options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="nationality" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="p_issue_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="visa_expiry" />
+                            </group>
+                        </group>
+                        <group string="Other Details">
+                            <group>
+                                <field name="request_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="last_working_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="submitted_document" widget="many2many_tags"
+                                       options="{'create_edit':true, 'create':true, 'no_open':true}"
+                                       attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="cancellation_reason" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="departure_date" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <group string="Assign Details"
+                               attrs="{'invisible': [('state', '!=', 'pr'),('state', '!=', 'done')]}">
+                            <group>
+                                <field name="cancel_attachment"
+                                       attrs="{'readonly': [('state', '!=', 'pr')],'required': [('state', '=', 'pr')]}" />
+                                <field name="job_assigned" context="{'list_employee': True}"
+                                       attrs="{'readonly': [('state', '!=', 'pr'),('state', '!=', 'done')],'required': [('state', '=', 'pr')]}" />
+                            </group>
+                            <group>
+                                <field name="date_of_travel" attrs="{'readonly': [('state', '!=', 'pr')]}" />
+                                <field name="job_finish_date"
+                                       attrs="{'readonly': [('state', '!=', 'pr'),('state', '!=', 'done')],'required': [('state', '=', 'pr')]}" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_visa_cancellation_tree" model="ir.ui.view">
+            <field name="name">hr.visa.cancel.request</field>
+            <field name="model">hr.visa.cancel.request</field>
+            <field name="arch" type="xml">
+                <tree string="Visa Details">
+                    <field name="name" />
+                    <field name="employee_id" context="{'list_employee': True}" />
+                    <field name="last_working_date" />
+                    <field name="departure_date" />
+                    <field name="passport_no" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_hr_visa_cancel_details">
+            <field name="name">Visa Cancel Request</field>
+            <field name="res_model">hr.visa.cancel.request</field>
+            <!--            <field name="view_type">form</field>-->
+            <field name="view_mode">tree,form,search</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create Visa Cancel request.
+                </p>
+            </field>
+        </record>
+        <record id="view_hr_visa_renewal_request_form" model="ir.ui.view">
+            <field name="name">hr.visa.renew.request.form</field>
+            <field name="model">hr.visa.renew.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Send to HR Head" type="object" name="sent_forward" states="draft"
+                                groups="atheer_hr.group_hr_pa_admin" />
+                        <button string="Send to PR Section" type="object" name="sent_forward" states="hr"
+                                groups="atheer_hr.group_top_hr_manager" />
+                        <button string="Done" type="object" name="sent_forward" states="pr"
+                                groups="atheer_hr.group_pr_admin,atheer_hr.group_pr_hod" />
+
+                        <!--                        send back buttons-->
+                        <button string="Send Back" type="object" name="sent_backward" states="hr"
+                                groups="atheer_hr.group_top_hr_manager" />
+                        <button string="Send Back" type="object" name="sent_backward" states="pr"
+                                groups="atheer_hr.group_pr_admin,atheer_hr.group_pr_hod" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group string="Employee Details">
+                            <group>
+                                <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}"
+                                       context="{'list_employee': True}" />
+                                <field name="dob" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                                <field name="trade" options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="passport_no" />
+                                <field name="p_expiry" />
+                            </group>
+                            <group>
+                                <field name="department_id"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="duty_joining_date" />
+                                <field name="nationality" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                       options="{'create_edit':false, 'create':false, 'no_open':true}" />
+                                <field name="visa_expiry" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                        <group string="Trade/Job Title">
+                            <group>
+                                <field name="job_code" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                            <group>
+                                <field name="job_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_visa_renewal_request_tree" model="ir.ui.view">
+            <field name="name">hr.visa.renew.request.tree</field>
+            <field name="model">hr.visa.renew.request</field>
+            <field name="arch" type="xml">
+                <tree string="Re Details">
+                    <field name="name" />
+                    <field name="employee_id" context="{'list_employee': True}" />
+                    <field name="passport_no" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_visa_renewal_request">
+            <field name="name">Hr Visa Renew Request</field>
+            <field name="res_model">hr.visa.renew.request</field>
+            <field name="view_mode">tree,form,search</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Click to create Visa Cancel request.
+                </p>
+            </field>
+        </record>
+
+        <!--        todo menu group access-->
+        <!--        main menu for clearance-->
+        <menuitem name="VISA &amp; Clearances" id="menu_hr_clearance" sequence='4'
+                  groups="atheer_hr.group_hr_manager"
+                  web_icon="atheer_hr,static/description/clearence.png" />
+        <menuitem name="Clearance Request" parent="menu_hr_clearance" id="menu_view_hr_clearance_request"
+                  action="action_hr_clearance_request" sequence='1' />
+        <menuitem name="Clearances" parent="menu_hr_clearance" id="menu_view_hr_clearance"
+                  action="action_hr_clearance" sequence='2' />
+        <menuitem name="Clearance Details" parent="menu_hr_clearance" id="menu_open_view_hr_clearance_details"
+                  action="open_view_hr_clearances_details" sequence='10' />
+        <menuitem name="Visa Details" parent="menu_hr_clearance" id="menu_open_view_hr_visa_details"
+                  action="open_view_hr_visa_details" sequence='10' />
+        <!---->
+        <menuitem name="Visa Cancellation Request" parent="menu_hr_clearance" id="menu_open_view_hr_visa_cancel_details"
+                  action="open_view_hr_visa_cancel_details" sequence='12' />
+        <menuitem name="Visa Renewal Request" parent="menu_hr_clearance" id="menu_open_view_hr_visa_renewal_request"
+                  action="action_hr_visa_renewal_request" sequence='13' />
+
+    </data>
+</odoo>

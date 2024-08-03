@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_budget_report" model="ir.actions.report">
+        <field name="name">Sublevy Budget</field>
+        <field name="model">community.budget</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">property_community.report_community_budget</field>
+        <field name="report_file">property_community.report_community_budget</field>
+        <field name="print_report_name">"Sublevy Budget"</field>
+    </record>
+
+    <template id="report_community_budget">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h1>Sublevy Budget</h1>
+                    <table width="100%" style="border:none;font-family: 'Roboto', sans-serif;">
+                        <tr style="border:none;">
+                            <td t-if="budget" width="15%" style="font-family: Sans Regular;border:none;">
+                                <strong>
+                                    Budget
+                                </strong>
+                            </td>
+                            <td t-if="budget" style="font-family: Sans Regular;border:none;">:
+                                <t t-esc="budget"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="width:100%;font-family: Sans Regular;">
+                        <thead>
+                            <tr>
+                                <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                    Sub Levy
+                                </th>
+                                <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                    Actual Expense
+                                </th>
+                                <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                    Gross Amount
+                                </th>
+                                <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                    Application Factor
+                                </th>
+                                <th style="width:10%;text-align: left;border-top: none;border-left: none;border-right: none;border-bottom: 2px solid #ddd;">
+                                    Application Method
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="ids['data']" t-as="line">
+                                <tr>
+                                    <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                        <t t-esc="line['sub_levy_name']"/>
+                                    </td>
+                                    <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                        <t t-esc="line['total_gross_amount']"/>
+                                    </td>
+                                    <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                        <t t-esc="line['credit']"/>
+                                    </td>
+                                    <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                        <t t-esc="line['type']"/>
+                                    </td>
+                                    <td style="text-align:left;border-top:none;border-left: none;border-right: none;border-bottom:1px solid #ddd;">
+                                        <t t-if="line['type'] == 'equal'">
+                                             <t t-esc="line['budget_amount']"/>
+                                        </t>
+                                        <t t-else="">
+                                             <t t-esc="line['total_area']"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

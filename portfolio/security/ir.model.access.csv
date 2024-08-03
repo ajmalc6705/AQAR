@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_investment_portfolio,access.investment.portfolio,model_portfolio_investment,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_portfolio_user,access.investment.portfolio.user,model_portfolio_investment,portfolio.group_portfolio_user,1,1,1,1
+access_investment_sector,access.investment.sector,model_investment_sector,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_sub_sector,access.investment.sub_sector,model_investment_subsector,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_type,access.investment.type,model_investment_type,portfolio.group_portfolio_admin,1,1,1,1
+access_portfolio_purchase,access.portfolio.purchase,model_portfolio_purchase,portfolio.group_portfolio_admin,1,1,1,1
+access_portfolio_sale,access.portfolio.sale,model_portfolio_sale,portfolio.group_portfolio_admin,1,1,1,1
+access_market_updation,access.market.updation,model_market_updation,portfolio.group_portfolio_admin,1,1,1,1
+access_portfolio_dividend,access.portfolio.dividend,model_portfolio_dividend,portfolio.group_portfolio_admin,1,1,1,1
+access_share_quant,access.share_quant,model_share_quant,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_exchange,access.investment.exchange,model_investment_exchange,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_market,access.investment.market,model_investment_market,portfolio.group_portfolio_admin,1,1,1,1
+access_investment_adjustment,access.investment.adjustment,model_investment_adjustment,portfolio.group_portfolio_user,1,1,1,1
+access_adjustment_method,access.adjustment.method,model_adjustment_method,portfolio.group_portfolio_user,1,1,1,1

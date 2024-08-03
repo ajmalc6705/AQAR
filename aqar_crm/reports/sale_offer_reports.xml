@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_sale_offer_report" model="ir.actions.report">
+        <field name="name">Sale Offer</field>
+        <field name="model">crm.lead</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aqar_crm.report_sale_offer</field>
+        <field name="report_file">aqar_crm.report_sale_offer</field>
+    </record>
+
+    <template id="report_sale_offer">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <span t-field="o.seq_no"/>
+                        <br/>
+                        <span t-field="o.offer_send_date"/>
+                        <br/>
+                        <span>To</span>
+                        <br/>
+                        <span t-field="o.partner_id.name"/>
+                        <br/>
+                        <span t-field="o.partner_id.street"/>
+                        <br/>
+                        <b>
+                            <p>
+                                Subject: Intention to Sale of <span t-field="o.unit_type_id.name"/>
+                            </p>
+
+                        </b>
+                        <br/>
+                        <span>
+                            Dear Sir,
+                        </span>
+                        <br/>
+                        <span>
+                            We are glad to express our interest to sell the office units to you as per our discussions.
+                            The
+                            terms and
+                            conditions in this letter of intent are served as a proposed basis for preparation of a
+                            sales
+                            and purchase
+                            agreement.
+                            <br/>
+                            Please find sale offer as follows:
+                        </span>
+                        <table class="table table-sm" style="border: 1pt solid black;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span>Project</span>
+                                    </th>
+                                    <th>
+                                        <span>Office No.</span>
+                                    </th>
+                                    <th>
+                                        <span>Floor</span>
+                                    </th>
+                                    <th>
+                                        <span>BUA SQM</span>
+                                    </th>
+                                    <th>
+                                        <span>Purchase Price Incl. One
+                                            Parking
+                                        </span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span t-field="o.building_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.unit_id.name"/>
+                                    </td>
+                                     <td>
+<!--                                        <span t-field="o.unit_id.floor_no"/>-->
+                                        <span t-field="o.unit_id.floor_id.name"/>
+                                    </td>
+                                     <td>
+                                        <span t-field="o.unit_id.area"/>
+                                    </td>
+                                      <td>
+                                        <span t-field="o.unit_id.sale_price"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <span>Payment Terms :</span>
+                        <br/>
+                        <span t-field="o.terms_conditions_id.name"/>
+                        <br/>
+                        <span>Notes</span>
+                        <br/>
+                        <span t-field="o.sale_offer_notes"/>
+                        <br/>
+                        <span>Sincerely,</span>
+                        <br/>
+                        <span t-field="o.company_id.name"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

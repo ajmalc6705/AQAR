@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_vacancy,access.hr.vacancy,model_hr_vacancy_request,base.group_user,1,1,1,1
+access_hr_educational_qualifications,access.hr.educational.qualifications,model_educational_qualifications,base.group_user,1,1,1,1
+access_hr_certifications,access.hr.certifications,model_certifications,base.group_user,1,1,1,1

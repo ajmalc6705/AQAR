@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_lnc_sub_contract_report" model="ir.ui.view">
+            <field name="name">sub.contract.report.form</field>
+            <field name="model">sub.contract.report</field>
+            <field name="arch" type="xml">
+                <form string="Sub Contract Summary">
+                    <group col="4">
+                        <field name="date" />
+                        <field name="report_type" widget="radio" />
+                        <field name="project_id" />
+                    </group>
+                    <footer>
+                        <button name="print_xls" string="Print XLS Report" type="object"
+                                context="{'xls_export':1}" default_focus="1" class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

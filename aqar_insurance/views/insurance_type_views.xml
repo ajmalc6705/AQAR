@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="aqar_insurance_type_tree" model="ir.ui.view">
+        <field name="name">aqar.insurance.type.tree</field>
+        <field name="model">insurance.type</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_insurance_type" model="ir.actions.act_window">
+        <field name="name">Insurance Type</field>
+        <field name="res_model">insurance.type</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Insurance Type
+            </p>
+        </field>
+    </record>
+    <menuitem id="insurance_type_menu" name="Insurance Type" parent="hr.menu_hr_employee_user"
+              action="action_insurance_type" sequence="60"/>
+</odoo>

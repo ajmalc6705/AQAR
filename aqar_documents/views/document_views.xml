@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="document_attachemnts_form" model="ir.ui.view">
+        <field name="name">atheer.documents.inherit.form</field>
+        <field name="model">atheer.documents</field>
+        <field name="inherit_id" ref="atheer_documents.documents_form"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="renew_document" type="object" string="Renew Document"/>
+                </header>
+            </xpath>
+            <xpath expr="//sheet/div[hasclass('oe_title')]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="get_renewals" widget="statinfo"
+                            type="object" icon="fa-bars" string="Renewed"
+                            attrs="{'invisible': [('renew', '=', False)]}">
+                    </button>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='issue_date']" position="after">
+                <field name="renew"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="cheque_form_view" model="ir.ui.view">
+        <field name="name">cheque.form.view</field>
+        <field name="model">cheque.management</field>
+        <field name="arch" type="xml">
+            <form string="Cheque">
+                <header>
+                    <button name="confirm" string="Confirm"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'draft')]}"
+                    />
+                    <button name="print_check" class="oe_highlight" string="Print Cheque"
+                            type="object"
+                            groups="cheque_management.group_finance_manager,cheque_management.group_officer"
+                            attrs="{'invisible': ['|',('state', '!=', 'print'),('print_state', '=', 'printed')]}">
+                    </button>
+                    <button name="approve" string="APPROVE"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'print')]}"
+                            groups="cheque_management.group_finance_manager"/>
+                    <button name="sign" string="SIGN"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'pending_signature')]}"
+                            groups="cheque_management.group_owner"/>
+                    <button name="submit_to_client" string="SUBMIT TO CLIENT"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'signed')]}"/>
+                    <button name="reset_to_draft" string="RESET TO DRAFT"
+                            type="object" class="oe_highlight" attrs="{'invisible': True}"/>
+                    <button name="cancel" string="CANCEL"
+                            type="object" class="oe_highlight" attrs="{'invisible': [('state', '=', 'cancel')]}"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,print,pending_signature,signed,submitted_to_client"/>
+                    <field name="print_state" attrs="{'invisible': True}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="button_payment" type="object" class="oe_stat_button" icon="fa-bars"
+                                attrs="{'invisible': ['|',('payment_id','=',False),('state', 'in', ['draft','cancel'])]}">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Payments</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+
+                            <field name="payment_id" invisible="1"/>
+
+                            <field name="date" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="payment_type" widget="radio" options="{'horizontal': True}"
+                                   attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="partner_id"
+                                   options="{'no_edit': True, 'no_create': True, 'no_open': True}"
+                                   attrs="{'readonly': [('state','!=','draft')],'required': [('payment_type','=','vendor')],'invisible': [('payment_type','=','other')]}"/>
+                            <field name="amount" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+
+                            <field name="include_payee" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="available_journal_ids" invisible="1"/>
+                            <field name="move_id" attrs="{'invisible': [('move_id','=',False)]}"/>
+                        </group>
+                        <group>
+                            <field name="memo" attrs="{'readonly': [('state','!=','draft')]}" string="Label"/>
+                            <field name="journal_id" required="1" attrs="{'readonly': [('state','!=','draft')]}"
+                                   options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                            <field name="debit_account_id"
+                                   attrs="{'readonly': [('state','!=','draft')],'required': [('payment_type','=','other')],'invisible': [('payment_type','!=','other')]}"/>
+                            <field name="bearer" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="cheque_no" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="effective_date" required="1" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            <field name="check_amount_in_words" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="bills" string="Bill Details">
+                            <field name="bill_ids" force_save="1"
+                            >
+                                <tree>
+                                    <field name="name" force_save="1" readonly="1"/>
+                                    <field name="invoice_date" string="Bill Date" force_save="1" readonly="1"/>
+                                    <field name="ref" force_save="1" readonly="1" optional="show"/>
+                                    <field name="amount_untaxed_signed" string="Untaxed Amount" digits="[12,3]"
+                                           force_save="1" readonly="1"/>
+                                    <field name="amount_tax_signed" string="VAT Amount" digits="[12,3]" force_save="1"
+                                           readonly="1"/>
+                                    <field name="amount_total_signed" string="Total Amount" digits="[12,3]"
+                                           force_save="1" readonly="1"/>
+                                    <field name="amount_residual_signed" string="Amount Due" digits="[12,3]"
+                                           force_save="1" readonly="1"/>
+                                    <field name="payment_state" widget="badge" force_save="1" on_change="1"
+                                           decoration-danger="payment_state == 'not_paid'"
+                                           decoration-warning="payment_state in ('partial', 'in_payment')"
+                                           decoration-success="payment_state in ('paid', 'reversed')" optional="show"
+                                           readonly="1"/>
+
+                                    <field name="state" widget="badge" decoration-success="state == 'posted'"
+                                           decoration-info="state == 'draft'" optional="show" on_change="1"
+                                           readonly="1"/>
+                                    <field name="company_id" optional="hide" readonly="1"/>
+
+
+                                </tree>
+
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <div class="o_attachment_preview"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="cheque_tree_view" model="ir.ui.view">
+        <field name="name">cheque.view.tree</field>
+        <field name="model">cheque.management</field>
+        <field name="arch" type="xml">
+            <tree string="Cheque" default_order="date desc">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="payment_type"/>
+                <field name="date"/>
+                <field name="journal_id"/>
+                <field name="memo" optional="hide" string="Label"/>
+                <field name="bearer" optional="hide"/>
+                <field name="cheque_no" optional="hide"/>
+                <field name="effective_date" optional="hide"/>
+                <field name="amount"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_cheque_management" model="ir.actions.act_window">
+        <field name="name">Cheque</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">cheque.management</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new cheque
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_cheque_management"
+              name="Cheque Management"
+              parent="account.menu_finance_payables"
+              action="action_cheque_management"
+    />
+</odoo>

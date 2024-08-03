@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="building_area_1" model="building.area">
+            <field name="name">Muttrah - al Jissa</field>
+        </record>
+        <record id="building_area_2" model="building.area">
+            <field name="name">Muttrah - Hillat Bait Al Falaj Airport</field>
+        </record>
+        <record id="building_area_3" model="building.area">
+            <field name="name">Muttrah - Industrial of Wadi Kabir</field>
+        </record>
+        <record id="building_area_4" model="building.area">
+            <field name="name">Muttrah - al Hamriyya</field>
+        </record>
+        <record id="building_area_5" model="building.area">
+            <field name="name">Muttrah - Wadi Adai</field>
+        </record>
+        <record id="building_area_6" model="building.area">
+            <field name="name">Muttrah - Yankit</field>
+        </record>
+        <record id="building_area_7" model="building.area">
+            <field name="name">Muttrah - Ruwi</field>
+        </record>
+        <record id="building_area_8" model="building.area">
+            <field name="name">Muttrah - اللحلو</field>
+        </record>
+        <record id="building_area_9" model="building.area">
+            <field name="name">Muttrah - Yiti</field>
+        </record>
+        <record id="building_area_10" model="building.area">
+            <field name="name">Muttrah - District money market</field>
+        </record>
+        <record id="building_area_11" model="building.area">
+            <field name="name">Muttrah - Mutrah</field>
+        </record>
+        <record id="building_area_12" model="building.area">
+            <field name="name">Muttrah - Sidab</field>
+        </record>
+        <record id="building_area_13" model="building.area">
+            <field name="name">Muttrah - al Khiran</field>
+        </record>
+        <record id="building_area_14" model="building.area">
+            <field name="name">Muttrah - Bait al Falaj</field>
+        </record>
+        <record id="building_area_15" model="building.area">
+            <field name="name">Muttrah - al Bustan</field>
+        </record>
+        <record id="building_area_16" model="building.area">
+            <field name="name">Muttrah - al Sifa</field>
+        </record>
+        <record id="building_area_17" model="building.area">
+            <field name="name">Muttrah - Hillat al Nour</field>
+        </record>
+        <record id="building_area_18" model="building.area">
+            <field name="name">Muttrah - Muscat</field>
+        </record>
+        <record id="building_area_19" model="building.area">
+            <field name="name">Muttrah - BAR AL GISSA</field>
+        </record>
+        <record id="building_area_20" model="building.area">
+            <field name="name">Muttrah - Sifat al Shaikh</field>
+        </record>
+        <record id="building_area_21" model="building.area">
+            <field name="name">Muttrah - Darsait</field>
+        </record>
+        <record id="building_area_22" model="building.area">
+            <field name="name">Muttrah - Qantab</field>
+        </record>
+        <record id="building_area_23" model="building.area">
+            <field name="name">Al-Amrat - ALAMRAT INDUSTRIAL</field>
+        </record>
+        <record id="building_area_24" model="building.area">
+            <field name="name">Al-Amrat - al Atakiyya</field>
+        </record>
+        <record id="building_area_25" model="building.area">
+            <field name="name">Al-Amrat - مرتفعات العامرات</field>
+        </record>
+        <record id="building_area_26" model="building.area">
+            <field name="name">Al-Amrat - العلاية الحاجر</field>
+        </record>
+        <record id="building_area_27" model="building.area">
+            <field name="name">Al-Amrat - Jahlut</field>
+        </record>
+        <record id="building_area_28" model="building.area">
+            <field name="name">Al-Amrat - al Mandhariyya</field>
+        </record>
+        <record id="building_area_29" model="building.area">
+            <field name="name">Al-Amrat - al Amirat</field>
+        </record>
+        <record id="building_area_30" model="building.area">
+            <field name="name">Al-Amrat - al Tuyan</field>
+        </record>
+        <record id="building_area_31" model="building.area">
+            <field name="name">Al-Amrat - Saih al Dhabi</field>
+        </record>
+        <record id="building_area_32" model="building.area">
+            <field name="name">Al-Amrat - al Mahaj al Shamaliyya</field>
+        </record>
+        <record id="building_area_33" model="building.area">
+            <field name="name">Al-Amrat - al Jufaina</field>
+        </record>
+        <record id="building_area_34" model="building.area">
+            <field name="name">Al-Amrat - al Amirat</field>
+        </record>
+        <record id="building_area_35" model="building.area">
+            <field name="name">Al-Amrat - Madinat al Nahda</field>
+        </record>
+        <record id="building_area_36" model="building.area">
+            <field name="name">Al-Amrat - al Hajir</field>
+        </record>
+        <record id="building_area_37" model="building.area">
+            <field name="name">Al-Amrat - Sayya</field>
+        </record>
+        <record id="building_area_38" model="building.area">
+            <field name="name">Al-Amrat - al Wadi al Kabir</field>
+        </record>
+        <record id="building_area_39" model="building.area">
+            <field name="name">Al-Amrat - al Mahaj al Janubiyya</field>
+        </record>
+        <record id="building_area_40" model="building.area">
+            <field name="name">Al-Amrat - arqy</field>
+        </record>
+        <record id="building_area_41" model="building.area">
+            <field name="name">Al-Amrat - Saih al Tamam</field>
+        </record>
+        <record id="building_area_42" model="building.area">
+            <field name="name">Al-Amrat - Second Amerat Heights</field>
+        </record>
+        <record id="building_area_43" model="building.area">
+            <field name="name">Bausher - East of Misfah</field>
+        </record>
+        <record id="building_area_44" model="building.area">
+            <field name="name">Bausher - al Ghubra al Shamaliyya</field>
+        </record>
+        <record id="building_area_45" model="building.area">
+            <field name="name">Bausher - Ghala</field>
+        </record>
+        <record id="building_area_46" model="building.area">
+            <field name="name">Bausher - al Wutayya</field>
+        </record>
+        <record id="building_area_47" model="building.area">
+            <field name="name">Bausher - al Qurum</field>
+        </record>
+        <record id="building_area_48" model="building.area">
+            <field name="name">Bausher - Falaj al Sham</field>
+        </record>
+        <record id="building_area_49" model="building.area">
+            <field name="name">Bausher - Alawabi</field>
+        </record>
+        <record id="building_area_50" model="building.area">
+            <field name="name">Bausher - aL Ansab</field>
+        </record>
+        <record id="building_area_51" model="building.area">
+            <field name="name">Bausher - Mina al Fahal</field>
+        </record>
+        <record id="building_area_52" model="building.area">
+            <field name="name">Bausher - al Khuwair al Janubiyya</field>
+        </record>
+        <record id="building_area_53" model="building.area">
+            <field name="name">Bausher - al Udhaiba al Shamaliyya</field>
+        </record>
+        <record id="building_area_54" model="building.area">
+            <field name="name">Bausher - Madinat al Sultan Qaboos</field>
+        </record>
+        <record id="building_area_55" model="building.area">
+            <field name="name">Bausher - Boshar</field>
+        </record>
+        <record id="building_area_56" model="building.area">
+            <field name="name">Bausher - al Hammam</field>
+        </record>
+        <record id="building_area_57" model="building.area">
+            <field name="name">Bausher - al msfah</field>
+        </record>
+        <record id="building_area_58" model="building.area">
+            <field name="name">Bausher - Madinat al Ilam</field>
+        </record>
+        <record id="building_area_59" model="building.area">
+            <field name="name">Bausher - aflag/busher</field>
+        </record>
+        <record id="building_area_60" model="building.area">
+            <field name="name">Bausher - lgfaar</field>
+        </record>
+        <record id="building_area_61" model="building.area">
+            <field name="name">Bausher - Sinb</field>
+        </record>
+        <record id="building_area_62" model="building.area">
+            <field name="name">Bausher - Ghala Industrial</field>
+        </record>
+        <record id="building_area_63" model="building.area">
+            <field name="name">Bausher - al Saruj</field>
+        </record>
+        <record id="building_area_64" model="building.area">
+            <field name="name">Bausher - North of Misfat</field>
+        </record>
+        <record id="building_area_65" model="building.area">
+            <field name="name">Bausher - al Ghubra al Janubiyya</field>
+        </record>
+        <record id="building_area_66" model="building.area">
+            <field name="name">Bausher - al Khuwair al Shamaliyya</field>
+        </record>
+        <record id="building_area_67" model="building.area">
+            <field name="name">Seeb - Wadi al Luwami</field>
+        </record>
+        <record id="building_area_68" model="building.area">
+            <field name="name">Seeb - Murtafat al Matar</field>
+        </record>
+        <record id="building_area_69" model="building.area">
+            <field name="name">Seeb - al Mubaila al Shamaliyya</field>
+        </record>
+        <record id="building_area_70" model="building.area">
+            <field name="name">Seeb - al Mawailih al Shamaliyya</field>
+        </record>
+        <record id="building_area_71" model="building.area">
+            <field name="name">Seeb - الخوض البلاد</field>
+        </record>
+        <record id="building_area_72" model="building.area">
+            <field name="name">Seeb - Sur al Hadid</field>
+        </record>
+        <record id="building_area_73" model="building.area">
+            <field name="name">Seeb - al Khaud</field>
+        </record>
+        <record id="building_area_74" model="building.area">
+            <field name="name">Seeb - al Jafnain</field>
+        </record>
+        <record id="building_area_75" model="building.area">
+            <field name="name">Seeb - al Mubaila al Janubiyya</field>
+        </record>
+        <record id="building_area_76" model="building.area">
+            <field name="name">Seeb - الشرادي</field>
+        </record>
+        <record id="building_area_77" model="building.area">
+            <field name="name">Seeb - al Hail al Shamaliyya</field>
+        </record>
+        <record id="building_area_78" model="building.area">
+            <field name="name">Seeb - al Seeb al Jadida</field>
+        </record>
+        <record id="building_area_79" model="building.area">
+            <field name="name">Seeb - al Rusail</field>
+        </record>
+        <record id="building_area_80" model="building.area">
+            <field name="name">Seeb - المنومة</field>
+        </record>
+        <record id="building_area_81" model="building.area">
+            <field name="name">Seeb - al Mawalih al Janubiyya</field>
+        </record>
+        <record id="building_area_82" model="building.area">
+            <field name="name">Seeb - al Hail al Janubiyya</field>
+        </record>
+        <record id="building_area_83" model="building.area">
+            <field name="name">Seeb - منطقة الجامعة</field>
+        </record>
+        <record id="building_area_84" model="building.area">
+            <field name="name">Quaryat - al Mala</field>
+        </record>
+        <record id="building_area_85" model="building.area">
+            <field name="name">Quaryat - Western Shahbari</field>
+        </record>
+        <record id="building_area_86" model="building.area">
+            <field name="name">Quaryat - Quriyat</field>
+        </record>
+        <record id="building_area_87" model="building.area">
+            <field name="name">Quaryat - Quraiat</field>
+        </record>
+        <record id="building_area_88" model="building.area">
+            <field name="name">Quaryat - AL Sahel</field>
+        </record>
+        <record id="building_area_89" model="building.area">
+            <field name="name">Quaryat - قريات</field>
+        </record>
+        <record id="building_area_90" model="building.area">
+            <field name="name">Quaryat - AL SH</field>
+        </record>
+    </data>
+</odoo>

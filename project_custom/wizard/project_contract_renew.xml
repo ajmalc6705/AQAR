@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='view_project_contract_renew_form'>
+            <field name="name">project.contract.renew.form</field>
+            <field name="model">project.contract.renew</field>
+            <field eval="1" name="priority" />
+            <field name="arch" type="xml">
+                <form string="Renew Contract">
+                    <group col="4">
+                        <field name="contract_id" invisible="1" />
+                        <field name="contract_end_date" invisible="1" />
+                        <field name="start_date" />
+                        <field name="expiration_date" />
+                    </group>
+                    <footer>
+                        <button name="renew_contract" string="Renew" type="object" class="oe_highlight" />
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model='ir.actions.act_window' id='action_project_contract_renew'>
+            <field name="name">Renew Contract</field>
+            <field name="res_model">project.contract.renew</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'default_contract_id': active_id}</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

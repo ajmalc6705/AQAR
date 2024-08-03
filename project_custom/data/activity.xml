@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Project Tender activities -->
+        <!--      CSV   -->
+        <!--        access_project_delete_wizard_plan_cost,access_project_delete_wizard.plan_cost,project.model_project_delete_wizard,project_custom.group_qs_head,1,1,1,1
+        -->
+        <!--        # Commented By Ajmal-->
+        <!--        <record id="mail_act_tender_qs_approval" model="mail.activity.type">-->
+        <!--            <field name="name">Project Tender QS Head Approval</field>-->
+        <!--            <field name="icon">fa-sun-o</field>-->
+        <!--            <field name="res_model_id" ref="project_custom.model_project_tender"/>-->
+        <!--        </record>-->
+        <!--        # Commented By Ajmal-->
+        <!--        <record id="mail_act_tender_pm_approval" model="mail.activity.type">-->
+        <!--            <field name="name">Project Tender Project Manager Approval</field>-->
+        <!--            <field name="icon">fa-sun-o</field>-->
+        <!--            <field name="res_model_id" ref="project_custom.model_project_tender"/>-->
+        <!--        </record>-->
+
+        <!--        # Commented By Ajmal-->
+        <!--        <record id="mail_act_tender_coo_approval" model="mail.activity.type">-->
+        <!--            <field name="name">Project Tender COO Approval</field>-->
+        <!--            <field name="icon">fa-sun-o</field>-->
+        <!--            <field name="res_model_id" ref="project_custom.model_project_tender"/>-->
+        <!--        </record>-->
+
+        <!--        # Commented By Ajmal-->
+        <!--        <record id="mail_act_tender_ceo_approval" model="mail.activity.type">-->
+        <!--            <field name="name">Project Tender CEO Approval</field>-->
+        <!--            <field name="icon">fa-sun-o</field>-->
+        <!--            <field name="res_model_id" ref="project_custom.model_project_tender"/>-->
+        <!--        </record>-->
+    </data>
+</odoo>

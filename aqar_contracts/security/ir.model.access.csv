@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_aqar_contract,access.aqar.contract,model_aqar_contract,base.group_user,1,1,1,0
+access_group_contract_user,access.group.contract.user,model_aqar_contract,aqar_contracts.group_contract_user,1,1,1,0
+access_group_contract_user,access.group.contract.user,model_aqar_contract,aqar_contracts.group_contract_admin,1,1,1,1
+access_contract_categ,access.contract.categ,model_aqar_contract_category,base.group_user,1,1,1,1
+access_contract_duration,access.contract.duartion,model_expiry_contract_duration,base.group_user,1,1,1,1

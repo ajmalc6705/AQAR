@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+<!--        <record id="repair_policy_notice_tag" model="ir.actions.report">-->
+<!--            <field name="name">REPAIRS POLICY AND PROCEDURE DOC457</field>-->
+<!--            <field name="model">client.information</field>-->
+<!--            <field name="report_type">qweb-pdf</field>-->
+<!--            <field name="report_name">amlak_property_management.report_repair_policy_notice</field>-->
+<!--            <field name="report_file">amlak_property_management.report_repair_policy_notice</field>-->
+<!--            <field name="print_report_name">'Repair Policy And procedure DOC457'</field>-->
+<!--            <field name="binding_model_id" ref="model_client_information"/>-->
+<!--            <field name="binding_type">report</field>-->
+<!--        </record>-->
+
+<!--        <template id="report_repair_policy_notice">-->
+<!--            <t t-call="web.html_container">-->
+<!--                &lt;!&ndash;                <t t-call="web.basic_layout">&ndash;&gt;-->
+
+<!--                <div class="page">-->
+<!--                    <center>-->
+<!--                        <h1>-->
+<!--                            <strong>NOTICE</strong>-->
+<!--                            <br/>-->
+<!--                        </h1>-->
+<!--                        <h5>For ordinary repair &amp; maintenance, visit will be every SATURDAY only.</h5>-->
+<!--                    </center>-->
+<!--                    <h3>REPAIRS POLICY &amp; PROCEDURE</h3>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+<!--                        In the event that you require repairs and maintenance to be carried out at the property you-->
+<!--                        must-->
+<!--                        first contact Amlak Real Estate (via the maintenance-in-charge) Ms Raiya-->
+<!--                        raiya.amlak@gmail.com-->
+<!--                        and report what the problem is. Once we have discussed the matter with the Landlord we will-->
+<!--                        arrange for the relevant personnel to carry out the required work which tenant should allow-->
+<!--                        us-->
+<!--                        to do so inside the flat. If you seek the services of a third party without notifying and-->
+<!--                        approval from Amlak Real Estate, you will be liable for the cost of the repair-->
+<!--                    </div>-->
+
+<!--                    <p>-->
+<!--                        <b>ONLY</b>-->
+<!--                        calls and report from the <b>TENANT REGISTRED</b> in the Tenancy Agreement will be-->
+<!--                        entertained.-->
+<!--                    </p>-->
+<!--                    <h3>TAKE CARE OF YOUR PROPERTY</h3>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+<!--                        You need to look after the property and avoid causing any damage. Your responsibilities as a-->
+<!--                        tenant include:-->
+<!--                        <ul>-->
+<!--                            <li>Cleanliness – your home must be kept clean-fair wear and tear is accepted, damage is-->
+<!--                                not-->
+<!--                            </li>-->
+<!--                            <li>Carrying out basic maintenance - for example checking alarms work, changing light-->
+<!--                                bulbs etc.-->
+<!--                            </li>-->
+<!--                            <li>Tenants are not authorized to carry forward any work from outside and in order to-->
+<!--                                proceed the work from in house the gate pass must require from-->
+<!--                                <b>AMLAK REAL ESTATE</b>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+<!--                        If you cause any damage to the property or the furniture, fixtures and fittings in the-->
+<!--                        property, either accidentally or on purpose, your Landlord is entitled to make you pay for-->
+<!--                        the damage. In some cases, your Landlord may ask you to carry out the repairs yourself if it-->
+<!--                        is deemed as your responsibility.-->
+<!--                    </div>-->
+<!--                    <h3>OUT-OF-HOURS AND EMERGENCY CALL-OUTS</h3>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+<!--                        mlak Real Estate is open <b>Sunday to Thursday from 8:00am - 5:00pm.</b> You can contact the-->
+<!--                        maintenance-in charge at any time during these hours to report a repair.-->
+
+<!--                    </div>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+
+
+<!--                        If the problem is not <b>emergency</b>  you must wait and contact Amlak Real Estate-->
+<!--                        <b>during office-->
+<!--                            hours. An Emergency is classed as a situation which is sudden and dangerous, an-->
+<!--                            impending-->
+<!--                            situation that may cause injury, loss of life or severe damage to the property.-->
+<!--                        </b>-->
+
+<!--                        Thank you.-->
+
+<!--                        <b>The Management</b>-->
+<!--                        <b>Maintenance-in-Charge:</b>-->
+<!--                        (79434432), you may also contact Caretaker of the respected building for the same.-->
+
+<!--                    </div>-->
+<!--                    <center>-->
+<!--                        <h3>Tenant Vacating Procedure-->
+<!--                        </h3>-->
+<!--                    </center>-->
+<!--                    <div class="row" style="font-size:15px;!important;">-->
+<!--                        The following guidelines have been prepared to assist you at the time of vacating the-->
+<!--                        property.-->
+<!--                        Please ensure that they are carried out in order that all matters may be brought to our-->
+<!--                        satisfactory conclusion:-->
+<!--                        <ul>-->
+<!--                            <li>Non-renewal notice should be given at least 3 months prior to or before the-->
+<!--                                end/expiration of the Tenancy Agreement Period. Otherwise, the tenant must find a-->
+<!--                                replacement to occupy the property-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                In case of termination and relocation notice received by tenant from his employer-->
+<!--                                the same needs to be justify to the office and if approves can accept 1 month-->
+<!--                                notice.-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                Tenant need to pay for the month of grace period and the remaining amount for the-->
+<!--                                Municipality fees and 5% office commission if they vacate the flat before the end of-->
+<!--                                the contract period irrespective of any reason.-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                The property must be thoroughly cleaned throughout. All floor coverings require to-->
+<!--                                be cleaned as appropriate.-->
+<!--                            </li>-->
+<!--                            <li>There won't be any changes or partition work need to be carry forward inside an-->
+<!--                                apartment without informing and approved the same to the property in charge of the-->
+<!--                                building.-->
+<!--                            </li>-->
+<!--                            <li>Property must be handover in the same condition as it's receive at the time of move-->
+<!--                                in inspection.-->
+<!--                            </li>-->
+<!--                            <li>Any rubbish, debris, foodstuff etc must be disposed of correctly and not left behind-->
+<!--                                in the property. Please ensure that items of rubbish are disposed of in the-->
+<!--                                appropriate wheelie bins.-->
+<!--                            </li>-->
+<!--                            <li>Any damage incurred must be reported to our office and arrangements made to rectify-->
+<!--                                as necessary.-->
+<!--                            </li>-->
+<!--                            <li>All utility bills should be settled accordingly. Final meter readings should be-->
+<!--                                passed to our office at the time of vacating.-->
+<!--                            </li>-->
+<!--                            <li>All payments to be settled.-->
+<!--                            </li>-->
+<!--                            <li>All keys to the property must be returned to our office on the day of departure-->
+<!--                                unless alternative arrangements have been agreed by both parties.-->
+<!--                            </li>-->
+<!--                            <li>A suitable appointment should be made in order that the inventory can be agreed and-->
+<!--                                the property inspected prior to your vacating date. (Please advise Amlak Real-->
+<!--                                Estate)-->
+<!--                            </li>-->
+<!--                            <li>We trust the aforementioned requirements are clear, however should any clarification-->
+<!--                                be required please do not hesitate to contact our office.-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <div>-->
+<!--                        <strong>Agreed and Accepted:</strong>-->
+<!--                        <br/>-->
+<!--                        <br/>-->
+<!--                        <span style="border-bottom:1px solid !important;">-->
+<!--                            &lt;!&ndash;                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&ndash;&gt;-->
+<!--                        </span>-->
+<!--                        <br/>-->
+<!--                        Signature :-->
+<!--                    </div>-->
+<!--                    <br/>-->
+<!--                    <span style="min-width=300px;">-->
+<!--                        Date:&#160; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-->
+<!--                    </span>-->
+<!--                    <table width="100%" class="table"-->
+<!--                           style="padding:40px !important;border: none;!important">-->
+<!--                        <tr style="border:none;">-->
+<!--                            <td width="50%" style="border:none;">-->
+<!--                                <span>P.O Box 1459,PC130,Boushar,Sultanate Of Oman</span>-->
+<!--                                <br/>-->
+<!--                                <span>T: (+968)24499537</span>-->
+<!--                                <br/>-->
+<!--                                <span>F: (+968)24499527</span>-->
+<!--                                <br/>-->
+<!--                                <span>e :raiya.amlak@gmail.com</span>-->
+
+<!--                            </td>-->
+<!--                            <td width="50%" style="text-align:right;border:none;">-->
+
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </table>-->
+<!--                </div>-->
+
+<!--            </t>-->
+<!--        </template>-->
+    </data>
+</odoo>

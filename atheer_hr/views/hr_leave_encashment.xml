@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Leave Encashment-->
+        <record id="view_hr_leave_encashment_form" model="ir.ui.view">
+            <field name="name">hr_leave_encashment.form</field>
+            <field name="model">hr.leave.encashment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <!--Workflow-->
+                        <button name="generate_leave_encash" string="Generate Leave Encashment" type="object"
+                                attrs="{'invisible': [('state','not in',('draft'))]}"
+                                class="oe_highlight"
+                                groups="atheer_hr.group_hr_manager"/>
+
+                        <button name="sent_to_pa" string="Send to PA Administrator" type="object"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','not in',('draft'))]}"
+                                groups="atheer_hr.group_hr_manager"/>
+                        <button name="sent_to_pa_accountant" string="Send to Payroll Accountant" type="object"
+                                attrs="{'invisible': [('state','not in',('pa_admin'))]}"
+                                groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_ceo"/>
+
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','not in',('pa_admin'))]}"
+                                groups="atheer_hr.group_hr_manager"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','not in',('p_accountant'))]}"
+                                groups="atheer_hr.group_hr_accounts"/>
+                        <button name="send_back" string="Send Back" type="object"
+                                attrs="{'invisible': [('state','not in',('to_approve'))]}"
+                                groups="atheer_hr.group_hr_accounts"/>
+
+                        <button string="Send For Approval" type="object" name="sent"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','not in',('p_accountant'))]}"
+                                groups="atheer_hr.group_hr_accounts"/>
+                        <button string="Approve" type="object" name="approve"
+                                class="oe_highlight"
+                                attrs="{'invisible': [('state','not in',('to_approve'))]}"
+                                groups="atheer_hr.group_hr_accounts"/>
+                        <button name="update_payslip" type="object" string="Re-Compute"
+                                attrs="{'invisible': [('state','not in',('p_accountant'))]}"
+                                class="oe_highlight"
+                                groups="atheer_hr.group_hr_accounts">
+                            <i class="fa fa-refresh" aria-hidden="true"/>
+                        </button>
+                        <button string="Cancel"
+                                groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts"
+                                type="object" name="cancel"
+                                attrs="{'invisible': [('state','not in',('approved', 'p_accountant', 'to_approve'))]}"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,approved"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <label for="name"/>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="employee_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="used_leave" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="leave_remaining" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="elg_leaves" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="payslip_id"
+                                       attrs="{'readonly': [('state', 'not in', ('draft'))]}"
+                                       domain="[('employee_id', '=', employee_id), ('state', '!=', 'done')]"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <h2>
+                            <p>
+                                Leave Encashment is calculated on basic pay(Only)
+                            </p>
+                        </h2>
+                        <notebook>
+                            <page string="Payslip Lines">
+                                <field name="pay_lines" context="{'slip_id':payslip_id}">
+                                    <tree string="Salary Structure" create="false" colors="blue:total == 0">
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="code"/>
+                                        <field name="quantity"/>
+                                        <field name="rate"/>
+                                        <field name="amount"/>
+                                        <field name="total"/>
+                                        <field name="company_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="mrf_total">
+                                    <label for="amount_total" class="oe_subtotal_footer_separator" />
+                                    <field name="amount_total"  nolabel="1"
+                                           class="oe_subtotal_footer_separator" widget='monetary'
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                                <div class="oe_clear"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_leave_encashment_search" model="ir.ui.view">
+            <field name="name">hr.leave.encashment.search</field>
+            <field name="model">hr.leave.encashment</field>
+            <field name="arch" type="xml">
+                <search string="Leave Settlements">
+                    <field name="name" string="Reference"/>
+                    <field name="employee_id" string="Employees"/>
+                    <field name="payslip_id" string="Payslip"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_employee" string="Employee" domain="[]"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_hr_leave_encashment_tree" model="ir.ui.view">
+            <field name="name">hr_leave_encashment.tree</field>
+            <field name="model">hr.leave.encashment</field>
+            <field name="arch" type="xml">
+                <tree default_order="name desc" sample="1">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="payslip_id"/>
+                    <field name="state"/>
+                    <field name="company_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_leave_encashment" model="ir.actions.act_window">
+            <field name="name">Leave Encashment</field>
+            <field name="res_model">hr.leave.encashment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_leave_encashment_search"/>
+        </record>
+
+        <menuitem action="action_hr_leave_encashment"
+              id="hr_menu_leave_encashment"
+              parent="atheer_hr.hr_resignation"
+              name="Leave Encashment"
+              sequence="101"
+              groups="atheer_hr.group_hr_manager,atheer_hr.group_hr_accounts,atheer_hr.group_hr_ceo"/>
+
+    </data>
+</odoo>

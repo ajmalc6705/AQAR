@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_tenant_deposit_release_tree" model="ir.ui.view">
+            <field name="name">tenant_deposit_release.tree</field>
+            <field name="model">tenant.deposit.release</field>
+            <field name="arch" type="xml">
+                <tree string="Vacating Information" decoration-danger="(state == 'rejected')"
+                      decoration-info="(state == 'draft')" decoration-muted="(state  in ('property_account'))"
+                      decoration-primary="(state == 'property_head')" sample="1" create="0">
+                    <field name="reference" decoration-bf="1"/>
+                    <field name="partner_id"/>
+                    <field name="rent_id"/>
+                    <field name="building_id"/>
+                    <field name="property_id"/>
+                    <field name="security_deposit"/>
+                    <field name="amount"/>
+                    <field name="balance_amount"/>
+                    <field name="company_id"/>
+                    <field name="state" decoration-danger="(state == 'rejected')"
+                           decoration-info="(state == 'draft')"
+                           decoration-primary="(state in ('property_head','property_head'))"
+                           decoration-success="state == 'approved'"
+                           widget="badge" optional="show"/>
+                    <field name="activity_exception_decoration" widget="activity_exception"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_tenant_deposit_release_form" model="ir.ui.view">
+            <field name="name">Vacating Information</field>
+            <field name="model">tenant.deposit.release</field>
+            <field name="arch" type="xml">
+                <form string="Vacating Information">
+                    <header>
+                        <button name="button_send_to_accountat" string="Send to Accountant"
+                                groups="property_lease_management.group_property_user"
+                                type="object" class="oe_highlight" states='draft'/>
+                        <button name="button_send_to_property_head" string="Approve"
+                                groups="property_lease_management.group_property_accountant"
+                                type="object" class="oe_highlight" states='property_account'/>
+                        <button name="button_send_to_rejected" string="Reject"
+                                groups="property_lease_management.group_property_accountant"
+                                type="object" class="oe_highlight btn-warning" states='property_account'/>
+                        <button name="button_approve" string="Approve"
+                                groups="property_lease_management.group_property_head"
+                                type="object" class="oe_highlight btn-warning" states='property_head'
+                        />
+                        <button name="button_send_back" string="Send back" type="object"
+                                class="oe_highlight btn-warning" states='property_account'
+                                groups="property_lease_management.group_property_accountant"
+                        />
+                        <button name="button_send_back" string="Send back" type="object"
+                                class="oe_highlight btn-warning" states='property_head'
+                                groups="property_lease_management.group_property_head"
+
+                        />
+                        <button name="button_send_to_rejected" string="Reject" type="object"
+                                class="oe_highlight btn-warning" states='property_head'
+                                groups="property_lease_management.group_property_head"
+                        />
+                        <field name="state" widget="statusbar" statusbar_visible="open,property_head"/>
+                    </header>
+                    <sheet string="Vacating Information">
+                        <div name="button_box" position="inside">
+                            <button class="oe_stat_button" type="object"
+                                    name="get_vacating_entry"
+                                    icon="fa-pencil-square-o"
+                                    string="Accounting Entry" attrs="{'invisible':[('move_id','=',False)]}">
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="reference" class="oe_inline" readonly="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group string="Tenant Details">
+                                <field name="partner_id" domain="[('tenant','=',True), ('parent_id', '=', False)]"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="rent_id" domain="[('partner_id','=',partner_id)]"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="company_id" invisible="0" readonly="1"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
+                            </group>
+                            <group string="Building Details">
+                                <field name="building_id" readonly="1" force_save="1"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="property_id" readonly="1" force_save="1"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Lease Details">
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                            </group>
+                            <group>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Payment Details">
+                                <field name="security_deposit"/>
+                                <field name="amount"/>
+                                <field name="balance_amount" force_save="1"/>
+                            </group>
+                            <group string="Account Details">
+                                <field name="journal_id"/>
+                                <field name="account_id"/>
+                                <field name="credit_account_id"/>
+                                <field name="move_id" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page name="Deduction" string="Deduction">
+                                <field name="deduction_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="deduction_type_id" required="True"/>
+                                        <field name="ro" required="True"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="tenant_deposit_release_search_view" model="ir.ui.view">
+            <field name="name">tenant.deposit.release.search</field>
+            <field name="model">tenant.deposit.release</field>
+            <field name="arch" type="xml">
+                <search string="Vacating Information">
+                    <field name="reference"/>
+                    <field name="partner_id"/>
+                    <field name="rent_id"/>
+                    <field name="building_id"/>
+                    <field name="property_id"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building_id'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_tenant_deposit_release" model="ir.actions.act_window">
+            <field name="name">Vacating Information</field>
+            <field name="res_model">tenant.deposit.release</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <!-- <field name="context">{'search_default_building_id': 1}</field>      -->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create an Vacating Information.
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_tenant_deposit_release" action="action_tenant_deposit_release" parent="menu_rent_and_sale"
+                  sequence="30"/>
+    </data>
+</odoo>

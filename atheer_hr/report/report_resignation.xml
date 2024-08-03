@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="paperformat_af_resignation" model="report.paperformat">
+            <field name="name">European A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">20</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">15</field>
+            <field name="dpi">90</field>
+        </record>
+        <template id="report_print_resignation">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="atheer_hr.af_external_layout">
+                        <xpath expr="//div[@hasclass='header']" position="replace">
+                            <div class="header">
+                                <div class="col-12 row">
+                                    <div class="col-6 text-left">
+                                        <img t-if="o.company_id.report_image1"
+                                             t-att-src="'data:image/png;base64,%s' % to_text(o.company_id.report_image1)"
+                                             style="max-height: 75px;" alt="Logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="footer"/>
+                        </xpath>
+                        <div class="page" style="padding: 14px;font-size:18px;">
+                            <div class="col-12 row">
+                                <table style="width:60%;padding:5px;">
+                                    <tr>
+                                        <td style="text-align:left;font-size:16px;">
+                                            <strong>Reference</strong>
+                                        </td>
+                                        <td style="text-align:left;font-size:16px;">:
+                                            <t t-esc="o.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <table style="width:60%;padding:5px;">
+                                    <tr>
+                                        <td style="text-align:left;font-size:16px;">
+                                            <strong>Employee</strong>
+                                        </td>
+                                        <td style="text-align:left;font-size:16px;">:
+                                            <t t-esc="o.employee_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <span>
+                                <strong>
+                                    <u>Employee Information</u>
+                                </strong>
+                            </span>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <table style="width:100%;padding:5px;">
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Designaion</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="o.designation.name"/>
+                                        </td>
+                                        <td style="font-size:16px;">
+                                            <strong>Department</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="o.department_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Employee Category</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="dict(o.fields_get(allfields=['employee_category'])['employee_category']['selection'])[o.employee_category]"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Joining Date</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="o.joining_date"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                            <span>
+                                <strong>
+                                    <u>Resignation Information</u>
+                                </strong>
+                            </span>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <table style="width:100%;padding:5px;">
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Resignation Type</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="dict(o.fields_get(allfields=['type'])['type']['selection'])[o.type]"/>
+                                        </td>
+                                        <td style="font-size:16px;">
+                                            <strong>Resign Date</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="o.resign_date.strftime('%d-%m-%Y')"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <t t-if="o.evaluation">
+                            <span>
+                                <strong>
+                                    <u>Evaluation reference</u>
+                                </strong>
+                            </span>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <table style="width:100%;padding:5px;">
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Evaluation</strong>
+                                        </td>
+                                        <td colspan="3" style="font-size:16px;">:
+                                            <t t-esc="o.evaluation.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            </t>
+                            <br/>
+                            <br/>
+                            <span>
+                                <strong>
+                                    <u>Travel Information</u>
+                                </strong>
+                            </span>
+                            <br/>
+                            <br/>
+                            <div class="col-12 row">
+                                <table style="width:100%;padding:5px;">
+                                    <tr>
+                                        <td style="font-size:16px;">
+                                            <strong>Travel Date</strong>
+                                        </td>
+                                        <td style="font-size:16px;">:
+                                            <t t-esc="o.travel_date.strftime('%d-%m-%Y')"/>
+                                        </td>
+                                        <td t-if="o.location" style="font-size:16px;">
+                                            <strong>Location</strong>
+                                        </td>
+                                        <td t-if="o.location" style="font-size:16px;">:
+                                            <t t-esc="o.location"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td t-if="o.confirmed_travel_date" style="font-size:16px;">
+                                            <strong>Confirmed Travel Date</strong>
+                                        </td>
+                                        <td t-if="o.confirmed_travel_date" style="font-size:16px;">:
+                                            <t t-esc="o.confirmed_travel_date.strftime('%d-%m-%Y')"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <br/>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

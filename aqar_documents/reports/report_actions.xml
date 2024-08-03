@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    Document Receiving Form-->
+    <record id="action_doc_receive" model="ir.actions.report">
+        <field name="name">Document Receiving</field>
+        <field name="model">document.submission</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aqar_documents.report_document_receiving</field>
+        <field name="report_file">aqar_documents.report_document_receiving</field>
+        <field name="binding_model_id" ref="model_document_submission"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_doc_return" model="ir.actions.report">
+        <field name="name">Document Return</field>
+        <field name="model">document.submission</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aqar_documents.report_document_return</field>
+        <field name="report_file">aqar_documents.report_document_return</field>
+        <field name="binding_model_id" ref="model_document_submission"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

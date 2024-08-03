@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="action_bank_guarantee_report" model="ir.actions.report">
+        <field name="name">Bank Guarantee</field>
+        <field name="model">bank.guarantee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">aqar_accounting_updates.report_bank_guarantee</field>
+        <field name="report_file">aqar_accounting_updates.report_bank_guarantee</field>
+        <field name="binding_model_id" ref="model_bank_guarantee"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

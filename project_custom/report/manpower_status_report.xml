@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_manpower_status">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="oe_structure" />
+                    <div class="page">
+                        <center>
+                            <h3>MANPOWER STATUS REPORT</h3>
+                        </center>
+                        <br />
+                        <div class="row">
+                            <table class="table">
+                                <tr>
+                                    <th style="border:none !important;width:10% !important;">DATE</th>
+                                    <td style="border:none !important;width:40% !important;">
+                                        <t t-esc="data['form']['date']" />
+                                    </td>
+                                    <td style="border:none !important;width:10% !important;" />
+                                    <td style="border:none !important;width:40% !important;" />
+                                </tr>
+                                <tr>
+                                    <th style="border:none !important;width:10% !important;">PROJECT</th>
+                                    <t t-if="data['form']['project_id']">
+                                        <td style="border:none !important;width:40% !important;">
+                                            <t t-esc="data['form']['project_id'][1]" />
+                                        </td>
+                                    </t>
+                                    <t t-if="not data['form']['project_id']">
+                                        <td style="border:none !important;width:40% !important;">All</td>
+                                    </t>
+                                    <th style="border:none !important;width:10% !important;">LOCATION</th>
+                                    <t t-if="data['form']['location_id']">
+                                        <td style="border:none !important;width:40% !important;">
+                                            <t t-esc="data['form']['location_id'][1]" />
+                                        </td>
+                                    </t>
+                                    <t t-if="not data['form']['location_id']">
+                                        <td style="border:none !important;width:40% !important;">All</td>
+                                    </t>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <t t-if="not data['form']['project_id']">
+                                            <th style="border-bottom:1px solid;" width="2.5%" />
+                                        </t>
+                                        <t t-if="not data['form']['location_id']">
+                                            <th style="border-bottom:1px solid;">Location</th>
+                                        </t>
+                                        <th style="border-bottom:1px solid;">Manpower Required</th>
+                                        <th style="border-bottom:1px solid;">Current Manpower</th>
+                                        <th style="border-bottom:1px solid;">Employees on Leave</th>
+                                        <th style="border-bottom:1px solid;">Manpower Available</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="data['project_list']" t-as="project">
+                                        <t t-if="not data['form']['project_id']">
+                                            <tr>
+                                                <th colspan="6" style="border:none !important;">
+                                                    <span t-esc="project['name']" />
+                                                </th>
+                                            </tr>
+                                        </t>
+                                        <tr t-foreach="project['location_list']" t-as="location">
+                                            <t t-if="not data['form']['project_id']">
+                                                <td width="2.5%" style="border:none !important;"></td>
+                                            </t>
+                                            <t t-if="not data['form']['location_id']">
+                                                <td style="border:none !important;">
+                                                    <t t-esc="location['name']" />
+                                                </td>
+                                            </t>
+                                            <td class="text-right" style="border:none !important;">
+                                                <span t-esc="location['manpower']" />
+                                            </td>
+                                            <td class="text-right" style="border:none !important;">
+                                                <span t-esc="location['current_manpower']" />
+                                            </td>
+                                            <td class="text-right" style="border:none !important;">
+                                                <span t-esc="location['emp_on_leave']" />
+                                            </td>
+                                            <td class="text-right" style="border:none !important;">
+                                                <span t-esc="location['manpower_available']" />
+                                            </td>
+                                        </tr>
+                                        <t t-if="not data['form']['project_id']">
+                                            <th style="border-bottom:1px solid;" colspan="2">Total</th>
+                                            <td class="text-right" style="border-bottom:1px solid;">
+                                                <span t-esc="project['manpower']" />
+                                            </td>
+                                            <td class="text-right" style="border-bottom:1px solid;">
+                                                <span t-esc="project['current_manpower']" />
+                                            </td>
+                                            <td class="text-right" style="border-bottom:1px solid;">
+                                                <span t-esc="project['emp_on_leave']" />
+                                            </td>
+                                            <td class="text-right" style="border-bottom:1px solid;">
+                                                <span t-esc="project['manpower_available']" />
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <tr>
+                                        <t t-if="not data['form']['project_id']">
+                                            <th style="border-bottom:1px solid;border-top:1px solid" width="2.5%"></th>
+                                        </t>
+                                        <t t-if="not data['form']['location_id']">
+                                            <th style="border-bottom:1px solid;border-top:1px solid;">Grand Total</th>
+                                            <td class="text-right"
+                                                style="border-bottom:1px solid;border-top:1px solid;">
+                                                <span t-esc="data['total']['manpower']" />
+                                            </td>
+                                            <td class="text-right"
+                                                style="border-bottom:1px solid;border-top:1px solid;">
+                                                <span t-esc="data['total']['current_manpower']" />
+                                            </td>
+                                            <td class="text-right"
+                                                style="border-bottom:1px solid;border-top:1px solid;">
+                                                <span t-esc="data['total']['emp_on_leave']" />
+                                            </td>
+                                            <td class="text-right"
+                                                style="border-bottom:1px solid;border-top:1px solid;">
+                                                <span t-esc="data['total']['manpower_available']" />
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

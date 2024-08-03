@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.cron" id="expiry_notification_reminder">
+        <field name="name">Contract Expiration Notification</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_aqar_contract"/>
+        <field name="state">code</field>
+        <field name="code">model.expiry_notification_reminder()</field>
+    </record>
+</odoo>

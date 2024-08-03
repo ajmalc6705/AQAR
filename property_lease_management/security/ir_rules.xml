@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- Multi - Company Rules for Property Rent -->
+    <record id="multi_company_rule_for_property_rent" model="ir.rule">
+        <field name="name">Multi company rules: Property Rent</field>
+        <field name="model_id" ref="model_property_rent"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Monthly Bill -->
+    <record id="multi_company_rule_for_monthly_bill" model="ir.rule">
+        <field name="name">Multi company rules: Monthly Bill</field>
+        <field name="model_id" ref="model_monthly_bill"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Monthly Bill Approval-->
+    <record id="multi_company_rule_for_monthly_bill_approval" model="ir.rule">
+        <field name="name">Multi company rules: Monthly Bill Approval</field>
+        <field name="model_id" ref="model_monthly_bill_approval"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Tenant Request-->
+    <record id="multi_company_rule_for_tenant_request" model="ir.rule">
+        <field name="name">Multi company rules: Tenant Request</field>
+        <field name="model_id" ref="model_tenant_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Agreement Cancellation-->
+    <record id="multi_company_rule_for_agreement_cancellation" model="ir.rule">
+        <field name="name">Multi company rules: Agreement Cancellation</field>
+        <field name="model_id" ref="model_agreement_cancellation"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Agreement Handover-->
+    <record id="multi_company_rule_for_agreement_checklist_handover" model="ir.rule">
+        <field name="name">Multi company rules: Agreement Handover Checklist</field>
+        <field name="model_id" ref="model_property_checklist"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Agreement Takeover-->
+    <record id="multi_company_rule_for_agreement_checklist_takeover" model="ir.rule">
+        <field name="name">Multi company rules: Agreement Takeover Checklist</field>
+        <field name="model_id" ref="model_property_checklist_takeover"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for Agreement Takeover-->
+    <record id="multi_company_rule_for_tenant_deposit_release" model="ir.rule">
+        <field name="name">Multi company rules: Tenant Deposit Release</field>
+        <field name="model_id" ref="model_tenant_deposit_release"/>
+        <field name="domain_force">['|',('company_id', 'in', company_ids),('company_id','=',False)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for DISPUTE MANAGEMENT-->
+    <record id="multi_company_rule_for_dispute_cheque_bounce" model="ir.rule">
+        <field name="name">Multi company rules: Dispute Cheque Bounce</field>
+        <field name="model_id" ref="model_dispute_cheque_bounce"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <!-- Multi - Company Rules for DISPUTE LEGAL ACTION-->
+    <record id="multi_company_rule_for_dispute_legal_action" model="ir.rule">
+        <field name="name">Multi company rules: Dispute Legal Action</field>
+        <field name="model_id" ref="model_dispute_legal_action"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+
+    <!--  Property Rent User Own Document Rule -->
+    <record id="user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Rent Agreement</field>
+        <field name="model_id" ref="property_lease_management.model_property_rent"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid','=',False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+
+    <!--  Handover Checklist User Own Document Rule -->
+    <record id="handover_checklist_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Handover Checklist</field>
+        <field name="model_id" ref="property_lease_management.model_property_checklist"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+    <!--  Takeover Checklist User Own Document Rule -->
+    <record id="takeover_checklist_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Takeover Checklist</field>
+        <field name="model_id" ref="property_lease_management.model_property_checklist_takeover"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+    model_tenant_request
+    <!--  cancellation Form User Own Document Rule -->
+    <record id="agreement_cancellation_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Agreement Cancellation</field>
+        <field name="model_id" ref="property_lease_management.model_agreement_cancellation"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+
+    <!--  cancellation Form User Own Document Rule -->
+    <record id="tenant_request_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Tenant Request</field>
+        <field name="model_id" ref="property_lease_management.model_tenant_request"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+    <!--  Monthly Bill User Own Document Rule -->
+    <record id="monthly_bill_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Monthly Bill</field>
+        <field name="model_id" ref="property_lease_management.model_monthly_bill"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+    <!--  Monthly Bill Approval User Own Document Rule -->
+    <record id="monthly_bill_approval_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Monthly Bill Approval</field>
+        <field name="model_id" ref="property_lease_management.model_monthly_bill_approval"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+    <!--  Monthly Bill Approval User Own Document Rule -->
+    <record id="model_dispute_cheque_bounce_user_own_document_rule" model="ir.rule">
+        <field name="name">User Own Document Rule: Dispute Cheque Bounce</field>
+        <field name="model_id" ref="property_lease_management.model_dispute_cheque_bounce"/>
+        <field name="active" eval="True"/>
+        <field name="domain_force">['|', ('create_uid', '=', user.id), ('create_uid', '=', False),
+            ('message_follower_ids.partner_id.user_ids', 'in', [user.id])]
+        </field>
+        <field name="groups" eval="[(4, ref('property_lease_management.group_property_agreement_user_own'))]"/>
+    </record>
+
+
+</odoo>

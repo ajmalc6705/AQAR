@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+      <record id="cancel_mulkiya_reason_view_form" model="ir.ui.view">
+            <field name="name">cancel.mulkiya.form</field>
+            <field name="model">cancel.mulkiya</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Mulkiya">
+                    <group>
+                        <field name="reason" options="{'no_create_edit': True}" />
+                    </group>
+                    <footer>
+                        <button name="action_cancel_apply" string="Cancel" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="transfer_cancel_action" model="ir.actions.act_window">
+            <field name="name">Cancel Mulkiya</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cancel.mulkiya</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cancel_mulkiya_reason_view_form"/>
+            <field name="target">new</field>
+            <field name="context">{
+                'dialog_size' : 'medium',
+            }</field>
+        </record>
+</odoo>

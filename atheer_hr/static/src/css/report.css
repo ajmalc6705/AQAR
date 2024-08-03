@@ -1,0 +1,8 @@
+.table-bordered-blk {
+  border: 1px solid #00000;
+}
+
+.table-bordered-blk th,
+.table-bordered-blk td {
+  border: 1px solid #000000;
+}

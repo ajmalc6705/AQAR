@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="stock.menu_action_inventory_tree" name="Inventory Adjustments" parent="stock.menu_stock_warehouse_mgmt" sequence="10" action="stock.action_view_inventory_tree" groups="aqar_inventory_adjustment.group_allow_inventory_adjust" />
+    </data>
+</odoo>

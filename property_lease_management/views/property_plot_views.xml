@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_property_plot_tree" model="ir.ui.view">
+        <field name="name">property.plot.tree</field>
+        <field name="model">property.plot</field>
+        <field name="arch" type="xml">
+            <tree string="Plot" sample="1">
+                <field name="plot_no"/>
+                <field name="name"/>
+                <field name="purchase_date"/>
+                <field name="krooki_number"/>
+                <field name="plot_area"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_property_plot_form" model="ir.ui.view">
+        <field name="name">property.plot.form</field>
+        <field name="model">property.plot</field>
+        <field name="arch" type="xml">
+            <form string="Plot">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="plot_no" placeholder="e.g. Plot Number"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="purchase_date"/>
+                            <field name="address"/>
+                            <field name="krooki_number"/>
+                            <field name="land_usage_purpose"/>
+                            <field name="plot_area"/>
+                        </group>
+                        <group>
+                            <field name="plot_category_id"/>
+                            <field name="mulkiya_no"/>
+                            <field name="owner_id"/>
+                            <field name="phase_no"/>
+                            <field name="block_no"/>
+                            <field name="williyat"/>
+                            <field name="no_of_allowed_floors"/>
+                            <field name="plot_type"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_property_plot" model="ir.actions.act_window">
+        <field name="name">Plot</field>
+        <field name="res_model">property.plot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to create a Plot.
+            </p>
+        </field>
+    </record>
+    <menuitem id="menu_property_plot" name="Plot" action="action_property_plot" parent="menu_property" sequence="0"/>
+</odoo>

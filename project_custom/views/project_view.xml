@@ -1,0 +1,1077 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="action_lc_project_subcontract">
+            <field name="name">Sub Contract</field>
+            <field name="res_model">project.sub.contract</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_project_id': active_id, }</field>
+            <field name="domain">[('project_id', '=', active_id)]</field>
+        </record>
+
+        <record id="view_gate_pass_search" model="ir.ui.view">
+            <field name="name">project.gate_pass.search</field>
+            <field name="model">project.gate.pass</field>
+            <field name="arch" type="xml">
+                <search string="Gate Pass">
+                    <field name="name" string="Name"/>
+                    <group expand="1" string="Group By">
+                        <filter name="project" string="Project" context="{'group_by':'project'}"/>
+                        <filter name="pass_req" string="Staff/Sub Contractor" context="{'group_by':'pass_req'}"/>
+                        <filter name="pass_type" string="Pass Type" context="{'group_by':'pass_type'}"/>
+                        <filter name="status" string="Status" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- correspondence search view -->
+        <record id="view_correspondence_search" model="ir.ui.view">
+            <field name="name">project.correspondence.search</field>
+            <field name="model">project.correspondence</field>
+            <field name="arch" type="xml">
+                <search string="Correspondence">
+                    <field name="name" string="Name"/>
+                    <field name="client_ref_no" string="Client Ref. No"/>
+                    <group expand="1" string="Group By">
+                        <filter name="project" string="Project" context="{'group_by':'project'}"/>
+                        <filter name="tender" string="Tender" context="{'group_by':'tender'}"/>
+                        <filter name="action_by" string="Action By" context="{'group_by':'action_by'}"/>
+                        <filter name="type" string="Type" context="{'group_by':'type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_gatepass_form">
+            <field name="name">Gate Pass</field>
+            <field name="res_model">project.gate.pass</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_gate_pass_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new Gate Pass.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_visit_form">
+            <field name="name">Site Visit</field>
+            <field name="res_model">project.site.visit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new Site Visit.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_log_form">
+            <field name="name">Correspondence Log</field>
+            <field name="res_model">project.correspondence</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_correspondence_search"/>
+            <field name="context">{'default_project_type': 'construction' }</field>
+            <field name="domain">[('project_type','=', 'construction')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new Correspondence Log.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="open_tender_form">
+            <field name="name">Tender</field>
+            <field name="res_model">project.tender</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_tender_type': 'construction', 'tender_type': 'construction'}</field>
+            <field name="domain">[('tender_type', '=', 'construction')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new Tender.
+                </p>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="open_utility_form">
+            <field name="name">Utility Records</field>
+            <field name="res_model">project.utility</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_project_type': 'construction' }</field>
+            <field name="domain">[('project_type','=', 'construction')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a new Utility Record.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="om_attach">
+            <field name="name">O&amp;M</field>
+            <field name="res_model">ir.attachment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Search through Operation&amp;Manual Attachments.
+                </p>
+            </field>
+        </record>
+
+        <!--Added for tree_view_ref in project custom-->
+        <record id="view_employee_tree_new" model="ir.ui.view">
+            <field name="name">hr.employee.tree.new</field>
+            <field name="model">hr.employee</field>
+            <field name="arch" type="xml">
+                <tree string="Employees">
+                    <field name="name"/>
+                    <field name="work_phone"/>
+                    <field name="work_email"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="department_id"/>
+                    <field name="job_id"/>
+                    <field name="parent_id"/>
+                    <field name="coach_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_edit_project_inherit" model="ir.ui.view">
+            <field name="name">project.form.inherit</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+                <!--      Commented By AJMAL          <button name="%(portal.portal_share_action)d" position="before">-->
+                <!--                    <button name="action_confirm" string="Confirm" type="object"-->
+                <!--                            attrs="{'invisible': ['|', ('state', '!=', 'draft'),('is_contract', '=', True)]}"-->
+                <!--                            class="oe_highlight" groups="project.group_project_manager"/>-->
+                <!--                    <button name="set_open" string="Re-open project" type="object" states="pending"-->
+                <!--                            class="oe_highlight" groups="base.group_user"/>-->
+                <!--                    <button name="set_done" string="Close Project" type="object" states="open,pending"-->
+                <!--                            groups="base.group_user"/>-->
+                <!--                    <button name="%(action_project_contract_renew)d" string="Renew Contract" type="action"-->
+                <!--                            attrs="{'invisible': ['|', ('state', '!=', 'open'), ('is_contract', '=', False)]}"-->
+                <!--                            groups="base.group_user"/>-->
+                <!--                    <button name="set_open" string="Re-open project" type="object" states="cancelled,close"-->
+                <!--                            groups="base.group_user"/>-->
+                <!--                    <field name="state" widget="statusbar" statusbar_visible="open,close"/>-->
+                <!--                </button>-->
+                <!--               Commented By Ajmal <button name="attachment_tree_view" position="before">-->
+                <!--                    <button string="Stock"-->
+                <!--                            class="oe_stat_button"-->
+                <!--                            icon="fa-cubes" type="object" name="get_stock"/>-->
+                <!--                    <button string="Budget"-->
+                <!--                            class="oe_stat_button"-->
+                <!--                            icon="fa-suitcase" type="object" name="get_budget"/>-->
+
+                <!--                    <button name="open_boq" class="oe_stat_button" type="object" icon="fa-file-text"-->
+                <!--                            attrs="{'invisible': [('is_from_tender', '!=', True)]}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="boq_count"/>-->
+                <!--                            <span class="o_stat_text">BOQ</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button class="oe_stat_button" type="object" name="get_cost_and_revenue"-->
+                <!--                            icon="fa-usd" string="Cost/Revenue" widget="statinfo"/>-->
+
+                <!--                    <button name="return_mrf" class="oe_stat_button" type="object" icon="fa-cogs"-->
+                <!--                            context="{'xml_id':'open_mr_form'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="mrf_count"/>-->
+                <!--                            <span class="o_stat_text">MRS</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+                <!--                    <button name="action_return_sr" class="oe_stat_button" type="object" icon="fa-cogs"-->
+                <!--                            context="{'xml_id':'open_sr_form'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="sr_count"/>-->
+                <!--                            <span class="o_stat_text">SRS</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+                <!--                    <button name="return_po" class="oe_stat_button" type="object" icon="fa-shopping-cart"-->
+                <!--                            context="{'xml_id':'purchase_form_action'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="po_count"/>-->
+                <!--                            <span class="o_stat_text">PO</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+                <!--                    <button name="action_open_out_invoice" class="oe_stat_button" type="object" icon="fa-list">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="out_invoice_count"/>-->
+                <!--                            <span class="o_stat_text">Customer Invoices</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="action_open_in_invoice" class="oe_stat_button" type="object" icon="fa-list">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="in_invoice_count"/>-->
+                <!--                            <span class="o_stat_text">Supplier Invoices</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="om_view" class="oe_stat_button" type="object" icon="fa-envelope">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="om_count"/>-->
+                <!--                            <span class="o_stat_text">O&amp;M</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="return_log" class="oe_stat_button" type="object" icon="fa-credit-card"-->
+                <!--                            context="{'xml_id':'open_log_form'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="log_count"/>-->
+                <!--                            <span class="o_stat_text">Comm. Log</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="return_gate_pass" class="oe_stat_button" type="object" icon="fa-credit-card"-->
+                <!--                            context="{'xml_id':'action_lnc_gate_pass'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="pass_count"/>-->
+                <!--                            <span class="o_stat_text">Gate Pass</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="return_utility" class="oe_stat_button" type="object" icon="fa-plug"-->
+                <!--                            context="{'xml_id':'open_utility_form'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="utility_count"/>-->
+                <!--                            <span class="o_stat_text">Utility</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="return_site_visit" class="oe_stat_button" type="object" icon="fa-suitcase">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="visit_count"/>-->
+                <!--                            <span class="o_stat_text">Site Visits</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+
+                <!--                    <button name="return_timesheet" class="oe_stat_button" type="object" icon="fa-shopping-cart"-->
+                <!--                            context="{'xml_id':'timesheet_action_all'}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="ts_count"/>-->
+                <!--                            <span class="o_stat_text">Timesheets</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="tender_locations" class="oe_stat_button" type="object" icon="fa-list"-->
+                <!--                            context="{'default_project_id': active_id}">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="location_count"/>-->
+                <!--                            <span class="o_stat_text">Locations</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+                <!--                    <button name="%(project_custom.action_lc_project_subcontract)d" class="oe_stat_button" type="action"-->
+                <!--                            icon="fa-list">-->
+                <!--                        <div class="o_stat_info">-->
+                <!--                            <field name="sub_contract_count"/>-->
+                <!--                            <span class="o_stat_text">Sub Contract</span>-->
+                <!--                        </div>-->
+                <!--                    </button>-->
+
+
+                <!--                </button>-->
+                <!--       Commented By Ajmal         <field name="name" position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state','!=', 'draft')]}</attribute>-->
+                <!--                </field>-->
+                <xpath expr="//field[@name='name']/.." position="before">
+                    <label for="project_code"/>
+                    <h2>
+                        <field name="project_code" placeholder="Project Sequence"/>
+                    </h2>
+                    <label for="proj_code"/>
+                    <h3>
+                        <field name="proj_code" placeholder="Project Code"/>
+                    </h3>
+
+                </xpath>
+                <!--        Commented By Ajmal        <field name="label_tasks" position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state','!=', 'draft')]}-->
+                <!--                    </attribute>-->
+                <!--                </field>-->
+                <!--                Commented By Ajmal<xpath expr="//div[@name='options_active']" position="after">-->
+                <!--                    <div name="check_contract">-->
+                <!--                        <label for="project_type" class="oe_inline"/>-->
+                <!--                        <field name="project_type"/>-->
+                <!--                        &lt;!&ndash;                        Commented By Ajmal&ndash;&gt;-->
+                <!--                        &lt;!&ndash;                        <field name="project_analytic_type" invisible="1"/>&ndash;&gt;-->
+                <!--                    </div>-->
+                <!--                    <div name="check_contract">-->
+                <!--                        <field name="is_contract" class="oe_inline"-->
+                <!--                               attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                <!--                        <label for="is_contract"/>-->
+                <!--                    </div>-->
+                <!--                </xpath>-->
+                <field name="user_id" position="attributes">
+                    <attribute name="options">{'no_create_edit':True, 'no_create':True, 'no_open': True}</attribute>
+                    <!--                Commented By Ajmal      <attribute name="attrs">{'readonly': [('state','in',('close', 'cancelled'))]}</attribute>-->
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="options">{'no_create_edit':True, 'no_create':True, 'no_open': True}</attribute>
+                    <!--              Commented By Ajmal      <attribute name="attrs">{'readonly': [('state','!=', 'draft')]}</attribute>-->
+                    <attribute name="string">Client</attribute>
+
+                </field>
+                <field name="analytic_account_id" position="after">
+                    <!--          Commented By Ajmal          -->
+                    <!--                    <field name="analytic_account_group_id" attrs="{'readonly': True}"-->
+                    <!--                           options="{'no_create_edit':True, 'no_create':True, 'no_open': True}"/>-->
+                </field>
+                <xpath expr="//group[@name='extra_settings']/.." position="after">
+                    <group col="4" string="Analytic Accounts">
+                        <div class="oe_inline">
+                            <!--                      Commented By Ajmal      <field name="analytic_account_ids" widget="many2many_tags"-->
+                            <!--                                   context="{'default_group_id': analytic_account_id}"-->
+                            <!--                                   domain="[('group_id', '=', analytic_account_id)]"/>-->
+                            <button name="update_tender_analytic_accounts" string="Update from tender"
+                                    attrs="{'invisible': [('is_from_tender', '!=', True)]}"
+                                    type="object" class="oe_link"/>
+                        </div>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="is_from_tender"/>
+                            <!--                               Commented By Ajmal     attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="tender"
+                                   domain="[('state', '=', 'won')]"
+                                   attrs="{
+                                   'invisible': [('is_from_tender','=', False)],
+                                   'required': [('is_from_tender','=', True)]}"/>
+                            <!--                          Commented By Ajmal    'readonly': [('state','!=', 'draft')],-->
+                            <field name="location"/>
+                            <!--                              Commented By Ajmal       attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="location_id" readonly="1"/>
+                            <field name="construction" invisible="1"/>
+                            <field name="landscaping" invisible="1"/>
+                            <field name="location_ids" invisible="1" widget="many2many_tags"/>
+                            <field name="invoice_schedule"/>
+                            <!--                          Commented By Ajmal           attrs="{ 'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="contract_value"/>
+                            <!--                                Commented By Ajmal     attrs="{                                   'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="profit_amount"/>
+                            <!--                           Commented By Ajmal          attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                        </group>
+                        <group name="extra_settings">
+                            <field name="start_date" string="Start Date" required="1"/>
+                            <!--                          Commented By Ajmal           attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="date_end" string="End Date" required="1"/>
+                            <!--                             Commented By Ajmal        attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            <field name="manpower"/>
+                            <field name="current_manpower"/>
+                            <field name="emp_on_leave_count" string="Employees on Leave"/>
+                            <field name="manpower_available"/>
+                            <field name="manpower_status"/>
+                            <field name="status_amount"/>
+                        </group>
+                    </group>
+                </xpath>
+                <page name="settings" position="after">
+                    <page string="Drawings" name="drawings">
+                        <field name="attachment_ids" widget="many2many_binary"/>
+                    </page>
+                    <page string="Contract History">
+                        <!--                           Commented By Ajmal attrs="{'invisible': [('is_contract', '=', False)]}">-->
+                        <field name="contract_history">
+                            <tree string="Contract History">
+                                <field name="contract_id" invisible="1"/>
+                                <field name="start_date"/>
+                                <field name="expiration_date"/>
+                                <field name="history_type" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Bonds">
+                        <group>
+                            <group string="Performance Bond">
+                                <field name="bond_date_start"/>
+                                <!--                                       Commented By Ajmal  attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="bond_date_end"/>
+                                <!--                                      Commented By Ajmal   attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="bond_file"/>
+                                <!--                                     Commented By Ajmal    attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            </group>
+                            <group string="Insurance Bond">
+                                <field name="insurance_start"/>
+                                <!--                                      Commented By Ajmal   attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="insurance_end"/>
+                                <!--                                    Commented By Ajmal     attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="insurance_doc"/>
+                                <!--                                     Commented By Ajmal    attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Advance Bond">
+                                <field name="advance_bond_start"/>
+                                <!--                                       Commented By Ajmal  attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="advance_bond_end"/>
+                                <!--                                       Commented By Ajmal  attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                                <field name="advance_bond_doc"/>
+                                <!--                                        Commented By Ajmal attrs="{'readonly': [('state','!=', 'draft')]}"/>-->
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Team" name="team">
+                        <group string="Admin Team">
+                            <field name="members" string="Admin Team" widget="many2many_tags"/>
+                        </group>
+                        <group string="Workers">
+                            <group>
+                                <field name="w_supervisor" widget="many2many_tags" string="Supervisor"/>
+                                <field name="w_fm" widget="many2many_tags"/>
+                                <field name="w_sh" widget="many2many_tags"/>
+                                <field name="w_fc" widget="many2many_tags"/>
+                                <field name="w_sf" widget="many2many_tags"/>
+                                <field name="w_mason" widget="many2many_tags"/>
+                                <field name="w_tm" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="w_ppo" widget="many2many_tags"/>
+                                <field name="w_helper" widget="many2many_tags" string="Helper"/>
+                                <field name="w_sk" widget="many2many_tags"/>
+                                <field name="w_cb" widget="many2many_tags"/>
+                                <field name="w_ob" widget="many2many_tags"/>
+                                <field name="w_driver" widget="many2many_tags"/>
+                                <field name="w_jcb_rcc_optr" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <group string="MEP">
+                            <group>
+                                <field name="m_supervisor" widget="many2many_tags" string="Supervisor"/>
+                                <field name="w_elec" widget="many2many_tags"/>
+                                <field name="w_pl" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="m_helper" widget="many2many_tags" string="Helper"/>
+                                <field name="m_cable" widget="many2many_tags"/>
+                                <field name="m_ac_tech" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </page>
+                </page>
+                <!--         Commented By Ajmal         <field name="privacy_visibility" position="attributes">-->
+                <!--                    <attribute name="attrs">{'readonly': [('state','!=', 'draft')]}-->
+                <!--                    </attribute>-->
+                <!--                </field>-->
+                <field name="message_follower_ids" position="after">
+                    <field name="message_ids" widget="mail_thread"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_edit_project_inherit_kanban" model="ir.ui.view">
+            <field name="name">project.form.inherit</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <kanban position="attributes">
+                    <attribute name="on_create"></attribute>
+                </kanban>
+                <xpath expr="//a[hasclass('o_project_kanban_box')]" position="before">
+                    <field name="state" invisible="1"/>
+                    <a class="o_project_kanban_box" name="open_view_project_all_settings" type="object">
+                        <div>
+                            Settings
+                        </div>
+                    </a>
+
+                </xpath>
+            </field>
+        </record>
+
+        <record id="open_view_project_all_settings" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="view_edit_project_inherit"/>
+            <field name="target">main</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No projects found. Let's create one!
+                </p>
+                <p>
+                    Projects regroup tasks on the same topic and each have their own dashboard.
+                </p>
+            </field>
+        </record>
+
+
+        <!--        <record id="project_invoice_form" model="ir.ui.view">-->
+        <!--            <field name="name">Inherit project form : Invoicing Data</field>-->
+        <!--            <field name="model">project.project</field>-->
+        <!--            <field name="inherit_id" ref="hr_timesheet.project_invoice_form" />-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//div[@id='timesheet_settings']" position="attributes">-->
+        <!--                    <attribute name="attrs">{'readonly': [('state','!=', 'draft')]}</attribute>-->
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+        <record id="view_project_gantt" model="ir.ui.view">
+            <field name="name">project.project.gantt</field>
+            <field name="model">project.project</field>
+            <field name="arch" type="xml">
+                <gantt date_start="date_start" date_stop="date" string="Projects">
+                </gantt>
+            </field>
+        </record>
+
+        <record id="task_type_edit_state" model="ir.ui.view">
+            <field name="name">task_type_edit_state</field>
+            <field name="model">project.task.type</field>
+            <field name="inherit_id" ref="project.task_type_edit"/>
+            <field name="arch" type="xml">
+                <field name="fold" position="after">
+                    <field name="fold_statusbar"/>
+                    <field name="state"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="task_type_tree_state" model="ir.ui.view">
+            <field name="name">Project Task Type: add Fold Statusbar</field>
+            <field name="model">project.task.type</field>
+            <field name="inherit_id" ref="project.task_type_tree"/>
+            <field name="arch" type="xml">
+                <field name="fold" position="after">
+                    <field name="fold_statusbar"/>
+                    <field name="state"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Project Task form -->
+        <record id="project_task_form_stage" model="ir.ui.view">
+            <field name="name">project_task_form_stage</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <field name="stage_id" position="attributes">
+                    <attribute name="options">{'fold_field': 'fold_statusbar'}</attribute>
+                </field>
+                <field name="partner_id" position="after">
+                    <field name="state"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_utility_form" model="ir.ui.view">
+            <field name="name">project.utility.form</field>
+            <field name="model">project.utility</field>
+            <field name="arch" type="xml">
+                <form string="Utility Record">
+                    <header>
+                        <button name="verify" string="Verify" type="object" states="draft"/>
+                        <button name="cancel" string="Cancel" type="object" states="open"/>
+                        <button name="close" string="Close" type="object" states="open" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="util_type" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="responsible" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="project" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="project_type" invisible="1"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <label for="date_start" string="Duration"/>
+                                <div>
+                                    <field name="date_start" class="oe_inline"
+                                           attrs="{'readonly': [('state','!=','draft')]}"/>
+                                    -
+                                    <field name="date_end" class="oe_inline"
+                                           attrs="{'readonly': [('state','!=','draft')]}"/>
+                                </div>
+                                <field name="amount_total" attrs="{'readonly': [('state','!=','draft')]}"
+                                       required="1"/>
+                            </group>
+                        </group>
+                        <group string="Final Reading" attrs="{'invisible': [('state','!=','open')]}">
+                            <group>
+                                <field name="water_meter_id"
+                                       attrs="{'invisible': [('util_type','not in',('water'))],'readonly': [('state','!=','draft')]}"/>
+                                <field name="water_meter_reading"
+                                       attrs="{'invisible': [('util_type','not in',('water'))],'readonly': [('state','!=','draft')]}"/>
+                                <field name="elc_meter_id"
+                                       attrs="{'invisible': [('util_type','not in',('elec'))],'readonly': [('state','!=','draft')]}"/>
+                                <field name="elc_meter_reading"
+                                       attrs="{'invisible': [('util_type','not in',('elec'))],'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_utility_tree" model="ir.ui.view">
+            <field name="name">project.utility.tree</field>
+            <field name="model">project.utility</field>
+            <field name="arch" type="xml">
+                <tree string="Utility Record">
+                    <field name="name"/>
+                    <field name="project"/>
+                    <field name="responsible"/>
+                    <field name="util_type"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="amount_total"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_site_visit_form" model="ir.ui.view">
+            <field name="name">project.site.visit.form</field>
+            <field name="model">project.site.visit</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Tender">
+                    <header>
+                        <!--                        <button name="action_send_sh" string="Submit55" type="object"-->
+                        <!--                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>-->
+                        <button name="verify" string="Submit" type="object"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <button name="verify" string="Submit" type="object"
+                                attrs="{'invisible': [('state', '!=', 'section_head')]}"/>
+                        <button name="close" string="Validate" type="object" states="open" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="landscaping" invisible="1"/>
+                                <field name="type"/>
+                                <field name="tender"
+                                       attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','project')]}"/>
+                                <field name="date_visit" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="project"
+                                       attrs="{'readonly': [('state','!=','draft')],'invisible': [('type','!=','tender')]}"/>
+                                <field name="company_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="address" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="site_distance"
+                                       attrs="{'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="site_weather" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_access" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_condition" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_adj_structure" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_obstruction" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_presence" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_soil" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_extra" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_temp" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_rmc" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_resource" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_camp" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_water" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="site_elec" attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="description" class="oe_inline"
+                                   attrs="{'readonly': [('state','!=','draft')]}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_visit_tree" model="ir.ui.view">
+            <field name="name">project.visit.tree</field>
+            <field name="model">project.site.visit</field>
+            <!--            <field name="priority" eval="1"/>-->
+            <field name="arch" type="xml">
+                <tree string="Site Visit">
+                    <field name="name"/>
+                    <field name="date_visit"/>
+                    <field name="tender"/>
+                    <field name="project"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_correspondence_form" model="ir.ui.view">
+            <field name="name">project.correspondence.form</field>
+            <field name="model">project.correspondence</field>
+            <field name="arch" type="xml">
+                <form string="Correspondence Log">
+                    <header>
+                        <!-- <button name="verify" string="Verify" type="object"
+                                attrs="{'invisible': ['|', ('state','not in',('draft')), ('initiated_by', '=', uid)]}" /> -->
+                        <button name="send" string="Send for Review" type="object"
+                                attrs="{'invisible': [('state','!=','open')]}"/>
+                        <!-- <button name="close" string="Close" type="object" states="review" class="oe_highlight"
+                                attrs="{'invisible': ['|', ('state','not in',('review')), ('initiated_by', '=', uid)]}" /> -->
+                        <field name="state" widget="statusbar" statusbar_visible="draft"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="description" attrs="{'readonly': [('state','!=','draft')]}"
+                                       required="1"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="type" widget='radio' attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="tender" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="date_sent"
+                                       attrs="{'required':[('type', 'in',('out'))],'invisible':[('type', 'in',('in'))], 'readonly': [('state','!=','draft')]}"/>
+                                <field name="date_rec"
+                                       attrs="{'required':[('type', 'in',('in'))],'invisible':[('type', 'in',('out'))],'readonly': [('state','!=','draft')]}"/>
+                                <field name="due_date" attrs="{'readonly': [('state','!=','draft')]}"
+                                       required="1"/>
+                                <field name="date_response" readonly="1"/>
+                                <field name="action_by_ids" widget="many2many_tags"
+                                       options="{'no_create_edit': True, 'no_create':True, 'no_open': True}"
+                                       attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="project" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="client" attrs="{'readonly': [('state','!=','draft')]}" required="1"
+                                       context="{'res_partner_search_mode': 'customer'}"/>
+                                <field name="client_ref_no" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="initiated_by" attrs="{'readonly': [('state','!=','draft')]}"
+                                       required="1"/>
+                                <field name="responsible" widget="many2many_tags"
+                                       options="{'no_create_edit': True, 'no_create':True, 'no_open': True}"
+                                       attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="project_type" invisible="1"/>
+                            </group>
+                        </group>
+                        <group col="4" string="Correspondence Reference">
+                            <field name="in_doc"/>
+                            <field name="out_doc"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_correspondence_tree" model="ir.ui.view">
+            <field name="name">project.correspondence.tree</field>
+            <field name="model">project.correspondence</field>
+            <field name="arch" type="xml">
+                <tree string="Correspondence Log">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="project"/>
+                    <field name="client"/>
+                    <field name="client_ref_no"/>
+                    <field name="date_rec"/>
+                    <field name="initiated_by"/>
+                    <field name="action_by_ids"/>
+                    <field name="due_date"/>
+                    <field name="date_response"/>
+                    <field name="in_doc"/>
+                    <field name="out_doc"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_gate_pass_form" model="ir.ui.view">
+            <field name="name">project.gate_pass.form</field>
+            <field name="model">project.gate.pass</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Gate Pass">
+                    <header>
+                        <button string="Request" type="object" name="request" states="draft"/>
+                        <button string="Verify" type="object" name="verify" states="validate1"/>
+                        <!--<button string="Submit" type="object" name="approve" states="validate2" groups="project_custom.group_cons_ss,project_custom.group_cons_gc"/>-->
+                        <button string="Done" type="object" name="done" states="validate2"/>
+                        <button string="Cancel" type="object" name="cancel" states="draft,validate1,validate2"/>
+                        <button string="Send Back" type="object" name="send_back" states="validate1"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="requested_by"/>
+                                <field name="project" widget="many2many_tags"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group>
+                                <field name="site_place"
+                                       attrs="{'required': [('project_type', '=', 'construction')]}"/>
+                                <field name="gate_no"/>
+                            </group>
+                        </group>
+                        <group>
+                            <label for="pass_req"/>
+                            <field name="pass_req" nolabel="1" widget="radio"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="supplier_id"
+                                       attrs="{'invisible': [('pass_req','in', ['staff'])]}"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <group>
+                            <label for="pass_type"/>
+                            <field name="pass_type" nolabel="1" widget="radio"/>
+                            <field name="project_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="no_people"/>
+                                <field name="no_vehicle"/>
+                            </group>
+                            <group attrs="{'invisible': True}">
+                                <field name="project_date_start" attrs="{'readonly': [('state','!=','draft')]}"/>
+                                <field name="project_date_end" attrs="{'readonly': [('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Access Details">
+                                <field name="gate_pass_list" attrs="{'invisible': [('pass_req','not in', ['staff'])]}">
+                                    <tree editable="bottom">
+                                        <field name="employee_id"/>
+                                        <field name="designation"/>
+                                        <field name="labour_id"/>
+                                        <field name="pass_date_start"/>
+                                        <field name="pass_date_end"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="photo"/>
+                                        <field name="visa"/>
+                                        <field name="resident_card"/>
+                                    </group>
+                                    <group>
+                                        <field name="mulkiya"/>
+                                        <field name="cover_letter"/>
+                                        <field name="agreement"/>
+                                        <field name="driving_license"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_gate_pass_tree" model="ir.ui.view">
+            <field name="name">project.gate_pass.tree</field>
+            <field name="model">project.gate.pass</field>
+            <field name="arch" type="xml">
+                <tree string="Gate Pass">
+                    <field name="name"/>
+                    <field name="requested_by"/>
+                    <field name="project"/>
+                    <field name="site_place"/>
+                    <field name="gate_no"/>
+                    <field name="pass_req"/>
+                    <field name="pass_type"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="analytic_account_inherited_form2" model="ir.ui.view">
+            <field name="name">account.analytic.account.form.inherit</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field eval="18" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='project']" position="inside">
+                    <field name="construction"/>
+                    <label for="construction"/>
+                    <!--                    <field name="landscaping"/>-->
+                    <!--                    <label for="landscaping"/>-->
+                    <field name="is_construction" invisible="1"/>
+                    <field name="boq_category" invisible="1"/>
+                    <field name="is_project" invisible="1"/>
+                    <!--                    <field name="is_landscaping" invisible="1"/>-->
+                </xpath>
+                <!--    Commented By Ajmal            <button name="action_view_projects" position="attributes">-->
+                <!--                    <attribute name="invisible">[]</attribute>-->
+                <!--                </button>-->
+                <!--         Commented By Ajmal       <button name="action_view_projects" position="after">-->
+                <!--                    <button name="action_view_boq"-->
+                <!--                            class="oe_stat_button" type="object" icon="fa-file-text-o"-->
+                <!--                            attrs="{'invisible': [('boq_category', '=', False)]}">-->
+                <!--                        <field string="BOQ" name="boq_count" widget="statinfo"/>-->
+                <!--                    </button>-->
+                <!--                </button>-->
+            </field>
+        </record>
+
+        <record id="project.open_view_project_all" model="ir.actions.act_window">
+            <field name="view_mode">tree,kanban,form,gantt</field>
+            <field name="context">{
+                'default_construction': True,
+                'construction':True
+                }
+            </field>
+        </record>
+
+
+        <!--Attachments-->
+        <record id="view_attachment_form_inherit" model="ir.ui.view">
+            <field name="name">view_attachment_form_inherit</field>
+            <field name="model">ir.attachment</field>
+            <field name="inherit_id" ref="base.view_attachment_form"/>
+            <field name="arch" type="xml">
+                <field name="type" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="datas" position="before">
+                    <field name="app_type" string="Type"/>
+                    <field name="draw_type" attrs="{'invisible':[('app_type','!=','draw')]}"/>
+                </field>
+            </field>
+        </record>
+
+<!--      Commented By Ajmal    <record id="view_project_type_form" model="ir.ui.view">-->
+<!--            <field name="name">project.type.form</field>-->
+<!--            <field name="model">project.type</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Project Type">-->
+<!--                    <sheet>-->
+<!--                        <group>-->
+<!--                            &lt;!&ndash;                   Commented By Ajmal         <field name="name"/>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                    Commented By Ajmal         <field name="parent_id" domain="[('company_id', '=', company_id)]"/>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                 Commented By Ajmal             <field name="analytic_group_id" invisible="1"/>&ndash;&gt;-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            &lt;!&ndash;                      Commented By Ajmal                 <field name="description"/>&ndash;&gt;-->
+<!--&lt;!&ndash;              Commented By Ajmal                <field name="company_id" groups="base.group_multi_company"/>&ndash;&gt;-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--      Commented By Ajmal    <record id="view_project_type_tree" model="ir.ui.view">-->
+<!--            <field name="name">project.type.tree</field>-->
+<!--            <field name="model">project.type</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree string="Project Type">-->
+<!--                    <field name="name"/>-->
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--    Commented By Ajmal      <record id="action_project_type" model="ir.actions.act_window">-->
+<!--            <field name="name">Project Type</field>-->
+<!--            <field name="res_model">project.type</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">-->
+<!--                    Click to add a new project type-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+        <record id="view_project_boq_category_form" model="ir.ui.view">
+            <field name="name">project.boq.category.form</field>
+            <field name="model">project.boq.category</field>
+            <field name="arch" type="xml">
+                <form string="Project BOQ Category">
+                    <sheet>
+                        <group>
+                            <field name="code"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="amount_total" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_project_boq_category_tree" model="ir.ui.view">
+            <field name="name">project.boq.category.tree</field>
+            <field name="model">project.boq.category</field>
+            <field name="arch" type="xml">
+                <tree string="Project BOQ Category">
+                    <field name="code"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_project_boq_category" model="ir.actions.act_window">
+            <field name="name">Project BOQ Category</field>
+            <field name="res_model">project.boq.category</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to add a new project BOQ Category
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

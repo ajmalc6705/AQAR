@@ -1,0 +1,320 @@
+<odoo>
+    <record id="view_hr_leave_extra_form" model="ir.ui.view">
+        <field name="name">hr.leave.view.form</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='duration_display']" position="after">
+                <field name="rejoining_date" invisible="1" forcesave="1" readonly="0"/>
+            </xpath>
+            <xpath expr="//field[@name='number_of_days_display']" position="attributes">
+                <attribute name="attrs">{'readonly': True}</attribute>
+                <attribute name="force_save">True</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--   inherit leave tree view-->
+    <record id="hr_leave_request_tree_view_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.tree.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="before">
+                <field name="reference"/>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="department_id"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='holiday_type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+                <attribute name="string">Leave Type</attribute>
+            </xpath>
+            <xpath expr="//field[@name='duration_display']" position="after">
+                <field name="annual_leave" invisible="1"/>
+                <field name="leave_extension" invisible="1"/>
+                <field name="leave_extended" invisible="1"/>
+                <field name="annual_leave_confirmed" string="LC" widget="toggle_button"
+                       options='{"active": "Leave confirmed", "inactive": "Leave not onfirmed"}'/>
+                <field name="leave_extension" string="LE" widget="toggle_button"
+                       options='{"active": "Leave extended", "inactive": "Leave not extended"}'/>
+                <field name="leave_returned" string="LR" widget="toggle_button"
+                       options='{"active": "Leave Returned", "inactive": "Leave not returned"}'/>
+            </xpath>
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+                <attribute name="states">False</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+                <attribute name="states">False</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+                <attribute name="states">False</attribute>
+            </xpath>
+            <xpath expr="//field[@name='message_needaction']" position="after">
+                <button name="request_to_line_manager" string="Request To Line Manager" type="object"
+                        icon="fa-arrow-right"  groups="atheer_hr.group_hr_employee_staff,atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="request_to_hr" string="Request To HR" type="object" icon="fa-thumbs-up"
+                        groups="atheer_hr.group_hr_line_manager,atheer_hr.group_hr_project_manager"
+                        attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                <button name="action_approved" string="Approve" type="object" icon="fa-check"
+                        groups="atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', '!=', 'validate1')]}"/>
+
+                <button name="action_send_back" string="Send Back" type="object" icon="fa-undo"
+                        groups="atheer_hr.group_hr_line_manager"
+                        attrs="{'invisible': [('state', 'not in', 'confirm')]}"/>
+                <button name="action_send_back" string="Send Back" type="object" groups="atheer_hr.group_hr_manager"
+                        icon="fa-undo" attrs="{'invisible': [('state', 'not in', 'validate1')]}"/>
+
+                <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_line_manager"
+                        icon="fa-times" attrs="{'invisible': [('state', 'not in', 'confirm')]}"/>
+                <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_manager"
+                        icon="fa-times" attrs="{'invisible': [('state', 'not in', 'validate1')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!--   inherit leave form view-->
+    <record id="hr_leave_request_form_view_inherit" model="ir.ui.view">
+        <field name="name">hr.leave.form.inherit</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_manager"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_approve']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_refuse']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_draft']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_validate']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="request_to_line_manager" string="Request To Line Manager" type="object"
+                        class="oe_highlight" groups="atheer_hr.group_hr_employee_staff,atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                <button name="request_to_hr" string="Request To HR" type="object" class="oe_highlight"
+                        groups="atheer_hr.group_hr_line_manager,atheer_hr.group_hr_project_manager"
+                        attrs="{'invisible': [('state', '!=', 'confirm')]}"/>
+                <button name="action_approved" string="Approve" type="object" class="oe_highlight"
+                        groups="atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', '!=', 'validate1')]}"/>
+
+                <button name="action_send_back" string="Send Back" type="object"
+                        groups="atheer_hr.group_hr_line_manager"
+                        attrs="{'invisible': [('state', 'not in', 'confirm')]}"/>
+                <button name="action_send_back" string="Send Back" type="object" groups="atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', 'not in', 'validate1')]}"/>
+
+                <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_line_manager"
+                        attrs="{'invisible': [('state', 'not in', 'confirm')]}"/>
+                <button name="action_reject" string="Refuse" type="object" groups="atheer_hr.group_hr_manager"
+                        attrs="{'invisible': [('state', 'not in', 'validate1')]}"/>
+            </xpath>
+            <xpath expr="//group[1]" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+            </xpath>
+            <xpath expr="//div[@name='title']" position="replace">
+                <div class="oe_title" name="title">
+                    <field name="send_back_flag" invisible="1"/>
+                    <widget name="web_ribbon" title="Send Back" bg_color="bg-info"
+                            attrs="{'invisible': [('send_back_flag', '=', False)]}"
+                    />
+                    <h2>
+                        <field name="reference"/>
+                    </h2>
+                </div>
+            </xpath>
+            <xpath expr="//div[@name='title']" position="after">
+                <group string="Requested Details">
+                    <field name="created_user_id" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                    <field name="created_user_department" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                    <field name="created_user_designation" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                    <field name="create_date" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                </group>
+
+                <group string="Leave Details">
+                    <field name="employee_id" force_save="1" required="1"
+                           attrs="{'readonly': [('state', 'in', ['approved','validate'])]}"
+                           options="{'no_open': True, 'no_create': True}"/>
+                    <field name="department_id" options="{'no_open': True, 'no_create': True}"
+                           attrs="{'invisible': [('holiday_type', '!=', 'employee')]}"/>
+                    <field name="holiday_status_id" force_save="1"
+                           string="Leave Type"
+                           context="{'employee_id': employee_id}"
+                           attrs="{'readonly': [('state', 'in', ['approved','validate'])]}"
+                           required="1" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="leave_balance" force_save="1"/>
+                    <field name="employee_company_id" invisible="1"/>
+                    <label for="request_date_from" string="Dates"/>
+                    <div>
+                        <field name="date_from" invisible="1"/>
+                        <field name="date_to" invisible="1"/>
+                        <div class="o_row o_row_readonly o_hr_holidays_dates">
+                            <span class="oe_inline"
+                                  attrs="{'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)],'readonly': [('state', 'not in', ['validate','validate1'])]}">
+                                From
+                            </span>
+                            <field name="request_date_from" class="oe_inline" nolabel="1" force_save="1"
+                                   attrs="{'required': ['|',('date_from', '=', False), ('date_to', '=', False)],'readonly': [('state', 'in', ['validate'])]
+                                        }"/>
+                            <span class="oe_inline"
+                                  attrs="{'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)]}">
+                                To
+                            </span>
+                            <field name="request_date_to" class="oe_inline" force_save="1"
+                                   attrs="{
+                                   'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)],
+                                    'required': ['|', ('date_from', '=', False), ('date_to', '=', False)],
+                                    'readonly': [('state', 'in', ['validate'])]
+                                }"/>
+                            <field name="request_date_from_period" class="oe_inline"
+                                   string="In"
+                                   options="{'horizontal': True}"
+                                   attrs="{
+                                    'readonly': [('state', 'not in', ('draft', 'confirm'))],
+                                    'required': [('request_unit_half', '=', True)],
+                                    'invisible': [('request_unit_half', '=', False)]}"/>
+                        </div>
+                        <div class="o_row o_row_readonly oe_edit_only" style="margin-left: -2px;">
+                            <field name="request_unit_half" attrs="{'invisible': True}"/>
+                            <label for="request_unit_half" attrs="{'invisible': True}"/>
+                            <field name="request_unit_hours" invisible="1"
+                                   class="ml-5"/>
+                            <label for="request_unit_hours" invisible="1"/>
+                        </div>
+                        <div class="o_row o_row_readonly">
+                            <label for="request_hour_from" string="From"
+                                   attrs="{'invisible': [('request_unit_hours', '=', False)]}"/>
+                            <field name="request_hour_from"
+                                   attrs="{'readonly': [('state', 'in', ['validate','approved'])],'required': [('request_unit_hours', '=', True)],'invisible': [('request_unit_hours', '=', False)]}"/>
+                            <label for="request_hour_to" string="To"
+                                   attrs="{'invisible': [('request_unit_hours', '=', False)]}"/>
+                            <field name="request_hour_to"
+                                   attrs="{'readonly': [('state', 'in', ['validate','approved'])],'required': [('request_unit_hours', '=', True)],'invisible': [('request_unit_hours', '=', False)]}"/>
+                        </div>
+                    </div>
+                    <!-- When the user is leave manager, he should always see `number_of_days` to allow
+                    him to edit the value. `number_of_hours_display` is only an informative field -->
+                    <field name="name"
+                           attrs="{'readonly': [('state', 'in', ['validate','approved'])]}"
+                           widget="text"/>
+                    <field name="extension_description" attrs="{'invisible': [('leave_extended', '=', False)]}"
+                           force_save="1"/>
+                    <field name="confirm_description"
+                           attrs="{'invisible': [('annual_leave_confirmed', '=', False)]}" force_save="1"/>
+                    <field name="current_year" invisible="1"/>
+                    <field name="is_unpaid" invisible="1"/>
+                    <label for="number_of_days" string="Duration"
+                           attrs="{'invisible': [('request_unit_half', '=', True), ('leave_type_request_unit', '!=', 'hour')],
+                           'readonly': [('state', '=', 'validate')]}"/>
+                    <div>
+                        <div class="o_row">
+                            <div attrs="{'invisible': [('request_unit_half', '!=', True),('request_unit_hours', '!=', True)]}"
+                                 class="o_row">
+                                <field name="number_of_hours_text" nolabel="1" class="oe_inline"
+                                       attrs="{'invisible': [('request_unit_half', '=', True), ('leave_type_request_unit', '!=', 'hour')]}"/>
+                            </div>
+                            <div class="o_row"
+                                 attrs="{'invisible': ['|', ('request_unit_half', '=', True), ('request_unit_hours', '=', True)]}">
+                                <field name="number_of_days" nolabel="1" class="oe_inline"
+                                       attrs="{'readonly': True}" force_save="1"/>
+                                <span>Days</span>
+                            </div>
+                        </div>
+                    </div>
+                    <field name="rejoining_date"
+                           attrs="{'readonly': [('state', 'in', ['approved','validate'])]}"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="annual_leave_confirmed" invisible="1"/>
+                    <field name="leave_extension" invisible="1"/>
+                    <field name="leave_return" invisible="1"/>
+                    <field name="leave_returned" invisible="1"/>
+                    <field name="annual_leave" force_save="1" invisible="1"/>
+                    <field name="is_sick" force_save="1" invisible="1"/>
+                    <field name="payslip_state" attrs="{'readonly': [('state', 'in', ['validate'])]}"/>
+                    <field name="employee_category" invisible="1"/>
+                    <field name="leave_extended" invisible="1"/>
+                </group>
+                <separator string="Signature &amp; Remarks" />
+                <group string="Employee">
+                    <field name="emp_signature" widget="signature" string="Signature"
+                           attrs="{'readonly': [('state','!=','draft')]}"/>
+
+                </group>
+                <group string="Line Manager">
+                    <field name="lm_signature" widget="signature" string="Signature"
+                           attrs="{'readonly': [('state','!=','confirm')]}"/>
+                    <field name="line_manager_remark" force_save="1" string="Remarks"
+                           attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+                </group>
+                <group string="HR">
+                    <field name="hr_signature" widget="signature" string="Signature"
+                           attrs="{'readonly': [('state','!=','validate1')]}"/>
+                    <field name="hr_remark" force_save="1" string="Remarks"
+                           attrs="{'readonly':[('state','!=','validate1')]}"/>
+                </group>
+                <group string="Cancel Details" attrs="{'invisible':[('state','!=','refuse')]}">
+                    <field name="rejected_by" attrs="{'invisible':[('state','!=','refuse')]}"/>
+                    <field name="rejected_date" attrs="{'invisible':[('state','!=','refuse')]}"/>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Renaming the menus-->
+    <record id="hr_holidays.menu_hr_holidays_root" model="ir.ui.menu">
+        <field name="name">Leave</field>
+    </record>
+
+    <record id="hr_holidays.menu_hr_holidays_my_leaves" model="ir.ui.menu">
+        <field name="name">My Leave</field>
+    </record>
+
+    <record id="hr_holidays.hr_leave_menu_my" model="ir.ui.menu">
+        <field name="name">My Leave</field>
+    </record>
+
+    <record id="hr_holidays.hr_leave_action_my" model="ir.actions.act_window">
+        <field name="name">My Leave</field>
+    </record>
+
+    <record id="hr_holidays.menu_open_department_leave_approve" model="ir.ui.menu">
+        <field name="name">Leave</field>
+    </record>
+
+    <record id="hr_holidays.hr_leave_action_action_approve_department" model="ir.actions.act_window">
+        <field name="name">All Leave</field>
+    </record>
+
+    <record id="hr_holidays.hr_holidays_status_menu_configuration" model="ir.ui.menu">
+        <field name="name">Leave Types</field>
+    </record>
+
+    <record id="hr_holidays.menu_hr_holidays_approvals" model="ir.ui.menu">
+        <field name="groups_id" eval="[(6, 0, [ref('hr_holidays.group_hr_holidays_user')])]"/>
+    </record>
+
+</odoo>

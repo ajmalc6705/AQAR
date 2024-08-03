@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <template id="balance_confirmation_document">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <div class="text-center" style="border-bottom: 1px solid black !important;">
+                        <div class="col-2 pull-left">
+                            <img t-if="data.get('company_id').logo" t-att-src="image_data_uri(data.get('company_id').logo)" style="width:150px;height:80px;" alt="Logo"/>
+                        </div>
+                        <h3>
+                            <center><t t-esc="data['company_id'].name"/></center>
+                        </h3>
+                        <span>
+                            <t t-if="data['company_id'].street"><t t-esc="data['company_id'].street"/>, </t>
+                            <t t-if="data['company_id'].street2"><t t-esc="data['company_id'].street2"/>, </t>
+                            <t t-if="data['company_id'].city"><t t-esc="data['company_id'].city"/>, </t>
+                            <t t-if="data['company_id'].state_id"><t t-esc="data['company_id'].state_id.name"/> </t>
+                            <t t-if="data['company_id'].zip"><t t-esc="data['company_id'].zip"/>, </t>
+                            <t t-if="data['company_id'].country_id"><t t-esc="data['company_id'].country_id.name"/>, </t>
+                            <t t-if="data['company_id'].phone">Tel:<t t-esc="data['company_id'].phone"/>, </t>
+                            <t t-if="data['company_id'].mobile">Mobile:<t t-esc="data['company_id'].mobile"/>, </t>
+                            <t t-if="data['company_id'].email">Email:<t t-esc="data['company_id'].email"/>, </t>
+                            <t t-if="data['company_id'].website">Website:<t t-esc="data['company_id'].website"/>, </t>
+                        </span>
+                    </div>
+                    <h4>
+                        To,<br/>
+                        <span><t t-esc="data['partner_id'].name"/></span>
+                    </h4>
+                    <div t-if="docs" style="font-size:18px;">
+                        <h6 class="text-right"><t t-esc="data['date']"/></h6>
+                        <div>
+                            <p> Dear Sirs,</p>
+                            <p class="font-weight-bold">
+                                Sub: Balance Confirmation for Audit
+                            </p>
+                            <p> In accordance with the requirements of our auditors <span class="font-weight-bold">
+                                <t t-esc="data['auditor_id'].name"/></span>,
+                                <span>
+                                    <t t-if="data['auditor_id'].street"><t t-esc="data['auditor_id'].street"/>, </t>
+                                    <t t-if="data['auditor_id'].street2"><t t-esc="data['auditor_id'].street2"/>, </t>
+                                    <t t-if="data['auditor_id'].city"><t t-esc="data['auditor_id'].city"/>, </t>
+                                    <t t-if="data['auditor_id'].state_id"><t t-esc="data['auditor_id'].state_id.name"/> </t>
+                                    <t t-if="data['auditor_id'].zip"><t t-esc="data['auditor_id'].zip"/>, </t>
+                                    <t t-if="data['auditor_id'].country_id"><t t-esc="data['auditor_id'].country_id.name"/>, </t>
+                                </span>
+                                we request you to kindly confirm the balance in your account which as per
+                                our books is as under, on <span class="font-weight-bold" t-esc="data['balance_as_of_date']"/>.</p>
+
+                            <p>Balance OMR <span class="font-weight-bold" t-esc="data['total_balance']"/>/- due to us. Please fill up the lower portion of this
+                                letter and post it directly to our auditors in the stamped and addressed envelope
+                                enclosed for this purpose or fax to them <span t-if="data['auditor_id'].fax">at <t t-esc="data['auditor_id'].fax"/></span>.
+                                If the above amount does not agree with the balance as per your records,
+                                please send a detailed statement of our account in your books so that the difference
+                                can be reconciled. </p>
+                                <p>Your prompt reply will be highly appreciated.</p>
+                            <p>
+                                Yours Faithfully,</p>
+                            <p>
+                                <span>For <t class="font-weight-bold" t-esc="data['company_id'].name"/></span>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </p>
+                        </div>
+                        <separator />
+                        <div>
+                            <div style="border-top:1px solid black !important">
+                                <separator />
+                                <p>
+                                    To,
+                                    <div name="statement_address" style="padding-top:20px;" class="col-xs-5 col-xs-offset-7">
+                                        <address t-esc="data['auditor_id']"
+                                                 t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                    </div>
+                                </p>
+
+                                <p>Dear Sirs,</p>
+                                <p>We confirm that the balance in the account of <span class="font-weight-bold" t-esc="data['company_id'].name"/>. on
+                                    <span class="font-weight-bold" t-esc="data['balance_as_of_date']"/> is OMR <span class="font-weight-bold" t-esc="data['total_balance']"/>/- due to them.</p>
+                                <p class="font-weight-bold">OR</p>
+                                <p>The balance shown in our account by M/s <span class="font-weight-bold" t-esc="data['company_id'].name"/>. is not
+                                    correct. We are sending a statement of their account in our books.</p>
+                                <br/>
+                                <p>Yours Faithfully,</p>
+                                <p class="font-weight-bold">For</p>
+                                <div>
+                                    <span class="font-weight-bold">
+                                        Signature:
+                                    </span>
+                                    <span class="float-right font-weight-bold" style="width:50%">
+                                        Company's Name &amp; Stamp:
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p t-if="not docs">
+                        <center><strong>The partner doesn't have due entries.</strong></center>
+                    </p>
+                    <div class="footer">
+                        <div class="text-center" style="font-family:Sans Regular!important;">
+<!--                            <t t-if="data['company_id']">-->
+<!--                                <span class="font-weight-bold">-->
+<!--                                    <t t-if="data['company_id'].name"><t t-esc="data['company_id'].name"/>, </t>-->
+<!--                                </span>-->
+<!--                                <span>-->
+<!--                                    <t t-if="data['company_id'].street"><t t-esc="data['company_id'].street"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].street2"><t t-esc="data['company_id'].street2"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].city"><t t-esc="data['company_id'].city"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].state_id"><t t-esc="data['company_id'].state_id.name"/> </t>-->
+<!--                                    <t t-if="data['company_id'].zip"><t t-esc="data['company_id'].zip"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].country_id"><t t-esc="data['company_id'].country_id.name"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].phone">Tel:<t t-esc="data['company_id'].phone"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].mobile">Mobile:<t t-esc="data['company_id'].mobile"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].email">Email:<t t-esc="data['company_id'].email"/>, </t>-->
+<!--                                    <t t-if="data['company_id'].website">Website:<t t-esc="data['company_id'].website"/>, </t>-->
+<!--                                </span>-->
+<!--                            </t>-->
+
+                            <div t-if="report_type == 'pdf'" class="text-muted">
+                                Page:
+                                <span class="page"/>
+                                /
+                                <span class="topage"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <t t-if="docs" t-call="atheer_soa_report.statement_document"/>
+        </t>
+    </template>
+
+
+    <record id="paperformat_balance_confimation" model="report.paperformat">
+        <field name="name">Balance Confirmation A4</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">1</field>
+        <field name="dpi">96</field>
+    </record>
+
+
+
+    <record id="action_balance_confirmation_document_pdf" model="ir.actions.report">
+        <field name="name">Balance Confirmation Report</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">atheer_soa_report.balance_confirmation_document</field>
+        <field name="report_file">atheer_soa_report.balance_confirmation_document</field>
+        <field name="binding_type">report</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="paperformat_id" ref="paperformat_balance_confimation"/>
+    </record>
+
+</odoo>

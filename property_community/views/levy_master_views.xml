@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="levy_master_tree" model="ir.ui.view">
+        <field name="name">levy.tree</field>
+        <field name="model">levy.master</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="levy_code"/>
+                <field name="levy_name"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+    <record id="levy_master_form" model="ir.ui.view">
+        <field name="name">levy.form</field>
+        <field name="model">levy.master</field>
+        <field name="arch" type="xml">
+            <form string="Levy Master">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="levy_code"/>
+                            <field name="company_id" readonly="1" options='{"no_open": True, "no_create": True}'/>
+                        </group>
+                        <group>
+                            <field name="levy_name" required="1"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="levy_line" string="Sub Levy Line">
+                            <field name="sub_levy_ids">
+                                <tree editable="bottom">
+                                    <field name="sub_levy_code" required="1"/>
+                                    <field name="sub_levy_name" required="1"/>
+                                    <field name="sub_levy_account_id" required="1"/>
+                                    <field name="company_id" readonly="1" optional="hide"
+                                           options='{"no_open": True, "no_create": True}'
+                                    />
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--    Window action for Levy Master-->
+    <record id="action_levy" model="ir.actions.act_window">
+        <field name="name">Levy Master</field>
+        <field name="res_model">levy.master</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Levy Master
+            </p>
+        </field>
+    </record>
+    <!--    Menuitem-->
+    <menuitem id="property_community_main_menu" name="Property Community"
+              web_icon="property_community,static/description/odoo_icon.png"
+              groups="group_community_user"
+    />
+    <menuitem id="levy_master_menu" name="Levy Master" action="action_levy" parent="property_community_main_menu"
+              sequence="2"/>
+</odoo>

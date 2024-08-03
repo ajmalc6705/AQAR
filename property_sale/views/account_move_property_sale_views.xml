@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!--    Property Sale Form View-->
+    <record id="account_move_inherit_property_sale_form" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.property.sale</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                <field name="sale_payment_id" readonly="1" string="Property Sale"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

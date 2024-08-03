@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+ 
+        <record model="ir.ui.view" id="view_visa_renewal_report_wizard">
+            <field name="name">Visa Renewal Report</field>
+            <field name="model">visa.renewal.report.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string='Visa Renewal Report'>
+                    <group>
+                        <group>
+                            <field name="start_date" required="1" />
+                        </group>
+                        <group>
+                            <field name="end_date" required="1" />
+                        </group>
+                    </group>
+                   
+                    <group>
+                    </group>
+                    
+                    <footer>
+                        <button name="print_pdf_visa_renewal_report" string="PDF" type="object"
+                            class="btn-primary"/>
+                         <button name="xlsx_report" string="Print XLS" type="object"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_visa_renewal_report" model="ir.actions.act_window">
+	        <field name="name">Visa Renewal Report</field>
+	        <field name="res_model">visa.renewal.report.wizard</field>
+	        <field name="view_mode">form</field>
+	        <field name="target">new</field>
+	    </record>
+        
+        <menuitem sequence="80"  name="Visa Renewal Report" id="visa_renewal_report_menu" parent="report_menu" action="action_visa_renewal_report"/>
+    </data>
+</odoo>

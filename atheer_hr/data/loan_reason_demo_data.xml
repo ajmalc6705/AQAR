@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Addition type DEMO DATA -->
+        <record id="special_allowance_demo_data" model="reason.types">
+            <field name="name">Special Allowance</field>
+            <field name="type">addition</field>
+        </record>
+        <record id="bonus_demo_data" model="reason.types">
+            <field name="name">Bonus</field>
+            <field name="type">addition</field>
+        </record>
+
+        <record id="pending_salary_demo_data" model="reason.types">
+            <field name="name">Pending Salary</field>
+            <field name="type">addition</field>
+        </record>
+
+        <record id="reimbursment_demo_data" model="reason.types">
+            <field name="name">Reimbusrement</field>
+            <field name="type">addition</field>
+        </record>
+
+        <record id="others_demo_data" model="reason.types">
+            <field name="name">Others</field>
+            <field name="type">addition</field>
+        </record>
+
+        <!--Deduction type DEMO DATA -->
+        <record id="misbehave_demo_data" model="reason.types">
+            <field name="name">Misbehave</field>
+            <field name="type">deduction</field>
+        </record>
+
+        <record id="late_rejoin_demo_data" model="reason.types">
+            <field name="name">Late Re- Joining</field>
+            <field name="type">deduction</field>
+        </record>
+
+        <record id="telephone_deduction_demo_data" model="reason.types">
+            <field name="name">Telephone Deudction</field>
+            <field name="type">deduction</field>
+        </record>
+
+        <record id="rop_demo_data" model="reason.types">
+            <field name="name">ROP Fine</field>
+            <field name="type">deduction</field>
+        </record>
+
+        <record id="medical_deduction_demo_data" model="reason.types">
+            <field name="name">Medical Deduction</field>
+            <field name="type">deduction</field>
+        </record>
+        <record id="others_demo_data" model="reason.types">
+            <field name="name">Others</field>
+            <field name="type">deduction</field>
+        </record>
+        <!---->
+        <!--Evaluation Recommendation DEMO DATA -->
+        <record id="promotion_demo_data" model="evaluation.recommendation">
+            <field name="name">Give Promotion</field>
+        </record>
+        <record id="increment_demo_data" model="evaluation.recommendation">
+            <field name="name">Increment</field>
+        </record>
+        <record id="incentive_demo_data" model="evaluation.recommendation">
+            <field name="name">Incentive</field>
+        </record>
+        <record id="continue_in_employment_demo_data" model="evaluation.recommendation">
+            <field name="name">Continue in employment</field>
+        </record>
+        <record id="probation_extension_demo_data" model="evaluation.recommendation">
+            <field name="name">Probation Extension</field>
+        </record>
+        <record id="demobilise_demo_data" model="evaluation.recommendation">
+            <field name="name">Demobilise</field>
+        </record>
+
+        <!-- Add default evaluation.type already given by the cleint  -->
+        <record model="performance.evaluation.type" id="atr_evaluation_type_health">
+            <field name="name">Health And Safety Environment</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_knowledge">
+            <field name="name">Knowledge And Skill</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_quality">
+            <field name="name">Quality of Work</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_quality">
+            <field name="name">Productivity</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_attendance">
+            <field name="name">Attendance And Punctuality</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_team_work">
+            <field name="name">Team Working</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_behaviour">
+            <field name="name">Behaviour And Attitude</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_understand">
+            <field name="name">Ability to understand the work</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_care">
+            <field name="name">Care of Tools</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_cost">
+            <field name="name">Cost Awareness</field>
+            <field name="is_default_type">True</field>
+        </record>
+        <record model="performance.evaluation.type" id="atr_evaluation_type_cost">
+            <field name="name">Cost Awareness</field>
+            <field name="is_default_type">True</field>
+        </record>
+
+        <record model="performance.evaluation.state" id="atr_evaluation_state_hr">
+            <field name="name">Hr</field>
+            <field name="is_for_expat_staff">True</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_hod">
+            <field name="name">HOD</field>
+            <field name="is_for_expat_staff">True</field>
+            <field name="is_for_expat_labor">False</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_site">
+            <field name="name">Site Engineer</field>
+            <field name="is_for_expat_staff">False</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_project">
+            <field name="name">Project Manager</field>
+            <field name="is_for_expat_staff">False</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_head">
+            <field name="name">Commerccial Head</field>
+            <field name="is_for_expat_staff">True</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_ceo">
+            <field name="name">CEO</field>
+            <field name="is_for_expat_staff">True</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+        <record model="performance.evaluation.state" id="atr_evaluation_state_approved">
+            <field name="name">Approved</field>
+            <field name="is_for_expat_staff">True</field>
+            <field name="is_for_expat_labor">True</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!--        wizard for sending mail-->
+
+        <record id="send_mail_maintenance_request_view_form" model="ir.ui.view">
+            <field name="name">send_mail_maintenance_request</field>
+            <field name="model">send.mail.maintenance.request</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="from_date"/>
+                            <label for="recipient_ids"/>
+                            <field name="recipient_ids" placeholder="Recipients" nolabel="1" widget="many2many_tags"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="to_date"/>
+                        </group>
+                        <label for="subject"/>
+                        <field name="subject" placeholder="Maintenance Request" nolabel="1"/>
+                        <label for="message"/>
+                        <field name="message" nolabel="1" placeholder="Optional Message..."/>
+                        <!-- <field name="assets_ids" /> -->
+                    </group>
+                    <footer>
+                        <!--                        <button string="Create Maintenance Request" name="create_maintenance_request" type="object"-->
+                        <!--                                class="btn-primary"/>-->
+                        <button string="Send Mail" name="send_mail" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <!-- Property Maintenance  -->
+        <record id="view_all_property_maintenance_tree" model="ir.ui.view">
+            <field name="name">all.property.maintenance.tree</field>
+            <field name="model">all.property.maintenance</field>
+            <field name="arch" type="xml">
+                <tree string="Maintenance" sample="1" decoration-danger="(state == 'progress')"
+                      decoration-success="(state == 'done')" decoration-muted="(state == 'cancel')">
+                    <field name="name" decoration-bf="1"/>
+                    <field name="date"/>
+                    <field name="building"/>
+                    <field name="property_id"/>
+                    <field name="property_maintenance_type"/>
+                    <field name="state" decoration-danger="state == 'progress'" decoration-success="state == 'done'"
+                           decoration-muted="(state == 'cancel')" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_all_maintenance_form" model="ir.ui.view">
+            <field name="name">all.property.maintenance.form</field>
+            <field name="model">all.property.maintenance</field>
+            <field name="arch" type="xml">
+                <form string="Property Type">
+                    <header>
+                        <button name="action_pending_for_approval" string="Send for Approval" type="object"
+                                class="oe_highlight"
+                                states="draft"/>
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                                states="pending_approval"/>
+                        <button name="action_start_work" string="Start the Work" type="object" class="oe_highlight"
+                                states="approved"/>
+                        <button name="action_done" string="Mark as Completed" type="object" class="oe_highlight"
+                                states="start_the_work" groups="property_lease_management.group_property_head"/>
+<!--                        <button name="action_pending_for_approval2" string="Pending for approval" type="object"-->
+<!--                                class="oe_highlight" groups="property_lease_management.group_property_head"-->
+<!--                                states="done"/>-->
+<!--                        <button name="action_complete_payment" string="Send to accountant" type="object"-->
+<!--                                class="oe_highlight" groups="property_lease_management.group_property_head"-->
+<!--                                states="done"/>-->
+<!--                        <button name="action_paid" string="Complete Payment" type="object" class="oe_highlight"-->
+<!--                                groups="property_lease_management.group_property_accountant"-->
+<!--                                states="accountant"/>-->
+                        <button name="action_cancel" string="Cancel" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_accountant,property_lease_management.group_property_head"
+                                states="done"/>
+                        <button string="Send Mail" name="action_send_mail_to_tenants" type="object"
+                                class="btn-primary"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,pending_approval,approved,start_the_work,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_maintenance_ids" type="object"
+                                    class="oe_stat_button" icon="fa-th-list" string="Maintenance"
+                                    attrs="{'invisible':[('flat_count','=',0)]}">
+                            </button>
+                        </div>
+                        <div class="oe_title oe_left">
+                            <h2>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="building" attrs="{'readonly':[('state','!=','draft')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="property_maintenance_type" widget="radio"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="property_id"
+                                       domain="[('parent_building','=',building)]"
+                                       attrs="{'readonly':[('state','!=','draft')],'invisible':[('property_maintenance_type','=','all_flats')],'required':[('property_maintenance_type','!=','all_flats')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="all_property_id" widget="many2many_tags"
+                                   domain="[('parent_building','=',building)]"
+                                   attrs="{'readonly':[('state','!=','draft')],'invisible':[('property_maintenance_type','!=','all_flats')],'required':[('property_maintenance_type','=','all_flats')]}"
+                                   options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="asset_type_id" required="1"
+                                       attrs="{'readonly':[('state','!=','draft')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="description"
+                                       attrs="{'readonly':[('state','!=','draft')]}"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="bill_attachment_id"
+                                       attrs="{'required':[('state','=','start_the_work')]}" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="company_id" readonly="1" force_save="1" options='{"no_open": True}'/>
+                            </group>
+                            <group>
+                                <field name="maintenance_type" string="Maintenance Type"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="date"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="cost"
+                                       attrs="{                                       'readonly':[('state','=','done')]}"/>
+                                <field name="flat_count" invisible="1"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="remarks" string="Remarks">
+                                <field name="remarks" string="Remarks"
+                                       attrs="{'readonly':[('state','=','done')]}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                         <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="search_all_property_maintenance" model="ir.ui.view">
+            <field name="name">all.property.maintenance.search</field>
+            <field name="model">all.property.maintenance</field>
+            <field name="arch" type="xml">
+                <search string="Search Unit Maintenance">
+                    <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                    <filter name="pending_approval" string="Pending Approval"
+                            domain="[('state', '=', 'pending_approval')]"/>
+                    <filter name="approved" string="Approved" domain="[('state', '=', 'approved')]"/>
+                    <filter name="start_the_work" string="Start the Work" domain="[('state', '=', 'start_the_work')]"/>
+                    <filter name="done" string="Work Completed" domain="[('state', '=', 'done')]"/>
+<!--                    <filter name="pending_approval2" string="Pending Approval"-->
+<!--                            domain="[('state', '=', 'pending_approval2')]"/>-->
+<!--                    <filter name="accountant" string="Accountant" domain="[('state', '=', 'accountant')]"/>-->
+<!--                    <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>-->
+                    <filter name="cancel" string="Cancel" domain="[('state', '=', 'cancel')]"/>
+                    <field name="property_id"/>
+                    <field name="all_property_id"/>
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_building" string="Building" domain="[]" context="{'group_by':'building'}"/>
+                        <filter name="group_property_maintenance_type" string="Maintenance Type" domain="[]"
+                                context="{'group_by':'property_maintenance_type'}"/>
+                        <filter name="group_property_id" string="Property" domain="[]"
+                                context="{'group_by':'property_id'}"/>
+                        <filter name="group_state" string="State" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="group_asset_id" string="Assets" domain="[]" context="{'group_by':'asset_id'}"/>
+                        <filter name="group_date" string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter name="group_due_date" string="Due Date" domain="[]" context="{'group_by':'due_date'}"/>
+                        <filter name="group_done_date" string="Done Date" domain="[]"
+                                context="{'group_by':'done_date'}"/>
+                        <filter name="group_maintenance_type" string="Maintenance Type" domain="[]"
+                                context="{'group_by':'maintenance_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_all_property_maintenance" model="ir.actions.act_window">
+            <field name="name">Unit Maintenance</field>
+            <field name="res_model">all.property.maintenance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_all_property_maintenance_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to insert a Maintenance Details of a Property .
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_all_property_maintenance" name="Unit Maintenance"
+                  action="property_lease_management.action_all_property_maintenance"
+                  parent="property_lease_management.menu_property_maintenance_root" sequence="10"/>
+        <!-- End-->
+
+
+    </data>
+</odoo>

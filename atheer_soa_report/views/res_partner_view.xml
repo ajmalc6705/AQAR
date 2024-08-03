@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_res_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='parent_id']/.." position="after">
+                    <h5>
+                        <label for="is_auditor"  string="Auditor"/>
+                        <field name="is_auditor" string="Auditor"/>
+                    </h5>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

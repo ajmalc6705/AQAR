@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="crm_lead_view_form" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit.property.rent</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_sale_quotations_new']" position="after">
+                <button name="action_property_rent" class="oe_highlight" string="New Rent Agreement"
+                        attrs="{'invisible':[('is_create_rent', '=', True)]}" type="object"/>
+            </xpath>
+            <xpath expr="//button[@name='action_schedule_meeting']" position="after">
+                <button type="object" name="action_view_rent" class="oe_stat_button" icon="fa-puzzle-piece"
+                        string="Rent Agreement" attrs="{'invisible': [('is_create_rent', '=', False)]}">
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="after">
+                <field name="is_create_rent" invisible="1"/>
+                <field name="rent_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='lead']" position="after">
+                <page name="rent" string="Property Rent">
+                    <group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="installment_schedule"/>
+                            <field name="rental_period"/>
+                            <field name="security_deposit"/>
+                            <field name="rent_start_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

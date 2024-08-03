@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="sh_rfq_view" model="ir.ui.view">
+		<field name="name">purchase.order</field>
+		<field name="model">purchase.order</field>
+		<field name="inherit_id" ref="purchase.purchase_order_form"/>
+		<field name="arch" type="xml">
+			<field name="partner_ref" position="after">
+                <field name="sh_allow_portal_access" />
+                <label for="sh_time_limit" attrs="{'invisible': [('sh_allow_portal_access','=',False)]}"/>
+                <div attrs="{'invisible': [('sh_allow_portal_access','=',False)]}">
+                    <field name="sh_time_limit" string="Time Limit" class="oe_inline"/>
+                    <span> days</span>
+                </div>
+                <field name="sh_last_date_of_portal_access" attrs="{'invisible': [('sh_allow_portal_access','=',False)]}"/>
+				<field name="sh_bid_updated" invisible="1"/>
+            </field>
+			<field name="notes" position="after">
+                <field name="sh_supplier_note" class="oe_inline" placeholder="Supplier Note/Comment ..." string="Supplier Notes"/>
+            </field>
+			<xpath expr="//field[@name='order_line']//tree//field[@name='product_qty']" position="before">
+				<field name="sh_tender_note"/>
+			</xpath>
+			<xpath expr="//header" position="inside">
+                <button name="action_rfq_xls" string="Export Xls" type="object" class="btn btn-primary" />
+            </xpath>
+		</field>
+	</record>
+</odoo>

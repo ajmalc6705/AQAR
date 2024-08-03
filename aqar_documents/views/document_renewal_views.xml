@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="documents_renewal_tree" model="ir.ui.view">
+        <field name="name">documents.renewal.tree</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <tree default_order="ref desc">
+                <field name="ref"/>
+                <field name="document_type"/>
+                <field name="document_id"/>
+                <field name="issued_authority" optional="hide"/>
+                <field name="expiry_date" optional="hide"/>
+                <field name="expiry_date" optional="hide"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+    <!--    Documents Form View-->
+    <record id="documents_renewal_form" model="ir.ui.view">
+        <field name="name">documents.renewal.form</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <form string="Document Renewal">
+                <header>
+                    <button name="action_update_document" type="object" string="Confirm &amp; Update"
+                            states="draft" class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirm"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft" states="cancel,confirm"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="ref" placeholder="Document Renewal"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="document_type" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="document_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="company_id"
+                                   options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                   readonly="1"/>
+                            <field name="user_ids" widget="many2many_tags" force_save="1" invisible="1"
+                                   options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="new_details" string="New Details">
+                            <group>
+                                <group string="New Info">
+                                    <field name="issue_date" string="New Issue Date"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="expiry_date" string="New Expiry Date"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="issued_authority" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="file_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                    <field name="doc_link" string="Document Link" widget="url"
+                                           placeholder="e.g. https://www.youtube.com/watch?v=CP96yVnXNrY"/>
+                                    <field name="attachment_ids" widget="many2many_binary"
+                                           attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group string="Current Info">
+                                    <field name="old_issue_date" readonly="1" force_save="1"/>
+                                    <field name="old_expiry_date" readonly="1" force_save="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="Description" String="Description">
+                            <field name="doc_dec" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="view_doc_renewal_search" model="ir.ui.view">
+        <field name="name">doc.renewal.search</field>
+        <field name="model">document.renewal</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="1" string="Group By">
+                    <filter name="groupby_document_type" context="{'group_by': 'document_type'}"
+                            string="Document Type"/>
+                    <filter name="groupby_issue_date" context="{'group_by': 'issue_date'}" string="Issue Date"/>
+                    <filter name="groupby_expiry_date" context="{'group_by': 'expiry_date'}" string="Expiry Date"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!--    window action for Documents-->
+    <record id="action_document_renewal" model="ir.actions.act_window">
+        <field name="name">Document Renewal</field>
+        <field name="res_model">document.renewal</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Document Renewal
+            </p>
+        </field>
+    </record>
+    <!--Documents Menu -->
+    <menuitem id="document_renewal_menu" name="Document Renewal" parent="atheer_documents.document_main_menu"
+              sequence="20"
+              action="action_document_renewal"/>
+</odoo>

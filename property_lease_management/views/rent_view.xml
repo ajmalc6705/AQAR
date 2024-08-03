@@ -1,0 +1,832 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <menuitem name="Rent" id="menu_rent_and_sale" parent="menu_base_property" sequence="1"/>
+
+        <!--Rent Agreement-->
+        <record id="view_rent_tree" model="ir.ui.view">
+            <field name="name">property.rent.tree</field>
+            <field name="model">property.rent</field>
+            <field name="arch" type="xml">
+                <tree string="Property Rent Agreements" decoration-danger="(state == 'to_renew')"
+                      decoration-info="(state == 'draft')" decoration-muted="(state  in ('cancel','close'))"
+                      decoration-primary="(state == 'legal_case')" sample="1" default_order="name desc">
+                    <field name="name" string="Agreement NO" decoration-bf="1"/>
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="building"/>
+                    <field name="property_id" string="Unit"/>
+                    <field name="activity_ids" widget="list_activity" optional="show"/>
+                    <field name="from_date"/>
+                    <field name="to_date" widget="remaining_days" optional="show"/>
+                    <field name="company_id" optional="show"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" decoration-danger="(state == 'to_renew')"
+                           decoration-info="(state == 'draft')" decoration-muted="(state  in ('cancel','close'))"
+                           decoration-primary="(state == 'legal_case')" decoration-success="state == 'open'"
+                           widget="badge" optional="show"/>
+                    <field name="activity_exception_decoration" widget="activity_exception"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_rent_form" model="ir.ui.view">
+            <field name="name">property.rent.form</field>
+            <field name="model">property.rent</field>
+            <field name="arch" type="xml">
+                <form string="Agreement">
+                    <header>
+                        <button name="button_confirm_agreement" string="Confirm Agreement" type="object"
+                                class="oe_highlight" states='hand_over'
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="action_set_to_draft" string="Reset to Draft" type="object" invisible="1"/>
+                        <!--                        <button name="send_to_section" string="Send To Section Head" type="object" class="oe_highlight"-->
+                        <!--                        states="hand_over" />-->
+                        <button name="compute_installments" string="Compute Installments" type="object"
+                                class="oe_highlight btn-warning" states='draft'
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <!--<button name="button_confirm" string="Ready to Occupy" type="object" class="oe_highlight"  groups="amlak_property_management.group_rem_sale,amlak_property_management.group_rem_lease,amlak_property_management.group_property_gc" states="hand_over"/>-->
+                        <button name="button_renew" string="Renew Contract" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user" states="open,to_renew"
+                        />
+                        <!--Handover Buttons-->
+                        <button name="button_handover" string="Start Handover" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user" states='draft'
+                        />
+                        <button name="action_cancel" string="Cancel" type="object" class="oe_highlight"
+                                groups="property_lease_management.group_property_user" states='draft'
+                        />
+                        <button name="button_handover_checklist" string="View Handover Checklist"
+                                type="object" states="hand_over"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="button_takeover" string="Start Takeover"
+                                class="oe_highlight" type="object" states="notice"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="button_takeover_checklist" string="View Takeover Checklist" type="object"
+                                groups="property_lease_management.group_property_user" states="take_over"
+                        />
+                        <button name="button_cancel" string="Cancellation Form"
+                                type="object" states="take_over"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <!--    Button for Create Legal Case                    -->
+                        <button name="button_action_create_legal_case"
+                                string="Create Legal Case" type="object"
+                                groups="property_lease_management.group_property_user"
+                                attrs="{'invisible':[('state', 'not in',('open','notice'))]}"
+                        />
+                        <!--  Button for Create Vacating Information                   -->
+                        <button name="button_action_create_vacating_information"
+                                groups="property_lease_management.group_property_user"
+                                string="Create Vacating Information" type="object"
+                                attrs="{'invisible':['|',('state', 'not in',('take_over')),  ('vacating_info_count','>=', 1)]}"
+                        />
+
+                        <button name="button_notice" states="open,to_renew" string="To Notice" type="object"
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <button name="mail_rent_expiry" string="Send Mail" type="object"
+                                states="open,to_renew,renewed"
+                                groups="property_lease_management.group_property_user"
+                        />
+
+                        <button name="resend_notice" string="Send Back" type="object" states='notice'
+                                groups="property_lease_management.group_property_user"
+                        />
+                        <!--                        <button name="print_rent_payment_policy" string="Rent Payment Policy"-->
+                        <!--                                type="object" states="hand_over"/>-->
+                        <!--                        <button name="print_repair_policy" string="Repair Policy"-->
+                        <!--                                type="object" states="hand_over"/>-->
+                        <button name="print_report_turn_over" string="Key Turn-over Form" invisible="1"
+                                type="object" states="hand_over"/>
+                        <!--<button name="button_copy_agreement" states="closed" string="New Copy of Agreement" type="object"/>-->
+                        <field name="state" widget="statusbar" statusbar_visible="open,close"/>
+                    </header>
+                    <sheet string="Rent Agreement">
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="action_view_new_rent_agreement"
+                                    attrs="{'invisible': [('agreement_count','=', 0)]}"
+                                    string="Rent Agreement" type="object" icon="fa-bars">
+                                <field name="agreement_count" invisible="1"/>
+                            </button>
+                            <button type="object" name="action_view_crm" class="oe_stat_button" icon="fa-puzzle-piece"
+                                    string="Lead" attrs="{'invisible': [('is_from_crm', '=', False)]}">
+                            </button>
+                            <!--                            <button class="oe_stat_button" na0 me="button_cheque_deposits"-->
+                            <!--                                    string="Cheque Deposits" type="object" icon="fa-bars">-->
+                            <!--                                <field name="cheq_deposit"/>-->
+                            <!--                            </button>-->
+
+                            <!-- Invoice stat button -->
+                            <field name="confirmed_handover" invisible="1"/>
+                            <field name="confirmed_takeover" invisible="1"/>
+                            <field name="bounced_count" invisible="1"/>
+                            <button name="find_confirmed_handover" type="object"
+                                    class="oe_stat_button" icon="fa-list-alt"
+                                    attrs="{'invisible': [('confirmed_handover','=', False)]}"
+                                    string="HandOver Checklists"/>
+                            <button name="find_confirmed_takeover" type="object"
+                                    class="oe_stat_button" icon="fa-list-ol"
+                                    attrs="{'invisible': [('confirmed_takeover','=', False)]}"
+                                    string="TakeOver Checklists"/>
+                            <button name="open_invoices" type="object" class="oe_stat_button" icon="fa-bars"
+                                    attrs="{'invisible': [('invoice_count','=', 0)]}"
+                                    help="show the Invoices of the Rent Agreement"
+                            >
+                                <field string="Invoices" name="invoice_count" widget="statinfo"/>
+
+                            </button>
+                            <button name="open_deferred_revenue" type="object" class="oe_stat_button" icon="fa-dollar"
+                                    attrs="{'invisible': [('invoice_ids','=', False)]}" string="Deferred Revenue">
+                            </button>
+                            <button name="get_bounced_cheques" type="object"
+                                    class="oe_stat_button" icon="fa-apple"
+                                    attrs="{'invisible': [('bounced_count','=', 0)]}"
+                                    string="Bounced Cheques">
+                            </button>
+                            <button name="action_view_legal_case" type="object"
+                                    class="oe_stat_button" icon="fa-bars"
+                                    attrs="{'invisible': [('legal_case_count','=', 0)]}"
+                                    help="show the legal Case of the Rent Agreement"
+                            >
+                                <field string="Legal Case" name="legal_case_count" widget="statinfo"/>
+                            </button>
+
+                            <button name="action_view_vacating_information" type="object"
+                                    class="oe_stat_button" icon="fa-bars"
+                                    attrs="{'invisible': [('vacating_info_count','=', 0)]}"
+                                    help="show the Tenant Deposit Release of the Rent Agreement"
+                            >
+                                <field string="Vacating Information" name="vacating_info_count" widget="statinfo"/>
+                            </button>
+                            <button class="oe_stat_button" name="open_payments" type="object" icon="fa-dollar"
+                                    string="Payments">
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h2>
+                                <field name="name" class="oe_inline" readonly="1"/>
+                            </h2>
+                        </div>
+
+                        <group>
+                            <group string="Building Details">
+
+                                <field name="building"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':['|', ('reference_id', '!=', False), ('state','not in',('draft', 'hand_over'))]}"
+                                />
+                                <field name="building_area_id"/>
+                                <field name="owner"/>
+                                <field name="customer_vat"/>
+                                <field name="is_from_crm" invisible="1"/>
+                                <field name="property_id" force_save="1"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly':['|',('reference_id', '!=', False),('state','not in',('draft', 'hand_over'))]}"
+                                       domain="[('for_rent','=',True),('state','=', 'open'), ('parent_building', '=', building)]"/>
+                                <field name="property_type"
+                                       attrs="{'readonly':['|',('reference_id', '!=', False),('state','not in',('draft', 'hand_over'))]}"/>
+
+                                <field name="muncipality_agreemnt_no"
+                                       attrs="{'readonly':[('state','not in',('draft', 'hand_over'))]}"/>
+                                <field name="key_received" invisible="1"/>
+                                <field name="vacating_info_count" invisible="1"/>
+                            </group>
+                            <group string="Tenant Details">
+                                <field name="partner_id" options="{'always_reload': True}"
+                                       domain="[('tenant','=',True), ('parent_id', '=', False)]"
+                                       context="{'default_company_id':company_id,'default_landlord':0, 'default_tenant':1,'show_address': 1}"
+                                       attrs="{'readonly':[('state','not in',('draft', 'hand_over'))]}"
+                                />
+                                <field name="residing_tenant"
+                                       options="{'no_create_edit':True, 'no_create':True,
+                                       'no_open':True, 'always_reload': True}"
+                                       attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <field name="residing_since"
+                                       attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                <field name="tenant_years"/>
+                            </group>
+                            <group string="Account Details">
+                                <field name="journal_id" force_save="1"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                <field name="account_id"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       domain="[('account_type', '=', 'asset_receivable'), ('company_id', '=', company_id)]"/>
+
+                                <!--                               Button for entry-->
+                                <field name="open_dated_cheque" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="grace_period" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="business_categ_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="service_charges" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                            <group string="Other Details">
+                                <field name="date"/>
+                                <field name="legal_case"
+                                       attrs="{'readonly':[('state','in',('close', 'renewed', 'draft', 'cancel',))]}"/>
+                                <field name="property_handed_back" attrs="{'invisible':[('legal_case','=', False)]}"/>
+                                <field name="l_start_date" attrs="{'invisible':[('legal_case','=', False)]}"/>
+                                <field name="e_start_date"
+                                       attrs="{'invisible':[('legal_case','=', False)], 'required':[('property_handed_back', '=', True)]}"/>
+                                <field name="attestation" states="draft"/>
+                                <field name="attach_agreement" filename="file_name"
+                                       attrs="{'invisible':[('attestation','=', False)]}"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="active" invisible="1"/>
+                                <field name="year" invisible="1"/>
+                                <field name="company_id" invisible="0" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="security_deposit"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="created_security_entry" invisible="1"/>
+                                <field name="security_move_id"
+                                       attrs="{'invisible':[('created_security_entry','=',False)]}"/>
+                                <button name="create_security_deposit_entry" string="Create Entry" type="object"
+                                        class="oe_highlight"
+                                        attrs="{'invisible':[('created_security_entry','=',True)]}"/>
+
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page name="agreement" string="Agreement Details">
+                                <group>
+                                    <group string="Rent Details">
+                                        <field name="property_group" invisible="1"/>
+                                        <field name="area" force_save="1"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"
+                                        />
+                                        <field name="std_rent_sqm" force_save="1"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"
+                                        />
+                                        <field name="annual_rent"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"
+                                        />
+                                        <field name="rent_price"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"
+                                        />
+                                        <field name="rent_sqm"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"
+                                        />
+                                        <field name="agreed_rent_amount" force_save="1"
+                                               attrs="{'readonly':[('state','not in', ('draft', 'hand_over'))]}"/>
+                                        <!--                                               attrs="{'readonly':['|', ('state','not in', ('draft', 'hand_over'))]}"/>-->
+                                    </group>
+                                    <group string="Installment Details">
+                                        <field name="installment_schedule" required="1"
+                                               attrs="{'readonly':[('state', 'not in', ['draft'])]}"/>
+                                        <field name="period" required="1"
+                                               attrs="{'readonly':[('state', 'not in', ['draft'])]}"/>
+                                        <field name="from_date"
+                                               attrs="{'readonly':[('state', 'not in', ['draft'])]}"/>
+                                        <field name="to_date" required="1" force_save="1"
+                                               attrs="{'readonly':[('state', '!=', 'draft')]}"
+                                        />
+                                        <!--                                        attrs="{'readonly':[('installment_schedule', '!=', 'one_bill')]}"-->
+                                        <field name="year_month_days"/>
+                                        <field name="lease_acquired"
+                                               help="Used for updating installments and invoices according
+                                               to the acquired date"
+                                               attrs="{'readonly':[('state', 'not in', ['draft'])],'invisible':[('installment_schedule', '=', 'one_bill')]}"/>
+                                    </group>
+                                    <group string="Account Details">
+                                        <field name="revenue_account"
+                                               attrs="{'readonly':[('state', 'not in', ['draft', 'open','hand_over'])]}"/>
+                                        <field name="agreement_type"
+                                               attrs="{'readonly':[('invoice_created','=',True)]}"/>
+                                        <field name="tax_id" attrs="{'readonly':[('invoice_created','=',True)]}"
+                                               options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                        />
+                                        <field name="invoice_created" invisible="1"/>
+                                        <field name="vat_percentage"
+                                               attrs="{'readonly':[('invoice_created','=',True)]}"/>
+                                        <field name="rent_total"/>
+                                    </group>
+                                    <group string="Other Details">
+                                        <field name="reference_id" string="Source Agreement" readonly="1"
+                                               force_save="1"/>
+                                        <field name="purpose"
+                                               attrs="{'readonly':[('state','!=', 'draft')]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <!--collection details-->
+                            <page name="installment_collection" string="Installments">
+                                <field name="collection_ids" nolabel="1"
+                                       context="{'default_state':'draft','default_building':building,
+                                       'default_property_id':property_id,'default_tenant_id':partner_id,
+                                       'default_agreemnt_no':name,'default_from_date':from_date,
+                                       'default_to_date':to_date}"
+                                       decoration-danger="(state == 'cancel')" decoration-success="(state == 'paid')"
+                                       options="{'reload_on_button': true}">
+                                    <tree string="Collections" editable="bottom" delete="0" create="0"
+                                          sample="1"
+                                          decoration-info="state == 'draft0'">
+                                        <field name="building" invisible="1"/>
+                                        <field name="property_id" invisible="1"/>
+                                        <field name="tenant_id" invisible="1"/>
+                                        <field name="from_date" invisible="1"/>
+                                        <field name="to_date" invisible="1"/>
+                                        <field name="agreemnt_no" invisible="1"/>
+                                        <field name="rent_dummy" invisible="1"/>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="date" decoration-bf="1" readonly="1"/>
+                                        <field name="cash_cheque"
+                                               attrs="{'readonly': [('invoice_state', '!=', 'draft')]}"/>
+                                        <field name="cheque_number" decoration-bf="1"
+                                               attrs="{'readonly': [('state', 'in', ['lease_acquired_issue', 'paid'])]}"/>
+                                        <field name="period_ids"
+                                               domain="[('rent_ids', '=', rent_dummy),('state', '!=', 'done')]"
+                                               string="Rental Periods" readonly="1"
+                                               options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"/>
+                                        <field name="invoice_id" force_save="1" readonly="1"/>
+                                        <field name="amount" string="Amount" sum="Total" decoration-bf="1"
+                                               digits="[12,3]" readonly="1"
+                                        />
+                                        <!--                                        <field name="amount_total" string="Total Amount" sum="Total"-->
+                                        <!--                                               decoration-bf="1" />-->
+                                        <field name="residual" digits="[12,3]"/>
+                                        <field name="remarks"/>
+                                        <field name="invoice_state" invisible="1" string="Invoice Status"/>
+                                        <field name="state" widget="badge"
+                                               decoration-info="state == 'draft0'"
+                                               decoration-danger="state == 'cancel'"
+                                               decoration-warning="state in ('draft')"
+                                               decoration-success="state in ('paid')"/>
+                                        <field name="company_id" invisible="0" readonly="1" optional="hide"/>
+                                        <field name="from_date" invisible="1"/>
+                                        <field name="to_date" invisible="1"/>
+
+                                        <!--new updation-->
+                                        <!--                                        <button name="change_state_deposited" help="Set to Cheque Deposited"-->
+                                        <!--                                                states="draft0,cancel"-->
+                                        <!--                                                type="object" icon="fa-check" />-->
+                                        <!--                                        <button name="make_installmentt" type="object" icon="fa-file"-->
+                                        <!--                                                attrs="{'invisible': ['|', ['state', 'not in', ['draft']], ['residual', '=', 0]]}"-->
+                                        <!--                                                help="Make Receipts, Able to do partial payments, receipts ..." />-->
+                                        <button name="action_invoice_post" type="object"
+                                                class="btn btn-outline-primary"
+                                                help="To Confirm Invoices"
+                                                string="Confirm"
+                                                attrs="{'invisible': [('invoice_state', '!=', 'draft')]}"/>
+
+                                        <button name="post_entries" type="object"
+                                                class="btn btn-outline-primary"
+                                                help="Post Payments"
+                                                string="Register Payment"
+                                                attrs="{'invisible': [('residual', '=', 0)]}"/>
+                                        <button name="change_state_paid" class="btn btn-outline-primary"
+                                                help="Set as Paid" type="object" string="Post Entries"
+                                                icon="fa-check"
+                                                invisible="1"/>
+                                        <button name="change_state" class="btn btn-outline-warning"
+                                                help="Set as Bounced" states="draft" type="object"
+                                                string="Set as Bounced"
+                                                icon="fa-ban"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Invoices">
+                                <group>
+                                    <button name="generate_invoices" class="oe_highlight" string="Create Invoice"
+                                            type="object"/>
+                                    <button name="update_description" class="oe_highlight" string="Update Description"
+                                            type="object"/>
+
+                                    <!-- has to be changed, create invoices when agreement is confirmed/occupied-->
+                                    <!--                                    <button name="clear_invoices" string="Clear Invoices" type="object" groups="thabat_accounting.group_account_user_finance_manager"/>-->
+                                </group>
+                                <field name="invoice_ids" mode="tree" options="{'reload_on_button': true}"
+                                       create="0" delete="0" edit="0" force_save="1">
+                                    <tree string="Invoices" decoration-info="state == 'draft'" create="0"
+                                          delete="0" sample="1"
+                                          default_order="id asc" editable="top">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="ref" readonly="1" force_save="1"/>
+                                        <field name="invoice_date"/>
+                                        <field name="invoice_date_due" widget="remaining_days" optional="show"
+                                               attrs="{'invisible': [['payment_state', 'in', ('paid', 'in_payment', 'reversed')]]}"/>
+                                        <field name="amount_total" widget="monetary" string="Rent Amount"
+                                               digits="[12,3]"
+                                               options="{'currency_field': 'currency_id'}"
+                                               attrs="{'readonly': [('state', '=', 'posted')]}" decoration-bf="1"/>
+                                        <field name="name" readonly="1" string="Journal Entry" invisible="1"/>
+                                        <field name="payment_reference"/>
+                                        <field name="payment_state" widget="badge"
+                                               decoration-danger="payment_state == 'not_paid'"
+                                               decoration-warning="payment_state in ('partial', 'in_payment')"
+                                               decoration-success="payment_state in ('paid', 'reversed')"
+                                               attrs="{'invisible': [('payment_state', 'in', ('invoicing_legacy'))]}"/>
+                                        <field name="state" invisible="1"/>
+                                        <button name="action_register_payment" type="object" string="Register Payment"
+                                                groups="account.group_account_user"
+                                                invisible="context.get('default_move_type') not in ('out_invoice', 'out_refund', 'out_receipt', 'in_invoice', 'in_refund','in_receipt')"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!--                            <page string="Payments">-->
+                            <!--                                <field name="payment_ids">-->
+                            <!--                                    <tree create="false">-->
+                            <!--                                        <field name="date" />-->
+                            <!--                                        <field name="move_id" />-->
+                            <!--                                        <field name="ref" />-->
+                            <!--                                        <field name="name" />-->
+                            <!--                                        <field name="journal_id" groups="base.group_user" />-->
+                            <!--                                        <field name="debit" />-->
+                            <!--                                        <field name="credit" />-->
+                            <!--                                        <field name="amount_currency" groups="base.group_multi_currency" />-->
+                            <!--                                        <field name="currency_id" groups="base.group_multi_currency" />-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                            </page>-->
+                            <page string="Rental Period">
+                                <field name="period_line_ids" force_save="1">
+                                    <tree string="Rental Period" editable="bottom" decoration-info="(state == 'draft')"
+                                          decoration-success="(state == 'done')" create="0" delete="0" sample="1">
+                                        <field name="name" invisible="1"/>
+                                        <field name="sl_no"/>
+                                        <field name="from_date"/>
+                                        <field name="to_date"/>
+                                        <!--<field  name="amount"/>-->
+                                        <field name="state" widget="badge"
+                                               decoration-info="state == 'draft'"
+                                               decoration-success="state in ('done')"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="installment Receipt" string="Collected Details" invisible="1">
+                                <group col="4">
+                                    <group>
+                                        <field name="installment_type"
+                                               attrs="{'invisible':[('state','not in', ['open'])]}"/>
+                                    </group>
+                                    <group>
+                                        <!--                                        <button name="make_installment" states="open" string="+" type="object"-->
+                                        <!--                                                class="oe_highlight" />-->
+                                    </group>
+                                </group>
+
+                                <field name="installment_ids" options="{&quot;reload_on_button&quot;: True}">
+                                    <tree string="Installment" delete="false" create="false" edit="0" sample="1">
+                                        <field name="sequence"/>
+                                        <field name="installment_type"/>
+                                        <field name="date"/>
+                                        <field name="cash_or_cheque"/>
+                                        <field name="cheque_number"/>
+                                        <field name="bank_name"/>
+                                        <field name="receipt_number"/>
+                                        <field name="amount" sum="Total" digits="[12,3]"/>
+                                        <field name="state" invisible="1"/>
+                                        <field name="state" invisible="0"/>
+                                        <button name="print_receipt" string="Print" type="object" icon="fa-print"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="deposit_total" widget="monetary" digits="[12,3]"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="installment_total" widget="monetary" digits="[12,3]"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                    <field name="fee_total" widget="monetary" digits="[12,3]"
+                                           options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                            <page name="auto_journal_entry_details" string="Auto Journal Entry" invisible="1">
+                                <field name="auto_entry_ids" options="{&quot;reload_on_button&quot;: True}">
+                                    <tree string="'Auto Journal Entry" decoration-danger="(state == 'pending')"
+                                          decoration-success="(state == 'sent')" editable="false"
+                                          create="false" delete="false" sample="1">
+                                        <field name="sequence"/>
+                                        <field name="date"/>
+                                        <field name="amount" sum="Total"/>
+                                        <field name="state"/>
+                                        <field name="jurnal_id" invisible="True"/>
+                                        <button name="cancel_button" states="sent" string="Cancel Entry" type="object"
+                                                groups="base.group_user"/>
+                                        <button name="post" states="pending" string="Post Entry" type="object"
+                                                class="oe_highlight" groups="base.group_user"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!--check bouncing back-->
+                            <page name="check_bounce_details" string="Cheque Bounce Details">
+                                <field name="collection_ids_bounce" context="{'default_state':'cancel'}" nolabel="1"
+                                       options="{'reload_on_button': true}">
+                                    <tree string="Collections" editable="bottom" decoration-danger="(state == 'cancel')"
+                                          create="0" delete="0" sample="1">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="date" readonly="1"/>
+                                        <field name="cash_cheque" readonly="1"/>
+                                        <field name="cheque_number" readonly="1"/>
+                                        <field name="amount" string="Amount" sum="Total" readonly="1" digits="[12,3]"/>
+                                        <field name="state" widget="badge" decoration-danger="state == 'cancel'"/>
+                                        <button name="change_waiting" string="Set to waiting collection" type="object"
+                                                icon="fa-arrow-right"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="doc_ids">
+                                    <tree string="Documents" editable="bottom" sample="1">
+                                        <field name="doc_no"/>
+                                        <field name="doc_type"/>
+                                        <field name="name"/>
+                                        <field name="issue_date"/>
+                                        <field name="expiry_date"/>
+                                        <field name="issued_authority" optional="hide"/>
+                                        <field name="doc_dec"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="attachment_ids" filename="file_name"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Rent Reduction History" string="Rent History">
+                                <field name="rent_history_ids" readonly="1">
+                                    <tree>
+                                        <field name="from_date"/>
+                                        <field name="to_date"/>
+                                        <field name="approved_rent" string="Rent Amount"/>
+                                        <field name="tenant_request_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                            <page name="notification" string="Notification Details">
+                                <group>
+                                    <group>
+                                        <field name="acknowledgment_date"/>
+                                    </group>
+                                    <group>
+
+                                    </group>
+                                </group>
+                                <field name="notification_ids" readonly="1">
+                                    <tree>
+                                        <field name="notification_date"/>
+                                        <field name="notification_type"/>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                        <div class="oe_clear"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_property_rent_graph">
+            <field name="name">property.rent.graph</field>
+            <field name="model">property.rent</field>
+            <field name="arch" type="xml">
+                <graph string="Rent Agreement" type="bar" sample="1">
+                    <field name="partner_id" string="Tenant"/>
+                    <field name="property_id"/>
+                    <field name="rent_price" operator="+"/>
+                    <field name="rent_total" operator="+"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="rent_agreement_search_view" model="ir.ui.view">
+            <field name="name">property.rent.search</field>
+            <field name="model">property.rent</field>
+            <field name="arch" type="xml">
+                <search string="Rent Agreement">
+                    <field name="property_id"/>
+                    <field name="name" string="Agreement Number"/>
+                    <field name="partner_id" string="Tenant"/>
+                    <field name="year"/>
+                    <filter name="open" string="Open" domain="[('state','=','open')]"/>
+                    <filter name="group_state_not_renewed" string="Not Renewed" domain="[('state','!=','renewed')]"/>
+                    <filter string="Current Year" name="current_year"
+                            domain="[('date','&lt;=',time.strftime('%%Y-%%m-%%d')), ('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Building" context="{'group_by':'building'}" name="group_by_building"/>
+                        <filter string="Property" context="{'group_by':'property_id'}" name="group_by_property"/>
+                        <filter name="partner_filter" string="Tenant" context="{'group_by': 'partner_id'}"/>
+                        <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                        <separator/>
+                        <filter name="group_date" string="Month" context="{'group_by':'date'}"/>
+                        <filter name="group_year" string="Year" context="{'group_by':'year'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_rent_agreement_gantt" model="ir.ui.view">
+            <field name="name">project.rent.gantt</field>
+            <field name="model">property.rent</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <gantt date_start="from_date" date_stop="to_date" string="Agreements"
+                       default_group_by="property_id" plan="0" display_unavailability="1"
+                       sample="1"
+                       form_view_id="%(view_rent_form)d"
+                       decoration-danger="state == 'legal_case'"
+                       decoration-success="state == 'open'"
+                       decoration-warning="state == 'close'">
+                    <field name="state"/>
+                </gantt>
+            </field>
+        </record>
+
+        <!--bounced cheques-->
+        <record model="ir.ui.view" id="view_property_bounced_cheques">
+            <field name="name">property.rent.installment.collection.bounced.tree</field>
+            <field name="model">property.rent.installment.collection.bounced</field>
+            <field name="arch" type="xml">
+                <tree string="Bounced Cheques" sample="1">
+                    <field name="rent_id"/>
+                    <field name="sequence"/>
+                    <field name="date"/>
+                    <field name="cash_cheque"/>
+                    <field name="cheque_number"/>
+                    <field name="amount" string="Amount" sum="Total"/>
+                    <field name="state" widget="badge" optional="show"/>
+                    <button name="change_waiting" string="Set to waiting collection" type="object" icon="gtk-ok"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_property_rent_installment_bounced_form">
+            <field name="name">property.rent.installment.collection.bounced.form</field>
+            <field name="model">property.rent.installment.collection.bounced</field>
+            <field name="arch" type="xml">
+                <form string="Bounced Cheques">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="rent_id"/>
+                                <field name="sequence"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="cash_cheque"/>
+                                <field name="cheque_number"/>
+                                <field name="amount" string="Amount" sum="Total"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_property_rent_installment_collection_form">
+            <field name="name">property.rent.installment.collection.form</field>
+            <field name="model">property.rent.installment.collection</field>
+            <field name="arch" type="xml">
+                <form string="Collection">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="building"/>
+                                <field name="property_id"/>
+                                <field name="tenant_id"/>
+                                <field name="from_date"/>
+                                <field name="to_date"/>
+                                <field name="agreemnt_no"/>
+                                <field name="sequence" widget="handle"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="cash_cheque"/>
+                                <field name="cheque_number"/>
+                                <field name="rent_dummy" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="period_ids"
+                                       domain="[('rent_ids', '=', rent_dummy),('state', '!=', 'done')]"
+                                       string="Rental Periods"
+                                       options="{'no_create_edit':True, 'no_create':True, 'no_open':True}"
+                                       attrs="{'readonly': [('state', 'in', ['lease_acquired_issue', 'paid'])]}"/>
+                                <field name="invoice_id" force_save="1"
+                                       attrs="{'readonly': [('state', 'in', ['lease_acquired_issue', 'paid'])]}"/>
+                                <field name="amount" string="Amount" sum="Total"/>
+                                <field name="residual" digits="[12,3]"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_property_rent_installment_form">
+            <field name="name">property.rent.installment.form</field>
+            <field name="model">property.rent.installment</field>
+            <field name="arch" type="xml">
+                <form string="Collection">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="sequence"/>
+                                <field name="installment_type"/>
+                                <field name="date"/>
+                                <field name="cash_or_cheque"/>
+                                <field name="state" invisible="1"/>
+                            </group>
+                            <group>
+                                <field name="cheque_number"/>
+                                <field name="bank_name"/>
+                                <field name="receipt_number"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="amount" sum="Total"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="bounced_cheques_search_view" model="ir.ui.view">
+            <field name="name">property.rent.installment.collection.bounced.search</field>
+            <field name="model">property.rent.installment.collection.bounced</field>
+            <field name="arch" type="xml">
+                <search string="Rent Agreement">
+                    <field name="state"/>
+                    <group expand="0" string="Group By">
+                        <filter name="rent_filter" string="Rent Agreement" context="{'group_by':'rent_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_bounced" model="ir.actions.act_window">
+            <field name="name">Bounced Cheques</field>
+            <field name="res_model">property.rent.installment.collection.bounced</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_property_bounced_cheques"/>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_group_rent_id":1}</field>
+        </record>
+
+        <record id="action_rent" model="ir.actions.act_window">
+            <field name="name">Rent Agreement</field>
+            <field name="res_model">property.rent</field>
+            <field name="view_mode">tree,form,gantt,graph</field>
+            <field name="view_id" ref="view_rent_tree"/>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_group_state_not_renewed':1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Click to create a rent.
+                </p>
+            </field>
+        </record>
+
+        <!--Cusotmer Payment View-->
+        <!--        <record id="view_account_customer_payment_tree" model="ir.ui.view">-->
+        <!--            <field name="name">account.supplier.payment.tree</field>-->
+        <!--            <field name="model">account.payment</field>-->
+        <!--            <field name="inherit_id" ref="account.view_account_payment_tree"/>-->
+        <!--            <field name="mode">primary</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <field name="payment_method_id" position="after">-->
+        <!--                    <field name="transaction_type" string="Transaction Type"/>-->
+        <!--                    <field name="cheque_no"/>-->
+        <!--                </field>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+
+        <menuitem id="menu_property_rent" action="action_rent" parent="menu_rent_and_sale" sequence="10"/>
+        <!--End-->
+
+        <record model="ir.ui.view" id="view_property_notification_form">
+            <field name="name">property.notification.form</field>
+            <field name="model">property.notification</field>
+            <field name="arch" type="xml">
+                <form string="Property Notification">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="partner_id"/>
+                                <field name="building_id"/>
+                                <field name="property_id"/>
+                                <field name="rent_id"/>
+                            </group>
+                            <group>
+                                <field name="notification_type"/>
+                                <field name="notification_date"/>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

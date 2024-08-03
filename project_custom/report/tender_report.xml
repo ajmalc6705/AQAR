@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_report_project_tender" model="ir.actions.report">
+            <field name="name">Tender Report (PDF)</field>
+            <field name="model">project.tender</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">project_custom.report_project_tender</field>
+            <field name="report_file">project_custom.report_project_tender</field>
+            <field name="print_report_name">'TENDER REPORT - %s' % (object.tender_no)</field>
+            <field name="binding_model_id" ref="model_project_tender"/>
+            <field name="binding_type">report</field>
+            <field name="binding_view_types">form,list</field>
+        </record>
+    </data>
+</odoo>

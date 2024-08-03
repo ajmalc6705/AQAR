@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Your module definition -->
+    <data>
+        <!-- Include the new XML view definition -->
+        <record id="account_payment_form_view" model="ir.ui.view">
+            <field name="name">account.payment.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_post']" position="before">
+                    <field name="approval_status_1" invisible="1"/>
+                    <field name="approval_status_2" invisible="1"/>
+                    <button name="update_approve_status_one" class="oe_highlight" string="Verify"
+                            attrs="{'invisible': [('approval_status_1', '=', True)]}"
+                            type="object"/>
+                    <button name="update_approve_status_two" class="oe_highlight" string="Approve"
+                            attrs="{'invisible': [('approval_status_2', '=', True)]}"
+                            type="object"/>
+                </xpath>
+
+                <xpath expr="//field[@name='payment_type']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//label[@for='amount']" position="before">
+                    <field name="amount_dues" string="Partner Dues"/>
+                </xpath>
+
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="balance"/>
+                </xpath>
+
+                <xpath expr="//button[@name='action_draft']" position="attributes">
+                    <attribute name="groups">aqar_accounting_updates.account_management_group_user</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='button_open_journal_entry']" position="attributes">
+                    <attribute name="groups">account.group_account_user</attribute>
+                </xpath>
+
+            </field>
+
+        </record>
+    </data>
+</odoo>
