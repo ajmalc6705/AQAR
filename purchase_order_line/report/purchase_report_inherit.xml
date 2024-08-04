@@ -2,34 +2,34 @@
 <odoo>
     <template id="report_purchaseorder_document_inherit" inherit_id="purchase.report_purchaseorder_document">
         <xpath expr="//t[@t-call='web.external_layout']" position="replace">
-            <t t-call="web.basic_layout">
+            <t t-call="web.external_layout">
 
-                <div class="header" style="padding-top:-20px;">
-                    <table style="width: 100%;" class="table table-borderless">
-                        <tr>
-                            <td style="width: 33.33%;" class="text-left" t-if="o.company_id.logo">
-                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
-                                     style="max-height:130pt;max-width:100%" alt="Company Logo"/>
-                            </td>
-                            <td style="width: 63.67%;" class="text-center">
-                                <span t-if="o.company_id.header" t-field="o.company_id.header"/>
-                            </td>
+                <!--                <div class="header" style="padding-top:-20px;">-->
+                <!--                    <table style="width: 100%;" class="table table-borderless">-->
+                <!--                        <tr>-->
+                <!--                            <td style="width: 33.33%;" class="text-left" t-if="o.company_id.logo">-->
+                <!--                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"-->
+                <!--                                     style="max-height:130pt;max-width:100%" alt="Company Logo"/>-->
+                <!--                            </td>-->
+                <!--                            <td style="width: 63.67%;" class="text-center">-->
+                <!--                                <span t-if="o.company_id.header" t-field="o.company_id.header"/>-->
+                <!--                            </td>-->
 
-                        </tr>
-                    </table>
-                    <!--                    <div class="row justify-content-end" style="padding-top:20px;">-->
-                    <!--                        <div class="col-4">-->
-                    <!--                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"-->
-                    <!--                                 style="max-height:50pt;max-width:50%" alt="Company Logo"/>-->
-                    <!--                        </div>-->
+                <!--                        </tr>-->
+                <!--                    </table>-->
+                <!--                    &lt;!&ndash;                    <div class="row justify-content-end" style="padding-top:20px;">&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                        <div class="col-4">&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                                 style="max-height:50pt;max-width:50%" alt="Company Logo"/>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                        </div>&ndash;&gt;-->
 
-                    <!--                        <div class="col-8">-->
-                    <!--                            <span t-field="o.company_id.header" style="font-size:20px;max-height:50pt;max-width:50%"/>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-                    <!--                    <hr style="border:2px solid black;"/>-->
-                    <!--                    <div class="oe_structure"/>-->
-                </div>
+                <!--                    &lt;!&ndash;                        <div class="col-8">&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                            <span t-field="o.company_id.header" style="font-size:20px;max-height:50pt;max-width:50%"/>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                        </div>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    </div>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    <hr style="border:2px solid black;"/>&ndash;&gt;-->
+                <!--                    &lt;!&ndash;                    <div class="oe_structure"/>&ndash;&gt;-->
+                <!--                </div>-->
                 <div class="oe_structure"/>
                 <div class="mt-4">
                     <br/>
@@ -376,22 +376,22 @@
                     </table>
 
 
-                    <div class="footer">
-                        <div class="text-center" style="font-size:12px;">
-                            <hr style="border:2px solid black;"/>
-                            <span class="text-center" t-field="o.company_id.footer" style="font-size:12px;"/>
-                            <div t-if="report_type =='pdf'" class="text-muted" style="font-size:12px;">
-                                Page :
-                                <span class="page"/>
-                                /
-                                <span class="topage"/>
-                                <div class="oe_structure"/>
-                                Printed On :
-                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
-                            </div>
+                    <!--                    <div class="footer">-->
+                    <!--                        <div class="text-center" style="font-size:12px;">-->
+                    <!--                            <hr style="border:2px solid black;"/>-->
+                    <!--                            <span class="text-center" t-field="o.company_id.footer" style="font-size:12px;"/>-->
+                    <!--                            <div t-if="report_type =='pdf'" class="text-muted" style="font-size:12px;">-->
+                    <!--                                Page :-->
+                    <!--                                <span class="page"/>-->
+                    <!--                                /-->
+                    <!--                                <span class="topage"/>-->
+                    <!--                                <div class="oe_structure"/>-->
+                    <!--                                Printed On :-->
+                    <!--                                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>-->
+                    <!--                            </div>-->
 
-                        </div>
-                    </div>
+                    <!--                        </div>-->
+                    <!--                    </div>-->
 
                 </div>
             </t>

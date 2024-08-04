@@ -2,7 +2,7 @@
 
 {
     'name': "Purchase Order Line",
-    'version': '17.1.2.7',
+    'version': '17.1.2.8',
     'summary': """Purchase View""",
     'author': 'Atheer Global Solutions',
     'company': 'Atheer Global Solutions',
@@ -14,8 +14,12 @@
     """,
     'depends': ['purchase', 'aqar_reports'],
     'data': [
+
         'views/purchase_view.xml',
+
         'report/purchase_report_inherit.xml',
+        'report/external_striped_layout_views.xml',
+
     ],
     "application":  False,
     "installable":  True,

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_external_layout_striped_inherit" inherit_id="web.external_layout_striped">
+        <xpath expr="//div[@t-attf-class='o_company_#{company.id}_layout header']" position="replace">
+            <div class="header" style="padding-top:-20px;">
+                <table style="width: 100%;" class="table table-borderless">
+                    <tr>
+                        <td style="width: 33.33%;" class="text-left" t-if="o.company_id.logo">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                 style="max-height:130pt;max-width:100%" alt="Company Logo"/>
+                        </td>
+                        <td style="width: 63.67%;" class="text-center">
+                            <span t-if="o.company_id.header" t-field="o.company_id.header"/>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+        <xpath expr="//div[@t-attf-class='o_company_#{company.id}_layout footer o_background_footer']"
+               position="replace">
+            <div class="footer">
+                <div class="text-center" style="font-size:12px;">
+                    <hr style="border:2px solid black;"/>
+                    <span class="text-center" t-field="o.company_id.footer" style="font-size:12px;"/>
+                    <div t-if="report_type =='pdf'" class="text-muted" style="font-size:12px;">
+                        Page :
+                        <span class="page"/>
+                        /
+                        <span class="topage"/>
+                        <div class="oe_structure"/>
+                        Printed On :
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y')"/>
+                    </div>
+
+                </div>
+            </div>
+        </xpath>
+        <!--Base Code-->
+        <!--        <div class="text-center">-->
+        <!--                <ul class="list-inline">-->
+        <!--                    <div t-field="company.report_footer"/>-->
+        <!--                </ul>-->
+        <!--                <div t-if="report_type == 'pdf'" class="text-muted">-->
+        <!--                    Page:-->
+        <!--                    <span class="page"/>-->
+        <!--                    of-->
+        <!--                    <span class="topage"/>-->
+        <!--                </div>-->
+        <!--                <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">-->
+        <!--                    <span t-field="o.name"/>-->
+        <!--                </div>-->
+        <!--            </div>-->
+    </template>
+</odoo>
