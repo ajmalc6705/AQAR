@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Property Lease Management',
-    'version': '16.0.1.7.6',
+    'version': '16.0.1.7.7',
     'category': 'Property Management',
     'sequence': 1,
     'summary': 'Property, Landlord, Contract, Rent, Sale',

@@ -1307,34 +1307,31 @@ class PropertyRent(models.Model):
     # Commented By Ajmal jul 8
     def button_action_create_vacating_information(self):
         for rec in self:
+            release_id = self.env['tenant.deposit.release'].create({
+                'partner_id': rec.partner_id.id,
+                'journal_id': rec.journal_id.id,
+                'rent_id': rec.id,
+                'account_id': rec.account_id.id,
+                'security_deposit': rec.security_deposit,
+                'amount': rec.rent_total,
 
-            if rec.security_deposit >= rec.rent_total:
-                release_id = self.env['tenant.deposit.release'].create({
-                    'partner_id': rec.partner_id.id,
-                    'journal_id': rec.journal_id.id,
-                    'rent_id': rec.id,
-                    'account_id': rec.account_id.id,
-                    'security_deposit': rec.security_deposit,
-                    'amount': rec.rent_total,
+            })
+            rec.legal_case = True
+            return {
+                'name': _("Vacating Information"),
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_model': 'tenant.deposit.release',
+                'res_id': release_id.id,
+                'type': 'ir.actions.act_window',
+                'target': 'current',
+                # 'domain': '[]',
+                # 'context': {
+                #     'default_partner_id': rec.partner_id.id,
+                #     'default_rent_id': rec.id,
+                # }
+            }
 
-                })
-                rec.legal_case = True
-                return {
-                    'name': _("Vacating Information"),
-                    'view_mode': 'form',
-                    'view_type': 'form',
-                    'res_model': 'tenant.deposit.release',
-                    'res_id': release_id.id,
-                    'type': 'ir.actions.act_window',
-                    'target': 'current',
-                    # 'domain': '[]',
-                    # 'context': {
-                    #     'default_partner_id': rec.partner_id.id,
-                    #     'default_rent_id': rec.id,
-                    # }
-                }
-            else:
-                raise ValidationError(_('The Deposit Amount Should be Greater than  TOTAL AMOUNT.!'))
 
     def action_view_vacating_information(self):
         """ action to show bill"""
