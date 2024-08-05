@@ -30,6 +30,8 @@
                 <field name="community_end_date" readonly="1"
                        attrs="{'invisible':[('community_id','==',False)]}"
                 />
+                <field name="building_id" readonly="1"/>
+                <field name="property_id" readonly="1"/>
             </xpath>
         </field>
     </record>

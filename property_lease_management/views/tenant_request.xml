@@ -310,7 +310,7 @@
 
         <!--Customer issue action-->
         <record id="action_tenant_request" model="ir.actions.act_window">
-            <field name="name">Tenant Requests</field>
+            <field name="name">Customer Requests</field>
             <field name="res_model">tenant.request</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
@@ -322,7 +322,7 @@
 
 
         <menuitem id="menu_tenant_request"
-                  name="Tenant Requests"
+                  name="Customer Requests"
                   action="action_tenant_request"
                   parent="property_lease_management.menu_base_property"
                   sequence="3"/>

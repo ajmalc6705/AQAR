@@ -30,6 +30,7 @@
         'views/account_account_inherit_views.xml',
 
         'reports/report_sublevy_budget.xml',
+        'reports/report_community_invoice.xml',
 
         'wizard/report_sublevy_budget_views.xml'
 
