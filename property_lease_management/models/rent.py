@@ -1309,11 +1309,8 @@ class PropertyRent(models.Model):
         for rec in self:
             release_id = self.env['tenant.deposit.release'].create({
                 'partner_id': rec.partner_id.id,
-                'journal_id': rec.journal_id.id,
                 'rent_id': rec.id,
-                'account_id': rec.account_id.id,
                 'security_deposit': rec.security_deposit,
-                'amount': rec.rent_total,
 
             })
             rec.legal_case = True
@@ -1325,11 +1322,6 @@ class PropertyRent(models.Model):
                 'res_id': release_id.id,
                 'type': 'ir.actions.act_window',
                 'target': 'current',
-                # 'domain': '[]',
-                # 'context': {
-                #     'default_partner_id': rec.partner_id.id,
-                #     'default_rent_id': rec.id,
-                # }
             }
 
 
@@ -1425,6 +1417,11 @@ class PropertyRent(models.Model):
 
         if not vacation_info_id:
             raise UserError('There is no Confirmed Vacating Information Please Confirm Vacating Information.')
+        if not vacation_info_id.move_id:
+            raise UserError('There is no Invoice is Generated Against Vacating Information.')
+        if vacation_info_id.move_id and vacation_info_id.move_id.payment_state != 'paid':
+            raise UserError('Invoice is Generated Against Vacating Information is Not Paid.')
+            
         if not cancel_id:
             if self.key_received:
                 values = {

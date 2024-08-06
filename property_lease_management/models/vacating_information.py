@@ -29,7 +29,7 @@ class Deduction(models.Model):
 class VacatingInformation(models.Model):
     _name = 'tenant.deposit.release'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _rec_name = 'partner_id'
+    _rec_name = 'reference'
     _check_company_auto = True
     _description = "Vacating Information"
 
@@ -123,44 +123,47 @@ class VacatingInformation(models.Model):
 
     def button_approve(self):
         for rec in self:
-            # if rec.balance_amount <= 0:
-            #     raise ValidationError(_('The Balance Amount Should be Greater than Zero !'))
             rec.action_entry()
             rec.state = 'approved'
             rec.send_back_flag = False
 
     def action_entry(self):
         """ create entry when transaction is done"""
-        debit_vals = {
-            'name': self.reference,
-            'account_id': self.account_id.id,
-            'journal_id': self.journal_id.id,
-            'date': self.from_date,
-            'debit': self.amount > 0.0 and self.amount or 0.0,
-            'credit': self.amount < 0.0 and -self.amount or 0.0,
-        }
-        credit_vals = {
-            'name': self.reference,
-            'account_id': self.credit_account_id.id,
-            'journal_id': self.journal_id.id,
-            'date': self.from_date,
-            'debit': self.amount < 0.0 and -self.amount or 0.0,
-            'credit': self.amount > 0.0 and self.amount or 0.0,
-
-        }
-        vals = {
-            'name': self.reference,
-            'narration': self.reference,
-            'move_type': 'entry',
-            'ref': self.reference,
-            'vacating_info_id': self.id,
-            'journal_id': self.journal_id.id,
-            'date': self.from_date,
-            'line_ids': [(0, 0, debit_vals), (0, 0, credit_vals)]
-        }
-        move = self.env['account.move'].create(vals)
-        move.action_post()
-        self.move_id = move.id
+        for rec in self:
+            journal_id = rec.journal_id and rec.journal_id.id or False
+            if not journal_id:
+                raise UserError('Please update the journal details.')
+            credit_account_id = rec.credit_account_id and rec.credit_account_id.id or False
+            if not credit_account_id:
+                raise UserError('Please update the credit account.')
+            invoice_lines = []
+            for deduction_line in rec.deduction_line_ids:
+                if deduction_line.ro > 0:
+                    invoice_vals = {
+                        'name': deduction_line.deduction_type_id and deduction_line.deduction_type_id.name or '',
+                        'account_id': credit_account_id or False,
+                        'date': self.from_date,
+                        'price_unit': deduction_line.ro,
+                        'price_subtotal': deduction_line.ro,
+                        'quantity': 1,
+                        'display_type': 'product'
+                    }
+                    invoice_lines.append((0, 0, invoice_vals))
+            if invoice_lines:
+                vals = {
+                    'invoice_date': self.from_date,
+                    'move_type': 'out_invoice',
+                    'partner_id': rec.partner_id and rec.partner_id.id or False,
+                    'invoice_origin': self.reference,
+                    'invoice_payment_term_id': rec.partner_id.property_payment_term_id and rec.partner_id.property_payment_term_id.id,
+                    'vacating_info_id': self.id,
+                    'journal_id': journal_id,
+                    'rent_id': rec.rent_id and rec.rent_id.id or False,
+                    'invoice_line_ids': invoice_lines
+                }
+                move = self.env['account.move'].create(vals)
+                move.action_post()
+                rec.move_id = move.id
 
     def get_vacating_entry(self):
         return {

@@ -101,15 +101,15 @@
                         </group>
                         <group>
                             <group string="Payment Details">
-                                <field name="security_deposit"/>
-                                <field name="amount"/>
-                                <field name="balance_amount" force_save="1"/>
+                                <field name="security_deposit" readonly="1" force_save="1"/>
+                                <field name="amount" readonly="1" force_save="1"/>
+                                <field name="balance_amount" readonly="1" force_save="1"/>
                             </group>
                             <group string="Account Details">
-                                <field name="journal_id"/>
-                                <field name="account_id"/>
-                                <field name="credit_account_id"/>
-                                <field name="move_id" invisible="1"/>
+                                <field name="journal_id" domain="[('type','=', 'sale'),('company_id','=',company_id)]" attrs="{'readonly': [('state', 'in', ('approved','rejected'))]}"/>
+                                <field name="account_id" invisible="1"/>
+                                <field name="credit_account_id" domain="[('company_id','=',company_id)]" attrs="{'readonly': [('state', 'in', ('approved','rejected'))]}"/>
+                                <field name="move_id" readonly="1"/>
                             </group>
                         </group>
                         <notebook colspan="4">
