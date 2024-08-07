@@ -18,7 +18,7 @@ class CommunityBudget(models.Model):
     building_id = fields.Many2one('property.building', string='Building')
     levy_id = fields.Many2one('levy.master', string='Levy')
     community_id = fields.Many2one('property.community', string='Community')
-    total_area = fields.Float(string='Total Builtup Area', compute='_compute_area', store=True)
+    total_area = fields.Float(string='Total Builtup Area', compute='_compute_area', store=True, digits='Product Price')
     sub_levy_name = fields.Char(string='Sub Levy Name')
     sub_levy_account_id = fields.Many2one('account.account', string='Sub Levy A/C')
     sub_levy_id = fields.Many2one('sub.levy.line', string='Sub Levy Name')
@@ -39,8 +39,8 @@ class CommunityBudget(models.Model):
     total_gross_amount = fields.Float(string='Total Gross Amount', compute='_compute_total', digits='Product Price',
                                       store=True)
     is_confirmed = fields.Boolean(string='Confirmed', default=False)
-    total_expenses = fields.Integer(string='Total expense', digits='Product Price', compute='_compute_total_expenses',
-                                    compute_sudo=True, store=True, copy=False)
+    total_expenses = fields.Float(string='Total expense', digits='Product Price', compute='_compute_total_expenses',
+                                  compute_sudo=True, store=True, copy=False)
 
     #
 
@@ -104,7 +104,8 @@ class CommunityBudget(models.Model):
     def _compute_unit_count(self):
         for rec in self:
             rec.budget_units = len(self.budget_lines.filtered(lambda budget: budget.exclude_compute == False))
-            units = self.env['property.property'].search_count([('parent_building', '=', rec.building_id.id)])
+            units = self.env['property.property'].search_count(
+                [('parent_building', '=', rec.building_id.id), ('for_parking', '!=', True)])
             rec.actual_units = units
 
     def _compute_exclude_units(self):
@@ -114,7 +115,8 @@ class CommunityBudget(models.Model):
     def _compute_area(self):
         self.total_area = False
         for rec in self:
-            rec.total_area = sum(rec.budget_lines.mapped('unit_area'))
+            # rec.total_area = sum(rec.budget_lines.mapped('unit_area'))
+            rec.total_area = sum(line.unit_area for line in rec.budget_lines if not line.unit_id.for_parking)
 
     def action_compute(self):
         """ compute the rate/area"""
@@ -192,8 +194,6 @@ class BudgetUnitLine(models.Model):
             if rec.budget_id:
                 line_unit = rec.budget_id.get_not_added_units()
                 if rec.unit_ids.ids not in line_unit.ids:
-                    print(rec.unit_ids.ids)
-                    print(line_unit.ids)
                     return {'domain': {'unit_id': [('id', '=', line_unit.ids)]}}
                 else:
                     return {'domain': {'unit_id': [('id', 'in', [rec.unit_id.id])]}}

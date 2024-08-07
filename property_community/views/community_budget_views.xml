@@ -70,7 +70,7 @@
                                 <field name="period_end" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
                             </div>
                             <field name="community_id" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
-                            <field name="total_amount" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
+                            <field name="total_amount" readonly="1"/>
                             <field name="type" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
                             <field name="budget_amount" attrs="{'readonly' : [('is_confirmed', '=', True)]}"/>
                             <field name="is_confirmed" invisible="1"/>

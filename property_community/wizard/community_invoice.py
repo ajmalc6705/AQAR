@@ -29,6 +29,7 @@ class CommunityInvoice(models.TransientModel):
     unit_community_invoice_line_ids = fields.Many2many('unit.community.invoice.line',
                                                        string='Unit Community Invoice Line')
     analytic_distribution = fields.Json("Analytic Distribution", store=True, tracking=True)
+    company_id = fields.Many2one('res.company', 'Company', )
 
     @api.onchange('start_date')
     def onchange_unit(self):
@@ -99,6 +100,7 @@ class CommunityInvoice(models.TransientModel):
                 'invoice_date_due': self.invoice_date_due,
                 'community_start_date': self.start_date,
                 'community_end_date': self.end_date,
+                'company_id': self.company_id.id,
                 'invoice_line_ids': [
                     Command.create({
                         'name': 'Period as on %s to %s' % (self.start_date, self.end_date),

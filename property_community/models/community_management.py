@@ -21,7 +21,7 @@ class PropertyCommunity(models.Model):
     prospect_name = fields.Char(string='Prospect Name')
     tentative_period = fields.Integer(string='Tentative Period')
     expected_units = fields.Integer(string='Expected Units')
-    total_area = fields.Integer(string='Total Area')
+    total_area = fields.Float(string='Total Area')
     enquiry_no = fields.Char(string='Enquiry No', copy=False)
     enq_record_from = fields.Date(string='Enquiry Date', copy=False)
     valid_upto = fields.Date(string='Valid Upto')
@@ -369,7 +369,9 @@ class PropertyCommunity(models.Model):
             units = self.unit_ids.ids
             action['context'] = {
                 'default_unit_ids': units,
-                'default_journal_id': journal_id}
+                'default_journal_id': journal_id,
+                'default_company_id': self.company_id.id
+            }
         return action
 
 
