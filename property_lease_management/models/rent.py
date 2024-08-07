@@ -1420,7 +1420,7 @@ class PropertyRent(models.Model):
         if not vacation_info_id.move_id:
             raise UserError('There is no Invoice is Generated Against Vacating Information.')
         if vacation_info_id.move_id and vacation_info_id.move_id.payment_state != 'paid':
-            raise UserError('Invoice is Generated Against Vacating Information is Not Paid.')
+            raise UserError(_('Invoice %s is Generated Against Vacating Information is Not Paid.') % (vacation_info_id.move_id.name))
             
         if not cancel_id:
             if self.key_received:

@@ -146,6 +146,7 @@ class VacatingInformation(models.Model):
                         'price_unit': deduction_line.ro,
                         'price_subtotal': deduction_line.ro,
                         'quantity': 1,
+                        'tax_ids': [],
                         'display_type': 'product'
                     }
                     invoice_lines.append((0, 0, invoice_vals))
