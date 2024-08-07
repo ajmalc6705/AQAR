@@ -14,5 +14,8 @@ class TenantRequestInheritCommunity(models.Model):
     @api.onchange('property_community_id')
     def onchange_property_community_id(self):
         for rec in self:
+            print('qwertyu')
             if rec.property_community_id:
                 rec.building_id = rec.property_community_id.building_id.id
+            else:
+                rec.building_id = False

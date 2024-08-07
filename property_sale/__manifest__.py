@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Property Sale ",
-    'version': "16.0.1.0.4",
+    'version': "16.0.1.0.5",
     'category': 'Industry',
     'author': 'Atheer Global Solutions',
     'company': 'Atheer Global Solutions',
@@ -24,7 +24,8 @@
         'views/property_mulkiya_transfer_views.xml',
         'views/mulkiya_stages_views.xml',
         'views/property_resale_views.xml',
-        'views/account_move_property_sale_views.xml'
+        'views/account_move_property_sale_views.xml',
+        'views/sale_tenant_request_views.xml'
 
     ],
     'license': 'AGPL-3',

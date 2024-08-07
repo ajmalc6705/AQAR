@@ -57,8 +57,11 @@
                                     <br/>
                                 </t>
                                 <t class="mt16">
-                                    Property Details : Test
-                                    <span t-field="o.property_id.name"/>
+                                    Property Details :
+                                    <t t-set="unit_name" t-value="o.property_id.name +  + o.property_id.unit_seq"/>
+                                    <span t-esc="unit_name"/>
+                                    <!--                                    <span t-esc="o.property_id.name + str(o.property_id.unit_seq)"/>
+                                    -->
                                     <br/>
                                 </t>
                                 <t t-if="o.invoice_date" class="mt16">
@@ -80,7 +83,7 @@
                                 <br/>
                                 <t>
                                     <strong>Unit Area (Sq.Mtr):
-                                        <span t-field="o.name"/>
+                                        <span t-field="o.property_id.area"/>
                                     </strong>
 
                                 </t>
@@ -213,26 +216,26 @@
 
                         <div class="clearfix mb-4">
                             <div id="total" class="row">
-<!--                                <div t-attf-class="#{'col-6'} ms-auto">-->
-<!--                                    <p style="margin-top:0px;">-->
-<!--                                        AMOUNT IN WORDS:-->
-<!--                                        <br/>-->
-<!--                                        <small class="text-muted lh-sm">-->
-<!--                                            <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span>-->
-<!--                                        </small>-->
-<!--                                    </p>-->
+                                <!--                                <div t-attf-class="#{'col-6'} ms-auto">-->
+                                <!--                                    <p style="margin-top:0px;">-->
+                                <!--                                        AMOUNT IN WORDS:-->
+                                <!--                                        <br/>-->
+                                <!--                                        <small class="text-muted lh-sm">-->
+                                <!--                                            <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span>-->
+                                <!--                                        </small>-->
+                                <!--                                    </p>-->
 
-<!--                                    &lt;!&ndash;                                        <span>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                            <strong>Total</strong>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                        </span>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                        <span>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                            <strong>Total</strong>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                        </span>&ndash;&gt;-->
 
-<!--                                    &lt;!&ndash;                                        <span class="text-right">&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                            <span t-esc="tax_totals['formatted_amount_total_rounded']"&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                                  t-if="'formatted_amount_total_rounded' in tax_totals"/>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                            <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>&ndash;&gt;-->
-<!--                                    &lt;!&ndash;                                        </span>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                        <span class="text-right">&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                            <span t-esc="tax_totals['formatted_amount_total_rounded']"&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                                  t-if="'formatted_amount_total_rounded' in tax_totals"/>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                            <span t-esc="tax_totals['formatted_amount_total']" t-else=""/>&ndash;&gt;-->
+                                <!--                                    &lt;!&ndash;                                        </span>&ndash;&gt;-->
 
-<!--                                </div>-->
+                                <!--                                </div>-->
                                 <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
                                     <table class="table table-sm table-borderless" style="page-break-inside: avoid;">
 
