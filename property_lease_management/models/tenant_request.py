@@ -51,14 +51,15 @@ class TenantRequest(models.Model):
     rent_id = fields.Many2one(comodel_name='property.rent', string='Rent Agreement')
     new_rent_id = fields.Many2one(comodel_name='property.rent', string='New Rent Agreement',
                                   compute="compute_new_rent_id")
-    building_id = fields.Many2one('property.building', 'Building', related="rent_id.building", store=True)
+    building_id = fields.Many2one('property.building', 'Building',  store=True)
     property_id = fields.Many2one(comodel_name='property.property', string='Unit', store=True,
                                   related="rent_id.property_id", tracking=True)
     request_type = fields.Selection([('Cheque holding', 'Cheque holding'),
                                      ('Rent Reduction', 'Rent Reduction'),
                                      ('Renewal Request', 'Renewal Request'),
                                      ('Vacate Request', 'Vacate Request'),
-                                     ('waiver_of_rent', 'Waiver of Rent')], string="Request Type")
+                                     ('waiver_of_rent', 'Waiver of Rent'),
+                                     ('other', 'Other')], string="Request Type")
     from_date = fields.Date(string="From Date")
     to_date = fields.Date(string="To Date")
     no_of_month = fields.Integer('Number of Months', required=True, default=1)
@@ -118,15 +119,18 @@ class TenantRequest(models.Model):
     send_back_flag = fields.Boolean(default=False)
     accountant_flag = fields.Boolean(default=False)
     rent_amount_total = fields.Float('Total Amount', digits="Product Price")
+    # is_property_rent = fields.Boolean('Is For rent', default=False)
 
     @api.onchange('rent_id')
     def onchange_rent_id(self):
         for rec in self:
-            rec.lease_from_date = rec.rent_id.from_date
-            rec.lease_to_date = rec.rent_id.to_date
-            rec.installment_schedule = rec.rent_id.installment_schedule
-            rec.period = rec.rent_id.period
-            rec.rent_amount_total = rec.rent_id.rent_total
+            if rec.rent_id:
+                rec.building_id = rec.rent_id.building
+                rec.lease_from_date = rec.rent_id.from_date
+                rec.lease_to_date = rec.rent_id.to_date
+                rec.installment_schedule = rec.rent_id.installment_schedule
+                rec.period = rec.rent_id.period
+                rec.rent_amount_total = rec.rent_id.rent_total
 
     @api.model
     def fields_view_get(self, view_id=None, view_type=False, toolbar=False, submenu=False):

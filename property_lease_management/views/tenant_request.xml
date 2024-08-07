@@ -67,7 +67,7 @@
                                 attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"
                                 class="oe_highlight"/>
                         <button name="print_renewal_commercial" string="Print Renewal Commercial"
-                                type="object" class="oe_highlight" />
+                                type="object" class="oe_highlight"/>
                         <!--                         attrs="{'invisible':[('renew_button_visibility', '!=', True)]}"-->
                         <button name="print_renewal_sanad"
                                 string="Print Renewal Sanad"
@@ -109,9 +109,11 @@
                                        attrs="{'readonly':[('state','==', 'approved')]}"/>
                                 <field name="rent_id"
                                        attrs="{'readonly':[('state','==', 'approved')]}"
-                                       domain="[('partner_id','=',partner_id)]"/>
+                                       domain="[('partner_id','=',partner_id)]"
+                                       options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
+                                />
                                 <field name="property_id" readonly="1"/>
-                                <field name="building_id" readonly="1"/>
+                                <field name="building_id" readonly="1" force_save="1"/>
                                 <field name="request_type" attrs="{'readonly':[('state','==', 'approved')]}"/>
                                 <field name="company_id" invisible="0" readonly="1"
                                        options="{'no_create_edit':True,'no_open':True,'no_edit':True,'no_create':True}"
@@ -119,7 +121,7 @@
 
                             </group>
                             <group string="Current Rental Details"
-                                     attrs="{'invisible':[('request_type','!=', 'Vacate Request')]}">
+                                   attrs="{'invisible':[('request_type','!=', 'Vacate Request')]}">
                                 <field name="rent_amount_total" force_save="1" readonly="1"/>
                                 <field name="lease_from_date" force_save="1" readonly="1"/>
                                 <field name="lease_to_date" force_save="1" readonly="1"/>
@@ -312,7 +314,10 @@
         <record id="action_tenant_request" model="ir.actions.act_window">
             <field name="name">Customer Requests</field>
             <field name="res_model">tenant.request</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('property_lease_management.view_tenant_request_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('property_lease_management.view_tenant_request_form')})]"
+            />
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Click to Tenant Requests.
