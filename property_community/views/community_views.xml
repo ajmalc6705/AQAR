@@ -274,6 +274,7 @@
                             <field name="budget_summary_line_ids" readonly="1">
                                 <tree editable="bottom">
                                     <field name="unit_id"/>
+                                    <field name="municipality_no" readonly="1"/>
                                     <field name="admin_fund" sum="Total Admin Fund" digits="[12,3]"/>
                                     <field name="sinking_fund" sum="Total Sinking Fund" digits="[12,3]"/>
                                     <field name="total_fund" sum="Total Fund" digits="[12,3]"/>

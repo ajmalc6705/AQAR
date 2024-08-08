@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Property Community",
-    'version': "16.0.1.2.4",
+    'version': "16.0.1.2.6",
     'category': 'Helpdesk',
     'author': 'Atheer Global Solutions',
     'company': 'Atheer Global Solutions',

@@ -350,14 +350,19 @@ class PropertyCommunity(models.Model):
                 rec.state = new_state
 
     def action_show_invoices(self):
-        """ show the budget"""
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Community Invoices',
-            'view_mode': 'tree,form',
-            'res_model': 'account.move',
+        """ show the budget Invoice"""
+        self.ensure_one()
+        action = self.env["ir.actions.act_window"]._for_xml_id('account.action_move_out_invoice_type')
+        ctx = dict(self.env.context)
+        ctx.update({'create': False, 'default_move_type': 'out_invoice'})
+        views = self.env.ref('account.view_invoice_tree')
+        action['context'] = ctx
+        action.update({
             'domain': [('id', 'in', self.move_ids.ids)],
-        }
+            'views': [(views.id, 'tree'), (False, 'form'), (False, 'kanban')]
+
+        })
+        return action
 
     def action_community_invoice(self):
         journal_id = False
@@ -383,6 +388,7 @@ class BudgetSummaryLine(models.Model):
     community_id = fields.Many2one('property.community', string='Community')
     building_id = fields.Many2one('property.building', string='Building', related='community_id.building_id')
     unit_id = fields.Many2one('property.property', string='Unit')
+    municipality_no = fields.Char(related="unit_id.muncipality_no", string='Municipality No')
     admin_fund = fields.Float(string='Admin Fund', digits='Product Price')
     sinking_fund = fields.Float(string='Sinking Fund', digits='Product Price')
     invoiced_fund = fields.Float(string='Invoiced Fund', digits='Product Price')
