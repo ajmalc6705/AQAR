@@ -4,7 +4,7 @@
         <field name="name">property.service.tree</field>
         <field name="model">property.service</field>
         <field name="arch" type="xml">
-            <tree default_order="name desc">
+            <tree default_order="service_seq desc">
                 <field name="name"/>
                 <field name="service_seq"/>
                 <field name="partner_id"/>

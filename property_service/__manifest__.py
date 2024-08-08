@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Property Service ",
-    'version': "16.0.1.2.1",
+    'version': "16.0.1.2.2",
     'category': 'Industry',
     'author': 'Atheer Global Solutions',
     'company': 'Atheer Global Solutions',
