@@ -15,7 +15,7 @@
                             <field name="parking_no"/>
                             <field name="name" optional="show"/>
                             <field name="park_no" optional="show"/>
-                            <field name="floor_no" optional="show"/>
+                            <field name="floor_no_id" optional="show"/>
                             <field name="is_sale" optional="show"/>
                             <field name="is_rent" optional="show"/>
                             <field name="unit_id" domain="[('id','in',unit_ids)]"
@@ -45,7 +45,7 @@
                             <field name="name"/>
                             <field name="parking_no"/>
                             <field name="building_id"/>
-                            <field name="floor_no" optional="hide"/>
+                            <field name="floor_no_id" optional="hide"/>
                             <field name="unit_id" optional="hide"/>
 
                             <field name="state" widget="badge"/>

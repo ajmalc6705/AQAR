@@ -40,7 +40,7 @@
                         <group>
                             <field name="name" attrs="{'readonly':[('state','not in',['available'])]}"/>
                             <field name="park_no" attrs="{'readonly':[('state','not in',['available'])]}"/>
-                            <field name="floor_no" attrs="{'readonly':[('state','not in',['available'])]}"/>
+                            <field name="floor_no_id" attrs="{'readonly':[('state','not in',['available'])]}"/>
                             <field name="is_sale" attrs="{'readonly':[('state','not in',['available'])]}"/>
                             <field name="is_rent" attrs="{'readonly':[('state','not in',['available'])]}"/>
                         </group>

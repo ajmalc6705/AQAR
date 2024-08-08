@@ -16,7 +16,7 @@ class Parking(models.Model):
     unit_id = fields.Many2one('property.property', string='Unit')
     unit_ids = fields.Many2many('property.property', string="Unit Ids", compute='_compute_unit_ids')
 
-    floor_no = fields.Char(string='Floor No', required=1)
+    floor_no_id = fields.Many2one("unit.floor", string='Floor No', required=1)
     is_sale = fields.Boolean(string='Sale', copy=False)
     is_rent = fields.Boolean(string='Rent',copy=False)
     notes = fields.Html(string='Notes')
