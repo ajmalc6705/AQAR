@@ -71,6 +71,13 @@
         <field name="domain_force">[('company_id', 'in', company_ids)]</field>
     </record>
 
+    <!-- Multi - Company Rules forAll Property Maintenance -->
+    <record id="multi_company_rule_for_all_property_maintenance" model="ir.rule">
+        <field name="name">Multi company rules: All Property Maintenance</field>
+        <field name="model_id" ref="model_all_property_maintenance"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
 
     <!--  Property Rent User Own Document Rule -->
     <record id="user_own_document_rule" model="ir.rule">

@@ -112,7 +112,7 @@
 
         <!--        sequence for Property Maintenance -->
         <record id="seq_all_property_maintenance" model="ir.sequence">
-            <field name="name">Unit Maintenance</field>
+            <field name="name">Property Maintenance</field>
             <field name="code">all.property.maintenance</field>
             <field name="prefix">PR/%(year)s/</field>
             <field name="padding">5</field>

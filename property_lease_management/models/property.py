@@ -143,7 +143,7 @@ class Property(models.Model):
     mulkiya_no = fields.Char(string='Mulkiya No')
     muncipality_no = fields.Char(string='Muncipality No')
     open_from = fields.Date(string='Open From')
-    floor_no = fields.Char(string='Floor No')  # They need a master to select the floor
+    # floor_no = fields.Char(string='Floor No')  # They need a master to select the floor
     floor_id = fields.Many2one('unit.floor', string='Floor No')
     rentable_area = fields.Float(string='Rentable Area(sqm)', digits='Product Price')
     indoor_area = fields.Float(string='Indoor Area(sqm)', digits='Product Price')

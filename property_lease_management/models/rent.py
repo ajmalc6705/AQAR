@@ -40,10 +40,7 @@ class PropertyRent(models.Model):
                 seq_date = fields.Datetime.context_timestamp(self, fields.Datetime.to_datetime(
                     vals['from_date'])) if 'from_date' in vals else None
                 vals['name'] = self.env['ir.sequence'].next_by_code('property.rent', sequence_date=seq_date) or _("New")
-                # print(vals['name'])
-                # OLD FORMATE
-                # vals['name'] = self.env['ir.sequence'].with_context(ir_sequence_date=vals['from_date']).next_by_code(
-                #     'property.rent')
+
                 res = super(PropertyRent, self).create(vals)
                 if res.reference_id:
                     res.reference_id.write({'state': 'renewed'})

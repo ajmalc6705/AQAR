@@ -4,23 +4,33 @@ from odoo import fields, models, api, _
 from odoo.exceptions import UserError, ValidationError
 from odoo import SUPERUSER_ID
 
+
 class AllMaintenance(models.Model):
     _name = 'all.property.maintenance'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = _('All Property Maintenance')
     _order = 'date desc'
 
-    @api.model
-    def _get_name(self):
-        if 'default_utility' in self._context.keys():
-            return "Utility Charges"
-        else:
-            return "Maintenance"
+    # @api.model
+    # def _get_name(self):
+    #     if 'default_utility' in self._context.keys():
+    #         return "Utility Charges"
+    #     else:
+    #         return "Maintenance"
 
-    name = fields.Char(string='Job Number', readonly=True, default=_get_name)
-    property_maintenance_type = fields.Selection([('all_flats', 'All Flats'),
-                                                  ('flat', 'Flat')], 'Type', default="all_flats",
-                                                 required=True)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            company_id = vals.get('company_id', self.default_get(['company_id'])['company_id'])
+            self_comp = self.with_company(company_id)
+            if vals.get('name', 'New') == 'New':
+                vals['name'] = self_comp.env['ir.sequence'].next_by_code('all.property.maintenance') or '/'
+        return super().create(vals_list)
+
+    name = fields.Char(string='Job Number')
+
+    property_maintenance_type = fields.Selection([('all_flats', 'All Flats'), ('flat', 'Flat')], 'Type',
+                                                 default="all_flats",)
 
     state = fields.Selection([('draft', _('Draft')),
                               ('pending_approval', _('Pending Approval')),
@@ -68,16 +78,17 @@ class AllMaintenance(models.Model):
 
     def write(self, vals):
         res = super(AllMaintenance, self).write(vals)
-        print("INSIDEEEEEEEEEEEE")
         for record in self:
-            print("iuhjihioknj",record.flat_count,record.create_true)
+            print("iuhjihioknj", record.flat_count, record.create_true)
             record_id = record.id
             if record.asset_type_id:
                 flat_maintenance_ids = self.env['property.maintenance'].search(
                     [('property_maintenance_ids', '=', record_id)]).ids
                 if flat_maintenance_ids:
-                    self.env.cr.execute("UPDATE property_maintenance SET property_maintenance_ids=NULL WHERE id IN %s", [tuple(flat_maintenance_ids)])
-                    self.env.cr.execute("DELETE FROM property_maintenance WHERE id IN %s", [tuple(flat_maintenance_ids)])
+                    self.env.cr.execute("UPDATE property_maintenance SET property_maintenance_ids=NULL WHERE id IN %s",
+                                        [tuple(flat_maintenance_ids)])
+                    self.env.cr.execute("DELETE FROM property_maintenance WHERE id IN %s",
+                                        [tuple(flat_maintenance_ids)])
                 if record.all_property_id and record.asset_type_id:
                     asset_ids = self.env['assets.accessrz'].search(
                         [('asset_categ', '=', record.asset_type_id.id), ('building_id', '=', record.building.id),
@@ -87,9 +98,12 @@ class AllMaintenance(models.Model):
                     for rec in asset_ids:
                         name = self.env['ir.sequence'].next_by_code('property.maintenance') or _('Maintenance')
                         maintenance = "INSERT INTO property_maintenance (building,name,property_maintenance_ids,property_id,asset_id,cost,date,maintenance_type,state,description) " \
-                                      "VALUES(" + str(record.building.id) + ",'" + str(name) + "'," + str(record.id) + "," + str(
-                            rec.property_id.id) + "," + str(rec.id) + ",'" + str(record.cost) + "','" + str(record.date) + "','" \
-                                      + str(record.maintenance_type) + "','" + str('draft') + "','" + str(record.remarks) + "')"
+                                      "VALUES(" + str(record.building.id) + ",'" + str(name) + "'," + str(
+                            record.id) + "," + str(
+                            rec.property_id.id) + "," + str(rec.id) + ",'" + str(record.cost) + "','" + str(
+                            record.date) + "','" \
+                                      + str(record.maintenance_type) + "','" + str('draft') + "','" + str(
+                            record.remarks) + "')"
                         self._cr.execute(maintenance)
 
                 if record.property_id and record.asset_type_id:
@@ -100,18 +114,17 @@ class AllMaintenance(models.Model):
                         raise ValidationError(
                             'There are no asset associated with the selected building and flat. ')
                     for rec in asset_ids:
-
                         name = self.env['ir.sequence'].next_by_code('property.maintenance') or _('Maintenance')
                         maintenance = "INSERT INTO property_maintenance (building,name,property_maintenance_ids,property_id,asset_id,cost,date,maintenance_type,state,description) " \
-                                      "VALUES(" + str(record.building.id) + ",'" + str(name) +  "'," + str(record.id) + "," + str(
-                            rec.property_id.id) + "," + str(rec.id) + ",'" + str(record.cost) + "','" + str(record.date) +"','" \
-                                      + str(record.maintenance_type) + "','" + str('draft')  + "','" + str(record.remarks) +"')"
+                                      "VALUES(" + str(record.building.id) + ",'" + str(name) + "'," + str(
+                            record.id) + "," + str(
+                            rec.property_id.id) + "," + str(rec.id) + ",'" + str(record.cost) + "','" + str(
+                            record.date) + "','" \
+                                      + str(record.maintenance_type) + "','" + str('draft') + "','" + str(
+                            record.remarks) + "')"
                         self._cr.execute(maintenance)
 
-
-
         return res
-
 
     @api.onchange('property_maintenance_type', 'building')
     def onchange_property_maintenance_type(self):
@@ -123,14 +136,13 @@ class AllMaintenance(models.Model):
                     [('parent_building', '=', rec.building.id), ('state', '=', 'open')]).ids
                 rec.all_property_id = [((6, 0, flat_ids))]
 
-
     def compute_flat_count(self):
         for record in self:
             flat_maintenance_ids = self.env['property.maintenance'].search_count(
                 [('property_maintenance_ids', '=', record.id)])
             record.flat_count = flat_maintenance_ids
 
-    @api.onchange( 'maintenance_type', 'date', 'cost','description')
+    @api.onchange('maintenance_type', 'date', 'cost', 'description')
     def onchange_details(self):
         for rec in self:
             flat_maintenance_ids = self.env['property.maintenance'].search([('property_maintenance_ids', '=', rec.id)])
@@ -234,7 +246,7 @@ class AllMaintenance(models.Model):
              ('property_id', '=', self.property_id.id)]).ids
         for assets_id in asset_ids:
             asset = self.env['assets.accessrz'].search([('id', '=', assets_id)])
-            print("dfgsdgsdg",assets_id,asset.property_id.rent_id)
+            print("dfgsdgsdg", assets_id, asset.property_id.rent_id)
             if asset.property_id.rent_id.partner_id:
                 email_to.append(asset.property_id.rent_id.partner_id.id)
                 print("dfgsdgsdgemail_to", email_to)
@@ -262,13 +274,15 @@ class AllMaintenance(models.Model):
     def unlink(self):
         for record in self:
             if record.state == 'draft':
-                flat_maintenance_ids = self.env['property.maintenance'].search([('property_maintenance_ids', '=', record.id)])
+                flat_maintenance_ids = self.env['property.maintenance'].search(
+                    [('property_maintenance_ids', '=', record.id)])
                 for each in flat_maintenance_ids:
                     each.property_maintenance_ids = False
                     each.unlink()
             if record.state != 'draft':
                 raise UserError('At this gggstate, it is not possible to delete this record. ')
             return super(AllMaintenance, self).unlink()
+
 
 # maintenance wizard for sending mail
 class SendMaintenanceRequest(models.TransientModel):
@@ -286,7 +300,7 @@ class SendMaintenanceRequest(models.TransientModel):
         """ function to send the email notification """
         email_to = []
         for assets_id in self.assets_ids:
-            email_to.append(str(assets_id.property_id.rent_id.partner_id.email),)
+            email_to.append(str(assets_id.property_id.rent_id.partner_id.email), )
         main_content = {
             'subject': self.subject,
             'author_id': SUPERUSER_ID,
@@ -294,4 +308,3 @@ class SendMaintenanceRequest(models.TransientModel):
             'email_to': email_to,
         }
         self.env['mail.mail'].sudo().create(main_content).sudo().send()
-
